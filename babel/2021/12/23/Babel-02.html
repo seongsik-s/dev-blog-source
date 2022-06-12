@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>[Babel] 바벨의 프레셋(Presets) 사용 | IT 데이터베이스</title>
+<meta name="generator" content="Jekyll v4.2.2">
+<meta property="og:title" content="[Babel] 바벨의 프레셋(Presets) 사용">
+<meta name="author" content="GitHub User">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="프레셋(Presets)이란?">
+<meta property="og:description" content="프레셋(Presets)이란?">
+<link rel="canonical" href="/jekyll-theme-yat/babel/2021/12/23/Babel-02.html">
+<meta property="og:url" content="/jekyll-theme-yat/babel/2021/12/23/Babel-02.html">
+<meta property="og:site_name" content="IT 데이터베이스">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2021-12-23T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="[Babel] 바벨의 프레셋(Presets) 사용">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"GitHub User"},"dateModified":"2021-12-23T00:00:00+00:00","datePublished":"2021-12-23T00:00:00+00:00","description":"프레셋(Presets)이란?","headline":"[Babel] 바벨의 프레셋(Presets) 사용","mainEntityOfPage":{"@type":"WebPage","@id":"/jekyll-theme-yat/babel/2021/12/23/Babel-02.html"},"url":"/jekyll-theme-yat/babel/2021/12/23/Babel-02.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-noto-sans@0.0.72/index.min.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/main.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/image-popup.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="/jekyll-theme-yat/assets/js/main.js"></script>
+  <script src="/jekyll-theme-yat/assets/js/zooming.min.js"></script><link type="application/atom+xml" rel="alternate" href="/jekyll-theme-yat/feed.xml" title="IT 데이터베이스">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+<!-- and it's easy to individually load additional languages -->
+<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/go.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Init highlight js
+document.addEventListener('DOMContentLoaded', function(event) {
+  var els = document.querySelectorAll('pre code')
+
+  function addLangData(block) {
+    var outer = block.parentElement.parentElement.parentElement;
+    var lang = block.getAttribute('data-lang');
+    for (var i = 0; i < outer.classList.length; i++) {
+      var cls = outer.classList[i];
+      if (cls.startsWith('language-')) {
+        lang = cls;
+        break;
+      }
+    }
+    if (!lang) {
+      cls = block.getAttribute('class');
+      lang = cls ? cls.replace('hljs ', '') : '';
+    }
+    if (lang.startsWith('language-')) {
+      lang = lang.substr(9);
+    }
+    block.setAttribute('class', 'hljs ' + lang);
+    block.parentNode.setAttribute('data-lang', lang);
+  }
+
+  function addBadge(block) {
+    var enabled = ('true' || 'true').toLowerCase();
+    if (enabled == 'true') {
+      var pre = block.parentElement;
+      pre.classList.add('badge');
+    }
+  }
+
+  function handle(block) {
+    addLangData(block);
+    addBadge(block)
+    hljs.highlightBlock(block);
+  }
+
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i];
+    handle(el);
+  }
+});
+</script>
+
+<style>
+  /* code language badge */
+  pre.badge::before {
+    content: attr(data-lang);
+    color: #fff;
+    background-color: #ff4e00;
+    padding: 0 .5em;
+    border-radius: 0 2px;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 32px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+  }
+
+  /* fix wrong badge display for firefox browser */
+  code > table pre::before {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="site-header site-header-transparent" role="banner">
+
+  <div class="wrapper">
+    <div class="site-header-inner">
+<span class="site-brand"><a class="site-brand-inner" rel="author" href="/jekyll-theme-yat/">
+  <img class="site-favicon" title="IT 데이터베이스" src="" onerror="this.style.display='none'">
+  IT 데이터베이스
+</a>
+</span><nav class="site-nav">
+          <input type="checkbox" id="nav-trigger" class="nav-trigger">
+          <label for="nav-trigger">
+            <span class="menu-icon">
+              <svg viewbox="0 0 18 15" width="18px" height="15px">
+                <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+              </svg>
+            </span>
+          </label>
+
+          <div class="trigger">
+<a class="page-link" href="/jekyll-theme-yat/about.html">ABOUT</a><a class="page-link" href="/jekyll-theme-yat/archives.html">ARCHIVES</a><a class="page-link" href="/jekyll-theme-yat/categories.html">CATEGORIES</a><a class="page-link" href="/jekyll-theme-yat/">HOME</a><a class="page-link" href="/jekyll-theme-yat/tags.html">TAGS</a>
+
+
+
+
+
+
+
+
+
+<span class="page-link">
+
+
+
+<div id="google_translate_element" style="display: none;">
+</div>
+
+<span class="ct-language">
+  <ul class="list-unstyled ct-language-dropdown">
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="en">
+          
+          <img src="https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png" title="English">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="fr">
+          
+          <img src="https://cdn.countryflags.com/thumbs/france/flag-400.png" title="French">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="zh-CN">
+          
+          <img src="https://cdn.countryflags.com/thumbs/china/flag-400.png" title="Chinese(Simple)">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ja">
+          
+          <img src="https://cdn.countryflags.com/thumbs/japan/flag-400.png" title="Japanese">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ko">
+          
+          <img src="https://cdn.countryflags.com/thumbs/south-korea/flag-400.png" title="Korean">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ru">
+          
+          <img src="https://cdn.countryflags.com/thumbs/russia/flag-400.png" title="Russian">
+          
+        </a>
+      </li>
+    
+  </ul>
+</span>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false,
+    layout: google.translate.TranslateElement.InlineLayout.VERTICAL
+  }, 'google_translate_element');
+
+  // Links to cross-origin destinations are unsafe
+  var gll = document.getElementsByClassName('goog-logo-link')[0];
+  if (gll) {
+    gll.setAttribute('rel', 'noopener');
+  }
+
+  function restoreLang() {
+    var iframe = document.getElementsByClassName('goog-te-banner-frame')[0];
+    if (!iframe) return;
+
+    var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+    var restore_el = innerDoc.getElementsByTagName("button");
+
+    for (var i = 0; i < restore_el.length; i++) {
+      if (restore_el[i].id.indexOf("restore") >= 0) {
+        restore_el[i].click();
+        var close_el = innerDoc.getElementsByClassName("goog-close-link");
+        close_el[0].click();
+        return;
+      }
+    }
+  }
+
+  function triggerHtmlEvent(element, eventName) {
+    var event;
+    if (document.createEvent) {
+      event = document.createEvent('HTMLEvents');
+      event.initEvent(eventName, true, true);
+      element.dispatchEvent(event);
+    } else {
+      event = document.createEventObject();
+      event.eventType = eventName;
+      element.fireEvent('on' + event.eventType, event);
+    }
+  }
+
+  var googleCombo = document.querySelector("select.goog-te-combo");
+  var langSelect = document.querySelector('.ct-language');
+  langSelect.addEventListener('click', function(event) {
+    if (!event.target) {
+      return;
+    }
+
+    var selected = document.querySelector('.ct-language .ct-language-selected');
+    if (selected) {
+      selected.classList.remove('ct-language-selected');
+    }
+
+    var target = event.target;
+    while (target && target !== langSelect ) {
+      if (target.matches('.lang-select')) {
+        break;
+      }
+      target = target.parentElement;
+    }
+
+    if (target && target.matches('.lang-select')) {
+      var lang = target.getAttribute('data-lang');
+      if (googleCombo.value == lang) {
+        restoreLang();
+      } else {
+        target.parentElement.classList.add('ct-language-selected');
+        googleCombo.value = lang;
+        triggerHtmlEvent(googleCombo, 'change');
+      }
+    }
+
+    event.preventDefault();
+  });
+}
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</span>
+</div>
+        </nav>
+</div>
+  </div>
+</header>
+
+<script>
+  function initHeader() {
+    var lastScrollY = getScrollPos().y;
+    var documentElement = document.documentElement;
+
+    function storeScrollData() {
+      var y = getScrollPos().y;documentElement.setAttribute("data-header-transparent", "");var scrollStatus = "";
+
+      if (y <= 0) {
+        scrollStatus = "top";
+      } else if ((window.innerHeight + y) >= document.body.offsetHeight) {
+        scrollStatus = "bottom";
+      } else {
+        var isScrollDown = (y - lastScrollY > 0) ? true : false;
+        scrollStatus = isScrollDown ? "down" : "up";
+      }
+
+      lastScrollY = y;
+      documentElement.setAttribute("data-scroll-status", scrollStatus);
+    }
+
+    window.addEventListener('scroll', function(e) {
+      storeScrollData();
+    });
+
+    storeScrollData();
+  }
+  document.addEventListener('DOMContentLoaded', initHeader);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    html .page-banner {
+      background: #000;
+    }
+  </style>
+<style>html .page-banner {
+      height:  36.8vh;
+      min-height: 38vh;
+    }
+    html[data-scroll-status="top"] .page-banner {
+      height: 100vh;
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-img > *:first-child {
+      opacity: 0.618;
+    }
+
+    html[data-theme="dark"] .page-banner .page-banner-img > *:first-child {
+      opacity: 0.443724;
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-inner > *:first-child > *:nth-child(1) {
+      font-size: 3.25em; font-weight: bold; text-decoration: underline
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-inner > *:first-child > *:nth-child(2) {
+      color: gold
+    }
+  </style>
+<section class="page-banner">
+    <div class="page-banner-img">
+<div style="background-image: url(/jekyll-theme-yat/assets/images/banners/babel.png)"></div>
+        <img class="img-placeholder" src="/jekyll-theme-yat/assets/images/banners/babel.png">
+</div>
+    <div class="wrapper">
+      <div class="page-banner-inner">
+<header class="post-header">
+  <h1 class="post-title p-name" itemprop="name headline">[Babel] 바벨의 프레셋(Presets) 사용</h1>
+  <h2 class="post-subtitle"></h2>
+
+  <p class="post-meta">
+    <time class="dt-published" datetime="2021-12-23T00:00:00+00:00" itemprop="datePublished"><i class="fa fa-calendar"></i> Dec 23, 2021
+    </time>
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span class="post-reading-time left-vsplit"><i class="fa fa-clock-o"></i> About 7 mins</span>
+  </p>
+<div class="post-tags">
+<a class="post-tag" href="/jekyll-theme-yat/tags.html#Webpack">#Webpack</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#Node.js">#Node.js</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#Javascript">#Javascript</a>
+</div></header>
+</div>
+    </div>
+  </section><script>
+  function hashLocate(hashValue) {
+    hashValue = hashValue.replace(/^.*#h-/, '');
+    hashValue = decodeURIComponent(hashValue);
+    var element = document.getElementById(hashValue);
+
+    if (!element) {
+      return;
+    }
+
+    var header = document.querySelector('header.site-header');
+    var headerRect = header.getBoundingClientRect();
+    var headerTop = Math.floor(headerRect.top);
+    var headerHeight = Math.floor(headerRect.height);
+    var scrollPos = getScrollPos();
+    var offsetY = element.offsetTop - (headerTop + headerHeight + 20);
+
+    if (offsetY == scrollPos.y) {
+      return;
+    }
+
+    if (headerTop == 0  && offsetY > scrollPos.y) {
+      offsetY += headerHeight + 2;
+    } else if (headerTop < 0  && offsetY < scrollPos.y) {
+      offsetY -= headerHeight - 2;
+    }
+
+    smoothScrollTo(offsetY);
+  }
+
+  // The first event occurred
+  window.addEventListener('load', function(event) {
+    if (window.location.hash) {
+      hashLocate(window.location.hash);
+    }
+  });
+
+  // The first event occurred
+  window.addEventListener('click', function(event) {
+    if (event.target.tagName.toLowerCase() == 'a') {
+      hashLocate(event.target.getAttribute('href'));
+    }
+  });
+</script>
+<div class="theme-toggle">
+  <input type="checkbox" id="theme-switch">
+  <label for="theme-switch">
+    <div class="toggle"></div>
+    <div class="names">
+      <p class="light">Light</p>
+      <p class="dark">Dark</p>
+    </div>
+  </label>
+</div>
+
+
+
+
+<script>
+  (function() {
+    var sw = document.getElementById('theme-switch');
+    var html = document.getElementsByTagName('html')[0];
+    var nightModeOption = ('auto' || 'auto').toLowerCase();
+    var storage = nightModeOption === 'manual'
+        ? localStorage
+        : sessionStorage;
+    var themeData = loadThemeData();
+
+    function saveThemeData(data) {
+      storage.setItem('theme', JSON.stringify(data));
+    }
+
+    function loadThemeData() {
+      var data = storage.getItem('theme');
+      try {
+        data = JSON.parse(data ? data : '');
+      } catch(e) {
+        data = { nightShift: undefined, autoToggleAt: 0 };
+        saveThemeData(data);
+      }
+      return data;
+    }
+
+    function handleThemeToggle(nightShift) {
+      themeData.nightShift = nightShift;
+      saveThemeData(themeData);
+      html.dataset.theme = nightShift ? 'dark' : 'light';
+      setTimeout(function() {
+        sw.checked = nightShift ? true : false;
+      }, 50);
+    }
+
+    function autoThemeToggle() {
+      // Next time point of theme toggle
+      var now = new Date();
+      var toggleAt = new Date();
+      var hours = now.getHours();
+      var nightShift = hours >= 19 || hours <=7;
+
+      if (nightShift) {
+        if (hours > 7) {
+          toggleAt.setDate(toggleAt.getDate() + 1);
+        }
+        toggleAt.setHours(7);
+      } else {
+        toggleAt.setHours(19);
+      }
+
+      toggleAt.setMinutes(0);
+      toggleAt.setSeconds(0);
+      toggleAt.setMilliseconds(0)
+
+      var delay = toggleAt.getTime() - now.getTime();
+
+      // auto toggle theme mode
+      setTimeout(function() {
+        handleThemeToggle(!nightShift);
+      }, delay);
+
+      return {
+        nightShift: nightShift,
+        toggleAt: toggleAt.getTime()
+      };
+    }
+
+    // Listen the theme toggle event
+    sw.addEventListener('change', function(event) {
+      handleThemeToggle(event.target.checked);
+    });
+
+    if (nightModeOption == 'auto') {
+      var data = autoThemeToggle();
+
+      // Toggle theme by local setting
+      if (data.toggleAt > themeData.autoToggleAt) {
+        themeData.autoToggleAt = data.toggleAt;
+        handleThemeToggle(data.nightShift);
+      } else {
+        handleThemeToggle(themeData.nightShift);
+      }
+    } else if (nightModeOption == 'manual') {
+      handleThemeToggle(themeData.nightShift);
+    } else {
+      var nightShift = themeData.nightShift;
+      if (nightShift === undefined) {
+        nightShift = nightModeOption === 'on';
+      }
+      handleThemeToggle(nightShift);
+    }
+  })();
+</script>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="framework">
+  <section class="main">
+
+     <div class="post">
+  <section>
+
+
+
+
+
+
+
+
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <div class="post-content e-content" itemprop="articleBody">
+
+      <h2 id="a"><strong>프레셋(Presets)이란?</strong></h2>
+
+<hr>
+
+<p>플러그인으로 코드 변환을 하기 위해서는 필요한 플러그인을 각각 설정해야 했습니다.</p>
+
+<div file="babel.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">plugins</span><span class="p">:</span> <span class="p">[</span>
+            <span class="dl">"</span><span class="s2">@babel/plugin-transform-block-scoping</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">@babel/plugin-transform-arrow-functions</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">@babel/plugin-transform-strict-mode</span><span class="dl">"</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>혹은</p>
+
+<p><strong>build :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span><span class="w"> </span>npx app.js <span class="nt">--plugins</span><span class="o">=</span>@babel/plugin-transform-block-scoping <span class="nt">--plugins</span><span class="o">=</span>@babel/plugin-transform-arrow-functions <span class="nt">--plugins</span><span class="o">=</span>@babel/plugin-transform-strict-mode
+</code></pre></div></div>
+
+<p>바벨은 필요한 플러그인들을 모아 만든 <code class="language-plaintext highlighter-rouge">프레셋(Presets)</code>이라는 기능을 제공합니다.</p>
+
+<p>이제는 하나하나 세팅할 필요가 없습니다.</p>
+
+<p><br></p>
+
+<h2 id="b"><strong>프레셋(Presets) 만들기</strong></h2>
+
+<hr>
+
+<p>기존의 세개의 플러그인을 하나의 <code class="language-plaintext highlighter-rouge">프리셋</code>으로 만들어 보겠습니다.</p>
+
+<div file="customPreset.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">custompreset</span><span class="p">(){</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="na">plugins</span><span class="p">:</span> <span class="p">[</span>
+                <span class="dl">"</span><span class="s2">@babel/plugin-transform-block-scoping</span><span class="dl">"</span><span class="p">,</span>
+                <span class="dl">"</span><span class="s2">@babel/plugin-transform-arrow-functions</span><span class="dl">"</span><span class="p">,</span>
+                <span class="dl">"</span><span class="s2">@babel/plugin-transform-strict-mode</span><span class="dl">"</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br></p>
+
+<div file="babel.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">presets</span><span class="p">:[</span><span class="dl">'</span><span class="s1">./customPreset.js</span><span class="dl">'</span><span class="p">]</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br></p>
+
+<p><strong>build 결과 :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span><span class="w"> </span>npx babel app.js
+<span class="gp">    "use strict";</span><span class="w">
+</span><span class="go">
+    // Babel Input: ES2015 arrow function, const/let 스코프
+    [1, 2, 3].map(function (data) {
+</span><span class="gp">    return data + 1;</span><span class="w">
+</span><span class="gp">    });</span><span class="w">
+</span><span class="gp">    var test = 3;</span><span class="w">
+</span><span class="gp">    var test2 = 5;</span><span class="w">
+</span></code></pre></div></div>
+
+<p>플러그인을 하나의 프리셋으로 묶어 <code class="language-plaintext highlighter-rouge">babel.config.js</code> 기본설정 파일 <code class="language-plaintext highlighter-rouge">presets</code> 배열에 추가만 해주면 됩니다.</p>
+
+<p><br>
+<br></p>
+
+<h2 id="c"><strong>바벨의 프레셋(Presets) 사용하기</strong></h2>
+
+<hr>
+
+<p><a href="https://babeljs.io/docs/en/babel-preset-env">바벨 곰식홈페이지</a>에 들어가면 바벨은 목적에 맞는 프리셋을 제공합니다.</p>
+
+<p>실제로 실무에서는 플로그인이나 커스텀 프리셋을 만들지 않고 바벨이 제공하는 프리셋을 사용합니다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/147522388-cff9cfca-c604-468d-b1e5-f686efcd91e3.png" alt="image"></p>
+
+<p><br></p>
+
+<p><code class="language-plaintext highlighter-rouge">preset-react</code>는 리액트를 <code class="language-plaintext highlighter-rouge">preset-typescript</code>는 타입스크립트를 <code class="language-plaintext highlighter-rouge">preset-flow</code>는 <code class="language-plaintext highlighter-rouge">flow</code>을 변환해주는 프리셋입니다. 
+이번 포스트는 <code class="language-plaintext highlighter-rouge">ES6</code> 문법으로 진행할 것이기 때문에 <code class="language-plaintext highlighter-rouge">preset-env</code>에 대해서만 알아보도록 하겠습니다.</p>
+
+<p><br>
+<br></p>
+
+<h3 id="d"><strong>preset-env</strong></h3>
+
+<hr>
+
+<p><code class="language-plaintext highlighter-rouge">preset-env</code>은 대상 환경에 필요한 변환을 세세하게 관리할 필요 없이, 최신 ES2015+ Javascript를 사용할 수 있는 환경을 제공합니다. 이전에는 연도별로 프리셋을 제공했지만
+(babel-reset-es2015, babel-reset-es2016, babel-reset-es2017, babel-reset-latest …) 이제는 <code class="language-plaintext highlighter-rouge">preset-env</code>로 통합하여 제공합니다.</p>
+
+<p><strong>install :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    npm install --save-dev @babel/preset-env
+</span></code></pre></div></div>
+
+<p><br></p>
+
+<div file="babel.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">presets</span><span class="p">:</span> <span class="p">[</span>
+            <span class="dl">"</span><span class="s2">@babel/preset-env</span><span class="dl">"</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br></p>
+
+<p><strong>build 결과 :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span><span class="w"> </span>npx babel app.js
+<span class="gp">    "use strict";</span><span class="w">
+</span><span class="go">
+    // Babel Input: ES2015 arrow function, const/let 스코프
+    [1, 2, 3].map(function (data) {
+</span><span class="gp">    return data + 1;</span><span class="w">
+</span><span class="gp">    });</span><span class="w">
+</span><span class="gp">    var test = 3;</span><span class="w">
+</span><span class="gp">    var test2 = 5;</span><span class="w">
+</span></code></pre></div></div>
+
+<p><br></p>
+
+<h3 id="e"><strong>Options</strong></h3>
+
+<hr>
+
+<h4 id="f"><strong>targets</strong></h4>
+
+<ul>
+  <li>브라우저의 최소 환경 버전을 지정하여 타겟 브라우저 환경에 맞는 플러그인들을 찾아 변환해 줍니다.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">targets</code>에 아무것도 지정하지 않으면 최상위 옵션이 설정됩니다.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">targets</code>에 브라우저를 여러개 지정하면, 바벨은 알아서 최소 환경 기준으로 변환 합니다.</li>
+</ul>
+
+<p><br></p>
+
+<p><strong>브라우저 호환성 체크</strong></p>
+<ul>
+  <li><a href="https://caniuse.com/">can i use 에서 확인</a></li>
+  <li>크롬 58 버전은 <code class="language-plaintext highlighter-rouge">arrow function</code>, <code class="language-plaintext highlighter-rouge">const</code>, <code class="language-plaintext highlighter-rouge">let</code>을 모두 제공하지만 <code class="language-plaintext highlighter-rouge">IE10</code>은 제공하지 않습니다. 최저 환경인 <code class="language-plaintext highlighter-rouge">IE10</code> 기준으로 변환 되는지 확인해보겠습니다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/147529461-ec5a1e72-5114-4ec2-967b-7eb186f55ed7.png" alt="image"></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/147529475-9f1fe972-2a01-491a-bd11-557c0dd50e5e.png" alt="image"></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/147529497-94a448bd-f08e-4755-827c-0a0e647738d6.png" alt="image"></p>
+
+<p><br></p>
+
+<div file="babel.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">presets</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">[</span>
+            <span class="dl">"</span><span class="s2">@babel/preset-env</span><span class="dl">"</span><span class="p">,</span>
+            <span class="p">{</span>
+            <span class="na">targets</span><span class="p">:</span> <span class="p">{</span>
+                <span class="na">chrome</span><span class="p">:</span> <span class="dl">"</span><span class="s2">58</span><span class="dl">"</span><span class="p">,</span> 
+                <span class="na">ie</span><span class="p">:</span> <span class="dl">"</span><span class="s2">10</span><span class="dl">"</span>
+            <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br></p>
+
+<p><strong>build 결과 :</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span><span class="w"> </span>npx babel app.js
+<span class="gp">    "use strict";</span><span class="w">
+</span><span class="go">
+    // Babel Input: ES2015 arrow function, const/let 스코프
+    [1, 2, 3].map(function (data) {
+</span><span class="gp">    return data + 1;</span><span class="w">
+</span><span class="gp">    });</span><span class="w">
+</span><span class="gp">    var test = 3;</span><span class="w">
+</span><span class="gp">    var test2 = 5;</span><span class="w">
+</span></code></pre></div></div>
+
+<p><br></p>
+
+<h4 id="g"><strong>폴리필(polyfills)</strong></h4>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">useBuiltIns</code> 옵션을 다루기전에 폴리필이라는 개념을 먼저 알아야합니다. 예제를 보시면 <code class="language-plaintext highlighter-rouge">app.js</code>에 ES6 문법인 <code class="language-plaintext highlighter-rouge">new Promise()</code> 사용했습니다.</li>
+  <li>하지만 <code class="language-plaintext highlighter-rouge">build</code> 결과는 변함이 없습니다. 바벨은 ES6에서 ES5로 변환할 수 있는 것만 빌드합니다.</li>
+  <li>그렇지 못한 것들은 <code class="language-plaintext highlighter-rouge">폴리필(polyfills)</code>이라고 부르는 코드조각을 추가하여 해결합니다.</li>
+  <li>정리하여 <code class="language-plaintext highlighter-rouge">Promise()</code>는 <code class="language-plaintext highlighter-rouge">ES5</code>로 변환할 수 없기 때문에, 폴리필을 사용하여 <code class="language-plaintext highlighter-rouge">ES5</code> 버전에서 구동될 수 있도록 구현합니다.</li>
+</ul>
+
+<div file="app.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// Babel Input: ES2015 Promise</span>
+    <span class="k">new</span> <span class="nb">Promise</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><br></p>
+
+<div file="babel.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">presets</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">[</span>
+            <span class="dl">"</span><span class="s2">@babel/preset-env</span><span class="dl">"</span><span class="p">,</span>
+            <span class="p">{</span>
+            <span class="na">targets</span><span class="p">:</span> <span class="p">{</span>
+                <span class="na">chrome</span><span class="p">:</span> <span class="dl">"</span><span class="s2">58</span><span class="dl">"</span><span class="p">,</span> 
+                <span class="na">ie</span><span class="p">:</span> <span class="dl">"</span><span class="s2">10</span><span class="dl">"</span>
+            <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br></p>
+
+<p><strong>build 결과 :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span><span class="w"> </span>npx babel app.js
+<span class="gp">    "use strict";</span><span class="w">
+</span><span class="go">
+    // Babel Input: ES2015 Promise
+</span><span class="gp">    new Promise();</span><span class="w">
+</span></code></pre></div></div>
+
+<p>분명 <code class="language-plaintext highlighter-rouge">preset-env</code> 프리셋을 적용했는대도 ES5로 변환이 안됩니다. 그</p>
+
+<p><br>
+<br></p>
+
+<h4 id="h"><strong>useBuiltIns</strong></h4>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">useBuiltIns</code>은 폴리필을 처리하는 방법을 구성합니다.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">"usage"</code>, <code class="language-plaintext highlighter-rouge">"entry"</code>, <code class="language-plaintext highlighter-rouge">false</code> 3가지 중 하나를 선택, default는 false</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">"usage"</code>, <code class="language-plaintext highlighter-rouge">"entry"</code> 옵션을 선택하면 <code class="language-plaintext highlighter-rouge">core-js</code>을 모듈로 가져와서 사용합니다.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">@babel/polyfill</code>은 7.4.0버전부터는 사용되지 않습니다. 따라서 직접 추가하는 것을 추천하고 있습니다.</li>
+</ul>
+
+<p><strong>install :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    npm install core-js@3 --save
+
+</span><span class="gp">    #</span><span class="c"># or</span>
+<span class="go">
+    npm install core-js@2 --save
+</span></code></pre></div></div>
+
+<p>corejs의 기본값은 “2” 버전입니다.</p>
+
+<div file="babel.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">presets</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">[</span>
+        <span class="dl">"</span><span class="s2">@babel/preset-env</span><span class="dl">"</span><span class="p">,</span>
+        <span class="p">{</span>
+            <span class="na">useBuiltIns</span><span class="p">:</span> <span class="dl">"</span><span class="s2">usage</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">corejs</span><span class="p">:</span> <span class="p">{</span>
+            <span class="na">version</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+        <span class="p">],</span>
+    <span class="p">],</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>build 결과 :</strong></p>
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">corejs</code>의 기본값은 “2” 버전입니다. <code class="language-plaintext highlighter-rouge">build</code> 결과를 보면 <code class="language-plaintext highlighter-rouge">corejs</code>에서 <code class="language-plaintext highlighter-rouge">Promise</code> 모듈을 <code class="language-plaintext highlighter-rouge">import</code>하는 구문이 상단에 추가된 것을 확인할 수 있습니다.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">corejs</code>를 <code class="language-plaintext highlighter-rouge">install</code>해서 직접 <code class="language-plaintext highlighter-rouge">import</code> 구문을 추가하는 방법을 사용해도 무관합니다.</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span><span class="w"> </span>npx babel app.js   
+<span class="gp">    "use strict";</span><span class="w">
+</span><span class="go">
+</span><span class="gp">    require("core-js/modules/es6.object.to-string.js");</span><span class="w">
+</span><span class="gp">    require("core-js/modules/es6.promise.js");</span><span class="w">
+</span><span class="go">
+    // Babel Input: ES2015 Promise
+</span><span class="gp">    new Promise();</span><span class="w">
+</span></code></pre></div></div>
+
+
+    </div>
+
+</article>
+<div class="post-nav">
+<a class="previous" href="/jekyll-theme-yat/babel/2021/12/23/Babel-01.html" title="[Babel] 바벨의 이해와 동작원리 파악하기">[Babel] 바벨의 이해와 동작원리 파악하기</a><a class="next" href="/jekyll-theme-yat/babel/2021/12/28/Babel-03.html" title="[Babel] Webpack에 통합하여 사용하기">[Babel] Webpack에 통합하여 사용하기</a>
+</div>
+<div class="post-related">
+      <div>Related Articles</div>
+      <ul>
+        <li><a class="post-link" href="/jekyll-theme-yat/node.js/2022/03/29/Node.js-07.html" title="[Babel] Webpack에 통합하여 사용하기">[Node.js] 사용자 인증 (1) - JSON Web Tokens이란?</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/cloud/2021/11/04/cloud.html" title="[Babel] Webpack에 통합하여 사용하기">네이버 클라우드에 putty, filezila 접속하기</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/git/2021/12/02/git-01.html" title="[Babel] Webpack에 통합하여 사용하기">[Git] Git 이해하기</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/babel/2021/12/28/Babel-03.html" title="[Babel] Webpack에 통합하여 사용하기">[Babel] Webpack에 통합하여 사용하기</a></li>
+</ul>
+    </div>
+<div class="post-comments"></div></section>
+</div>
+<script>
+  new Zooming().listen('img')
+</script>
+
+  </section>
+  <section class="sidebar" style="margin-left: 15px;">
+    <!-- Get sidebar items --><style type="text/css" media="screen">
+.post-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+</style>
+
+<div class="post-menu">
+  <div class="post-menu-title">TOC</div>
+  <div class="post-menu-content"></div>
+</div>
+
+<script>
+  function generateContent() {
+    var menu = document.querySelector(".post-menu");
+    var menuContent =  menu.querySelector(".post-menu-content");
+    var headings = document.querySelector(".post-content").querySelectorAll("h2, h3, h4, h5, h6");
+
+    // Hide menu when no headings
+    if (headings.length === 0) {
+      return menu.style.display = "none";
+    }
+
+    // Generate post menu
+    var menuHTML = '';
+    for (var i = 0; i < headings.length; i++) {
+      var h = headings[i];
+      menuHTML += (
+        '<li class="h-' + h.tagName.toLowerCase() + '">'
+        + '<a href="#h-' + h.getAttribute('id') + '">' + h.textContent + '</a></li>');
+    }
+
+    menuContent.innerHTML = '<ul>' + menuHTML + '</ul>';
+
+    // The header element
+    var header = document.querySelector('header.site-header');
+
+    function doMenuCollapse(index, over_items) {
+      var items = menuContent.firstChild.children;
+
+      if (over_items == undefined) {
+        over_items = 20;
+      }
+
+      if (items.length < over_items) {
+        return;
+      }
+
+      var activeItem = items[index];
+      var beginItem = activeItem
+      var endItem = activeItem
+      var beginIndex = index;
+      var endIndex = index + 1;
+      while (beginIndex >= 0
+        && !items[beginIndex].classList.contains('h-h2')) {
+        beginIndex -= 1;
+      }
+      while (endIndex < items.length
+        && !items[endIndex].classList.contains('h-h2')) {
+        endIndex += 1;
+      }
+      for (var i = 0; i < beginIndex; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+      for (var i = beginIndex + 1; i < endIndex; i++) {
+        item = items[i]
+        // if (!item.classList.contains('h-h2')) {
+          item.style.display = '';
+        // }
+      }
+      for (var i = endIndex; i < items.length; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+    }
+
+    // Init menu collapsed
+    doMenuCollapse(-1);
+
+    // Active the menu item
+    window.addEventListener('scroll', function (event) {
+      var lastActive = menuContent.querySelector('.active');
+      var changed = true;
+      var activeIndex = -1;
+      for (var i = headings.length - 1; i >= 0; i--) {
+        var h = headings[i];
+        var headingRect = h.getBoundingClientRect();
+        var headerRect = header.getBoundingClientRect();
+        var headerTop = Math.floor(headerRect.top);
+        var headerHeight = Math.floor(headerRect.height);
+        var headerHeight = headerTop + headerHeight + 20;
+        if (headingRect.top <= headerHeight) {
+          var id = 'h-' + h.getAttribute('id');
+          var a = menuContent.querySelector('a[href="#' + id  + '"]');
+          var curActive = a.parentNode;
+          if (curActive) {
+            curActive.classList.add('active');
+            activeIndex = i;
+          }
+          if (lastActive == curActive) {
+            changed = false;
+          }
+          break;
+        }
+      }
+      if (changed) {
+        if (lastActive) {
+          lastActive.classList.remove('active');
+        }
+        doMenuCollapse(activeIndex);
+      }
+      event.preventDefault();
+    });
+  }
+  generateContent();
+</script>
+</section>
+</div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jekyll-theme-yat/"></data>
+
+  <div class="wrapper">
+    <div class="site-footer-inner">
+<div>
+<span class="copyleft">©</span> 2022 Seo SeongSik. All rights reserved</div>
+      <div>Go to <a title="github" href="https://github.com/s-seongsik">Github</a>
+</div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

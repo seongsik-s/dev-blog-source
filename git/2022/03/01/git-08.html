@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>[Git] 요새 누가 GitBook없이 문서 만들어? | IT 데이터베이스</title>
+<meta name="generator" content="Jekyll v4.2.2">
+<meta property="og:title" content="[Git] 요새 누가 GitBook없이 문서 만들어?">
+<meta name="author" content="GitHub User">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="시작으로">
+<meta property="og:description" content="시작으로">
+<link rel="canonical" href="/jekyll-theme-yat/git/2022/03/01/git-08.html">
+<meta property="og:url" content="/jekyll-theme-yat/git/2022/03/01/git-08.html">
+<meta property="og:site_name" content="IT 데이터베이스">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2022-03-01T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="[Git] 요새 누가 GitBook없이 문서 만들어?">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"GitHub User"},"dateModified":"2022-03-01T00:00:00+00:00","datePublished":"2022-03-01T00:00:00+00:00","description":"시작으로","headline":"[Git] 요새 누가 GitBook없이 문서 만들어?","mainEntityOfPage":{"@type":"WebPage","@id":"/jekyll-theme-yat/git/2022/03/01/git-08.html"},"url":"/jekyll-theme-yat/git/2022/03/01/git-08.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-noto-sans@0.0.72/index.min.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/main.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/image-popup.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="/jekyll-theme-yat/assets/js/main.js"></script>
+  <script src="/jekyll-theme-yat/assets/js/zooming.min.js"></script><link type="application/atom+xml" rel="alternate" href="/jekyll-theme-yat/feed.xml" title="IT 데이터베이스">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+<!-- and it's easy to individually load additional languages -->
+<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/go.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Init highlight js
+document.addEventListener('DOMContentLoaded', function(event) {
+  var els = document.querySelectorAll('pre code')
+
+  function addLangData(block) {
+    var outer = block.parentElement.parentElement.parentElement;
+    var lang = block.getAttribute('data-lang');
+    for (var i = 0; i < outer.classList.length; i++) {
+      var cls = outer.classList[i];
+      if (cls.startsWith('language-')) {
+        lang = cls;
+        break;
+      }
+    }
+    if (!lang) {
+      cls = block.getAttribute('class');
+      lang = cls ? cls.replace('hljs ', '') : '';
+    }
+    if (lang.startsWith('language-')) {
+      lang = lang.substr(9);
+    }
+    block.setAttribute('class', 'hljs ' + lang);
+    block.parentNode.setAttribute('data-lang', lang);
+  }
+
+  function addBadge(block) {
+    var enabled = ('true' || 'true').toLowerCase();
+    if (enabled == 'true') {
+      var pre = block.parentElement;
+      pre.classList.add('badge');
+    }
+  }
+
+  function handle(block) {
+    addLangData(block);
+    addBadge(block)
+    hljs.highlightBlock(block);
+  }
+
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i];
+    handle(el);
+  }
+});
+</script>
+
+<style>
+  /* code language badge */
+  pre.badge::before {
+    content: attr(data-lang);
+    color: #fff;
+    background-color: #ff4e00;
+    padding: 0 .5em;
+    border-radius: 0 2px;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 32px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+  }
+
+  /* fix wrong badge display for firefox browser */
+  code > table pre::before {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="site-header site-header-transparent" role="banner">
+
+  <div class="wrapper">
+    <div class="site-header-inner">
+<span class="site-brand"><a class="site-brand-inner" rel="author" href="/jekyll-theme-yat/">
+  <img class="site-favicon" title="IT 데이터베이스" src="" onerror="this.style.display='none'">
+  IT 데이터베이스
+</a>
+</span><nav class="site-nav">
+          <input type="checkbox" id="nav-trigger" class="nav-trigger">
+          <label for="nav-trigger">
+            <span class="menu-icon">
+              <svg viewbox="0 0 18 15" width="18px" height="15px">
+                <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+              </svg>
+            </span>
+          </label>
+
+          <div class="trigger">
+<a class="page-link" href="/jekyll-theme-yat/about.html">ABOUT</a><a class="page-link" href="/jekyll-theme-yat/archives.html">ARCHIVES</a><a class="page-link" href="/jekyll-theme-yat/categories.html">CATEGORIES</a><a class="page-link" href="/jekyll-theme-yat/">HOME</a><a class="page-link" href="/jekyll-theme-yat/tags.html">TAGS</a>
+
+
+
+
+
+
+
+
+
+<span class="page-link">
+
+
+
+<div id="google_translate_element" style="display: none;">
+</div>
+
+<span class="ct-language">
+  <ul class="list-unstyled ct-language-dropdown">
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="en">
+          
+          <img src="https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png" title="English">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="fr">
+          
+          <img src="https://cdn.countryflags.com/thumbs/france/flag-400.png" title="French">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="zh-CN">
+          
+          <img src="https://cdn.countryflags.com/thumbs/china/flag-400.png" title="Chinese(Simple)">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ja">
+          
+          <img src="https://cdn.countryflags.com/thumbs/japan/flag-400.png" title="Japanese">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ko">
+          
+          <img src="https://cdn.countryflags.com/thumbs/south-korea/flag-400.png" title="Korean">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ru">
+          
+          <img src="https://cdn.countryflags.com/thumbs/russia/flag-400.png" title="Russian">
+          
+        </a>
+      </li>
+    
+  </ul>
+</span>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false,
+    layout: google.translate.TranslateElement.InlineLayout.VERTICAL
+  }, 'google_translate_element');
+
+  // Links to cross-origin destinations are unsafe
+  var gll = document.getElementsByClassName('goog-logo-link')[0];
+  if (gll) {
+    gll.setAttribute('rel', 'noopener');
+  }
+
+  function restoreLang() {
+    var iframe = document.getElementsByClassName('goog-te-banner-frame')[0];
+    if (!iframe) return;
+
+    var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+    var restore_el = innerDoc.getElementsByTagName("button");
+
+    for (var i = 0; i < restore_el.length; i++) {
+      if (restore_el[i].id.indexOf("restore") >= 0) {
+        restore_el[i].click();
+        var close_el = innerDoc.getElementsByClassName("goog-close-link");
+        close_el[0].click();
+        return;
+      }
+    }
+  }
+
+  function triggerHtmlEvent(element, eventName) {
+    var event;
+    if (document.createEvent) {
+      event = document.createEvent('HTMLEvents');
+      event.initEvent(eventName, true, true);
+      element.dispatchEvent(event);
+    } else {
+      event = document.createEventObject();
+      event.eventType = eventName;
+      element.fireEvent('on' + event.eventType, event);
+    }
+  }
+
+  var googleCombo = document.querySelector("select.goog-te-combo");
+  var langSelect = document.querySelector('.ct-language');
+  langSelect.addEventListener('click', function(event) {
+    if (!event.target) {
+      return;
+    }
+
+    var selected = document.querySelector('.ct-language .ct-language-selected');
+    if (selected) {
+      selected.classList.remove('ct-language-selected');
+    }
+
+    var target = event.target;
+    while (target && target !== langSelect ) {
+      if (target.matches('.lang-select')) {
+        break;
+      }
+      target = target.parentElement;
+    }
+
+    if (target && target.matches('.lang-select')) {
+      var lang = target.getAttribute('data-lang');
+      if (googleCombo.value == lang) {
+        restoreLang();
+      } else {
+        target.parentElement.classList.add('ct-language-selected');
+        googleCombo.value = lang;
+        triggerHtmlEvent(googleCombo, 'change');
+      }
+    }
+
+    event.preventDefault();
+  });
+}
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</span>
+</div>
+        </nav>
+</div>
+  </div>
+</header>
+
+<script>
+  function initHeader() {
+    var lastScrollY = getScrollPos().y;
+    var documentElement = document.documentElement;
+
+    function storeScrollData() {
+      var y = getScrollPos().y;documentElement.setAttribute("data-header-transparent", "");var scrollStatus = "";
+
+      if (y <= 0) {
+        scrollStatus = "top";
+      } else if ((window.innerHeight + y) >= document.body.offsetHeight) {
+        scrollStatus = "bottom";
+      } else {
+        var isScrollDown = (y - lastScrollY > 0) ? true : false;
+        scrollStatus = isScrollDown ? "down" : "up";
+      }
+
+      lastScrollY = y;
+      documentElement.setAttribute("data-scroll-status", scrollStatus);
+    }
+
+    window.addEventListener('scroll', function(e) {
+      storeScrollData();
+    });
+
+    storeScrollData();
+  }
+  document.addEventListener('DOMContentLoaded', initHeader);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    html .page-banner {
+      background: #000;
+    }
+  </style>
+<style>html .page-banner {
+      height:  36.8vh;
+      min-height: 38vh;
+    }
+    html[data-scroll-status="top"] .page-banner {
+      height: 100vh;
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-img > *:first-child {
+      opacity: 0.618;
+    }
+
+    html[data-theme="dark"] .page-banner .page-banner-img > *:first-child {
+      opacity: 0.443724;
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-inner > *:first-child > *:nth-child(1) {
+      font-size: 3.25em; font-weight: bold; text-decoration: underline
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-inner > *:first-child > *:nth-child(2) {
+      color: gold
+    }
+  </style>
+<section class="page-banner">
+    <div class="page-banner-img">
+<div style="background-image: url(/jekyll-theme-yat/assets/images/banners/gitbook.png)"></div>
+        <img class="img-placeholder" src="/jekyll-theme-yat/assets/images/banners/gitbook.png">
+</div>
+    <div class="wrapper">
+      <div class="page-banner-inner">
+<header class="post-header">
+  <h1 class="post-title p-name" itemprop="name headline">[Git] 요새 누가 GitBook없이 문서 만들어?</h1>
+  <h2 class="post-subtitle"></h2>
+
+  <p class="post-meta">
+    <time class="dt-published" datetime="2022-03-01T00:00:00+00:00" itemprop="datePublished"><i class="fa fa-calendar"></i> Mar 01, 2022
+    </time>
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span class="post-reading-time left-vsplit"><i class="fa fa-clock-o"></i> About 6 mins</span>
+  </p>
+<div class="post-tags">
+<a class="post-tag" href="/jekyll-theme-yat/tags.html#Git">#Git</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#Github">#Github</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#GitBook">#GitBook</a>
+</div></header>
+</div>
+    </div>
+  </section><script>
+  function hashLocate(hashValue) {
+    hashValue = hashValue.replace(/^.*#h-/, '');
+    hashValue = decodeURIComponent(hashValue);
+    var element = document.getElementById(hashValue);
+
+    if (!element) {
+      return;
+    }
+
+    var header = document.querySelector('header.site-header');
+    var headerRect = header.getBoundingClientRect();
+    var headerTop = Math.floor(headerRect.top);
+    var headerHeight = Math.floor(headerRect.height);
+    var scrollPos = getScrollPos();
+    var offsetY = element.offsetTop - (headerTop + headerHeight + 20);
+
+    if (offsetY == scrollPos.y) {
+      return;
+    }
+
+    if (headerTop == 0  && offsetY > scrollPos.y) {
+      offsetY += headerHeight + 2;
+    } else if (headerTop < 0  && offsetY < scrollPos.y) {
+      offsetY -= headerHeight - 2;
+    }
+
+    smoothScrollTo(offsetY);
+  }
+
+  // The first event occurred
+  window.addEventListener('load', function(event) {
+    if (window.location.hash) {
+      hashLocate(window.location.hash);
+    }
+  });
+
+  // The first event occurred
+  window.addEventListener('click', function(event) {
+    if (event.target.tagName.toLowerCase() == 'a') {
+      hashLocate(event.target.getAttribute('href'));
+    }
+  });
+</script>
+<div class="theme-toggle">
+  <input type="checkbox" id="theme-switch">
+  <label for="theme-switch">
+    <div class="toggle"></div>
+    <div class="names">
+      <p class="light">Light</p>
+      <p class="dark">Dark</p>
+    </div>
+  </label>
+</div>
+
+
+
+
+<script>
+  (function() {
+    var sw = document.getElementById('theme-switch');
+    var html = document.getElementsByTagName('html')[0];
+    var nightModeOption = ('auto' || 'auto').toLowerCase();
+    var storage = nightModeOption === 'manual'
+        ? localStorage
+        : sessionStorage;
+    var themeData = loadThemeData();
+
+    function saveThemeData(data) {
+      storage.setItem('theme', JSON.stringify(data));
+    }
+
+    function loadThemeData() {
+      var data = storage.getItem('theme');
+      try {
+        data = JSON.parse(data ? data : '');
+      } catch(e) {
+        data = { nightShift: undefined, autoToggleAt: 0 };
+        saveThemeData(data);
+      }
+      return data;
+    }
+
+    function handleThemeToggle(nightShift) {
+      themeData.nightShift = nightShift;
+      saveThemeData(themeData);
+      html.dataset.theme = nightShift ? 'dark' : 'light';
+      setTimeout(function() {
+        sw.checked = nightShift ? true : false;
+      }, 50);
+    }
+
+    function autoThemeToggle() {
+      // Next time point of theme toggle
+      var now = new Date();
+      var toggleAt = new Date();
+      var hours = now.getHours();
+      var nightShift = hours >= 19 || hours <=7;
+
+      if (nightShift) {
+        if (hours > 7) {
+          toggleAt.setDate(toggleAt.getDate() + 1);
+        }
+        toggleAt.setHours(7);
+      } else {
+        toggleAt.setHours(19);
+      }
+
+      toggleAt.setMinutes(0);
+      toggleAt.setSeconds(0);
+      toggleAt.setMilliseconds(0)
+
+      var delay = toggleAt.getTime() - now.getTime();
+
+      // auto toggle theme mode
+      setTimeout(function() {
+        handleThemeToggle(!nightShift);
+      }, delay);
+
+      return {
+        nightShift: nightShift,
+        toggleAt: toggleAt.getTime()
+      };
+    }
+
+    // Listen the theme toggle event
+    sw.addEventListener('change', function(event) {
+      handleThemeToggle(event.target.checked);
+    });
+
+    if (nightModeOption == 'auto') {
+      var data = autoThemeToggle();
+
+      // Toggle theme by local setting
+      if (data.toggleAt > themeData.autoToggleAt) {
+        themeData.autoToggleAt = data.toggleAt;
+        handleThemeToggle(data.nightShift);
+      } else {
+        handleThemeToggle(themeData.nightShift);
+      }
+    } else if (nightModeOption == 'manual') {
+      handleThemeToggle(themeData.nightShift);
+    } else {
+      var nightShift = themeData.nightShift;
+      if (nightShift === undefined) {
+        nightShift = nightModeOption === 'on';
+      }
+      handleThemeToggle(nightShift);
+    }
+  })();
+</script>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="framework">
+  <section class="main">
+
+     <div class="post">
+  <section>
+
+
+
+
+
+
+
+
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <div class="post-content e-content" itemprop="articleBody">
+
+      <h2 id="시작으로"><strong>시작으로</strong></h2>
+
+<hr>
+
+<p>블로그를 운영한다거나, 기술을 챕터별로 문서화하고싶다거나, 팀내 지식을 문서화하여 공유한다거나, 교육자료를 만들어야 한다거나 등. 
+문서화 작업은 필수로 다뤄야하는 영역이다.</p>
+
+<p>이제까지 <code class="language-plaintext highlighter-rouge">PDF</code>, <code class="language-plaintext highlighter-rouge">워드</code>, <code class="language-plaintext highlighter-rouge">엑셀</code> 등과 같은 프로그램을 사용하여 문서화 작업을 했었는데 파일로 관리하다보니 여러모로 신경쓸 것이 많았다. (<code class="language-plaintext highlighter-rouge">수정</code>, <code class="language-plaintext highlighter-rouge">배포</code>, <code class="language-plaintext highlighter-rouge">버전관리</code> 등)</p>
+
+<p>따라서, eBook을 작성할 수 있는 <code class="language-plaintext highlighter-rouge">GitBook</code>을 공부하려고 한다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">GitBook</code>은 Markdown 언어로 집필이 가능하므로 기술 블로그를 운영한 경험이 있는 개발자라면 어렵지 않게 개발할 수 있다.</p>
+
+<p>또한, <code class="language-plaintext highlighter-rouge">Github</code> 저장소와 연동이 가능하여 서버 호스팅에 정적웹을 배포하여 사용할 수 있다.</p>
+
+<p><br></p>
+
+<h2 id="설치"><strong>설치</strong></h2>
+
+<hr>
+
+<p>설치는 윈도우 기반으로 진행하였다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">GitBook</code>을 설치하려면 <code class="language-plaintext highlighter-rouge">Node.js</code>가 설치되어있어야 한다.</p>
+
+<p>여기서 중요한건 다른 블로그나 GitBook에서도 <code class="language-plaintext highlighter-rouge">npm install -g gitbook-cli</code>으로 설치하라고 설명되어있지만 
+현재(<code class="language-plaintext highlighter-rouge">2022-03-01</code>) 기준으로 설치하게되면 버전이 <code class="language-plaintext highlighter-rouge">2.3.2 이다.</code></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>npm <span class="nb">install</span> <span class="nt">-g</span> gitbook-cli
+<span class="go">
+</span><span class="gp">$</span><span class="w"> </span>gitbook <span class="nt">--version</span>
+<span class="go">CLI version: 2.3.2
+GitBook version: 3.2.3
+</span></code></pre></div></div>
+
+<p>가장 최신버전으로 설치하게되면 cli로 init, serve, build가 작동하지 않는다.</p>
+
+<p>몇 시간을 삽질한 결과,</p>
+
+<p><code class="language-plaintext highlighter-rouge">gitbook-cli</code> 버전을 <code class="language-plaintext highlighter-rouge">2.3.0</code>으로 설치해야 모든 플랫폼에서 적상적으로 작동한다. 기존 버전을 삭제하고 <code class="language-plaintext highlighter-rouge">2.3.0</code>을 설치한다.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>npm <span class="nb">install</span> <span class="nt">-g</span> gitbook-cli@2.3.1
+<span class="go">
+</span><span class="gp">$</span><span class="w"> </span>gitbook <span class="nt">--version</span>
+<span class="go">CLI version: 2.3.0
+GitBook version: 3.2.3
+</span></code></pre></div></div>
+
+<p><br></p>
+
+<h2 id="프로젝트-생성"><strong>프로젝트 생성</strong></h2>
+
+<hr>
+
+<p>작업 디렉토리가 이미 생성되어 있다면 해당 디렉토리 안에서 <code class="language-plaintext highlighter-rouge">gitbook init</code>을 실행한다.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span><span class="nb">mkdir </span>my_gitbook
+<span class="gp">$</span><span class="w"> </span><span class="nb">cd </span>my_gitbook
+<span class="gp">$</span><span class="w"> </span>gitbook init
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">gitbook init ./my_gitbook</code>을 실행하면 my_gitbook 디렉토리가 자동으로 생성되고 그 안에 gitbook 관련된 파일들이 생성된다.</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>gitbook init ./my_gitbook
+</code></pre></div></div>
+
+<p>프로젝트 안에는 <code class="language-plaintext highlighter-rouge">README.md</code>파일이 생성되어 있다.</p>
+
+<p><br></p>
+
+<h2 id="프로젝트-실행"><strong>프로젝트 실행</strong></h2>
+
+<hr>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span><span class="nb">cd </span>my_gitbook
+<span class="gp">$</span><span class="w"> </span>gitbook serve
+</code></pre></div></div>
+
+<p>gitbook 웹 서버를 실행하면 브라우저에서 확인 할 수 있다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/156173321-bd6f45bf-124c-47c5-a491-852fc8d31587.png" alt="image"></p>
+
+<p><br></p>
+
+<h2 id="목차-및-컨텐츠-작성하기"><strong>목차 및 컨텐츠 작성하기</strong></h2>
+
+<hr>
+
+<p>GitBook은 <code class="language-plaintext highlighter-rouge">SUMMARY.md</code>파일을 사용하여 책의 챕터와 하위 챕터의 구조를 정의한다. <code class="language-plaintext highlighter-rouge">SUMMARY.md</code>파일은 책의 <code class="language-plaintext highlighter-rouge">목차</code>를 생성하는 데 사용된다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">SUMMARY.md</code>링크 목록일 뿐이며 링크의 대상은 해당 장의 파일에 대한 경로이다.</p>
+
+<p>상위 챕터에 중첩 목록을 추가하면 하위 챕터가 생성된다.</p>
+
+<h3 id="summarymd-작성-예시"><strong>SUMMARY.md 작성 예시</strong></h3>
+
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gh"># Summary</span>
+<span class="p">
+*</span> <span class="p">[</span><span class="nv">Part I</span><span class="p">](</span><span class="sx">part1/README.md</span><span class="p">)</span>
+<span class="p">    *</span> <span class="p">[</span><span class="nv">Writing is nice</span><span class="p">](</span><span class="sx">part1/writing.md</span><span class="p">)</span>
+<span class="p">    *</span> <span class="p">[</span><span class="nv">GitBook is nice</span><span class="p">](</span><span class="sx">part1/gitbook.md</span><span class="p">)</span>
+<span class="p">*</span> <span class="p">[</span><span class="nv">Part II</span><span class="p">](</span><span class="sx">part2/README.md</span><span class="p">)</span>
+<span class="p">    *</span> <span class="p">[</span><span class="nv">We love feedback</span><span class="p">](</span><span class="sx">part2/feedback_please.md</span><span class="p">)</span>
+<span class="p">    *</span> <span class="p">[</span><span class="nv">Better tools for authors</span><span class="p">](</span><span class="sx">part2/better_tools.md</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">SUMMARY.md</code>은 프로젝트 루트에 생성하여 작성한다.</li>
+  <li>part1/README.md 생성</li>
+  <li>part1/writing.md 생성</li>
+  <li>part1/gitbook.md 생성</li>
+  <li>part2/README.md 생성</li>
+  <li>part2/writing.md 생성</li>
+  <li>part2/gitbook.md 생성</li>
+</ul>
+
+<p><br></p>
+
+<p>그리고 나서 서버를 실행하면 아래와 같이 목차와 컨텐츠가 나온다. 
+링크에 연결된 <code class="language-plaintext highlighter-rouge">markdown</code> 파일의 내용이 출력되는 것이다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ gitbook serve
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/156176630-eb53d689-ba8b-48ab-8199-71a02db75207.png" alt="image"></p>
+
+<p><br></p>
+
+<h2 id="configuration"><strong>Configuration</strong></h2>
+
+<hr>
+
+<p>GitBook은 Configuration을 제공하여 책을 사용자 정의할 수 있도록 한다. 루트에서 <code class="language-plaintext highlighter-rouge">book.json</code>을 기본구성 파일로 지정하여 사용한다. package.json과 같이  <code class="language-plaintext highlighter-rouge">JSON</code> 구문으로 작성한다.</p>
+
+<h3 id="일반-설정"><strong>일반 설정</strong></h3>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Variable</th>
+      <th style="text-align: left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">root</td>
+      <td style="text-align: left">book.json를 제외한 모든 책의 파일이 포함된 루트 폴더의 경로</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">structure</td>
+      <td style="text-align: left">추가 정보, 요약, 용어집 등의 경로를 지정</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">title</td>
+      <td style="text-align: left">책 제목을 지정한다. 기본값은 README에서 추출된다.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">description</td>
+      <td style="text-align: left">책에 대한 설명을 정의한다. 기본값은 README에서 추출된다.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">styles</td>
+      <td style="text-align: left">css를 지정할 수 있다.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">isbn</td>
+      <td style="text-align: left">책의 ISBN</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">language</td>
+      <td style="text-align: left">책 언어의 ISO 코드, 기본값은 <code class="language-plaintext highlighter-rouge">en</code>
+</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">direction</td>
+      <td style="text-align: left">텍스트의 방향. rtl 또는 ltr, 기본값은 language에 따라 다르다.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">gitbook</td>
+      <td style="text-align: left">사용해야 하는 GitBook의 버전</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="플러그인"><strong>플러그인</strong></h3>
+
+<p>플러그인 및 해당 구성은 <code class="language-plaintext highlighter-rouge">book.json</code>에 지정된다.<br>
+<code class="language-plaintext highlighter-rouge">버전 3.0.0</code>부터 <code class="language-plaintext highlighter-rouge">GitBook</code>은 테마를 사용할 수 있다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Variable</th>
+      <th style="text-align: left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">plugins</td>
+      <td style="text-align: left">로드할 플러그인 목록</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">pluginsConfig</td>
+      <td style="text-align: left">플러그인 구성</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="structure"><strong>structure</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">root</code>외에도 <code class="language-plaintext highlighter-rouge">Readme</code>, <code class="language-plaintext highlighter-rouge">Summary</code>, <code class="language-plaintext highlighter-rouge">Glossary</code>, <code class="language-plaintext highlighter-rouge">Languages</code>와 같은 기본 이름을 대신 사용할 파일을 지정할 수 있다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Variable</th>
+      <th style="text-align: left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">structure.readme</td>
+      <td style="text-align: left">README 파일 이름(기본값은 README.md)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">structure.summary</td>
+      <td style="text-align: left">요약 파일 이름(기본값은 SUMMARY.md)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">structure.glossary</td>
+      <td style="text-align: left">용어집 파일 이름(기본값은 GLOSSARY.md)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">structure.languages</td>
+      <td style="text-align: left">언어 파일 이름(기본값은 LANGS.md)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br></p>
+
+<h2 id="bookjson으로-커스텀하기"><strong>book.json으로 커스텀하기</strong></h2>
+
+<hr>
+
+<p>간단한 커스텀으로 책을 만들어보자.</p>
+
+<ul>
+  <li>plugins 리스트에 사용할 플러그인들을 설치하려면 <code class="language-plaintext highlighter-rouge">gitbook install</code>을 실행해야한다.</li>
+  <li>styles에는 website, ebook, pdf, mobi, epub 의 css를 지정할 수 있다.</li>
+  <li>structure.readme를 <code class="language-plaintext highlighter-rouge">INTRO.md</code>라는 폴더로 지정한다. 보통 루트 디렉토리에 있는 README.md은 깃허브에서도 같이 사용하기 때문에 분리하여 사용하고 싶을 때 사용한다.</li>
+</ul>
+
+<h3 id="추천-플러그인"><strong>추천 플러그인</strong></h3>
+
+<ul>
+  <li>“toggle-chapters” : 목록의 리스트를 토글형식으로 보여주는 기능</li>
+  <li>“expandable-chapters-small” : 아이콘 추가되어 아이콘을 클릭하면 확장 축소되는 기능</li>
+  <li>“theme-darkblue” : 다크 블루 테마를 제공한다.,</li>
+  <li>“highlight-1” : 코드 하이라이트를 제공한다.</li>
+</ul>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"서성식의 eBook"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"author"</span><span class="p">:</span><span class="w"> </span><span class="s2">"서성식"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"styles"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"website"</span><span class="p">:</span><span class="w"> </span><span class="s2">"styles/website.css"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"ebook"</span><span class="p">:</span><span class="w"> </span><span class="s2">"styles/ebook.css"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"pdf"</span><span class="p">:</span><span class="w"> </span><span class="s2">"styles/pdf.css"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"mobi"</span><span class="p">:</span><span class="w"> </span><span class="s2">"styles/mobi.css"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"epub"</span><span class="p">:</span><span class="w"> </span><span class="s2">"styles/epub.css"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"plugins"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="s2">"expandable-chapters-small"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"theme-darkblue"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"highlight-1"</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"pluginsConfig"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"structure"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"readme"</span><span class="p">:</span><span class="w"> </span><span class="s2">"INTRO.md"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ko"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="디렉토리-구조"><strong>디렉토리 구조</strong></h3>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/156183506-c8ffac7a-c81a-41a4-afd9-02ee8f7f89c6.png" alt="image"></p>
+
+<p><br></p>
+
+<h3 id="실행결과"><strong>실행결과</strong></h3>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">&amp; gitbook install
+</span><span class="gp">$</span><span class="w"> </span>gitbook serve
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/156183047-13469a34-06e7-459f-86f6-c759931fc739.png" alt="image"></p>
+
+
+    </div>
+
+</article>
+<div class="post-nav">
+<a class="previous" href="/jekyll-theme-yat/javascript/2022/02/24/javascript-07.html" title="[Javascript] 자바스크립트 비동기처리 (1) - Callback 함수">[Javascript] 자바스크립트 비동기처리 (1) - Callback...</a><a class="next" href="/jekyll-theme-yat/javascript/2022/03/07/javascript-08.html" title="[Javascript] 이벤트 버블링, 이벤트 캡쳐링, 이벤트 위임">[Javascript] 이벤트 버블링, 이벤트 캡쳐링, 이벤트...</a>
+</div>
+<div class="post-related">
+      <div>Related Articles</div>
+      <ul>
+        <li><a class="post-link" href="/jekyll-theme-yat/node.js/2021/12/07/Node.js-01.html" title="[Javascript] 이벤트 버블링, 이벤트 캡쳐링, 이벤트 위임">[Node.js] 개념 이해하기</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/git/2022/02/07/git-06.html" title="[Javascript] 이벤트 버블링, 이벤트 캡쳐링, 이벤트 위임">[Git] Software 버전 관리 규칙, 어떻게 번호를 할당하는거야?</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/javascript/2022/03/09/javascript-09.html" title="[Javascript] 이벤트 버블링, 이벤트 캡쳐링, 이벤트 위임">[Javascript] DOM의 개념</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/git/2022/02/08/git-07.html" title="[Javascript] 이벤트 버블링, 이벤트 캡쳐링, 이벤트 위임">[Git] .gitignore로 필요한 것만 관리하자</a></li>
+</ul>
+    </div>
+<div class="post-comments"></div></section>
+</div>
+<script>
+  new Zooming().listen('img')
+</script>
+
+  </section>
+  <section class="sidebar" style="margin-left: 15px;">
+    <!-- Get sidebar items --><style type="text/css" media="screen">
+.post-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+</style>
+
+<div class="post-menu">
+  <div class="post-menu-title">TOC</div>
+  <div class="post-menu-content"></div>
+</div>
+
+<script>
+  function generateContent() {
+    var menu = document.querySelector(".post-menu");
+    var menuContent =  menu.querySelector(".post-menu-content");
+    var headings = document.querySelector(".post-content").querySelectorAll("h2, h3, h4, h5, h6");
+
+    // Hide menu when no headings
+    if (headings.length === 0) {
+      return menu.style.display = "none";
+    }
+
+    // Generate post menu
+    var menuHTML = '';
+    for (var i = 0; i < headings.length; i++) {
+      var h = headings[i];
+      menuHTML += (
+        '<li class="h-' + h.tagName.toLowerCase() + '">'
+        + '<a href="#h-' + h.getAttribute('id') + '">' + h.textContent + '</a></li>');
+    }
+
+    menuContent.innerHTML = '<ul>' + menuHTML + '</ul>';
+
+    // The header element
+    var header = document.querySelector('header.site-header');
+
+    function doMenuCollapse(index, over_items) {
+      var items = menuContent.firstChild.children;
+
+      if (over_items == undefined) {
+        over_items = 20;
+      }
+
+      if (items.length < over_items) {
+        return;
+      }
+
+      var activeItem = items[index];
+      var beginItem = activeItem
+      var endItem = activeItem
+      var beginIndex = index;
+      var endIndex = index + 1;
+      while (beginIndex >= 0
+        && !items[beginIndex].classList.contains('h-h2')) {
+        beginIndex -= 1;
+      }
+      while (endIndex < items.length
+        && !items[endIndex].classList.contains('h-h2')) {
+        endIndex += 1;
+      }
+      for (var i = 0; i < beginIndex; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+      for (var i = beginIndex + 1; i < endIndex; i++) {
+        item = items[i]
+        // if (!item.classList.contains('h-h2')) {
+          item.style.display = '';
+        // }
+      }
+      for (var i = endIndex; i < items.length; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+    }
+
+    // Init menu collapsed
+    doMenuCollapse(-1);
+
+    // Active the menu item
+    window.addEventListener('scroll', function (event) {
+      var lastActive = menuContent.querySelector('.active');
+      var changed = true;
+      var activeIndex = -1;
+      for (var i = headings.length - 1; i >= 0; i--) {
+        var h = headings[i];
+        var headingRect = h.getBoundingClientRect();
+        var headerRect = header.getBoundingClientRect();
+        var headerTop = Math.floor(headerRect.top);
+        var headerHeight = Math.floor(headerRect.height);
+        var headerHeight = headerTop + headerHeight + 20;
+        if (headingRect.top <= headerHeight) {
+          var id = 'h-' + h.getAttribute('id');
+          var a = menuContent.querySelector('a[href="#' + id  + '"]');
+          var curActive = a.parentNode;
+          if (curActive) {
+            curActive.classList.add('active');
+            activeIndex = i;
+          }
+          if (lastActive == curActive) {
+            changed = false;
+          }
+          break;
+        }
+      }
+      if (changed) {
+        if (lastActive) {
+          lastActive.classList.remove('active');
+        }
+        doMenuCollapse(activeIndex);
+      }
+      event.preventDefault();
+    });
+  }
+  generateContent();
+</script>
+</section>
+</div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jekyll-theme-yat/"></data>
+
+  <div class="wrapper">
+    <div class="site-footer-inner">
+<div>
+<span class="copyleft">©</span> 2022 Seo SeongSik. All rights reserved</div>
+      <div>Go to <a title="github" href="https://github.com/s-seongsik">Github</a>
+</div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

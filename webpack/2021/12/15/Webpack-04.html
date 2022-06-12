@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>[Webpack] loader (2) | IT 데이터베이스</title>
+<meta name="generator" content="Jekyll v4.2.2">
+<meta property="og:title" content="[Webpack] loader (2)">
+<meta name="author" content="GitHub User">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="자주 사용하는 로더">
+<meta property="og:description" content="자주 사용하는 로더">
+<link rel="canonical" href="/jekyll-theme-yat/webpack/2021/12/15/Webpack-04.html">
+<meta property="og:url" content="/jekyll-theme-yat/webpack/2021/12/15/Webpack-04.html">
+<meta property="og:site_name" content="IT 데이터베이스">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2021-12-15T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="[Webpack] loader (2)">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"GitHub User"},"dateModified":"2021-12-15T00:00:00+00:00","datePublished":"2021-12-15T00:00:00+00:00","description":"자주 사용하는 로더","headline":"[Webpack] loader (2)","mainEntityOfPage":{"@type":"WebPage","@id":"/jekyll-theme-yat/webpack/2021/12/15/Webpack-04.html"},"url":"/jekyll-theme-yat/webpack/2021/12/15/Webpack-04.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-noto-sans@0.0.72/index.min.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/main.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/image-popup.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="/jekyll-theme-yat/assets/js/main.js"></script>
+  <script src="/jekyll-theme-yat/assets/js/zooming.min.js"></script><link type="application/atom+xml" rel="alternate" href="/jekyll-theme-yat/feed.xml" title="IT 데이터베이스">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+<!-- and it's easy to individually load additional languages -->
+<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/go.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Init highlight js
+document.addEventListener('DOMContentLoaded', function(event) {
+  var els = document.querySelectorAll('pre code')
+
+  function addLangData(block) {
+    var outer = block.parentElement.parentElement.parentElement;
+    var lang = block.getAttribute('data-lang');
+    for (var i = 0; i < outer.classList.length; i++) {
+      var cls = outer.classList[i];
+      if (cls.startsWith('language-')) {
+        lang = cls;
+        break;
+      }
+    }
+    if (!lang) {
+      cls = block.getAttribute('class');
+      lang = cls ? cls.replace('hljs ', '') : '';
+    }
+    if (lang.startsWith('language-')) {
+      lang = lang.substr(9);
+    }
+    block.setAttribute('class', 'hljs ' + lang);
+    block.parentNode.setAttribute('data-lang', lang);
+  }
+
+  function addBadge(block) {
+    var enabled = ('true' || 'true').toLowerCase();
+    if (enabled == 'true') {
+      var pre = block.parentElement;
+      pre.classList.add('badge');
+    }
+  }
+
+  function handle(block) {
+    addLangData(block);
+    addBadge(block)
+    hljs.highlightBlock(block);
+  }
+
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i];
+    handle(el);
+  }
+});
+</script>
+
+<style>
+  /* code language badge */
+  pre.badge::before {
+    content: attr(data-lang);
+    color: #fff;
+    background-color: #ff4e00;
+    padding: 0 .5em;
+    border-radius: 0 2px;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 32px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+  }
+
+  /* fix wrong badge display for firefox browser */
+  code > table pre::before {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="site-header site-header-transparent" role="banner">
+
+  <div class="wrapper">
+    <div class="site-header-inner">
+<span class="site-brand"><a class="site-brand-inner" rel="author" href="/jekyll-theme-yat/">
+  <img class="site-favicon" title="IT 데이터베이스" src="" onerror="this.style.display='none'">
+  IT 데이터베이스
+</a>
+</span><nav class="site-nav">
+          <input type="checkbox" id="nav-trigger" class="nav-trigger">
+          <label for="nav-trigger">
+            <span class="menu-icon">
+              <svg viewbox="0 0 18 15" width="18px" height="15px">
+                <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+              </svg>
+            </span>
+          </label>
+
+          <div class="trigger">
+<a class="page-link" href="/jekyll-theme-yat/about.html">ABOUT</a><a class="page-link" href="/jekyll-theme-yat/archives.html">ARCHIVES</a><a class="page-link" href="/jekyll-theme-yat/categories.html">CATEGORIES</a><a class="page-link" href="/jekyll-theme-yat/">HOME</a><a class="page-link" href="/jekyll-theme-yat/tags.html">TAGS</a>
+
+
+
+
+
+
+
+
+
+<span class="page-link">
+
+
+
+<div id="google_translate_element" style="display: none;">
+</div>
+
+<span class="ct-language">
+  <ul class="list-unstyled ct-language-dropdown">
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="en">
+          
+          <img src="https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png" title="English">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="fr">
+          
+          <img src="https://cdn.countryflags.com/thumbs/france/flag-400.png" title="French">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="zh-CN">
+          
+          <img src="https://cdn.countryflags.com/thumbs/china/flag-400.png" title="Chinese(Simple)">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ja">
+          
+          <img src="https://cdn.countryflags.com/thumbs/japan/flag-400.png" title="Japanese">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ko">
+          
+          <img src="https://cdn.countryflags.com/thumbs/south-korea/flag-400.png" title="Korean">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ru">
+          
+          <img src="https://cdn.countryflags.com/thumbs/russia/flag-400.png" title="Russian">
+          
+        </a>
+      </li>
+    
+  </ul>
+</span>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false,
+    layout: google.translate.TranslateElement.InlineLayout.VERTICAL
+  }, 'google_translate_element');
+
+  // Links to cross-origin destinations are unsafe
+  var gll = document.getElementsByClassName('goog-logo-link')[0];
+  if (gll) {
+    gll.setAttribute('rel', 'noopener');
+  }
+
+  function restoreLang() {
+    var iframe = document.getElementsByClassName('goog-te-banner-frame')[0];
+    if (!iframe) return;
+
+    var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+    var restore_el = innerDoc.getElementsByTagName("button");
+
+    for (var i = 0; i < restore_el.length; i++) {
+      if (restore_el[i].id.indexOf("restore") >= 0) {
+        restore_el[i].click();
+        var close_el = innerDoc.getElementsByClassName("goog-close-link");
+        close_el[0].click();
+        return;
+      }
+    }
+  }
+
+  function triggerHtmlEvent(element, eventName) {
+    var event;
+    if (document.createEvent) {
+      event = document.createEvent('HTMLEvents');
+      event.initEvent(eventName, true, true);
+      element.dispatchEvent(event);
+    } else {
+      event = document.createEventObject();
+      event.eventType = eventName;
+      element.fireEvent('on' + event.eventType, event);
+    }
+  }
+
+  var googleCombo = document.querySelector("select.goog-te-combo");
+  var langSelect = document.querySelector('.ct-language');
+  langSelect.addEventListener('click', function(event) {
+    if (!event.target) {
+      return;
+    }
+
+    var selected = document.querySelector('.ct-language .ct-language-selected');
+    if (selected) {
+      selected.classList.remove('ct-language-selected');
+    }
+
+    var target = event.target;
+    while (target && target !== langSelect ) {
+      if (target.matches('.lang-select')) {
+        break;
+      }
+      target = target.parentElement;
+    }
+
+    if (target && target.matches('.lang-select')) {
+      var lang = target.getAttribute('data-lang');
+      if (googleCombo.value == lang) {
+        restoreLang();
+      } else {
+        target.parentElement.classList.add('ct-language-selected');
+        googleCombo.value = lang;
+        triggerHtmlEvent(googleCombo, 'change');
+      }
+    }
+
+    event.preventDefault();
+  });
+}
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</span>
+</div>
+        </nav>
+</div>
+  </div>
+</header>
+
+<script>
+  function initHeader() {
+    var lastScrollY = getScrollPos().y;
+    var documentElement = document.documentElement;
+
+    function storeScrollData() {
+      var y = getScrollPos().y;documentElement.setAttribute("data-header-transparent", "");var scrollStatus = "";
+
+      if (y <= 0) {
+        scrollStatus = "top";
+      } else if ((window.innerHeight + y) >= document.body.offsetHeight) {
+        scrollStatus = "bottom";
+      } else {
+        var isScrollDown = (y - lastScrollY > 0) ? true : false;
+        scrollStatus = isScrollDown ? "down" : "up";
+      }
+
+      lastScrollY = y;
+      documentElement.setAttribute("data-scroll-status", scrollStatus);
+    }
+
+    window.addEventListener('scroll', function(e) {
+      storeScrollData();
+    });
+
+    storeScrollData();
+  }
+  document.addEventListener('DOMContentLoaded', initHeader);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    html .page-banner {
+      background: #000;
+    }
+  </style>
+<style>html .page-banner {
+      height:  36.8vh;
+      min-height: 38vh;
+    }
+    html[data-scroll-status="top"] .page-banner {
+      height: 100vh;
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-img > *:first-child {
+      opacity: 0.618;
+    }
+
+    html[data-theme="dark"] .page-banner .page-banner-img > *:first-child {
+      opacity: 0.443724;
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-inner > *:first-child > *:nth-child(1) {
+      font-size: 3.25em; font-weight: bold; text-decoration: underline
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-inner > *:first-child > *:nth-child(2) {
+      color: gold
+    }
+  </style>
+<section class="page-banner">
+    <div class="page-banner-img">
+<div style="background-image: url(/jekyll-theme-yat/assets/images/banners/webpack.png)"></div>
+        <img class="img-placeholder" src="/jekyll-theme-yat/assets/images/banners/webpack.png">
+</div>
+    <div class="wrapper">
+      <div class="page-banner-inner">
+<header class="post-header">
+  <h1 class="post-title p-name" itemprop="name headline">[Webpack] loader (2)</h1>
+  <h2 class="post-subtitle"></h2>
+
+  <p class="post-meta">
+    <time class="dt-published" datetime="2021-12-15T00:00:00+00:00" itemprop="datePublished"><i class="fa fa-calendar"></i> Dec 15, 2021
+    </time>
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span class="post-reading-time left-vsplit"><i class="fa fa-clock-o"></i> About 17 mins</span>
+  </p>
+<div class="post-tags">
+<a class="post-tag" href="/jekyll-theme-yat/tags.html#Webpack">#Webpack</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#Babel">#Babel</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#Node.js">#Node.js</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#Javascript">#Javascript</a>
+</div></header>
+</div>
+    </div>
+  </section><script>
+  function hashLocate(hashValue) {
+    hashValue = hashValue.replace(/^.*#h-/, '');
+    hashValue = decodeURIComponent(hashValue);
+    var element = document.getElementById(hashValue);
+
+    if (!element) {
+      return;
+    }
+
+    var header = document.querySelector('header.site-header');
+    var headerRect = header.getBoundingClientRect();
+    var headerTop = Math.floor(headerRect.top);
+    var headerHeight = Math.floor(headerRect.height);
+    var scrollPos = getScrollPos();
+    var offsetY = element.offsetTop - (headerTop + headerHeight + 20);
+
+    if (offsetY == scrollPos.y) {
+      return;
+    }
+
+    if (headerTop == 0  && offsetY > scrollPos.y) {
+      offsetY += headerHeight + 2;
+    } else if (headerTop < 0  && offsetY < scrollPos.y) {
+      offsetY -= headerHeight - 2;
+    }
+
+    smoothScrollTo(offsetY);
+  }
+
+  // The first event occurred
+  window.addEventListener('load', function(event) {
+    if (window.location.hash) {
+      hashLocate(window.location.hash);
+    }
+  });
+
+  // The first event occurred
+  window.addEventListener('click', function(event) {
+    if (event.target.tagName.toLowerCase() == 'a') {
+      hashLocate(event.target.getAttribute('href'));
+    }
+  });
+</script>
+<div class="theme-toggle">
+  <input type="checkbox" id="theme-switch">
+  <label for="theme-switch">
+    <div class="toggle"></div>
+    <div class="names">
+      <p class="light">Light</p>
+      <p class="dark">Dark</p>
+    </div>
+  </label>
+</div>
+
+
+
+
+<script>
+  (function() {
+    var sw = document.getElementById('theme-switch');
+    var html = document.getElementsByTagName('html')[0];
+    var nightModeOption = ('auto' || 'auto').toLowerCase();
+    var storage = nightModeOption === 'manual'
+        ? localStorage
+        : sessionStorage;
+    var themeData = loadThemeData();
+
+    function saveThemeData(data) {
+      storage.setItem('theme', JSON.stringify(data));
+    }
+
+    function loadThemeData() {
+      var data = storage.getItem('theme');
+      try {
+        data = JSON.parse(data ? data : '');
+      } catch(e) {
+        data = { nightShift: undefined, autoToggleAt: 0 };
+        saveThemeData(data);
+      }
+      return data;
+    }
+
+    function handleThemeToggle(nightShift) {
+      themeData.nightShift = nightShift;
+      saveThemeData(themeData);
+      html.dataset.theme = nightShift ? 'dark' : 'light';
+      setTimeout(function() {
+        sw.checked = nightShift ? true : false;
+      }, 50);
+    }
+
+    function autoThemeToggle() {
+      // Next time point of theme toggle
+      var now = new Date();
+      var toggleAt = new Date();
+      var hours = now.getHours();
+      var nightShift = hours >= 19 || hours <=7;
+
+      if (nightShift) {
+        if (hours > 7) {
+          toggleAt.setDate(toggleAt.getDate() + 1);
+        }
+        toggleAt.setHours(7);
+      } else {
+        toggleAt.setHours(19);
+      }
+
+      toggleAt.setMinutes(0);
+      toggleAt.setSeconds(0);
+      toggleAt.setMilliseconds(0)
+
+      var delay = toggleAt.getTime() - now.getTime();
+
+      // auto toggle theme mode
+      setTimeout(function() {
+        handleThemeToggle(!nightShift);
+      }, delay);
+
+      return {
+        nightShift: nightShift,
+        toggleAt: toggleAt.getTime()
+      };
+    }
+
+    // Listen the theme toggle event
+    sw.addEventListener('change', function(event) {
+      handleThemeToggle(event.target.checked);
+    });
+
+    if (nightModeOption == 'auto') {
+      var data = autoThemeToggle();
+
+      // Toggle theme by local setting
+      if (data.toggleAt > themeData.autoToggleAt) {
+        themeData.autoToggleAt = data.toggleAt;
+        handleThemeToggle(data.nightShift);
+      } else {
+        handleThemeToggle(themeData.nightShift);
+      }
+    } else if (nightModeOption == 'manual') {
+      handleThemeToggle(themeData.nightShift);
+    } else {
+      var nightShift = themeData.nightShift;
+      if (nightShift === undefined) {
+        nightShift = nightModeOption === 'on';
+      }
+      handleThemeToggle(nightShift);
+    }
+  })();
+</script>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="framework">
+  <section class="main">
+
+     <div class="post">
+  <section>
+
+
+
+
+
+
+
+
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <div class="post-content e-content" itemprop="articleBody">
+
+      <h2 id="a"><strong>자주 사용하는 로더</strong></h2>
+
+<hr>
+
+<h3 id="b"><strong>css-loader</strong></h3>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">css-loader</code>를 사용하면 스타일시트도 import 구문으로 불러와 모듈로 변환할 수 있습니다.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">./src/app.css</code> 를 생성하여 밑의 코드를 저장합니다.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">./src/app.js</code>에서 <code class="language-plaintext highlighter-rouge">app.css</code>를 import 구문을 추가합니다.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">html</code>에 <code class="language-plaintext highlighter-rouge">css</code> 태그를 넣지 않아도 적용되는지 확인해보겠습니다.</li>
+</ul>
+
+<p><strong>install :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    npm install --save-dev css-loader
+</span></code></pre></div></div>
+
+<p><br></p>
+
+<ul>
+  <li>./package.json -&gt; devDependencies에 <code class="language-plaintext highlighter-rouge">css-loader</code>가 추가된 것을 확인할 수 있습니다.</li>
+</ul>
+
+<div file="./package.json" class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w">    </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"webpack-demo"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0.0"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"main"</span><span class="p">:</span><span class="w"> </span><span class="s2">"index.js"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"test"</span><span class="p">:</span><span class="w"> </span><span class="s2">"echo </span><span class="se">\"</span><span class="s2">Error: no test specified</span><span class="se">\"</span><span class="s2"> &amp;&amp; exit 1"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"build"</span><span class="p">:</span><span class="w"> </span><span class="s2">"webpack"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"author"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"license"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ISC"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"devDependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"css-loader"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^6.5.1"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"webpack"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^5.65.0"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"webpack-cli"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^4.9.1"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<div file="./src/app.css" class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nt">body</span> <span class="p">{</span>
+        <span class="nl">background-color</span><span class="p">:</span> <span class="no">red</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<div file="./index.html" class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cp">&lt;!DOCTYPE html&gt;</span>
+    <span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"X-UA-Compatible"</span> <span class="na">content=</span><span class="s">"IE=edge"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;title&gt;</span>Document<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"./dist/main.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+    <span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<div file="./src/app.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">math</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./math.js</span><span class="dl">'</span>
+    <span class="k">import</span> <span class="dl">'</span><span class="s1">./app.css</span><span class="dl">'</span><span class="p">;</span> <span class="c1">// 추가</span>
+
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">math</span><span class="p">.</span><span class="nx">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">));</span>
+</code></pre></div></div>
+
+<div file="./src/math.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">export</span> <span class="kd">function</span> <span class="nx">sum</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">){</span>
+        <span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<div file="./webpack.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">const</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">path</span><span class="dl">'</span><span class="p">);</span>
+
+    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">mode</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">development</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">entry</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="na">main</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">./src/app.js</span><span class="dl">'</span>
+        <span class="p">},</span>
+        <span class="na">output</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="na">path</span> <span class="p">:</span> <span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="dl">'</span><span class="s1">./dist</span><span class="dl">'</span><span class="p">),</span>
+            <span class="na">filename</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">[name].js</span><span class="dl">'</span>
+        <span class="p">},</span>
+        <span class="na">module</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="na">rules</span> <span class="p">:</span> <span class="p">[{</span>
+                <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.</span><span class="sr">css$/</span><span class="p">,</span> <span class="c1">// .css 확장자를 갖는 모든 파일을 대상으로 한다.</span>
+                <span class="na">use</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">css-loader</span><span class="dl">'</span><span class="p">)]</span> <span class="c1">// .css 파일을 모듈료 변환해주는 로더</span>
+            <span class="p">}]</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br></p>
+
+<p><strong>결과 :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    npm run build
+
+</span><span class="gp">    &gt;</span><span class="w"> </span>webpack-demo@1.0.0 build
+<span class="gp">    &gt;</span><span class="w"> </span>webpack
+<span class="go">
+    asset main.js 9.67 KiB [emitted] (name: main)
+    runtime modules 937 bytes 4 modules
+    cacheable modules 2.92 KiB
+    modules by path ./src/ 605 bytes
+        ./src/app.js 90 bytes [built] [code generated]
+        ./src/math.js 48 bytes [built] [code generated]
+        ./src/app.css 467 bytes [built] [code generated]
+    modules by path ./node_modules/css-loader/dist/runtime/*.js 2.33 KiB
+        ./node_modules/css-loader/dist/runtime/noSourceMaps.js 64 bytes [built] [code generated]
+        ./node_modules/css-loader/dist/runtime/api.js 2.26 KiB [built] [code generated]
+    webpack 5.65.0 compiled successfully in 2024 ms
+</span></code></pre></div></div>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">"./dist/main.js"</code>에서 javascript로 변환된 것을 확인할 수 있습니다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146322779-c5fda59b-622a-4c6a-b582-3196439004b6.png" alt="image"></p>
+
+<p><br></p>
+
+<h3 id="c"><strong>style-loader</strong></h3>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">css-loader</code>는 자바스크립트 코드로 변환만 해주고, 실제 <code class="language-plaintext highlighter-rouge">DOM</code>에 적용되지 않습니다.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">style-loader</code>는 변환된 <code class="language-plaintext highlighter-rouge">CSS</code>코드를 동적으로 <code class="language-plaintext highlighter-rouge">DOM</code>에 추가해줍니다.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">webpack</code>으로 <code class="language-plaintext highlighter-rouge">css</code>를 번들링 하기 위해서는 <code class="language-plaintext highlighter-rouge">css-loader</code>와 <code class="language-plaintext highlighter-rouge">style-loader</code>를 함께 사용합니다.</li>
+</ul>
+
+<p><strong>install :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    npm install --save-dev style-loader
+</span></code></pre></div></div>
+
+<p><br></p>
+
+<ul file="./package.json">
+  <li>
+<code class="language-plaintext highlighter-rouge">./package.json</code> -&gt; devDependencies에 <code class="language-plaintext highlighter-rouge">style-loader</code>가 추가된 것을 확인할 수 있습니다.
+    <div class="language-json highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="w">  </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"webpack-demo"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0.0"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"main"</span><span class="p">:</span><span class="w"> </span><span class="s2">"index.js"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"test"</span><span class="p">:</span><span class="w"> </span><span class="s2">"echo </span><span class="se">\"</span><span class="s2">Error: no test specified</span><span class="se">\"</span><span class="s2"> &amp;&amp; exit 1"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"build"</span><span class="p">:</span><span class="w"> </span><span class="s2">"webpack"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"author"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"license"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ISC"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"devDependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"css-loader"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^6.5.1"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"style-loader"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^3.3.1"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"webpack"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^5.65.0"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"webpack-cli"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^4.9.1"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br></p>
+
+<ul file="./webpack.config.js">
+  <li>css-loader로 변환된 자바스크립트 코드를 DOM에 삽입하기 때문에, <code class="language-plaintext highlighter-rouge">css-loader</code> -&gt; <code class="language-plaintext highlighter-rouge">style-loader</code> 순서로 처리되어야합니다.
+여기서 중요한 포인트! loader은 역순으로 처리한다고 저번 포스터에 말씀드렸습니다. 그러므로 <code class="language-plaintext highlighter-rouge">use: ['style-loader','css-loader']</code> 로 작성하셔야 합니다.
+    <div class="language-javascript highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>  <span class="kd">const</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">path</span><span class="dl">'</span><span class="p">);</span>
+
+  <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">mode</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">development</span><span class="dl">'</span><span class="p">,</span>
+      <span class="na">entry</span> <span class="p">:</span> <span class="p">{</span>
+          <span class="na">main</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">./src/app.js</span><span class="dl">'</span>
+      <span class="p">},</span>
+      <span class="na">output</span> <span class="p">:</span> <span class="p">{</span>
+          <span class="na">path</span> <span class="p">:</span> <span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="dl">'</span><span class="s1">./dist</span><span class="dl">'</span><span class="p">),</span>
+          <span class="na">filename</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">[name].js</span><span class="dl">'</span>
+      <span class="p">},</span>
+      <span class="na">module</span> <span class="p">:</span> <span class="p">{</span>
+          <span class="na">rules</span> <span class="p">:</span> <span class="p">[{</span>
+              <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.</span><span class="sr">css$/</span><span class="p">,</span>
+              <span class="na">use</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">style-loader</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">css-loader</span><span class="dl">'</span><span class="p">]</span>
+          <span class="p">}]</span>
+      <span class="p">}</span>
+  <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br></p>
+
+<p><strong>결과 :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    npm run build
+
+</span><span class="gp">    &gt;</span><span class="w"> </span>webpack-demo@1.0.0 build
+<span class="gp">    &gt;</span><span class="w"> </span>webpack
+<span class="go">
+    asset main.js 23.7 KiB [emitted] (name: main)
+    runtime modules 937 bytes 4 modules
+    cacheable modules 9.77 KiB
+    modules by path ./node_modules/ 8.07 KiB
+        modules by path ./node_modules/style-loader/dist/runtime/*.js 5.75 KiB 6 modules
+        modules by path ./node_modules/css-loader/dist/runtime/*.js 2.33 KiB
+        ./node_modules/css-loader/dist/runtime/noSourceMaps.js 64 bytes [built] [code generated]
+        ./node_modules/css-loader/dist/runtime/api.js 2.26 KiB [built] [code generated]
+    modules by path ./src/ 1.7 KiB
+        modules by path ./src/*.js 138 bytes
+        ./src/app.js 90 bytes [built] [code generated]
+        ./src/math.js 48 bytes [built] [code generated]
+        modules by path ./src/*.css 1.57 KiB
+        ./src/app.css 1.11 KiB [built] [code generated]
+        ./node_modules/css-loader/dist/cjs.js!./src/app.css 467 bytes [built] [code generated]
+    webpack 5.65.0 compiled successfully in 903 ms
+</span></code></pre></div></div>
+
+<ul>
+  <li>index.html을 열어보면 css가 적용된 것을 확인할 수 있습니다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146324627-1e30b729-52d2-4209-b540-0c150bfed174.png" alt="image"></p>
+
+<p><br>
+<br></p>
+
+<h3 id="d"><strong>Asset Modules</strong></h3>
+
+<hr>
+
+<p><a href="https://webpack.js.org/guides/asset-modules/#root">webpack 공식문서 참고</a></p>
+
+<p>webpack 4 버전에서는 아래의 기능을 사용하는게 일반적이었습니다.</p>
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">raw-loader</code>, 파일을 문자열로 가져오는 기능</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">url-loader</code>, 파일을 데이터 URI로 인라인하는 기능</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">file-loader</code>, 파일을 출력 디렉토리로 보내는 기능</li>
+</ul>
+
+<p>webpack 5 버전에서는 Asset Modules의 4가지의 새로운 type을 추가하여 위의 로더를 대체합니다.</p>
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">asset/resource</code>, file-loader의 기능을 대체합니다.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">asset/inline</code>, url-loader의 기능을 대체합니다.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">asset/source</code>, raw-loader의 기능을 대체합니다.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">asset</code>, 파일 크기의 제한에 따라 file 내보내기와 URI 내보내기 중에서 자동으로 선택합니다,  url-loader의 기능 대체(limit에 따라 file or URI을 자동선택하여 내보냈었음)</li>
+</ul>
+
+<p><strong>준비물 :</strong></p>
+<ul>
+  <li>2개의 이미지 파일을 준비해주세요.</li>
+  <li>1개는 파일크기가 큰 이미지, 1개는 파일크기가 작은 이미지</li>
+  <li>.png, .jpg 아무거나 준비하셔도 됩니다.</li>
+</ul>
+
+<p>파일이 큰 이미지 파일을 body의 background-image로 써보겠습니다.</p>
+<div file="./src/app.css" class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nt">body</span> <span class="p">{</span>
+        <span class="nl">background-image</span><span class="p">:</span> <span class="sx">url(bg.png)</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>파일이 작은 이미지를 body안에 넣어서 써보겠습니다.</p>
+<div file="./src/app.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">math</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./math.js</span><span class="dl">'</span>
+    <span class="k">import</span> <span class="dl">'</span><span class="s1">./app.css</span><span class="dl">'</span><span class="p">;</span>
+    <span class="k">import</span> <span class="nx">webpackImage</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./webpack.png</span><span class="dl">'</span><span class="p">;</span>
+
+    <span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">DOMContentLoaded</span><span class="dl">'</span><span class="p">,</span> <span class="p">()</span><span class="o">=&gt;</span><span class="p">{</span>
+        <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">`
+            &lt;img src="</span><span class="p">${</span><span class="nx">webpackImage</span><span class="p">}</span><span class="s2">" /&gt;
+        `</span>
+    <span class="p">})</span>
+
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">math</span><span class="p">.</span><span class="nx">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">));</span>
+</code></pre></div></div>
+
+<p><br></p>
+
+<h3 id="e"><strong>asset/resource</strong></h3>
+
+<div file="./webpack.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">const</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">path</span><span class="dl">'</span><span class="p">);</span>
+
+    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">mode</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">development</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">entry</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="na">main</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">./src/app.js</span><span class="dl">'</span>
+        <span class="p">},</span>
+        <span class="na">output</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="na">path</span> <span class="p">:</span> <span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="dl">'</span><span class="s1">./dist</span><span class="dl">'</span><span class="p">),</span>
+            <span class="na">filename</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">[name].js</span><span class="dl">'</span>
+        <span class="p">},</span>
+        <span class="na">module</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="na">rules</span> <span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.</span><span class="sr">css$/</span><span class="p">,</span>
+                    <span class="na">use</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">style-loader</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">css-loader</span><span class="dl">'</span><span class="p">]</span>
+                <span class="p">},{</span>
+                    <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.(</span><span class="sr">png|jpg</span><span class="se">)</span><span class="sr">/</span><span class="p">,</span>
+                    <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">asset/resource</span><span class="dl">'</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>결과 :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    npm run build
+
+</span><span class="gp">    &gt;</span><span class="w"> </span>webpack-demo@1.0.0 build
+<span class="gp">    &gt;</span><span class="w"> </span>webpack
+<span class="go">
+    asset 07cd38e60ab3ac16ae90.jpg 612 KiB [emitted] [immutable] [from: src/bg.jpg] (auxiliary name: main)
+    asset main.js 28.8 KiB [emitted] (name: main)
+    asset 870be3fe12bc3abc096d.png 3.8 KiB [emitted] [immutable] [from: src/webpack.png] (auxiliary name: main)
+    runtime modules 2.39 KiB 7 modules
+    javascript modules 10.8 KiB
+    modules by path ./node_modules/ 8.66 KiB
+        modules by path ./node_modules/style-loader/dist/runtime/*.js 5.75 KiB 6 modules
+        modules by path ./node_modules/css-loader/dist/runtime/*.js 2.91 KiB 3 modules
+    modules by path ./src/ 2.19 KiB
+        modules by path ./src/*.js 323 bytes 2 modules
+        modules by path ./src/*.css 1.88 KiB
+        ./src/app.css 1.11 KiB [built] [code generated]
+        ./node_modules/css-loader/dist/cjs.js!./src/app.css 785 bytes [built] [code generated]
+    asset modules 84 bytes (javascript) 616 KiB (asset)
+    ./src/webpack.png 42 bytes (javascript) 3.8 KiB (asset) [built] [code generated]
+    ./src/bg.jpg 42 bytes (javascript) 612 KiB (asset) [built] [code generated]
+    webpack 5.65.0 compiled successfully in 970 ms
+</span></code></pre></div></div>
+
+<ul>
+  <li>아래 그림을 보면, 출력(output) 디렉토리에 이미지가 저장된것을 확인할 수 있습니다.</li>
+  <li>이미지 이름이 해쉬코드로 변경되어 저장된 것을 확인할 수 있습니다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146333564-9de769a0-93cc-4098-81ff-fac4147ea6f1.png" alt="image"></p>
+
+<p><br></p>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">./index.html</code>으로 결과를 확인해보면 이미지가 적용되었습니다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146334349-cf6d3830-47f0-49e0-bb23-9d6d3dbbf5b4.png" alt="image"></p>
+
+<p><br>
+<br></p>
+
+<h3 id="f"><strong>asset/inline</strong></h3>
+
+<div file="./webpack.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">const</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">path</span><span class="dl">'</span><span class="p">);</span>
+
+    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">mode</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">development</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">entry</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="na">main</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">./src/app.js</span><span class="dl">'</span>
+        <span class="p">},</span>
+        <span class="na">output</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="na">path</span> <span class="p">:</span> <span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="dl">'</span><span class="s1">./dist</span><span class="dl">'</span><span class="p">),</span>
+            <span class="na">filename</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">[name].js</span><span class="dl">'</span>
+        <span class="p">},</span>
+        <span class="na">module</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="na">rules</span> <span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.</span><span class="sr">css$/</span><span class="p">,</span>
+                    <span class="na">use</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">style-loader</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">css-loader</span><span class="dl">'</span><span class="p">]</span>
+                <span class="p">},{</span>
+                    <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.(</span><span class="sr">png|jpg</span><span class="se">)</span><span class="sr">/</span><span class="p">,</span>
+                    <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">asset/resource</span><span class="dl">'</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>결과 :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    npm run build
+
+</span><span class="gp">    &gt;</span><span class="w"> </span>webpack-demo@1.0.0 build
+<span class="gp">    &gt;</span><span class="w"> </span>webpack
+<span class="go">
+    asset main.js 848 KiB [emitted] (name: main)
+    runtime modules 1.33 KiB 5 modules
+    javascript modules 10.8 KiB
+    modules by path ./node_modules/ 8.66 KiB
+        modules by path ./node_modules/style-loader/dist/runtime/*.js 5.75 KiB 6 modules
+        modules by path ./node_modules/css-loader/dist/runtime/*.js 2.91 KiB 3 modules
+    modules by path ./src/ 2.19 KiB
+        modules by path ./src/*.js 323 bytes 2 modules
+        modules by path ./src/*.css 1.88 KiB
+        ./src/app.css 1.11 KiB [built] [code generated]
+        ./node_modules/css-loader/dist/cjs.js!./src/app.css 785 bytes [built] [code generated]
+    asset modules 825 KiB
+    ./src/webpack.png 5.13 KiB [built] [code generated]
+    ./src/bg.jpg 820 KiB [built] [code generated]
+    webpack 5.65.0 compiled successfully in 1122 ms
+</span></code></pre></div></div>
+
+<p><br></p>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">asset/resource</code>는 출력(output) 디렉토리에 해쉬코드로 이미지를 저장했지만, <code class="language-plaintext highlighter-rouge">asset/inline</code>은 저장되어있지않고 데이터를 <code class="language-plaintext highlighter-rouge">URI</code>로 내보냅니다.</li>
+  <li>추가로, 이미지를 <code class="language-plaintext highlighter-rouge">Base64</code>로 인코딩하여 문자열 형태로 소스코드에 넣는 형식입니다.</li>
+  <li>개발자도구를 통해 이미지들을 학인해보면 <code class="language-plaintext highlighter-rouge">base64</code>로 인코딩된 문자열이 들어가 있는것을 확인할 수 있습니다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146336148-15b0d9de-2d47-495c-8544-3b1cea24da83.png" alt="image"></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146336064-0aabe87d-c903-4f81-bff6-f27177a2745f.png" alt="image"></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146336321-ca6ef389-7c19-4a7a-9600-f38a5ceed84d.png" alt="image"></p>
+
+<p><br></p>
+
+<h3 id="g"><strong>asset</strong></h3>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">asset</code> tpye은 디폴드로 파일 크기가 <code class="language-plaintext highlighter-rouge">8kb</code> 작으면 <code class="language-plaintext highlighter-rouge">inline</code>으로 크면 <code class="language-plaintext highlighter-rouge">resource</code>로 처리합니다.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">Rule.parser.dataUrlCondition.maxSize</code> 옵션을 추가하여 조건을 변경할 수 있습니다.</li>
+  <li>기준을 10kb로 잡아보겠습니다.</li>
+</ul>
+
+<p><strong>이미지 크기 확인</strong></p>
+<ul>
+  <li>bg.jpg : 626kb</li>
+  <li>webpack.png : 3.9kb</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    디렉터리: E:\study\frontend\webpack-demo\src
+
+    Mode                 LastWriteTime         Length Name
+    ----                 -------------         ------ ----
+    -a----      2021-12-16   오후 5:08             45 app.css
+    -a----      2021-12-16   오후 5:06            275 app.js
+    -a----      2019-12-07   오후 6:09         626435 bg.jpg
+    -a----      2021-12-15   오후 3:43             48 math.js
+    -a----      2021-12-16   오후 4:56           3890 webpack.png
+</span></code></pre></div></div>
+
+<div file="./webpack.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">const</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">path</span><span class="dl">'</span><span class="p">);</span>
+
+    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">mode</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">development</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">entry</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="na">main</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">./src/app.js</span><span class="dl">'</span>
+        <span class="p">},</span>
+        <span class="na">output</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="na">path</span> <span class="p">:</span> <span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="dl">'</span><span class="s1">./dist</span><span class="dl">'</span><span class="p">),</span>
+            <span class="na">filename</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">[name].js</span><span class="dl">'</span>
+        <span class="p">},</span>
+        <span class="na">module</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="na">rules</span> <span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.</span><span class="sr">css$/</span><span class="p">,</span>
+                    <span class="na">use</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">style-loader</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">css-loader</span><span class="dl">'</span><span class="p">]</span>
+                <span class="p">},{</span>
+                    <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.(</span><span class="sr">png|jpg</span><span class="se">)</span><span class="sr">/</span><span class="p">,</span>
+                    <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">asset</span><span class="dl">'</span><span class="p">,</span>
+                    <span class="na">parser</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="na">dataUrlCondition</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="na">maxSize</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="mi">1024</span> <span class="c1">// 10kb</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>결과 :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    npm run build
+
+</span><span class="gp">    &gt;</span><span class="w"> </span>webpack-demo@1.0.0 build
+<span class="gp">    &gt;</span><span class="w"> </span>webpack
+<span class="go">
+    asset 07cd38e60ab3ac16ae90.jpg 612 KiB [emitted] [immutable] [from: src/bg.jpg] (auxiliary name: main)
+    asset main.js 33.8 KiB [emitted] (name: main)
+    runtime modules 2.39 KiB 7 modules
+    javascript modules 10.8 KiB
+    modules by path ./node_modules/ 8.66 KiB
+        modules by path ./node_modules/style-loader/dist/runtime/*.js 5.75 KiB 6 modules
+        modules by path ./node_modules/css-loader/dist/runtime/*.js 2.91 KiB 3 modules
+    modules by path ./src/ 2.19 KiB
+        modules by path ./src/*.js 323 bytes 2 modules
+        modules by path ./src/*.css 1.88 KiB
+        ./src/app.css 1.11 KiB [built] [code generated]
+        ./node_modules/css-loader/dist/cjs.js!./src/app.css 785 bytes [built] [code generated]
+    asset modules 5.17 KiB (javascript) 612 KiB (asset)
+    ./src/webpack.png 5.13 KiB [built] [code generated]
+    ./src/bg.jpg 42 bytes (javascript) 612 KiB (asset) [built] [code generated]
+    webpack 5.65.0 compiled successfully in 1502 ms
+</span></code></pre></div></div>
+
+<p><br></p>
+
+<ul>
+  <li>8kb이상인 bg.jpg는 <code class="language-plaintext highlighter-rouge">resource</code> 타입으로 처리되었고, 미만인 webpack.png는 <code class="language-plaintext highlighter-rouge">inline</code> 타입으로 처리되었습니다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146338350-5a0f13ab-9842-45cf-a9f2-40968ece14d7.png" alt="image"></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146338637-54d62f9a-0080-4cbf-95b0-e732a415393a.png" alt="image"></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146338696-acb80bac-e449-411e-92d0-920d18bb70cd.png" alt="image"></p>
+
+<p><br></p>
+
+<h2 id="h"><strong>Output File 커스텀</strong></h2>
+
+<hr>
+
+<ul>
+  <li>기본적으로 <code class="language-plaintext highlighter-rouge">asset/resource</code> 모듈은 <code class="language-plaintext highlighter-rouge">[hash][ext][query]</code> 파일 이름으로 출력 디렉토리에 내보냅니다.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">webpack.config.js</code> -&gt; <code class="language-plaintext highlighter-rouge">output.assetModuleFilename</code> 구성에서 설정하여 파일명을 커스텀할 수 있습니다.</li>
+  <li>지정된 디렉토리에 내보낼 수도 있습니다.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">images/[name][ext]</code> 형태로 저장되는지 확인해보겠습니다.</li>
+</ul>
+
+<p><strong>file 수준에서 대체 가능한 항목</strong></p>
+<ul>
+  <li><a href="https://webpack.js.org/configuration/output/#outputassetmodulefilename">webpack 공식문서 참고</a></li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146469483-3782eb1e-991a-458e-bd86-a3fd8fd7c943.png" alt="image"></p>
+
+<p><br></p>
+
+<div file="./webpack.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">const</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">path</span><span class="dl">'</span><span class="p">);</span>
+
+    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">mode</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">development</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">entry</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="na">main</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">./src/app.js</span><span class="dl">'</span>
+        <span class="p">},</span>
+        <span class="na">output</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="na">path</span> <span class="p">:</span> <span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="dl">'</span><span class="s1">./dist</span><span class="dl">'</span><span class="p">),</span>
+            <span class="na">filename</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">[name].js</span><span class="dl">'</span><span class="p">,</span>
+            <span class="na">assetModuleFilename</span><span class="p">:</span> <span class="dl">'</span><span class="s1">images/[name][ext]</span><span class="dl">'</span> <span class="c1">// + 추가</span>
+        <span class="p">},</span>
+        <span class="na">module</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="na">rules</span> <span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.</span><span class="sr">css$/</span><span class="p">,</span>
+                    <span class="na">use</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">style-loader</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">css-loader</span><span class="dl">'</span><span class="p">]</span>
+                <span class="p">},{</span>
+                    <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.(</span><span class="sr">png|jpg</span><span class="se">)</span><span class="sr">/</span><span class="p">,</span>
+                    <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">asset</span><span class="dl">'</span><span class="p">,</span>
+                    <span class="na">parser</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="na">dataUrlCondition</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="na">maxSize</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="mi">1024</span> <span class="c1">// 10kb</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br></p>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">./dist/images/</code> 디렉토리에 생성된 것을 확인할 수 있습니다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146469759-68cb2306-c176-4de7-88c2-670d2cafa6c7.png" alt="image"></p>
+
+<p><br></p>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">./index.html</code>을 열어서 개발자도구로 bg.jpg를 확인해보면 <code class="language-plaintext highlighter-rouge">/iamges/[name][ext]</code>로 되어있는 것을 확인할 수 있습니다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146469810-73e0798d-6b2d-4084-b51a-93a8118fc441.png" alt="image"></p>
+
+
+    </div>
+
+</article>
+<div class="post-nav">
+<a class="previous" href="/jekyll-theme-yat/webpack/2021/12/15/Webpack-03.html" title="[Webpack] loader (1)">[Webpack] loader (1)</a><a class="next" href="/jekyll-theme-yat/webpack/2021/12/17/Webpack-05.html" title="[Webpack] plugin">[Webpack] plugin</a>
+</div>
+<div class="post-related">
+      <div>Related Articles</div>
+      <ul>
+        <li><a class="post-link" href="/jekyll-theme-yat/vue.js/2022/01/17/vueJs-04.html" title="[Webpack] plugin">[Vue.js] Vue.js 문법 총정리</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/react/2022/04/21/react-02.html" title="[Webpack] plugin">[React] 라이프 사이클 메서드란?</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/babel/2021/12/28/Babel-03.html" title="[Webpack] plugin">[Babel] Webpack에 통합하여 사용하기</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/javascript/2022/05/12/javascript-14.html" title="[Webpack] plugin">[Javascript] 함수형 프로그래밍 - go, pipe, curry</a></li>
+</ul>
+    </div>
+<div class="post-comments"></div></section>
+</div>
+<script>
+  new Zooming().listen('img')
+</script>
+
+  </section>
+  <section class="sidebar" style="margin-left: 15px;">
+    <!-- Get sidebar items --><style type="text/css" media="screen">
+.post-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+</style>
+
+<div class="post-menu">
+  <div class="post-menu-title">TOC</div>
+  <div class="post-menu-content"></div>
+</div>
+
+<script>
+  function generateContent() {
+    var menu = document.querySelector(".post-menu");
+    var menuContent =  menu.querySelector(".post-menu-content");
+    var headings = document.querySelector(".post-content").querySelectorAll("h2, h3, h4, h5, h6");
+
+    // Hide menu when no headings
+    if (headings.length === 0) {
+      return menu.style.display = "none";
+    }
+
+    // Generate post menu
+    var menuHTML = '';
+    for (var i = 0; i < headings.length; i++) {
+      var h = headings[i];
+      menuHTML += (
+        '<li class="h-' + h.tagName.toLowerCase() + '">'
+        + '<a href="#h-' + h.getAttribute('id') + '">' + h.textContent + '</a></li>');
+    }
+
+    menuContent.innerHTML = '<ul>' + menuHTML + '</ul>';
+
+    // The header element
+    var header = document.querySelector('header.site-header');
+
+    function doMenuCollapse(index, over_items) {
+      var items = menuContent.firstChild.children;
+
+      if (over_items == undefined) {
+        over_items = 20;
+      }
+
+      if (items.length < over_items) {
+        return;
+      }
+
+      var activeItem = items[index];
+      var beginItem = activeItem
+      var endItem = activeItem
+      var beginIndex = index;
+      var endIndex = index + 1;
+      while (beginIndex >= 0
+        && !items[beginIndex].classList.contains('h-h2')) {
+        beginIndex -= 1;
+      }
+      while (endIndex < items.length
+        && !items[endIndex].classList.contains('h-h2')) {
+        endIndex += 1;
+      }
+      for (var i = 0; i < beginIndex; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+      for (var i = beginIndex + 1; i < endIndex; i++) {
+        item = items[i]
+        // if (!item.classList.contains('h-h2')) {
+          item.style.display = '';
+        // }
+      }
+      for (var i = endIndex; i < items.length; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+    }
+
+    // Init menu collapsed
+    doMenuCollapse(-1);
+
+    // Active the menu item
+    window.addEventListener('scroll', function (event) {
+      var lastActive = menuContent.querySelector('.active');
+      var changed = true;
+      var activeIndex = -1;
+      for (var i = headings.length - 1; i >= 0; i--) {
+        var h = headings[i];
+        var headingRect = h.getBoundingClientRect();
+        var headerRect = header.getBoundingClientRect();
+        var headerTop = Math.floor(headerRect.top);
+        var headerHeight = Math.floor(headerRect.height);
+        var headerHeight = headerTop + headerHeight + 20;
+        if (headingRect.top <= headerHeight) {
+          var id = 'h-' + h.getAttribute('id');
+          var a = menuContent.querySelector('a[href="#' + id  + '"]');
+          var curActive = a.parentNode;
+          if (curActive) {
+            curActive.classList.add('active');
+            activeIndex = i;
+          }
+          if (lastActive == curActive) {
+            changed = false;
+          }
+          break;
+        }
+      }
+      if (changed) {
+        if (lastActive) {
+          lastActive.classList.remove('active');
+        }
+        doMenuCollapse(activeIndex);
+      }
+      event.preventDefault();
+    });
+  }
+  generateContent();
+</script>
+</section>
+</div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jekyll-theme-yat/"></data>
+
+  <div class="wrapper">
+    <div class="site-footer-inner">
+<div>
+<span class="copyleft">©</span> 2022 Seo SeongSik. All rights reserved</div>
+      <div>Go to <a title="github" href="https://github.com/s-seongsik">Github</a>
+</div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

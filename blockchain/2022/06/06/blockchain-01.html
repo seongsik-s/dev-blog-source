@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>[블록체인] 기본 개념 - DApp이란? | IT 데이터베이스</title>
+<meta name="generator" content="Jekyll v4.2.2">
+<meta property="og:title" content="[블록체인] 기본 개념 - DApp이란?">
+<meta name="author" content="GitHub User">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="DApp 정의">
+<meta property="og:description" content="DApp 정의">
+<link rel="canonical" href="/jekyll-theme-yat/blockchain/2022/06/06/blockchain-01.html">
+<meta property="og:url" content="/jekyll-theme-yat/blockchain/2022/06/06/blockchain-01.html">
+<meta property="og:site_name" content="IT 데이터베이스">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2022-06-06T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="[블록체인] 기본 개념 - DApp이란?">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"GitHub User"},"dateModified":"2022-06-06T00:00:00+00:00","datePublished":"2022-06-06T00:00:00+00:00","description":"DApp 정의","headline":"[블록체인] 기본 개념 - DApp이란?","mainEntityOfPage":{"@type":"WebPage","@id":"/jekyll-theme-yat/blockchain/2022/06/06/blockchain-01.html"},"url":"/jekyll-theme-yat/blockchain/2022/06/06/blockchain-01.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-noto-sans@0.0.72/index.min.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/main.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/image-popup.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="/jekyll-theme-yat/assets/js/main.js"></script>
+  <script src="/jekyll-theme-yat/assets/js/zooming.min.js"></script><link type="application/atom+xml" rel="alternate" href="/jekyll-theme-yat/feed.xml" title="IT 데이터베이스">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+<!-- and it's easy to individually load additional languages -->
+<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/go.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Init highlight js
+document.addEventListener('DOMContentLoaded', function(event) {
+  var els = document.querySelectorAll('pre code')
+
+  function addLangData(block) {
+    var outer = block.parentElement.parentElement.parentElement;
+    var lang = block.getAttribute('data-lang');
+    for (var i = 0; i < outer.classList.length; i++) {
+      var cls = outer.classList[i];
+      if (cls.startsWith('language-')) {
+        lang = cls;
+        break;
+      }
+    }
+    if (!lang) {
+      cls = block.getAttribute('class');
+      lang = cls ? cls.replace('hljs ', '') : '';
+    }
+    if (lang.startsWith('language-')) {
+      lang = lang.substr(9);
+    }
+    block.setAttribute('class', 'hljs ' + lang);
+    block.parentNode.setAttribute('data-lang', lang);
+  }
+
+  function addBadge(block) {
+    var enabled = ('true' || 'true').toLowerCase();
+    if (enabled == 'true') {
+      var pre = block.parentElement;
+      pre.classList.add('badge');
+    }
+  }
+
+  function handle(block) {
+    addLangData(block);
+    addBadge(block)
+    hljs.highlightBlock(block);
+  }
+
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i];
+    handle(el);
+  }
+});
+</script>
+
+<style>
+  /* code language badge */
+  pre.badge::before {
+    content: attr(data-lang);
+    color: #fff;
+    background-color: #ff4e00;
+    padding: 0 .5em;
+    border-radius: 0 2px;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 32px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+  }
+
+  /* fix wrong badge display for firefox browser */
+  code > table pre::before {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="site-header site-header-transparent" role="banner">
+
+  <div class="wrapper">
+    <div class="site-header-inner">
+<span class="site-brand"><a class="site-brand-inner" rel="author" href="/jekyll-theme-yat/">
+  <img class="site-favicon" title="IT 데이터베이스" src="" onerror="this.style.display='none'">
+  IT 데이터베이스
+</a>
+</span><nav class="site-nav">
+          <input type="checkbox" id="nav-trigger" class="nav-trigger">
+          <label for="nav-trigger">
+            <span class="menu-icon">
+              <svg viewbox="0 0 18 15" width="18px" height="15px">
+                <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+              </svg>
+            </span>
+          </label>
+
+          <div class="trigger">
+<a class="page-link" href="/jekyll-theme-yat/about.html">ABOUT</a><a class="page-link" href="/jekyll-theme-yat/archives.html">ARCHIVES</a><a class="page-link" href="/jekyll-theme-yat/categories.html">CATEGORIES</a><a class="page-link" href="/jekyll-theme-yat/">HOME</a><a class="page-link" href="/jekyll-theme-yat/tags.html">TAGS</a>
+
+
+
+
+
+
+
+
+
+<span class="page-link">
+
+
+
+<div id="google_translate_element" style="display: none;">
+</div>
+
+<span class="ct-language">
+  <ul class="list-unstyled ct-language-dropdown">
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="en">
+          
+          <img src="https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png" title="English">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="fr">
+          
+          <img src="https://cdn.countryflags.com/thumbs/france/flag-400.png" title="French">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="zh-CN">
+          
+          <img src="https://cdn.countryflags.com/thumbs/china/flag-400.png" title="Chinese(Simple)">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ja">
+          
+          <img src="https://cdn.countryflags.com/thumbs/japan/flag-400.png" title="Japanese">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ko">
+          
+          <img src="https://cdn.countryflags.com/thumbs/south-korea/flag-400.png" title="Korean">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ru">
+          
+          <img src="https://cdn.countryflags.com/thumbs/russia/flag-400.png" title="Russian">
+          
+        </a>
+      </li>
+    
+  </ul>
+</span>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false,
+    layout: google.translate.TranslateElement.InlineLayout.VERTICAL
+  }, 'google_translate_element');
+
+  // Links to cross-origin destinations are unsafe
+  var gll = document.getElementsByClassName('goog-logo-link')[0];
+  if (gll) {
+    gll.setAttribute('rel', 'noopener');
+  }
+
+  function restoreLang() {
+    var iframe = document.getElementsByClassName('goog-te-banner-frame')[0];
+    if (!iframe) return;
+
+    var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+    var restore_el = innerDoc.getElementsByTagName("button");
+
+    for (var i = 0; i < restore_el.length; i++) {
+      if (restore_el[i].id.indexOf("restore") >= 0) {
+        restore_el[i].click();
+        var close_el = innerDoc.getElementsByClassName("goog-close-link");
+        close_el[0].click();
+        return;
+      }
+    }
+  }
+
+  function triggerHtmlEvent(element, eventName) {
+    var event;
+    if (document.createEvent) {
+      event = document.createEvent('HTMLEvents');
+      event.initEvent(eventName, true, true);
+      element.dispatchEvent(event);
+    } else {
+      event = document.createEventObject();
+      event.eventType = eventName;
+      element.fireEvent('on' + event.eventType, event);
+    }
+  }
+
+  var googleCombo = document.querySelector("select.goog-te-combo");
+  var langSelect = document.querySelector('.ct-language');
+  langSelect.addEventListener('click', function(event) {
+    if (!event.target) {
+      return;
+    }
+
+    var selected = document.querySelector('.ct-language .ct-language-selected');
+    if (selected) {
+      selected.classList.remove('ct-language-selected');
+    }
+
+    var target = event.target;
+    while (target && target !== langSelect ) {
+      if (target.matches('.lang-select')) {
+        break;
+      }
+      target = target.parentElement;
+    }
+
+    if (target && target.matches('.lang-select')) {
+      var lang = target.getAttribute('data-lang');
+      if (googleCombo.value == lang) {
+        restoreLang();
+      } else {
+        target.parentElement.classList.add('ct-language-selected');
+        googleCombo.value = lang;
+        triggerHtmlEvent(googleCombo, 'change');
+      }
+    }
+
+    event.preventDefault();
+  });
+}
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</span>
+</div>
+        </nav>
+</div>
+  </div>
+</header>
+
+<script>
+  function initHeader() {
+    var lastScrollY = getScrollPos().y;
+    var documentElement = document.documentElement;
+
+    function storeScrollData() {
+      var y = getScrollPos().y;documentElement.setAttribute("data-header-transparent", "");var scrollStatus = "";
+
+      if (y <= 0) {
+        scrollStatus = "top";
+      } else if ((window.innerHeight + y) >= document.body.offsetHeight) {
+        scrollStatus = "bottom";
+      } else {
+        var isScrollDown = (y - lastScrollY > 0) ? true : false;
+        scrollStatus = isScrollDown ? "down" : "up";
+      }
+
+      lastScrollY = y;
+      documentElement.setAttribute("data-scroll-status", scrollStatus);
+    }
+
+    window.addEventListener('scroll', function(e) {
+      storeScrollData();
+    });
+
+    storeScrollData();
+  }
+  document.addEventListener('DOMContentLoaded', initHeader);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    html .page-banner {
+      background: #000;
+    }
+  </style>
+<style>html .page-banner {
+      height:  36.8vh;
+      min-height: 38vh;
+    }
+    html[data-scroll-status="top"] .page-banner {
+      height: 100vh;
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-img > *:first-child {
+      opacity: 0.618;
+    }
+
+    html[data-theme="dark"] .page-banner .page-banner-img > *:first-child {
+      opacity: 0.443724;
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-inner > *:first-child > *:nth-child(1) {
+      font-size: 3.25em; font-weight: bold; text-decoration: underline
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-inner > *:first-child > *:nth-child(2) {
+      color: gold
+    }
+  </style>
+<section class="page-banner">
+    <div class="page-banner-img">
+<div style="background-image: url(/jekyll-theme-yat/assets/images/banners/ethereum.png)"></div>
+        <img class="img-placeholder" src="/jekyll-theme-yat/assets/images/banners/ethereum.png">
+</div>
+    <div class="wrapper">
+      <div class="page-banner-inner">
+<header class="post-header">
+  <h1 class="post-title p-name" itemprop="name headline">[블록체인] 기본 개념 - DApp이란?</h1>
+  <h2 class="post-subtitle"></h2>
+
+  <p class="post-meta">
+    <time class="dt-published" datetime="2022-06-06T00:00:00+00:00" itemprop="datePublished"><i class="fa fa-calendar"></i> Jun 06, 2022
+    </time>
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span class="post-reading-time left-vsplit"><i class="fa fa-clock-o"></i> About 4 mins</span>
+  </p>
+<div class="post-tags"><a class="post-tag" href="/jekyll-theme-yat/tags.html#BlockChain">#BlockChain</a></div></header>
+</div>
+    </div>
+  </section><script>
+  function hashLocate(hashValue) {
+    hashValue = hashValue.replace(/^.*#h-/, '');
+    hashValue = decodeURIComponent(hashValue);
+    var element = document.getElementById(hashValue);
+
+    if (!element) {
+      return;
+    }
+
+    var header = document.querySelector('header.site-header');
+    var headerRect = header.getBoundingClientRect();
+    var headerTop = Math.floor(headerRect.top);
+    var headerHeight = Math.floor(headerRect.height);
+    var scrollPos = getScrollPos();
+    var offsetY = element.offsetTop - (headerTop + headerHeight + 20);
+
+    if (offsetY == scrollPos.y) {
+      return;
+    }
+
+    if (headerTop == 0  && offsetY > scrollPos.y) {
+      offsetY += headerHeight + 2;
+    } else if (headerTop < 0  && offsetY < scrollPos.y) {
+      offsetY -= headerHeight - 2;
+    }
+
+    smoothScrollTo(offsetY);
+  }
+
+  // The first event occurred
+  window.addEventListener('load', function(event) {
+    if (window.location.hash) {
+      hashLocate(window.location.hash);
+    }
+  });
+
+  // The first event occurred
+  window.addEventListener('click', function(event) {
+    if (event.target.tagName.toLowerCase() == 'a') {
+      hashLocate(event.target.getAttribute('href'));
+    }
+  });
+</script>
+<div class="theme-toggle">
+  <input type="checkbox" id="theme-switch">
+  <label for="theme-switch">
+    <div class="toggle"></div>
+    <div class="names">
+      <p class="light">Light</p>
+      <p class="dark">Dark</p>
+    </div>
+  </label>
+</div>
+
+
+
+
+<script>
+  (function() {
+    var sw = document.getElementById('theme-switch');
+    var html = document.getElementsByTagName('html')[0];
+    var nightModeOption = ('auto' || 'auto').toLowerCase();
+    var storage = nightModeOption === 'manual'
+        ? localStorage
+        : sessionStorage;
+    var themeData = loadThemeData();
+
+    function saveThemeData(data) {
+      storage.setItem('theme', JSON.stringify(data));
+    }
+
+    function loadThemeData() {
+      var data = storage.getItem('theme');
+      try {
+        data = JSON.parse(data ? data : '');
+      } catch(e) {
+        data = { nightShift: undefined, autoToggleAt: 0 };
+        saveThemeData(data);
+      }
+      return data;
+    }
+
+    function handleThemeToggle(nightShift) {
+      themeData.nightShift = nightShift;
+      saveThemeData(themeData);
+      html.dataset.theme = nightShift ? 'dark' : 'light';
+      setTimeout(function() {
+        sw.checked = nightShift ? true : false;
+      }, 50);
+    }
+
+    function autoThemeToggle() {
+      // Next time point of theme toggle
+      var now = new Date();
+      var toggleAt = new Date();
+      var hours = now.getHours();
+      var nightShift = hours >= 19 || hours <=7;
+
+      if (nightShift) {
+        if (hours > 7) {
+          toggleAt.setDate(toggleAt.getDate() + 1);
+        }
+        toggleAt.setHours(7);
+      } else {
+        toggleAt.setHours(19);
+      }
+
+      toggleAt.setMinutes(0);
+      toggleAt.setSeconds(0);
+      toggleAt.setMilliseconds(0)
+
+      var delay = toggleAt.getTime() - now.getTime();
+
+      // auto toggle theme mode
+      setTimeout(function() {
+        handleThemeToggle(!nightShift);
+      }, delay);
+
+      return {
+        nightShift: nightShift,
+        toggleAt: toggleAt.getTime()
+      };
+    }
+
+    // Listen the theme toggle event
+    sw.addEventListener('change', function(event) {
+      handleThemeToggle(event.target.checked);
+    });
+
+    if (nightModeOption == 'auto') {
+      var data = autoThemeToggle();
+
+      // Toggle theme by local setting
+      if (data.toggleAt > themeData.autoToggleAt) {
+        themeData.autoToggleAt = data.toggleAt;
+        handleThemeToggle(data.nightShift);
+      } else {
+        handleThemeToggle(themeData.nightShift);
+      }
+    } else if (nightModeOption == 'manual') {
+      handleThemeToggle(themeData.nightShift);
+    } else {
+      var nightShift = themeData.nightShift;
+      if (nightShift === undefined) {
+        nightShift = nightModeOption === 'on';
+      }
+      handleThemeToggle(nightShift);
+    }
+  })();
+</script>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="framework">
+  <section class="main">
+
+     <div class="post">
+  <section>
+
+
+
+
+
+
+
+
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <div class="post-content e-content" itemprop="articleBody">
+
+      <h2 id="dapp-정의">DApp 정의</h2>
+
+<p><code class="language-plaintext highlighter-rouge">디앱(DApp)</code> 또는 <code class="language-plaintext highlighter-rouge">댑</code>이란 Decentralized Application의 약자로서, 이더리움, 큐텀, 이오스 같은 플랫폼 코인 위에서 작동하는 탈중앙화 분산 애플리케이션을 말한다. 간략히 분산앱이라고도 한다. 플랫폼 위에서 작동하는 디앱의 암호화폐는 코인(coin)이라고 하지 않고 토큰(token)이라고 구별하여 부르기도 한다. ‘Daap’가 아니라 ‘DApp’가 올바른 표기법이다. ‘Dapp’ 또는 ‘dApp’이라고도 쓴다. 단수형이 아니라 복수형으로 표현하여, 디앱스(DApps) 또는 댑스(dApps)라고도 한다.</p>
+
+<h2 id="개요">개요</h2>
+
+<p>디앱이란 블록체인을 기반으로 돌아가는 애플리케이션을 말한다. 쉽게 말해 이더리움 기반 디엡이라면 디앱에서 상호작용하는 데이터들이 이더리움 블록체인에 기록되고 불러내어지는 애플리케이션이라고 이해하면 된다.
+현재, 이더리움, 이오스, 스팀 등에서 돌아가는 모든 디앱들을 합치면 약 3,000여 개가 존재한다.</p>
+
+<p>애플 앱스토어에만 220만여 개가 넘는 앱이 존재하는데, 이와 비교하면 아주 초라한 숫자이기도 하다. 전체 디앱 중에서 게임, 거래소, 도박 등을 뺀 실생활과 밀접한 영역의 디앱들의 유저 수 비중은 40%도 안 된다.</p>
+
+<p>디앱은 스마트폰 <code class="language-plaintext highlighter-rouge">블록체인</code>을 기반으로 한 운영체제에서 구동된다는 것이 차이점이다. 아이폰은 ISO 운영체제를 갤럭시에는 안드로이드 OS를 사용한다. <code class="language-plaintext highlighter-rouge">블록체인</code>은 이러한 OS라고 생각하면 된다. 어떤 블록체인을 기반으로 구동되는지에 따라 이더리움 디앱, 이오스 디앱 등으로 구분할 수 있는 것이다.</p>
+
+<h2 id="등장배경">등장배경</h2>
+
+<p>블록체인에서 디앱은 <code class="language-plaintext highlighter-rouge">스마트 계약</code>이 도입되면서 생겨났다. 스마트 계약이 없는 비트코인에는 디앱이 존재하지 않는다. 
+이더리움 창시자인 비탈릭 부테린은 이더리움에 스마트 계약을 처음 도입했다. 이 후 이더리움은 최초의 메인넷으로 무수한 디앱들을 탄생시켰다.</p>
+
+<h2 id="특징">특징</h2>
+
+<p>디앱 개념은 아직 초기 단계에 있다. 디앱으로는 응용 프로그램이 다음 네 가지 특징을 나타내야 한다.</p>
+
+<ul>
+  <li>탈중앙화 구조 : 디앱은 OS 개발에 필요한 소스 코드가 누구에게나 공개돼 있다.</li>
+  <li>뛰어난 개인정보 보호 : 데이터를 블록체인에 기록하기 때문에 저장에 있어 안전하다.</li>
+  <li>오픈 소스 : 가장 중요한 속성은 이러한 앱이 모든 사람에게 핵심 소스 코드를 제공해야 한다는 것이다. 디앱의 핵심 특징은 자율성과 만장일치로 이루어져 있음으로 기본적으로 변경 사항은 모든 사용자 또는 대부분 사용자가 결정해야 한다. 또한, 코드는 모든 사용자가 체크 아웃 할 수 있어야 한다.</li>
+  <li>분산형 자연 : 이름에서 알 수 있듯이 분산형 응용 프로그램은 분산된 블록체인 또는 모든 암호화 기술에 모든 것을 저장하여 중앙 권한의 위험으로부터 응용 프로그램을 저장하고 자치 특성을 강조한다.</li>
+  <li>인센티브(Incentivization) : 앱이 분산형 블록체인을 기반으로 하므로 네트워크의 레코드 유효성 검사기에 암호화 토큰이나 가치가 있는 디지털 자산 형태로 보상/ 인센티브를 부여해야 한다.</li>
+  <li>알고리즘 : 분산 앱은 암호화 시스템에서 가치 증명을 나타내는 컨센서스 메커니즘이 필요하다. 본질적으로 이는 암호 토큰의 가치를 부여하고 사용자가 중요한 암호 토큰을 생성하기 위해 합의한 합의 프로토콜을 만든다.</li>
+</ul>
+
+<h2 id="앱과-디앱의-차이">앱과 디앱의 차이</h2>
+
+<ul>
+  <li>디앱은 사용자가 계정을 생성하는 절차부터 앱과 다르다. 일반 앱은 회원가입을 할 때는 개인정보를 입력해 계정을 만들고 로그인 후 즉시 서비스를 이용한다. 하지만, 디앱의 경우 계정을 만들 때, <code class="language-plaintext highlighter-rouge">이더리움</code>, <code class="language-plaintext highlighter-rouge">이오스</code> 등 해당 블록체인 지갑을 보유하고 있어야 한다. 해당 블록체인 서비스에 참여함으로써, 보상으로 받는 암호화폐를 저장하고 거래하기 위한 지갑을 준비하는 것이다.</li>
+  <li>이더리움 기반 디앱은 이더리움 지갑을, 이오스 기반 디앱은 이오스 지갑을 갖춰야 한다. 예를 들어 이더리움 게임으로 잘 알려진 크립토키티를 이용하려면 메타마스크라는 이더리움 지갑을 만들고, 서비스를 이용할 때마다 메타마스크 인증을 해야 한다.</li>
+  <li>디앱과 기존 앱 개발의 가장 큰 차이점이라면 얼마나 엄격하게, 정밀하게 점검하느냐이다. 쉽게 말해, 디앱은 소프트웨어 개발보다는 하드웨어 개발과 더 비슷하다. 어떤 회사가 하드웨어를 완성했다면 제품을 공개하기전에 반드시 엄격하게 정밀하게 테스트를 한 후 공개해야 한다. 하드웨어 개발이 끝난 뒤 공개되었을 때, 미처 발견하지 못한 문제점들이 생긴다면 기존 소프트웨어 수정보다 훨씬 더 많은 돈과 시간을 요구한다. 왜냐하면 <code class="language-plaintext highlighter-rouge">디앱 개발에서 스마트 계약이 메인넷에서 한번 실행되면 절대 변경이 안 되기 때문이다.</code>
+</li>
+  <li>만약 오류가 생긴다면 스마트 계약에서 발견된 버그 때문에 사용자들의 암호화폐를 잃어버릴 가능성도 배제할 수 없다. 그래서 쉽게, 그리고 빠르게 개발하여 공개할 수 없는 이유도 된다.</li>
+  <li>이와 반대로 기존 앱 개발은 빠르게 변하는 트렌드에 맞춰 새로운 서비스를 계속해서 만들어내는 것에 집중하는 편이다. 개발자로서 최소한의 실행 가능한 제품 즉, MVPs를 만들고 사람들이 직접 테스트하게 한 후 가능한 한 빨리 업데이트된 버전을 출시하는 것이 요새 앱 개발의 추세이지만 현재 디앱 개발자들에게는 적합하지 않은 추세다.</li>
+</ul>
+
+<p><br></p>
+
+<p style="text-align: center;"><img src="https://user-images.githubusercontent.com/52439201/172168332-f81afcc3-7170-4033-998b-51db7175ce1a.png" alt="image"><br>
+출처자료: 현암 코딩</p>
+
+<p>정리해서, 기존 앱은 구글 플레이 스토어나 앱 스토어에 등록하여 구글과 애플의 <code class="language-plaintext highlighter-rouge">중앙화</code>된 서버에서 관리를 받는 반면에,<br>
+디앱은 분산된 P2P 간의 자율적인 연결에 의해 <code class="language-plaintext highlighter-rouge">탈중앙화</code>된 이더리움, 이오스, 트론 등과 같은 스마트계약 기능이 있는 블록체인 플랫폼 위에서 작동되는 방식이다.</p>
+
+<h2 id="출처">출처</h2>
+<ul>
+  <li><a href="http://wiki.hash.kr/index.php/%EB%94%94%EC%95%B1">해시넷</a></li>
+</ul>
+
+
+
+    </div>
+
+</article>
+<div class="post-nav">
+<a class="previous" href="/jekyll-theme-yat/typescirpt/2022/05/17/typescript-02.html" title="[TypeScript] 인터페이스 이해하기">[TypeScript] 인터페이스 이해하기</a><a class="next" href="/jekyll-theme-yat/blockchain/2022/06/07/blockchain-02.html" title="[블록체인] 기본 개념 - 스마트 컨트랙트">[블록체인] 기본 개념 - 스마트 컨트랙트...</a>
+</div>
+<div class="post-related">
+      <div>Related Articles</div>
+      <ul>
+        <li><a class="post-link" href="/jekyll-theme-yat/vue.js/2022/01/14/vueJs-03.html" title="[블록체인] 기본 개념 - 스마트 컨트랙트">[Vue.js] Vuex의 이해와 컨셉</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/babel/2021/12/23/Babel-02.html" title="[블록체인] 기본 개념 - 스마트 컨트랙트">[Babel] 바벨의 프레셋(Presets) 사용</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/javascript/2022/04/13/javascript-12.html" title="[블록체인] 기본 개념 - 스마트 컨트랙트">[Javascript] ES6의 Spread 연산자 &amp; Rest 파라미터</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/git/2022/02/07/git-06.html" title="[블록체인] 기본 개념 - 스마트 컨트랙트">[Git] Software 버전 관리 규칙, 어떻게 번호를 할당하는거야?</a></li>
+</ul>
+    </div>
+<div class="post-comments"></div></section>
+</div>
+<script>
+  new Zooming().listen('img')
+</script>
+
+  </section>
+  <section class="sidebar" style="margin-left: 15px;">
+    <!-- Get sidebar items --><style type="text/css" media="screen">
+.post-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+</style>
+
+<div class="post-menu">
+  <div class="post-menu-title">TOC</div>
+  <div class="post-menu-content"></div>
+</div>
+
+<script>
+  function generateContent() {
+    var menu = document.querySelector(".post-menu");
+    var menuContent =  menu.querySelector(".post-menu-content");
+    var headings = document.querySelector(".post-content").querySelectorAll("h2, h3, h4, h5, h6");
+
+    // Hide menu when no headings
+    if (headings.length === 0) {
+      return menu.style.display = "none";
+    }
+
+    // Generate post menu
+    var menuHTML = '';
+    for (var i = 0; i < headings.length; i++) {
+      var h = headings[i];
+      menuHTML += (
+        '<li class="h-' + h.tagName.toLowerCase() + '">'
+        + '<a href="#h-' + h.getAttribute('id') + '">' + h.textContent + '</a></li>');
+    }
+
+    menuContent.innerHTML = '<ul>' + menuHTML + '</ul>';
+
+    // The header element
+    var header = document.querySelector('header.site-header');
+
+    function doMenuCollapse(index, over_items) {
+      var items = menuContent.firstChild.children;
+
+      if (over_items == undefined) {
+        over_items = 20;
+      }
+
+      if (items.length < over_items) {
+        return;
+      }
+
+      var activeItem = items[index];
+      var beginItem = activeItem
+      var endItem = activeItem
+      var beginIndex = index;
+      var endIndex = index + 1;
+      while (beginIndex >= 0
+        && !items[beginIndex].classList.contains('h-h2')) {
+        beginIndex -= 1;
+      }
+      while (endIndex < items.length
+        && !items[endIndex].classList.contains('h-h2')) {
+        endIndex += 1;
+      }
+      for (var i = 0; i < beginIndex; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+      for (var i = beginIndex + 1; i < endIndex; i++) {
+        item = items[i]
+        // if (!item.classList.contains('h-h2')) {
+          item.style.display = '';
+        // }
+      }
+      for (var i = endIndex; i < items.length; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+    }
+
+    // Init menu collapsed
+    doMenuCollapse(-1);
+
+    // Active the menu item
+    window.addEventListener('scroll', function (event) {
+      var lastActive = menuContent.querySelector('.active');
+      var changed = true;
+      var activeIndex = -1;
+      for (var i = headings.length - 1; i >= 0; i--) {
+        var h = headings[i];
+        var headingRect = h.getBoundingClientRect();
+        var headerRect = header.getBoundingClientRect();
+        var headerTop = Math.floor(headerRect.top);
+        var headerHeight = Math.floor(headerRect.height);
+        var headerHeight = headerTop + headerHeight + 20;
+        if (headingRect.top <= headerHeight) {
+          var id = 'h-' + h.getAttribute('id');
+          var a = menuContent.querySelector('a[href="#' + id  + '"]');
+          var curActive = a.parentNode;
+          if (curActive) {
+            curActive.classList.add('active');
+            activeIndex = i;
+          }
+          if (lastActive == curActive) {
+            changed = false;
+          }
+          break;
+        }
+      }
+      if (changed) {
+        if (lastActive) {
+          lastActive.classList.remove('active');
+        }
+        doMenuCollapse(activeIndex);
+      }
+      event.preventDefault();
+    });
+  }
+  generateContent();
+</script>
+</section>
+</div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jekyll-theme-yat/"></data>
+
+  <div class="wrapper">
+    <div class="site-footer-inner">
+<div>
+<span class="copyleft">©</span> 2022 Seo SeongSik. All rights reserved</div>
+      <div>Go to <a title="github" href="https://github.com/s-seongsik">Github</a>
+</div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

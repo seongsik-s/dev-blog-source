@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>[Vue.js] Vue.js 문법 총정리 | IT 데이터베이스</title>
+<meta name="generator" content="Jekyll v4.2.2">
+<meta property="og:title" content="[Vue.js] Vue.js 문법 총정리">
+<meta name="author" content="GitHub User">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Vue 인스턴스">
+<meta property="og:description" content="Vue 인스턴스">
+<link rel="canonical" href="/jekyll-theme-yat/vue.js/2022/01/17/vueJs-04.html">
+<meta property="og:url" content="/jekyll-theme-yat/vue.js/2022/01/17/vueJs-04.html">
+<meta property="og:site_name" content="IT 데이터베이스">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2022-01-17T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="[Vue.js] Vue.js 문법 총정리">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"GitHub User"},"dateModified":"2022-01-17T00:00:00+00:00","datePublished":"2022-01-17T00:00:00+00:00","description":"Vue 인스턴스","headline":"[Vue.js] Vue.js 문법 총정리","mainEntityOfPage":{"@type":"WebPage","@id":"/jekyll-theme-yat/vue.js/2022/01/17/vueJs-04.html"},"url":"/jekyll-theme-yat/vue.js/2022/01/17/vueJs-04.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-noto-sans@0.0.72/index.min.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/main.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/image-popup.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="/jekyll-theme-yat/assets/js/main.js"></script>
+  <script src="/jekyll-theme-yat/assets/js/zooming.min.js"></script><link type="application/atom+xml" rel="alternate" href="/jekyll-theme-yat/feed.xml" title="IT 데이터베이스">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+<!-- and it's easy to individually load additional languages -->
+<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/go.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Init highlight js
+document.addEventListener('DOMContentLoaded', function(event) {
+  var els = document.querySelectorAll('pre code')
+
+  function addLangData(block) {
+    var outer = block.parentElement.parentElement.parentElement;
+    var lang = block.getAttribute('data-lang');
+    for (var i = 0; i < outer.classList.length; i++) {
+      var cls = outer.classList[i];
+      if (cls.startsWith('language-')) {
+        lang = cls;
+        break;
+      }
+    }
+    if (!lang) {
+      cls = block.getAttribute('class');
+      lang = cls ? cls.replace('hljs ', '') : '';
+    }
+    if (lang.startsWith('language-')) {
+      lang = lang.substr(9);
+    }
+    block.setAttribute('class', 'hljs ' + lang);
+    block.parentNode.setAttribute('data-lang', lang);
+  }
+
+  function addBadge(block) {
+    var enabled = ('true' || 'true').toLowerCase();
+    if (enabled == 'true') {
+      var pre = block.parentElement;
+      pre.classList.add('badge');
+    }
+  }
+
+  function handle(block) {
+    addLangData(block);
+    addBadge(block)
+    hljs.highlightBlock(block);
+  }
+
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i];
+    handle(el);
+  }
+});
+</script>
+
+<style>
+  /* code language badge */
+  pre.badge::before {
+    content: attr(data-lang);
+    color: #fff;
+    background-color: #ff4e00;
+    padding: 0 .5em;
+    border-radius: 0 2px;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 32px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+  }
+
+  /* fix wrong badge display for firefox browser */
+  code > table pre::before {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="site-header site-header-transparent" role="banner">
+
+  <div class="wrapper">
+    <div class="site-header-inner">
+<span class="site-brand"><a class="site-brand-inner" rel="author" href="/jekyll-theme-yat/">
+  <img class="site-favicon" title="IT 데이터베이스" src="" onerror="this.style.display='none'">
+  IT 데이터베이스
+</a>
+</span><nav class="site-nav">
+          <input type="checkbox" id="nav-trigger" class="nav-trigger">
+          <label for="nav-trigger">
+            <span class="menu-icon">
+              <svg viewbox="0 0 18 15" width="18px" height="15px">
+                <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+              </svg>
+            </span>
+          </label>
+
+          <div class="trigger">
+<a class="page-link" href="/jekyll-theme-yat/about.html">ABOUT</a><a class="page-link" href="/jekyll-theme-yat/archives.html">ARCHIVES</a><a class="page-link" href="/jekyll-theme-yat/categories.html">CATEGORIES</a><a class="page-link" href="/jekyll-theme-yat/">HOME</a><a class="page-link" href="/jekyll-theme-yat/tags.html">TAGS</a>
+
+
+
+
+
+
+
+
+
+<span class="page-link">
+
+
+
+<div id="google_translate_element" style="display: none;">
+</div>
+
+<span class="ct-language">
+  <ul class="list-unstyled ct-language-dropdown">
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="en">
+          
+          <img src="https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png" title="English">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="fr">
+          
+          <img src="https://cdn.countryflags.com/thumbs/france/flag-400.png" title="French">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="zh-CN">
+          
+          <img src="https://cdn.countryflags.com/thumbs/china/flag-400.png" title="Chinese(Simple)">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ja">
+          
+          <img src="https://cdn.countryflags.com/thumbs/japan/flag-400.png" title="Japanese">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ko">
+          
+          <img src="https://cdn.countryflags.com/thumbs/south-korea/flag-400.png" title="Korean">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ru">
+          
+          <img src="https://cdn.countryflags.com/thumbs/russia/flag-400.png" title="Russian">
+          
+        </a>
+      </li>
+    
+  </ul>
+</span>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false,
+    layout: google.translate.TranslateElement.InlineLayout.VERTICAL
+  }, 'google_translate_element');
+
+  // Links to cross-origin destinations are unsafe
+  var gll = document.getElementsByClassName('goog-logo-link')[0];
+  if (gll) {
+    gll.setAttribute('rel', 'noopener');
+  }
+
+  function restoreLang() {
+    var iframe = document.getElementsByClassName('goog-te-banner-frame')[0];
+    if (!iframe) return;
+
+    var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+    var restore_el = innerDoc.getElementsByTagName("button");
+
+    for (var i = 0; i < restore_el.length; i++) {
+      if (restore_el[i].id.indexOf("restore") >= 0) {
+        restore_el[i].click();
+        var close_el = innerDoc.getElementsByClassName("goog-close-link");
+        close_el[0].click();
+        return;
+      }
+    }
+  }
+
+  function triggerHtmlEvent(element, eventName) {
+    var event;
+    if (document.createEvent) {
+      event = document.createEvent('HTMLEvents');
+      event.initEvent(eventName, true, true);
+      element.dispatchEvent(event);
+    } else {
+      event = document.createEventObject();
+      event.eventType = eventName;
+      element.fireEvent('on' + event.eventType, event);
+    }
+  }
+
+  var googleCombo = document.querySelector("select.goog-te-combo");
+  var langSelect = document.querySelector('.ct-language');
+  langSelect.addEventListener('click', function(event) {
+    if (!event.target) {
+      return;
+    }
+
+    var selected = document.querySelector('.ct-language .ct-language-selected');
+    if (selected) {
+      selected.classList.remove('ct-language-selected');
+    }
+
+    var target = event.target;
+    while (target && target !== langSelect ) {
+      if (target.matches('.lang-select')) {
+        break;
+      }
+      target = target.parentElement;
+    }
+
+    if (target && target.matches('.lang-select')) {
+      var lang = target.getAttribute('data-lang');
+      if (googleCombo.value == lang) {
+        restoreLang();
+      } else {
+        target.parentElement.classList.add('ct-language-selected');
+        googleCombo.value = lang;
+        triggerHtmlEvent(googleCombo, 'change');
+      }
+    }
+
+    event.preventDefault();
+  });
+}
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</span>
+</div>
+        </nav>
+</div>
+  </div>
+</header>
+
+<script>
+  function initHeader() {
+    var lastScrollY = getScrollPos().y;
+    var documentElement = document.documentElement;
+
+    function storeScrollData() {
+      var y = getScrollPos().y;documentElement.setAttribute("data-header-transparent", "");var scrollStatus = "";
+
+      if (y <= 0) {
+        scrollStatus = "top";
+      } else if ((window.innerHeight + y) >= document.body.offsetHeight) {
+        scrollStatus = "bottom";
+      } else {
+        var isScrollDown = (y - lastScrollY > 0) ? true : false;
+        scrollStatus = isScrollDown ? "down" : "up";
+      }
+
+      lastScrollY = y;
+      documentElement.setAttribute("data-scroll-status", scrollStatus);
+    }
+
+    window.addEventListener('scroll', function(e) {
+      storeScrollData();
+    });
+
+    storeScrollData();
+  }
+  document.addEventListener('DOMContentLoaded', initHeader);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    html .page-banner {
+      background: #000;
+    }
+  </style>
+<style>html .page-banner {
+      height:  36.8vh;
+      min-height: 38vh;
+    }
+    html[data-scroll-status="top"] .page-banner {
+      height: 100vh;
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-img > *:first-child {
+      opacity: 0.618;
+    }
+
+    html[data-theme="dark"] .page-banner .page-banner-img > *:first-child {
+      opacity: 0.443724;
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-inner > *:first-child > *:nth-child(1) {
+      font-size: 3.25em; font-weight: bold; text-decoration: underline
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-inner > *:first-child > *:nth-child(2) {
+      color: gold
+    }
+  </style>
+<section class="page-banner">
+    <div class="page-banner-img">
+<div style="background-image: url(/jekyll-theme-yat/assets/images/banners/vue.png)"></div>
+        <img class="img-placeholder" src="/jekyll-theme-yat/assets/images/banners/vue.png">
+</div>
+    <div class="wrapper">
+      <div class="page-banner-inner">
+<header class="post-header">
+  <h1 class="post-title p-name" itemprop="name headline">[Vue.js] Vue.js 문법 총정리</h1>
+  <h2 class="post-subtitle"></h2>
+
+  <p class="post-meta">
+    <time class="dt-published" datetime="2022-01-17T00:00:00+00:00" itemprop="datePublished"><i class="fa fa-calendar"></i> Jan 17, 2022
+    </time>
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span class="post-reading-time left-vsplit"><i class="fa fa-clock-o"></i> About 13 mins</span>
+  </p>
+<div class="post-tags">
+<a class="post-tag" href="/jekyll-theme-yat/tags.html#Webpack">#Webpack</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#Babel">#Babel</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#Node.js">#Node.js</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#Javascript">#Javascript</a>
+</div></header>
+</div>
+    </div>
+  </section><script>
+  function hashLocate(hashValue) {
+    hashValue = hashValue.replace(/^.*#h-/, '');
+    hashValue = decodeURIComponent(hashValue);
+    var element = document.getElementById(hashValue);
+
+    if (!element) {
+      return;
+    }
+
+    var header = document.querySelector('header.site-header');
+    var headerRect = header.getBoundingClientRect();
+    var headerTop = Math.floor(headerRect.top);
+    var headerHeight = Math.floor(headerRect.height);
+    var scrollPos = getScrollPos();
+    var offsetY = element.offsetTop - (headerTop + headerHeight + 20);
+
+    if (offsetY == scrollPos.y) {
+      return;
+    }
+
+    if (headerTop == 0  && offsetY > scrollPos.y) {
+      offsetY += headerHeight + 2;
+    } else if (headerTop < 0  && offsetY < scrollPos.y) {
+      offsetY -= headerHeight - 2;
+    }
+
+    smoothScrollTo(offsetY);
+  }
+
+  // The first event occurred
+  window.addEventListener('load', function(event) {
+    if (window.location.hash) {
+      hashLocate(window.location.hash);
+    }
+  });
+
+  // The first event occurred
+  window.addEventListener('click', function(event) {
+    if (event.target.tagName.toLowerCase() == 'a') {
+      hashLocate(event.target.getAttribute('href'));
+    }
+  });
+</script>
+<div class="theme-toggle">
+  <input type="checkbox" id="theme-switch">
+  <label for="theme-switch">
+    <div class="toggle"></div>
+    <div class="names">
+      <p class="light">Light</p>
+      <p class="dark">Dark</p>
+    </div>
+  </label>
+</div>
+
+
+
+
+<script>
+  (function() {
+    var sw = document.getElementById('theme-switch');
+    var html = document.getElementsByTagName('html')[0];
+    var nightModeOption = ('auto' || 'auto').toLowerCase();
+    var storage = nightModeOption === 'manual'
+        ? localStorage
+        : sessionStorage;
+    var themeData = loadThemeData();
+
+    function saveThemeData(data) {
+      storage.setItem('theme', JSON.stringify(data));
+    }
+
+    function loadThemeData() {
+      var data = storage.getItem('theme');
+      try {
+        data = JSON.parse(data ? data : '');
+      } catch(e) {
+        data = { nightShift: undefined, autoToggleAt: 0 };
+        saveThemeData(data);
+      }
+      return data;
+    }
+
+    function handleThemeToggle(nightShift) {
+      themeData.nightShift = nightShift;
+      saveThemeData(themeData);
+      html.dataset.theme = nightShift ? 'dark' : 'light';
+      setTimeout(function() {
+        sw.checked = nightShift ? true : false;
+      }, 50);
+    }
+
+    function autoThemeToggle() {
+      // Next time point of theme toggle
+      var now = new Date();
+      var toggleAt = new Date();
+      var hours = now.getHours();
+      var nightShift = hours >= 19 || hours <=7;
+
+      if (nightShift) {
+        if (hours > 7) {
+          toggleAt.setDate(toggleAt.getDate() + 1);
+        }
+        toggleAt.setHours(7);
+      } else {
+        toggleAt.setHours(19);
+      }
+
+      toggleAt.setMinutes(0);
+      toggleAt.setSeconds(0);
+      toggleAt.setMilliseconds(0)
+
+      var delay = toggleAt.getTime() - now.getTime();
+
+      // auto toggle theme mode
+      setTimeout(function() {
+        handleThemeToggle(!nightShift);
+      }, delay);
+
+      return {
+        nightShift: nightShift,
+        toggleAt: toggleAt.getTime()
+      };
+    }
+
+    // Listen the theme toggle event
+    sw.addEventListener('change', function(event) {
+      handleThemeToggle(event.target.checked);
+    });
+
+    if (nightModeOption == 'auto') {
+      var data = autoThemeToggle();
+
+      // Toggle theme by local setting
+      if (data.toggleAt > themeData.autoToggleAt) {
+        themeData.autoToggleAt = data.toggleAt;
+        handleThemeToggle(data.nightShift);
+      } else {
+        handleThemeToggle(themeData.nightShift);
+      }
+    } else if (nightModeOption == 'manual') {
+      handleThemeToggle(themeData.nightShift);
+    } else {
+      var nightShift = themeData.nightShift;
+      if (nightShift === undefined) {
+        nightShift = nightModeOption === 'on';
+      }
+      handleThemeToggle(nightShift);
+    }
+  })();
+</script>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="framework">
+  <section class="main">
+
+     <div class="post">
+  <section>
+
+
+
+
+
+
+
+
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <div class="post-content e-content" itemprop="articleBody">
+
+      <h2 id="vue-인스턴스"><strong>Vue 인스턴스</strong></h2>
+
+<hr>
+
+<p><a href="https://kr.vuejs.org/v2/guide/instance.html">Vue 인스턴스</a>에서 보면 알듯이 모든 <code class="language-plaintext highlighter-rouge">Vue</code> 앱은 <code class="language-plaintext highlighter-rouge">Vue 인스턴스</code>를 만드는 것부터 시작한다.<br>
+인스턴스 안에 <code class="language-plaintext highlighter-rouge">options 객체</code>를 전달해야하는데 <a href="https://kr.vuejs.org/v2/api/#propsData">전체 옵션 목록</a>을 참고하자.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">vm</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
+    <span class="na">el</span><span class="p">:</span> <span class="dl">"</span><span class="s2">#app</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">data</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">text</span><span class="p">:</span> <span class="dl">'</span><span class="s1">hello world</span><span class="dl">'</span>
+    <span class="p">},</span>
+
+    <span class="c1">//...옵션들</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<p><br>
+<br></p>
+
+<h2 id="데이터-바인딩"><strong>데이터 바인딩</strong></h2>
+
+<hr>
+
+<h3 id="이중-중괄호"><strong>이중 중괄호</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">이중 중괄호</code>를 사용한 텍스트 보간이다. data 객체의 <code class="language-plaintext highlighter-rouge">msg</code>속성 값으로 대체된다. <code class="language-plaintext highlighter-rouge">msg</code>의 속성 값이 변경될 때 마다 갱신된다.
+보간법은 속성값을 <code class="language-plaintext highlighter-rouge">텍스트</code>로 출력한다.</p>
+
+<div class="language-vue highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nt">&lt;</span><span class="k">template</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div&gt;</span>
+      <span class="nt">&lt;p&gt;</span>&gt; 메시지: <span class="si">{{</span> <span class="nx">msg</span> <span class="si">}}</span> <span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/</span><span class="k">template</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;</span><span class="k">script</span><span class="nt">&gt;</span>
+<span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
+    <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">data</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="na">msg</span><span class="p">:</span> <span class="dl">"</span><span class="s2">이것은 보간법!, 선언적 렌더링입니다.</span><span class="dl">"</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nt">&lt;/</span><span class="k">script</span><span class="nt">&gt;</span>
+
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/149687683-b0b3a609-c8b8-4ee9-999b-a2cee4aef8c8.png" alt="image"></p>
+
+<p><br></p>
+
+<h3 id="v-text-디렉티브"><strong>v-text 디렉티브</strong></h3>
+
+<p>디렉티브는 <code class="language-plaintext highlighter-rouge">v-</code> 접두사가 있는 특수 속성이다. 디렉티브 속성 값은 <code class="language-plaintext highlighter-rouge">단일 javascript</code> 표현식이 된다. (<code class="language-plaintext highlighter-rouge">v-for</code>는 예외)
+디렉티브의 역할은 표현식의 값이 변경될 때 사이드이펙트를 반응적으로 DOM에 적용한다는 것이다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">v-text</code> 속성은 데이터 객체의 속성값을 <code class="language-plaintext highlighter-rouge">텍스트</code>로 출력한다.</p>
+
+<div class="language-vue highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nt">&lt;</span><span class="k">template</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div&gt;</span>
+      <span class="nt">&lt;p</span> <span class="na">v-text=</span><span class="s">"msg"</span><span class="nt">&gt;</span> <span class="nt">&lt;/p&gt;</span>
+      <span class="nt">&lt;p</span> <span class="na">v-text=</span><span class="s">"html_msg"</span><span class="nt">&gt;</span> <span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/</span><span class="k">template</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;</span><span class="k">script</span><span class="nt">&gt;</span>
+<span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
+    <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">data</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="na">msg</span><span class="p">:</span> <span class="dl">"</span><span class="s2">이것은 디렉티브!, v-text 속성을 이용했습니다.</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">html_msg</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;div&gt;이것은 디렉티브!, v-text 속성을 이용했습니다.&lt;/div&gt;</span><span class="dl">"</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nt">&lt;/</span><span class="k">script</span><span class="nt">&gt;</span>
+
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/149688240-2df427c1-7677-4ccd-81b8-914f4c494dbc.png" alt="image"></p>
+
+<p><br></p>
+
+<h3 id="v-html-디렉티브"><strong>v-html 디렉티브</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">v-text</code>가 텍스트로 출력한다면, <code class="language-plaintext highlighter-rouge">v-html</code>는 속성 값을 <code class="language-plaintext highlighter-rouge">HTML</code>로 표현된다. 
+즉, 실제 HTML을 출력하고 싶다면 <code class="language-plaintext highlighter-rouge">v-html</code> 디렉티브를 사용해야 한다.</p>
+
+<div class="language-vue highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nt">&lt;</span><span class="k">template</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div&gt;</span>
+      <span class="nt">&lt;p</span> <span class="na">v-text=</span><span class="s">"msg"</span><span class="nt">&gt;</span> <span class="nt">&lt;/p&gt;</span>
+      <span class="nt">&lt;p</span> <span class="na">v-html=</span><span class="s">"html_msg"</span><span class="nt">&gt;</span> <span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/</span><span class="k">template</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;</span><span class="k">script</span><span class="nt">&gt;</span>
+<span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
+    <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">data</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="na">msg</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;div&gt;이것은 디렉티브!, v-text 속성을 이용했습니다.&lt;/div&gt;</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">html_msg</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;div&gt;이것은 디렉티브!, v-text 속성을 이용했습니다.&lt;/div&gt;</span><span class="dl">"</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nt">&lt;/</span><span class="k">script</span><span class="nt">&gt;</span>
+
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/149689594-1c45dcb3-6deb-43ef-afd9-7b6f8de257de.png" alt="image"></p>
+
+<p><br></p>
+
+<h3 id="v-bind-디렉티브"><strong>v-bind 디렉티브</strong></h3>
+
+<p>위 속성들과 달리 <code class="language-plaintext highlighter-rouge">HTML</code> 태그의 속성을 바인딩하기 위해 사용한다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">class</code>, <code class="language-plaintext highlighter-rouge">id</code>, <code class="language-plaintext highlighter-rouge">href</code> 속성을 예로 작성.</p>
+
+<div class="language-vue highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nt">&lt;</span><span class="k">template</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div&gt;</span>
+      <span class="nt">&lt;a</span> <span class="na">v-bind:href=</span><span class="s">"Url"</span><span class="nt">&gt;</span>href 속성입니다.<span class="nt">&lt;/a&gt;</span>
+      <span class="nt">&lt;p</span> <span class="na">v-bind:class=</span><span class="s">"Class"</span><span class="nt">&gt;</span>class 속성입니다.<span class="nt">&lt;/p&gt;</span>
+      <span class="nt">&lt;p</span> <span class="na">v-bind:id=</span><span class="s">"Id"</span><span class="nt">&gt;</span>id 속성입니다.<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/</span><span class="k">template</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;</span><span class="k">script</span><span class="nt">&gt;</span>
+<span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
+    <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">data</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="na">Url</span><span class="p">:</span> <span class="dl">"</span><span class="s2">https://www.google.com/</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">Class</span><span class="p">:</span> <span class="dl">"</span><span class="s2">test-class</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">Id</span><span class="p">:</span> <span class="dl">"</span><span class="s2">test-id</span><span class="dl">"</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nt">&lt;/</span><span class="k">script</span><span class="nt">&gt;</span>
+
+</code></pre></div></div>
+
+<p>개발자 도구로 확인해보면 <code class="language-plaintext highlighter-rouge">class</code>, <code class="language-plaintext highlighter-rouge">id</code>, <code class="language-plaintext highlighter-rouge">href</code> 속성들이 바인딩 된 것을 확인.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/149694675-a057d011-8261-4266-8c07-27f5f917775e.png" alt="image"></p>
+
+<p><br></p>
+
+<h3 id="v-model-디렉티브"><strong>v-model 디렉티브</strong></h3>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">v-model</code> 속성은 입력 Form 요소를 개발할 때 사용하는 속성이다.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">v-model</code> 속성은 <code class="language-plaintext highlighter-rouge">v-bind</code>와 <code class="language-plaintext highlighter-rouge">v-on</code>의 기능의 조합으로 동작한다.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">v-model</code> 속성은 입력요소와 구성 요소에 양방향 바인딩을 만든다.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">v-model</code> 속성은 <code class="language-plaintext highlighter-rouge">&lt;input&gt;</code>, <code class="language-plaintext highlighter-rouge">&lt;select&gt;</code>, <code class="language-plaintext highlighter-rouge">&lt;textarea&gt;</code>, <code class="language-plaintext highlighter-rouge">components</code>에 제한되어 사용한다.</li>
+</ul>
+
+<div class="language-vue highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nt">&lt;</span><span class="k">template</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div&gt;</span>
+      <span class="nt">&lt;input</span> <span class="na">v-model=</span><span class="s">"model1"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;p&gt;</span>model1 : <span class="si">{{</span><span class="nx">model1</span><span class="si">}}</span><span class="nt">&lt;/p&gt;</span>
+
+      <span class="nt">&lt;textarea</span> <span class="na">v-model=</span><span class="s">"model2"</span><span class="nt">&gt;&lt;/textarea&gt;</span>
+      <span class="nt">&lt;p&gt;</span>model2 : <span class="si">{{</span><span class="nx">model2</span><span class="si">}}</span><span class="nt">&lt;/p&gt;</span>
+
+      <span class="nt">&lt;select</span> <span class="na">v-model=</span><span class="s">"model3"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;option&gt;</span>test1<span class="nt">&lt;/option&gt;</span>
+        <span class="nt">&lt;option&gt;</span>test2<span class="nt">&lt;/option&gt;</span>
+      <span class="nt">&lt;/select&gt;</span>
+      <span class="nt">&lt;p&gt;</span>model3 : <span class="si">{{</span><span class="nx">model3</span><span class="si">}}</span><span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/</span><span class="k">template</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;</span><span class="k">script</span><span class="nt">&gt;</span>
+<span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
+    <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">data</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="na">model1</span><span class="p">:</span> <span class="dl">""</span><span class="p">,</span>
+            <span class="na">model2</span><span class="p">:</span> <span class="dl">""</span><span class="p">,</span>
+            <span class="na">model3</span><span class="p">:</span> <span class="dl">""</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nt">&lt;/</span><span class="k">script</span><span class="nt">&gt;</span>
+
+</code></pre></div></div>
+
+<p>사용자가 입력한 Form의 데이터가 <code class="language-plaintext highlighter-rouge">v-model</code>의 속성 값으로 연결된다. 따라서, HTML 요소와 뷰 인스턴스의 데이터 속성이 양방향으로 바인딩 될 수 있는 것!</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/149706780-396a1153-b68c-465e-ac96-8b6b430dbf73.png" alt="image"></p>
+
+<p><br>
+<br></p>
+
+<h2 id="이벤트-핸들링"><strong>이벤트 핸들링</strong></h2>
+
+<hr>
+
+<h3 id="v-on-디렉티브"><strong>v-on 디렉티브</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">v-on</code> 속성은 요소에 이벤트 리스너를 연결할 때 사용한다.</p>
+
+<div class="language-vue highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nt">&lt;</span><span class="k">template</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div&gt;</span>
+      <span class="nt">&lt;button</span> <span class="na">v-on:click=</span><span class="s">"countUp"</span><span class="nt">&gt;</span>count 1증가<span class="nt">&lt;/button&gt;</span>
+      <span class="nt">&lt;p&gt;</span><span class="si">{{</span> <span class="nx">count</span> <span class="si">}}</span><span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/</span><span class="k">template</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;</span><span class="k">script</span><span class="nt">&gt;</span>
+<span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
+    <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">data</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="na">count</span><span class="p">:</span><span class="mi">0</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="na">methods</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nx">countUp</span><span class="p">(){</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">count</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nt">&lt;/</span><span class="k">script</span><span class="nt">&gt;</span>
+
+
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">v-on</code> 약어 참고!</p>
+<div class="language-vue highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- 전체 문법 --&gt;</span>
+<span class="nt">&lt;a</span> <span class="na">v-on:click=</span><span class="s">"doSomething"</span><span class="nt">&gt;</span> ... <span class="nt">&lt;/a&gt;</span>
+
+<span class="c">&lt;!-- 약어 --&gt;</span>
+<span class="nt">&lt;a</span> <span class="err">@</span><span class="na">click=</span><span class="s">"doSomething"</span><span class="nt">&gt;</span> ... <span class="nt">&lt;/a&gt;</span>
+
+<span class="c">&lt;!-- shorthand with dynamic argument (2.6.0+) --&gt;</span>
+<span class="nt">&lt;a</span> <span class="err">@</span><span class="na">[event]=</span><span class="s">"doSomething"</span><span class="nt">&gt;</span> ... <span class="nt">&lt;/a&gt;</span>
+</code></pre></div></div>
+
+<p>실제로 4회 누른 결과이다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/149708316-082deb4c-4186-4637-9a7a-b19021439c13.png" alt="image"></p>
+
+<p><br>
+<br></p>
+
+<h2 id="조건-렌더링"><strong>조건 렌더링</strong></h2>
+
+<hr>
+
+<h3 id="v-if-디렉티브"><strong>v-if 디렉티브</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">v-if</code> 속성은 조건에 따라 블록을 렌더링하기 위해 사용한다.<br>
+블록은 속성의 표현식이 <code class="language-plaintext highlighter-rouge">true</code>값을 반환할 때만 렌더링한다.
+<code class="language-plaintext highlighter-rouge">vue1</code> 속성 값이 <code class="language-plaintext highlighter-rouge">ture</code> 이므로 렌더링되어 화면에 표시었고, <code class="language-plaintext highlighter-rouge">vue2</code> 속성 값은 <code class="language-plaintext highlighter-rouge">false</code>이므로 렌더링되지 않는다.</p>
+
+<div class="language-vue highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nt">&lt;</span><span class="k">template</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div&gt;</span>
+      <span class="nt">&lt;p</span> <span class="na">v-if=</span><span class="s">"vue1"</span><span class="nt">&gt;</span>vue1가 <span class="si">{{</span> <span class="nx">vue1</span> <span class="si">}}</span>입니다.<span class="nt">&lt;/p&gt;</span>
+      <span class="nt">&lt;p</span> <span class="na">v-if=</span><span class="s">"vue2"</span><span class="nt">&gt;</span>vue2가 <span class="si">{{</span> <span class="nx">vue2</span> <span class="si">}}</span>입니다.<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/</span><span class="k">template</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;</span><span class="k">script</span><span class="nt">&gt;</span>
+<span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
+    <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">data</span><span class="p">:</span> <span class="p">()</span><span class="o">=&gt;</span><span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="na">vue1</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="na">vue2</span><span class="p">:</span> <span class="kc">false</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nt">&lt;/</span><span class="k">script</span><span class="nt">&gt;</span>
+
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/149709203-e67a62b4-daf6-4639-8f0f-76b70a6d196a.png" alt="image"></p>
+
+<p><br></p>
+
+<h3 id="v-else-디렉티브"><strong>v-else 디렉티브</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">v-else</code> 속성은 <code class="language-plaintext highlighter-rouge">v-if</code>에 대한 <code class="language-plaintext highlighter-rouge">else 블록</code>을 나타낼 수 있다.</p>
+
+<div class="language-vue highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nt">&lt;</span><span class="k">template</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div&gt;</span>
+      <span class="nt">&lt;p</span> <span class="na">v-if=</span><span class="s">"vue1"</span><span class="nt">&gt;</span>vue1가 <span class="si">{{</span> <span class="nx">vue1</span> <span class="si">}}</span>입니다.<span class="nt">&lt;/p&gt;</span>
+
+      <span class="nt">&lt;p</span> <span class="na">v-if=</span><span class="s">"vue2"</span><span class="nt">&gt;</span>vue2가 <span class="si">{{</span> <span class="nx">vue2</span> <span class="si">}}</span>입니다.<span class="nt">&lt;/p&gt;</span>
+      <span class="nt">&lt;p</span> <span class="na">v-else</span><span class="nt">&gt;</span>vue2가 <span class="si">{{</span> <span class="nx">vue2</span> <span class="si">}}</span>입니다.<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/</span><span class="k">template</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;</span><span class="k">script</span><span class="nt">&gt;</span>
+<span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
+    <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">data</span><span class="p">:</span> <span class="p">()</span><span class="o">=&gt;</span><span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="na">vue1</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="na">vue2</span><span class="p">:</span> <span class="kc">false</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nt">&lt;/</span><span class="k">script</span><span class="nt">&gt;</span>
+
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/149709443-1c4bc1fe-2a2d-4473-91b0-a86dc56c5d8e.png" alt="image"></p>
+
+<p><br></p>
+
+<h3 id="v-else-if-디렉티브"><strong>v-else-if 디렉티브</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">v-else-if</code> 속성은 <code class="language-plaintext highlighter-rouge">v-if</code>에 대한 <code class="language-plaintext highlighter-rouge">else if 블록</code>역할을 한다. 즉, 다른 조건문을 추가한다.</p>
+
+<div class="language-vue highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nt">&lt;</span><span class="k">template</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div&gt;</span>
+      <span class="nt">&lt;p</span> <span class="na">v-if=</span><span class="s">"type === 'A'"</span><span class="nt">&gt;</span>type : <span class="si">{{</span> <span class="nx">type</span> <span class="si">}}</span><span class="nt">&lt;/p&gt;</span>
+      <span class="nt">&lt;p</span> <span class="na">v-else-if=</span><span class="s">"type === 'B'"</span><span class="nt">&gt;</span>type : <span class="si">{{</span> <span class="nx">type</span> <span class="si">}}</span><span class="nt">&lt;/p&gt;</span>
+      <span class="nt">&lt;p</span> <span class="na">v-else</span><span class="nt">&gt;</span>type : <span class="si">{{</span> <span class="nx">type</span> <span class="si">}}</span><span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/</span><span class="k">template</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;</span><span class="k">script</span><span class="nt">&gt;</span>
+<span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
+    <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">data</span><span class="p">:</span> <span class="p">()</span><span class="o">=&gt;</span><span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">B</span><span class="dl">'</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nt">&lt;/</span><span class="k">script</span><span class="nt">&gt;</span>
+
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/149709857-f5bbdbad-cbcb-47bf-948b-c76081019aea.png" alt="image"></p>
+
+<p><br></p>
+
+<h3 id="재사용-가능한-key-속성"><strong>재사용 가능한 key 속성</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">Vue</code>는 효율적으로 엘리먼트를 렌더링하기 위해 처음부터 렌더링을 하지않고 재사용한다. 하지만 이는 독립적인 엘리먼트를 사용할 때는 유용하지않다.
+밑의 예제를 보면 <code class="language-plaintext highlighter-rouge">loginType</code>을 변경해도 사용자가 입력한 값은 초기화되지 않는다. 그 이유는 두 조건 모두 같은 요소를 사용하기 때문에 <code class="language-plaintext highlighter-rouge">&lt;input&gt;</code>은 대체되지않고 <code class="language-plaintext highlighter-rouge">placeholder</code>만 변경된다.</p>
+
+<div class="language-vue highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nt">&lt;</span><span class="k">template</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">v-if=</span><span class="s">"loginType === 'username'"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;label&gt;</span>사용자 이름<span class="nt">&lt;/label&gt;</span>
+            <span class="nt">&lt;input</span> <span class="na">placeholder=</span><span class="s">"사용자 이름을 입력하세요"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">v-else</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;label&gt;</span>이메일<span class="nt">&lt;/label&gt;</span>
+            <span class="nt">&lt;input</span> <span class="na">placeholder=</span><span class="s">"이메일 주소를 입력하세요"</span><span class="nt">&gt;</span>
+            
+        <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;button</span> <span class="na">v-on:click=</span><span class="s">"change"</span><span class="nt">&gt;</span>유형 변경 버튼<span class="nt">&lt;/button&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/</span><span class="k">template</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;</span><span class="k">script</span><span class="nt">&gt;</span>
+<span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
+    <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">data</span><span class="p">:</span> <span class="p">()</span><span class="o">=&gt;</span><span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="na">loginType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">username</span><span class="dl">"</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="na">methods</span><span class="p">:{</span>
+        <span class="nx">change</span><span class="p">(){</span>
+            <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">loginType</span><span class="o">===</span><span class="dl">"</span><span class="s2">username</span><span class="dl">"</span><span class="p">){</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">loginType</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span><span class="p">;</span>
+            <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">loginType</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">username</span><span class="dl">"</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nt">&lt;/</span><span class="k">script</span><span class="nt">&gt;</span>
+
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/149712151-bbd8acb1-2904-4517-8bc0-f42bcaacacf5.png" alt="image"></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/149712167-ab7e986d-074e-49c7-9334-6b69c9edad92.png" alt="image"></p>
+
+<p><br></p>
+
+<p>따라서, 독립적인 엘리먼트로 사용하기 위해서 <code class="language-plaintext highlighter-rouge">key</code> 속성을 사용해야 한다. <code class="language-plaintext highlighter-rouge">key</code> 속성은 임의로 유일한 값을 넣어주면된다.</p>
+
+<div class="language-vue highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nt">&lt;</span><span class="k">template</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">v-if=</span><span class="s">"loginType === 'username'"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;label&gt;</span>사용자 이름<span class="nt">&lt;/label&gt;</span>
+            <span class="nt">&lt;input</span> <span class="na">placeholder=</span><span class="s">"사용자 이름을 입력하세요"</span> <span class="na">key=</span><span class="s">"user"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">v-else</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;label&gt;</span>이메일<span class="nt">&lt;/label&gt;</span>
+            <span class="nt">&lt;input</span> <span class="na">placeholder=</span><span class="s">"이메일 주소를 입력하세요"</span> <span class="na">key=</span><span class="s">"email"</span><span class="nt">&gt;</span>
+            
+        <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;button</span> <span class="na">v-on:click=</span><span class="s">"change"</span><span class="nt">&gt;</span>유형 변경 버튼<span class="nt">&lt;/button&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/</span><span class="k">template</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;</span><span class="k">script</span><span class="nt">&gt;</span>
+<span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
+    <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">data</span><span class="p">:</span> <span class="p">()</span><span class="o">=&gt;</span><span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="na">loginType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">username</span><span class="dl">"</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="na">methods</span><span class="p">:{</span>
+        <span class="nx">change</span><span class="p">(){</span>
+            <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">loginType</span><span class="o">===</span><span class="dl">"</span><span class="s2">username</span><span class="dl">"</span><span class="p">){</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">loginType</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span><span class="p">;</span>
+            <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">loginType</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">username</span><span class="dl">"</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nt">&lt;/</span><span class="k">script</span><span class="nt">&gt;</span>
+
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">유형 버튼 클릭</code>시 입력한 input값이 초기화된다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/149712409-7140f15c-6edb-4345-b20d-bca0649f4e48.png" alt="image"></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/149712437-8a1252f1-40a9-4395-b138-e6bbfa5fe27f.png" alt="image"></p>
+
+<p><br>
+<br></p>
+
+<h2 id="반복-렌더링"><strong>반복 렌더링</strong></h2>
+
+<hr>
+
+<h3 id="v-for-디렉티브"><strong>v-for 디렉티브</strong></h3>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">v-for</code>는 배열을 기반으로 리스트를 렌더링할 때 사용한다.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">v-for</code>는 <code class="language-plaintext highlighter-rouge">item in items</code> 형태의 문법을 사용한다.</li>
+  <li>여기서 <code class="language-plaintext highlighter-rouge">items</code>는 원본 데이터 배열이고 <code class="language-plaintext highlighter-rouge">item</code>은 반복되는 배열 엘리먼트의 별칭이다.</li>
+  <li>Vue에서 개별 DOM 노드들을 추적하고 기존 엘리먼트를 재사용, 재정렬하기 위해서 <code class="language-plaintext highlighter-rouge">v-for</code>의 각 항목들에 고유한 <code class="language-plaintext highlighter-rouge">key</code> 속성을 제공해야 한다.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">key</code>에 대한 이상적인 값은 각 항목을 식별할 수 있는 고유한 ID이다.</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">v-bind</code>를 사용하여 동적 값에 바인딩 해야한다.</li>
+  <li>반복되는 DOM 내용이 단순한 경우나 의도적인 성능 향상을 위해 기본 동작에 의존하지 않는 경우를 제외하면, 가능하면 언제나 <code class="language-plaintext highlighter-rouge">v-for</code>에 <code class="language-plaintext highlighter-rouge">key</code>를 추가하는 것이 좋다.</li>
+</ul>
+
+<div class="language-vue highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nt">&lt;</span><span class="k">template</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;ul&gt;</span>
+        <span class="nt">&lt;li</span> <span class="na">v-for=</span><span class="s">"(value, index) in items"</span> <span class="na">v-bind:key=</span><span class="s">"index"</span><span class="nt">&gt;</span>
+            <span class="si">{{</span> <span class="nx">value</span> <span class="si">}}</span>
+        <span class="nt">&lt;/li&gt;</span>
+
+        <span class="nt">&lt;br&gt;</span>
+        
+        <span class="nt">&lt;li</span> <span class="na">v-for=</span><span class="s">"(value, key) in object"</span> <span class="na">v-bind:key=</span><span class="s">"key"</span><span class="nt">&gt;</span>
+            <span class="si">{{</span><span class="nx">key</span><span class="si">}}</span> : <span class="si">{{</span> <span class="nx">value</span> <span class="si">}}</span>
+        <span class="nt">&lt;/li&gt;</span>
+    <span class="nt">&lt;/ul&gt;</span>
+<span class="nt">&lt;/</span><span class="k">template</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;</span><span class="k">script</span><span class="nt">&gt;</span>
+<span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
+    <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">data</span><span class="p">:</span> <span class="p">()</span><span class="o">=&gt;</span><span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="na">items</span> <span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">바보</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">멍청이</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">똥개</span><span class="dl">"</span><span class="p">],</span>
+            <span class="na">object</span> <span class="p">:</span> <span class="p">{</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">서성식</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">age</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">30</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">sex</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">male</span><span class="dl">"</span><span class="p">},</span>
+            
+        <span class="p">}</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+<span class="nt">&lt;/</span><span class="k">script</span><span class="nt">&gt;</span>
+
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/149714639-0982d061-57e0-4238-a32f-cbd951ddd50b.png" alt="image"></p>
+
+
+    </div>
+
+</article>
+<div class="post-nav">
+<a class="previous" href="/jekyll-theme-yat/vue.js/2022/01/14/vueJs-03.html" title="[Vue.js] Vuex의 이해와 컨셉">[Vue.js] Vuex의 이해와 컨셉</a><a class="next" href="/jekyll-theme-yat/vue.js/2022/01/18/vueJs-05.html" title="[Vue.js] Vue의 핵심 기능인 컴포넌트는 무엇이고 어떻게 사용할까?">[Vue.js] Vue의 핵심 기능인 컴포넌트는 무엇이고...</a>
+</div>
+<div class="post-related">
+      <div>Related Articles</div>
+      <ul>
+        <li><a class="post-link" href="/jekyll-theme-yat/node.js/2021/12/07/Node.js-01.html" title="[Vue.js] Vue의 핵심 기능인 컴포넌트는 무엇이고 어떻게 사용할까?">[Node.js] 개념 이해하기</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/javascript/2022/05/12/javascript-14.html" title="[Vue.js] Vue의 핵심 기능인 컴포넌트는 무엇이고 어떻게 사용할까?">[Javascript] 함수형 프로그래밍 - go, pipe, curry</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/node.js/2022/02/12/Node.js-05.html" title="[Vue.js] Vue의 핵심 기능인 컴포넌트는 무엇이고 어떻게 사용할까?">[Node.js] Express API 서버 구축 - 라우팅 및 모듈화</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/vue.js/2022/01/10/vueJs-02.html" title="[Vue.js] Vue의 핵심 기능인 컴포넌트는 무엇이고 어떻게 사용할까?">[Vue.js] Vue CLI로 프로젝트 생성하기</a></li>
+</ul>
+    </div>
+<div class="post-comments"></div></section>
+</div>
+<script>
+  new Zooming().listen('img')
+</script>
+
+  </section>
+  <section class="sidebar" style="margin-left: 15px;">
+    <!-- Get sidebar items --><style type="text/css" media="screen">
+.post-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+</style>
+
+<div class="post-menu">
+  <div class="post-menu-title">TOC</div>
+  <div class="post-menu-content"></div>
+</div>
+
+<script>
+  function generateContent() {
+    var menu = document.querySelector(".post-menu");
+    var menuContent =  menu.querySelector(".post-menu-content");
+    var headings = document.querySelector(".post-content").querySelectorAll("h2, h3, h4, h5, h6");
+
+    // Hide menu when no headings
+    if (headings.length === 0) {
+      return menu.style.display = "none";
+    }
+
+    // Generate post menu
+    var menuHTML = '';
+    for (var i = 0; i < headings.length; i++) {
+      var h = headings[i];
+      menuHTML += (
+        '<li class="h-' + h.tagName.toLowerCase() + '">'
+        + '<a href="#h-' + h.getAttribute('id') + '">' + h.textContent + '</a></li>');
+    }
+
+    menuContent.innerHTML = '<ul>' + menuHTML + '</ul>';
+
+    // The header element
+    var header = document.querySelector('header.site-header');
+
+    function doMenuCollapse(index, over_items) {
+      var items = menuContent.firstChild.children;
+
+      if (over_items == undefined) {
+        over_items = 20;
+      }
+
+      if (items.length < over_items) {
+        return;
+      }
+
+      var activeItem = items[index];
+      var beginItem = activeItem
+      var endItem = activeItem
+      var beginIndex = index;
+      var endIndex = index + 1;
+      while (beginIndex >= 0
+        && !items[beginIndex].classList.contains('h-h2')) {
+        beginIndex -= 1;
+      }
+      while (endIndex < items.length
+        && !items[endIndex].classList.contains('h-h2')) {
+        endIndex += 1;
+      }
+      for (var i = 0; i < beginIndex; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+      for (var i = beginIndex + 1; i < endIndex; i++) {
+        item = items[i]
+        // if (!item.classList.contains('h-h2')) {
+          item.style.display = '';
+        // }
+      }
+      for (var i = endIndex; i < items.length; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+    }
+
+    // Init menu collapsed
+    doMenuCollapse(-1);
+
+    // Active the menu item
+    window.addEventListener('scroll', function (event) {
+      var lastActive = menuContent.querySelector('.active');
+      var changed = true;
+      var activeIndex = -1;
+      for (var i = headings.length - 1; i >= 0; i--) {
+        var h = headings[i];
+        var headingRect = h.getBoundingClientRect();
+        var headerRect = header.getBoundingClientRect();
+        var headerTop = Math.floor(headerRect.top);
+        var headerHeight = Math.floor(headerRect.height);
+        var headerHeight = headerTop + headerHeight + 20;
+        if (headingRect.top <= headerHeight) {
+          var id = 'h-' + h.getAttribute('id');
+          var a = menuContent.querySelector('a[href="#' + id  + '"]');
+          var curActive = a.parentNode;
+          if (curActive) {
+            curActive.classList.add('active');
+            activeIndex = i;
+          }
+          if (lastActive == curActive) {
+            changed = false;
+          }
+          break;
+        }
+      }
+      if (changed) {
+        if (lastActive) {
+          lastActive.classList.remove('active');
+        }
+        doMenuCollapse(activeIndex);
+      }
+      event.preventDefault();
+    });
+  }
+  generateContent();
+</script>
+</section>
+</div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jekyll-theme-yat/"></data>
+
+  <div class="wrapper">
+    <div class="site-footer-inner">
+<div>
+<span class="copyleft">©</span> 2022 Seo SeongSik. All rights reserved</div>
+      <div>Go to <a title="github" href="https://github.com/s-seongsik">Github</a>
+</div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

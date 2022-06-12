@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>[ECMAScript6] let, const 키워드 | IT 데이터베이스</title>
+<meta name="generator" content="Jekyll v4.2.2">
+<meta property="og:title" content="[ECMAScript6] let, const 키워드">
+<meta name="author" content="GitHub User">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="ES6(2015) 이전에는 자바스크립트에서 변수를 선언할 수 있는 방법은 var뿐이었습니다.">
+<meta property="og:description" content="ES6(2015) 이전에는 자바스크립트에서 변수를 선언할 수 있는 방법은 var뿐이었습니다.">
+<link rel="canonical" href="/jekyll-theme-yat/javascript/2022/01/02/javascript-04.html">
+<meta property="og:url" content="/jekyll-theme-yat/javascript/2022/01/02/javascript-04.html">
+<meta property="og:site_name" content="IT 데이터베이스">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2022-01-02T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="[ECMAScript6] let, const 키워드">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"GitHub User"},"dateModified":"2022-01-02T00:00:00+00:00","datePublished":"2022-01-02T00:00:00+00:00","description":"ES6(2015) 이전에는 자바스크립트에서 변수를 선언할 수 있는 방법은 var뿐이었습니다.","headline":"[ECMAScript6] let, const 키워드","mainEntityOfPage":{"@type":"WebPage","@id":"/jekyll-theme-yat/javascript/2022/01/02/javascript-04.html"},"url":"/jekyll-theme-yat/javascript/2022/01/02/javascript-04.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-noto-sans@0.0.72/index.min.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/main.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/image-popup.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="/jekyll-theme-yat/assets/js/main.js"></script>
+  <script src="/jekyll-theme-yat/assets/js/zooming.min.js"></script><link type="application/atom+xml" rel="alternate" href="/jekyll-theme-yat/feed.xml" title="IT 데이터베이스">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+<!-- and it's easy to individually load additional languages -->
+<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/go.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Init highlight js
+document.addEventListener('DOMContentLoaded', function(event) {
+  var els = document.querySelectorAll('pre code')
+
+  function addLangData(block) {
+    var outer = block.parentElement.parentElement.parentElement;
+    var lang = block.getAttribute('data-lang');
+    for (var i = 0; i < outer.classList.length; i++) {
+      var cls = outer.classList[i];
+      if (cls.startsWith('language-')) {
+        lang = cls;
+        break;
+      }
+    }
+    if (!lang) {
+      cls = block.getAttribute('class');
+      lang = cls ? cls.replace('hljs ', '') : '';
+    }
+    if (lang.startsWith('language-')) {
+      lang = lang.substr(9);
+    }
+    block.setAttribute('class', 'hljs ' + lang);
+    block.parentNode.setAttribute('data-lang', lang);
+  }
+
+  function addBadge(block) {
+    var enabled = ('true' || 'true').toLowerCase();
+    if (enabled == 'true') {
+      var pre = block.parentElement;
+      pre.classList.add('badge');
+    }
+  }
+
+  function handle(block) {
+    addLangData(block);
+    addBadge(block)
+    hljs.highlightBlock(block);
+  }
+
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i];
+    handle(el);
+  }
+});
+</script>
+
+<style>
+  /* code language badge */
+  pre.badge::before {
+    content: attr(data-lang);
+    color: #fff;
+    background-color: #ff4e00;
+    padding: 0 .5em;
+    border-radius: 0 2px;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 32px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+  }
+
+  /* fix wrong badge display for firefox browser */
+  code > table pre::before {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="site-header site-header-transparent" role="banner">
+
+  <div class="wrapper">
+    <div class="site-header-inner">
+<span class="site-brand"><a class="site-brand-inner" rel="author" href="/jekyll-theme-yat/">
+  <img class="site-favicon" title="IT 데이터베이스" src="" onerror="this.style.display='none'">
+  IT 데이터베이스
+</a>
+</span><nav class="site-nav">
+          <input type="checkbox" id="nav-trigger" class="nav-trigger">
+          <label for="nav-trigger">
+            <span class="menu-icon">
+              <svg viewbox="0 0 18 15" width="18px" height="15px">
+                <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+              </svg>
+            </span>
+          </label>
+
+          <div class="trigger">
+<a class="page-link" href="/jekyll-theme-yat/about.html">ABOUT</a><a class="page-link" href="/jekyll-theme-yat/archives.html">ARCHIVES</a><a class="page-link" href="/jekyll-theme-yat/categories.html">CATEGORIES</a><a class="page-link" href="/jekyll-theme-yat/">HOME</a><a class="page-link" href="/jekyll-theme-yat/tags.html">TAGS</a>
+
+
+
+
+
+
+
+
+
+<span class="page-link">
+
+
+
+<div id="google_translate_element" style="display: none;">
+</div>
+
+<span class="ct-language">
+  <ul class="list-unstyled ct-language-dropdown">
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="en">
+          
+          <img src="https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png" title="English">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="fr">
+          
+          <img src="https://cdn.countryflags.com/thumbs/france/flag-400.png" title="French">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="zh-CN">
+          
+          <img src="https://cdn.countryflags.com/thumbs/china/flag-400.png" title="Chinese(Simple)">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ja">
+          
+          <img src="https://cdn.countryflags.com/thumbs/japan/flag-400.png" title="Japanese">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ko">
+          
+          <img src="https://cdn.countryflags.com/thumbs/south-korea/flag-400.png" title="Korean">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ru">
+          
+          <img src="https://cdn.countryflags.com/thumbs/russia/flag-400.png" title="Russian">
+          
+        </a>
+      </li>
+    
+  </ul>
+</span>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false,
+    layout: google.translate.TranslateElement.InlineLayout.VERTICAL
+  }, 'google_translate_element');
+
+  // Links to cross-origin destinations are unsafe
+  var gll = document.getElementsByClassName('goog-logo-link')[0];
+  if (gll) {
+    gll.setAttribute('rel', 'noopener');
+  }
+
+  function restoreLang() {
+    var iframe = document.getElementsByClassName('goog-te-banner-frame')[0];
+    if (!iframe) return;
+
+    var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+    var restore_el = innerDoc.getElementsByTagName("button");
+
+    for (var i = 0; i < restore_el.length; i++) {
+      if (restore_el[i].id.indexOf("restore") >= 0) {
+        restore_el[i].click();
+        var close_el = innerDoc.getElementsByClassName("goog-close-link");
+        close_el[0].click();
+        return;
+      }
+    }
+  }
+
+  function triggerHtmlEvent(element, eventName) {
+    var event;
+    if (document.createEvent) {
+      event = document.createEvent('HTMLEvents');
+      event.initEvent(eventName, true, true);
+      element.dispatchEvent(event);
+    } else {
+      event = document.createEventObject();
+      event.eventType = eventName;
+      element.fireEvent('on' + event.eventType, event);
+    }
+  }
+
+  var googleCombo = document.querySelector("select.goog-te-combo");
+  var langSelect = document.querySelector('.ct-language');
+  langSelect.addEventListener('click', function(event) {
+    if (!event.target) {
+      return;
+    }
+
+    var selected = document.querySelector('.ct-language .ct-language-selected');
+    if (selected) {
+      selected.classList.remove('ct-language-selected');
+    }
+
+    var target = event.target;
+    while (target && target !== langSelect ) {
+      if (target.matches('.lang-select')) {
+        break;
+      }
+      target = target.parentElement;
+    }
+
+    if (target && target.matches('.lang-select')) {
+      var lang = target.getAttribute('data-lang');
+      if (googleCombo.value == lang) {
+        restoreLang();
+      } else {
+        target.parentElement.classList.add('ct-language-selected');
+        googleCombo.value = lang;
+        triggerHtmlEvent(googleCombo, 'change');
+      }
+    }
+
+    event.preventDefault();
+  });
+}
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</span>
+</div>
+        </nav>
+</div>
+  </div>
+</header>
+
+<script>
+  function initHeader() {
+    var lastScrollY = getScrollPos().y;
+    var documentElement = document.documentElement;
+
+    function storeScrollData() {
+      var y = getScrollPos().y;documentElement.setAttribute("data-header-transparent", "");var scrollStatus = "";
+
+      if (y <= 0) {
+        scrollStatus = "top";
+      } else if ((window.innerHeight + y) >= document.body.offsetHeight) {
+        scrollStatus = "bottom";
+      } else {
+        var isScrollDown = (y - lastScrollY > 0) ? true : false;
+        scrollStatus = isScrollDown ? "down" : "up";
+      }
+
+      lastScrollY = y;
+      documentElement.setAttribute("data-scroll-status", scrollStatus);
+    }
+
+    window.addEventListener('scroll', function(e) {
+      storeScrollData();
+    });
+
+    storeScrollData();
+  }
+  document.addEventListener('DOMContentLoaded', initHeader);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    html .page-banner {
+      background: #000;
+    }
+  </style>
+<style>html .page-banner {
+      height:  36.8vh;
+      min-height: 38vh;
+    }
+    html[data-scroll-status="top"] .page-banner {
+      height: 100vh;
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-img > *:first-child {
+      opacity: 0.618;
+    }
+
+    html[data-theme="dark"] .page-banner .page-banner-img > *:first-child {
+      opacity: 0.443724;
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-inner > *:first-child > *:nth-child(1) {
+      font-size: 3.25em; font-weight: bold; text-decoration: underline
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-inner > *:first-child > *:nth-child(2) {
+      color: gold
+    }
+  </style>
+<section class="page-banner">
+    <div class="page-banner-img">
+<div style="background-image: url(/jekyll-theme-yat/assets/images/banners/es6.png)"></div>
+        <img class="img-placeholder" src="/jekyll-theme-yat/assets/images/banners/es6.png">
+</div>
+    <div class="wrapper">
+      <div class="page-banner-inner">
+<header class="post-header">
+  <h1 class="post-title p-name" itemprop="name headline">[ECMAScript6] let, const 키워드</h1>
+  <h2 class="post-subtitle"></h2>
+
+  <p class="post-meta">
+    <time class="dt-published" datetime="2022-01-02T00:00:00+00:00" itemprop="datePublished"><i class="fa fa-calendar"></i> Jan 02, 2022
+    </time>
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span class="post-reading-time left-vsplit"><i class="fa fa-clock-o"></i> About 11 mins</span>
+  </p>
+<div class="post-tags">
+<a class="post-tag" href="/jekyll-theme-yat/tags.html#Javascript">#Javascript</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#ES6">#ES6</a>
+</div></header>
+</div>
+    </div>
+  </section><script>
+  function hashLocate(hashValue) {
+    hashValue = hashValue.replace(/^.*#h-/, '');
+    hashValue = decodeURIComponent(hashValue);
+    var element = document.getElementById(hashValue);
+
+    if (!element) {
+      return;
+    }
+
+    var header = document.querySelector('header.site-header');
+    var headerRect = header.getBoundingClientRect();
+    var headerTop = Math.floor(headerRect.top);
+    var headerHeight = Math.floor(headerRect.height);
+    var scrollPos = getScrollPos();
+    var offsetY = element.offsetTop - (headerTop + headerHeight + 20);
+
+    if (offsetY == scrollPos.y) {
+      return;
+    }
+
+    if (headerTop == 0  && offsetY > scrollPos.y) {
+      offsetY += headerHeight + 2;
+    } else if (headerTop < 0  && offsetY < scrollPos.y) {
+      offsetY -= headerHeight - 2;
+    }
+
+    smoothScrollTo(offsetY);
+  }
+
+  // The first event occurred
+  window.addEventListener('load', function(event) {
+    if (window.location.hash) {
+      hashLocate(window.location.hash);
+    }
+  });
+
+  // The first event occurred
+  window.addEventListener('click', function(event) {
+    if (event.target.tagName.toLowerCase() == 'a') {
+      hashLocate(event.target.getAttribute('href'));
+    }
+  });
+</script>
+<div class="theme-toggle">
+  <input type="checkbox" id="theme-switch">
+  <label for="theme-switch">
+    <div class="toggle"></div>
+    <div class="names">
+      <p class="light">Light</p>
+      <p class="dark">Dark</p>
+    </div>
+  </label>
+</div>
+
+
+
+
+<script>
+  (function() {
+    var sw = document.getElementById('theme-switch');
+    var html = document.getElementsByTagName('html')[0];
+    var nightModeOption = ('auto' || 'auto').toLowerCase();
+    var storage = nightModeOption === 'manual'
+        ? localStorage
+        : sessionStorage;
+    var themeData = loadThemeData();
+
+    function saveThemeData(data) {
+      storage.setItem('theme', JSON.stringify(data));
+    }
+
+    function loadThemeData() {
+      var data = storage.getItem('theme');
+      try {
+        data = JSON.parse(data ? data : '');
+      } catch(e) {
+        data = { nightShift: undefined, autoToggleAt: 0 };
+        saveThemeData(data);
+      }
+      return data;
+    }
+
+    function handleThemeToggle(nightShift) {
+      themeData.nightShift = nightShift;
+      saveThemeData(themeData);
+      html.dataset.theme = nightShift ? 'dark' : 'light';
+      setTimeout(function() {
+        sw.checked = nightShift ? true : false;
+      }, 50);
+    }
+
+    function autoThemeToggle() {
+      // Next time point of theme toggle
+      var now = new Date();
+      var toggleAt = new Date();
+      var hours = now.getHours();
+      var nightShift = hours >= 19 || hours <=7;
+
+      if (nightShift) {
+        if (hours > 7) {
+          toggleAt.setDate(toggleAt.getDate() + 1);
+        }
+        toggleAt.setHours(7);
+      } else {
+        toggleAt.setHours(19);
+      }
+
+      toggleAt.setMinutes(0);
+      toggleAt.setSeconds(0);
+      toggleAt.setMilliseconds(0)
+
+      var delay = toggleAt.getTime() - now.getTime();
+
+      // auto toggle theme mode
+      setTimeout(function() {
+        handleThemeToggle(!nightShift);
+      }, delay);
+
+      return {
+        nightShift: nightShift,
+        toggleAt: toggleAt.getTime()
+      };
+    }
+
+    // Listen the theme toggle event
+    sw.addEventListener('change', function(event) {
+      handleThemeToggle(event.target.checked);
+    });
+
+    if (nightModeOption == 'auto') {
+      var data = autoThemeToggle();
+
+      // Toggle theme by local setting
+      if (data.toggleAt > themeData.autoToggleAt) {
+        themeData.autoToggleAt = data.toggleAt;
+        handleThemeToggle(data.nightShift);
+      } else {
+        handleThemeToggle(themeData.nightShift);
+      }
+    } else if (nightModeOption == 'manual') {
+      handleThemeToggle(themeData.nightShift);
+    } else {
+      var nightShift = themeData.nightShift;
+      if (nightShift === undefined) {
+        nightShift = nightModeOption === 'on';
+      }
+      handleThemeToggle(nightShift);
+    }
+  })();
+</script>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="framework">
+  <section class="main">
+
+     <div class="post">
+  <section>
+
+
+
+
+
+
+
+
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <div class="post-content e-content" itemprop="articleBody">
+
+      <p>ES6(2015) 이전에는 자바스크립트에서 변수를 선언할 수 있는 방법은 <code class="language-plaintext highlighter-rouge">var</code>뿐이었습니다.</p>
+
+<p>이것은 많은 문제를 발생시켰습니다.</p>
+
+<ol>
+  <li>전역 변수로 인한 스코프 충돌
+    <ul>
+      <li>ES6이전에 스코프는 <code class="language-plaintext highlighter-rouge">전역 스코프(Global Scope)</code> 와 <code class="language-plaintext highlighter-rouge">함수 스코프(Function Scope)</code>만 있었습니다. 자바스크립트는 함수 스코프 외에는 모두 전역 스코프로 적용되기 때문에 전역 변수를 남발하여 스코프 충돌의 문제를 발생시켰습니다.</li>
+    </ul>
+  </li>
+  <li>변수 중복 선언
+    <ul>
+      <li>자바스크립트의 코드양이 많으면 많을 수록 스코프 충돌의 문제를 발생시킵니다. 이미 선언된 변수를 또 <code class="language-plaintext highlighter-rouge">재선언</code>을 하거나 <code class="language-plaintext highlighter-rouge">다른 값을 넣거나</code>하는 문제를 발생할 수 있습니다.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>보통 <code class="language-plaintext highlighter-rouge">전역변수</code>로 인해 발생하는 문제로, 이를 해결하고자 ES6(2015)부터는 <code class="language-plaintext highlighter-rouge">let</code>과 <code class="language-plaintext highlighter-rouge">const</code> Keyword를 도입했습니다.</p>
+
+<p><br></p>
+
+<h2 id="a"><strong>let</strong></h2>
+
+<hr>
+
+<p><code class="language-plaintext highlighter-rouge">ES6(2015)</code>이전의 자바스크립트는 함수 내에서 선언된 변수 외 모든 코드 블록 내에서 선언된 변수는 <code class="language-plaintext highlighter-rouge">전역 스코프(Global Scope)</code>를 갖습니다.</p>
+
+<h3 id="b"><strong>Block Scope</strong></h3>
+
+<p><strong>ES6(2015) 이전</strong></p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+
+  <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">change</span><span class="dl">'</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+</code></pre></div></div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  change
+</span></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">x</code>에 10을 넣었지만, { } 블록 내부에 <code class="language-plaintext highlighter-rouge">x</code>를 재선언 되었기 때문에 <code class="language-plaintext highlighter-rouge">change</code>로 변경되어 출력되었습니다.</p>
+
+<p><br></p>
+
+<p><strong>ES6(2015) let Keyword</strong></p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">let</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+
+  <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">x</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">change</span><span class="dl">'</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+</code></pre></div></div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  10
+</span></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">{ }</code> 코드 내부에 선언된 <code class="language-plaintext highlighter-rouge">x</code>는 <code class="language-plaintext highlighter-rouge">블록 스코프</code>를 따르기 때문에 외부에서 접근할 수 없습니다. 즉 재선언이 안된다는 말이죠.
+따라서 전역 변수로 선언한 <code class="language-plaintext highlighter-rouge">x=10</code>이 출력되는 것을 확인할 수 있습니다.</p>
+
+<p><br></p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">let</span> <span class="nx">x</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">Global</span><span class="dl">'</span><span class="p">;</span> <span class="c1">// 전역 변수</span>
+
+  <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">x</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">x Local</span><span class="dl">'</span><span class="p">;</span> <span class="c1">// 지역 변수</span>
+    <span class="kd">let</span> <span class="nx">y</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">y Local</span><span class="dl">'</span><span class="p">;</span> <span class="c1">// 지역 변수</span>
+  <span class="p">}</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span> <span class="c1">// Global</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">y</span><span class="p">);</span> <span class="c1">// ReferenceError: bar is not defined</span>
+</code></pre></div></div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  Global
+</span></code></pre></div></div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  Uncaught ReferenceError: y is not defined
+</span><span class="gp">    at &lt;anonymous&gt;</span>:9:13
+</code></pre></div></div>
+
+<p>전역 스코프를 갖는 <code class="language-plaintext highlighter-rouge">let x='Global'</code>는 <code class="language-plaintext highlighter-rouge">{ }</code> 코드 내부에 선언한 <code class="language-plaintext highlighter-rouge">let x = 'x Local'</code>로 재선언되지 않으며
+<code class="language-plaintext highlighter-rouge">y</code>는 <code class="language-plaintext highlighter-rouge">블록 스코프</code>를 따르기 때문에 외부에서 접근할 수 없기 때문에 <code class="language-plaintext highlighter-rouge">console.log</code>시 <code class="language-plaintext highlighter-rouge">ReferenceError</code> 오류를 확인할 수 있습니다.</p>
+
+<p><br></p>
+
+<h3 id="c"><strong>재선언 금지</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">var</code> 키워드는 동일한 이름을 갖는 변수를 몇 번이고 <code class="language-plaintext highlighter-rouge">재선언</code>을 할 수 있습니다. 하지만 <code class="language-plaintext highlighter-rouge">let</code> 키워드는 동일한 이름으로 <code class="language-plaintext highlighter-rouge">재선언</code>을 할 수 없습니다.
+중복 선언하게 되면 <code class="language-plaintext highlighter-rouge">문법 에러(SyntaxError)</code>를 발생시킵니다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="c1">// 최초 선언</span>
+  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span> <span class="c1">// 재 선언</span>
+
+  <span class="kd">let</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="c1">// 최초 선언</span>
+  <span class="kd">let</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span> <span class="c1">// 재 선언</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">y</span><span class="p">);</span>
+</code></pre></div></div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  Uncaught SyntaxError: Identifier 'y' has already been declared
+</span></code></pre></div></div>
+
+<p><br></p>
+
+<h3 id="d"><strong>호이스팅</strong></h3>
+
+<p>자바스크립트에서 선언된 모든 것(<code class="language-plaintext highlighter-rouge">var</code>, <code class="language-plaintext highlighter-rouge">let</code>, <code class="language-plaintext highlighter-rouge">const</code>, <code class="language-plaintext highlighter-rouge">function</code>, <code class="language-plaintext highlighter-rouge">class</code>)을 호이스팅이라고 합니다. 
+호이스팅(Hoisting)이란, <code class="language-plaintext highlighter-rouge">var</code> 선언문이나 <code class="language-plaintext highlighter-rouge">function</code> 선언문 등을 해당 스코프의 선두로 옮긴 것처럼 동작하는 특성을 말한다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">예시</code>를 먼저 보겠습니다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span>
+</code></pre></div></div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  undefined
+</span></code></pre></div></div>
+
+<p>변수 <code class="language-plaintext highlighter-rouge">x</code>를 선언하기 전에 <code class="language-plaintext highlighter-rouge">console.log</code>로 출력을 했는데 <code class="language-plaintext highlighter-rouge">x is not defined</code> 오류가 발생하지 않았습니다. 왜 그런지 알아봅시다.</p>
+
+<p>변수는 3단계를 걸쳐 생성됩니다.</p>
+
+<p>1단계: <code class="language-plaintext highlighter-rouge">선언 단계(Declaration phase)</code></p>
+<ul>
+  <li>변수를 실행 컨텍스트의 변수 객체(Variable Object)에 등록한다. 이 변수 객체는 스코프가 참조하는 대상이 된다.</li>
+</ul>
+
+<p>2단계: <code class="language-plaintext highlighter-rouge">초기화 단계(Initialization phase)</code></p>
+<ul>
+  <li>변수 객체(Variable Object)에 등록된 변수를 위한 공간을 메모리에 확보한다. 이 단계에서 변수는 undefined로 초기화된다.</li>
+</ul>
+
+<p>3단계: <code class="language-plaintext highlighter-rouge">할당 단계(Assignment phase)</code></p>
+<ul>
+  <li>undefined로 초기화된 변수에 실제 값을 할당한다.</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">var</code>는 <code class="language-plaintext highlighter-rouge">선언 단계</code>와 <code class="language-plaintext highlighter-rouge">초기화 단계</code>가 한 번에 실행됩니다. 스코프에 변수를 <code class="language-plaintext highlighter-rouge">등록(선언 단계)</code>하여 메모리에 공간을 확보한 뒤,
+<code class="language-plaintext highlighter-rouge">undefined</code>로 <code class="language-plaintext highlighter-rouge">초기화(초기화 단계)</code>합니다. 이러한 이유로 변수선언문 이전에 변수에 접근하여도 에러가 발생하지 않고 <code class="language-plaintext highlighter-rouge">undefined</code>를 반환한 것입니다.
+이후 변수에 값을 <code class="language-plaintext highlighter-rouge">할당(할당 단계)</code>해야 비로소 값이 할당 되는 것입니다. 이런 현상을 변수 호이스팅(Variable Hoisting)이라 합니다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">// 스코프의 선두에서 선언 단계와 초기화 단게가 한 번에 이루어 집니다.</span>
+  <span class="c1">// 따라서, 변수 선언 이전에 변수에 참조할 수 있습니다.</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>  <span class="c1">// undefined</span>
+
+  <span class="kd">var</span> <span class="nx">x</span><span class="p">;</span>           <span class="c1">// 선언 단계</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>  <span class="c1">// undefined</span>
+
+  
+  <span class="nx">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>          <span class="c1">// 할당 단계</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>  <span class="c1">// 10</span>
+</code></pre></div></div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  undefined
+  undefined
+  10
+</span></code></pre></div></div>
+
+<p><br></p>
+
+<p><strong>let은 선언 단계와 초기화 단계가 분리되어 진행합니다.</strong></p>
+
+<p>let은 스코프에 변수를 등록(선언단계)은 하지만 초기화 단계는 변수 선언문에 도달했을 때 실행합니다. 따라서 초기화 이전에 변수에 접근하려고 하면 <code class="language-plaintext highlighter-rouge">참조 에러(ReferenceError)</code>가 발생합니다.
+그 이유는 초기화 단게가 이루어지지 않았기 때문입니다. 즉, 변수를 담을 메모리 공간이 확보되지 않았기 때문입니다. 
+정리해서 스코프의 시작 지점부터 초기화 시작 지점까지는 변수를 참조할 수 없습니다. 이 구간을 <code class="language-plaintext highlighter-rouge">일시적 사각지대(Temporal Dead Zone; TDZ)</code>라고 부릅니다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">// 스코프의 선두에서 선언 단계가 이루어집니다.</span>
+  <span class="c1">// 변수 초기화 단계는 이루어지지 않았습니다.</span>
+  <span class="c1">// 따라서, 변수 선언 이전에 변수에 참조할 수 없습니다.</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>  <span class="c1">// Uncaught ReferenceError: x is not defined</span>
+
+  <span class="kd">let</span> <span class="nx">x</span><span class="p">;</span>           <span class="c1">// 선언 단계</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>  <span class="c1">// undefined</span>
+
+  
+  <span class="nx">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>          <span class="c1">// 할당 단계</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>  <span class="c1">// 10</span>
+</code></pre></div></div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  Uncaught ReferenceError: x is not defined
+</span><span class="gp">    at &lt;anonymous&gt;</span>:3:15
+</code></pre></div></div>
+
+<p><br></p>
+
+<p>그럼 let은 호이스팅이 안되는게 아닐까?</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">let</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+
+  <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+  <span class="p">}</span>
+</code></pre></div></div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  10
+</span></code></pre></div></div>
+
+<p>결과를 보면 <code class="language-plaintext highlighter-rouge">선언단계</code>와 <code class="language-plaintext highlighter-rouge">초기화단계</code>가 먼저 이루어졌기 때문에 정상적으로 결과값이 출력됩니다.</p>
+
+<p><br></p>
+
+<p>아래 코드에 <code class="language-plaintext highlighter-rouge">let</code> 선언을 추가해봅니다.</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">let</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+
+  <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+      <span class="kd">let</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+  <span class="p">}</span>
+</code></pre></div></div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  Uncaught ReferenceError: Cannot access 'x' before initialization
+</span></code></pre></div></div>
+
+<p>전역변수 <code class="language-plaintext highlighter-rouge">x</code>가 <code class="language-plaintext highlighter-rouge">console.log</code>에 출력될 것 처럼 보일 수 있다. 하지만, <code class="language-plaintext highlighter-rouge">{ }</code> 블록안에서 호이스팅이 발생하기 때문에 <code class="language-plaintext highlighter-rouge">참조 에러(ReferenceError)</code>가 발생하게 됩니다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">ES6</code>의 <code class="language-plaintext highlighter-rouge">let</code>과 <code class="language-plaintext highlighter-rouge">const</code> 키워드는 코드블록 내에서는 블록 스코프를 따르므로 <code class="language-plaintext highlighter-rouge">{ }</code>블록 내에 선언 된 <code class="language-plaintext highlighter-rouge">let x</code>는 지역 변수로 적용됩니다. 따라서 <code class="language-plaintext highlighter-rouge">{ }</code> 블록 안 스코프에서 호이스팅이 적용되고 코드 블록의 선두에서 초기화가 이루어 지는 지점까지는 <code class="language-plaintext highlighter-rouge">일시적 사각지대(TDZ)</code>에 빠지게 됩니다. 그렇기 때문에 <code class="language-plaintext highlighter-rouge">참조 에러(ReferenceError)</code>가 발생하게 됩니다.</p>
+
+<p><br></p>
+
+<h3 id="let은-전역-객체가-아니다"><strong>let은 전역 객체가 아니다</strong></h3>
+
+<p id="e"><code class="language-plaintext highlighter-rouge">전역 객체(Global Object)</code>란 모든 객체의 최상위 객체를 의미합니다.</p>
+
+<p>Browser-side에서는 <code class="language-plaintext highlighter-rouge">window 객체</code>, Server-side(Node.js)에서는 <code class="language-plaintext highlighter-rouge">global 객체</code>를 의미합니다.</p>
+
+<p>여기서 <code class="language-plaintext highlighter-rouge">var</code>로 선언된 변수를 전역 변수로 사용하게 된다면 <code class="language-plaintext highlighter-rouge">전역 객체</code>의 프로퍼티가 됩니다.</p>
+
+<p>하지만, <code class="language-plaintext highlighter-rouge">let</code>로 선언된 변수를 전역 변수로 사용하게 되더라도 <code class="language-plaintext highlighter-rouge">전역 객체</code>의 프로퍼티가 아닙니다.</p>
+
+<p>다시말해, <code class="language-plaintext highlighter-rouge">window 객체</code>로 접근할 수 없으며, <code class="language-plaintext highlighter-rouge">global 객체</code>에만 접근할 수 있습니다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">Global Object</span><span class="dl">'</span><span class="p">;</span> <span class="c1">// var 키워드 선언</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">x</span><span class="p">);</span>   <span class="c1">// var 키워드는 전역 객체(Global Object)의 프로퍼티가 되므로 window 객체 접근 가능</span>
+</code></pre></div></div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  Global Object
+</span></code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">let</span> <span class="nx">x</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">Global Object</span><span class="dl">'</span><span class="p">;</span> <span class="c1">// let 키워드 선언</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">x</span><span class="p">);</span>  <span class="c1">// let 키워드는 전역 객체(Global Object)의 프로퍼티가 되므로 window 객체 접근 불가능</span>
+</code></pre></div></div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  undefined
+</span></code></pre></div></div>
+
+<p><br></p>
+
+<h2 id="f"><strong>const</strong></h2>
+
+<hr>
+
+<p><code class="language-plaintext highlighter-rouge">const</code>는 상수(변하지 않는 값)을 위해 사용하는 키워드입니다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">const</code>는 <code class="language-plaintext highlighter-rouge">let</code>과 대부분 비슷하지만 다른점에 대해서만 알아보겠습니다.</p>
+
+<p><br></p>
+
+<h3 id="선언과-초기화"><strong>선언과 초기화</strong></h3>
+
+<p id="g"><code class="language-plaintext highlighter-rouge">let</code> 의 특징</p>
+<ul>
+  <li>중복선언 불가능
+    <div class="language-javascript highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">x</span><span class="o">=</span><span class="mi">20</span><span class="p">;</span>  <span class="c1">// 최초 선언</span>
+<span class="kd">let</span> <span class="nx">x</span><span class="o">=</span><span class="mi">50</span><span class="p">;</span>  <span class="c1">// 중복 선언</span>
+</code></pre></div>    </div>
+    <div class="language-console highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="go">Uncaught SyntaxError: Identifier 'x' has already been declared
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br></p>
+
+<ul>
+  <li>재할당 가능
+    <div class="language-javascript highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">x</span><span class="o">=</span><span class="mi">30</span><span class="p">;</span>   <span class="c1">// 최초 선언</span>
+<span class="nx">x</span> <span class="o">=</span><span class="mi">20</span><span class="p">;</span>      <span class="c1">// 재할당</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span> <span class="c1">// 20 출력 </span>
+</code></pre></div>    </div>
+    <div class="language-console highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="go">20
+</span></code></pre></div>    </div>
+    <p><br></p>
+  </li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">const</code>의 특징</p>
+
+<ul>
+  <li>중복선언 불가능
+    <div class="language-javascript highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">x</span><span class="o">=</span><span class="mi">20</span><span class="p">;</span>  <span class="c1">// 최초 선언</span>
+<span class="kd">const</span> <span class="nx">x</span><span class="o">=</span><span class="mi">50</span><span class="p">;</span>  <span class="c1">// 중복 선언</span>
+</code></pre></div>    </div>
+    <div class="language-console highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="go">Uncaught SyntaxError: Identifier 'x' has already been declared
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br></p>
+
+<ul>
+  <li>재할당 불가능
+    <div class="language-javascript highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">x</span><span class="o">=</span><span class="mi">30</span><span class="p">;</span>   <span class="c1">// 최초 선언</span>
+<span class="nx">x</span> <span class="o">=</span><span class="mi">20</span><span class="p">;</span>      <span class="c1">// 재할당시 문법 에러 발생</span>
+</code></pre></div>    </div>
+    <div class="language-console highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="go">Uncaught TypeError: Assignment to constant variable.
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br></p>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">const의 키워드는 반드시 선언과 동시에 할당이 이루어져야 합니다.</code> 그렇지 않으면 이미 선언된 변수에 값을 할당할 수 없습니다. 
+그 이유는 재할당이 안되기 때문입니다.
+    <div class="language-javascript highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">x</span><span class="p">;</span>    <span class="c1">// 초기화</span>
+<span class="nx">x</span> <span class="o">=</span><span class="mi">20</span><span class="p">;</span>      <span class="c1">// 할당</span>
+</code></pre></div>    </div>
+    <div class="language-console highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="go">Uncaught SyntaxError: Missing initializer in const declaration
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br></p>
+
+<h3 id="h"><strong>const의 객체</strong></h3>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">const</code>는 재할당이 되지 않는다고 말씀드렸습니다. 하지만, 객체의 프로퍼티는 변경할 수 있습니다.
+    <div class="language-javascript highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span><span class="dl">'</span><span class="s1">name</span><span class="dl">'</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">seongsik</span><span class="dl">'</span><span class="p">};</span>
+
+<span class="nx">obj</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">good</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>
+</code></pre></div>    </div>
+    <div class="language-console highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="go">{name: 'good'}
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>const 키워드는 객체의 내용이 변경(추가, 변경, 삭제)되더라도 객체 타입 변수에 할당된 메모리 주소값은 변경되지 않습니다.
+따라서, 객체 타입 변수 선언에는 <code class="language-plaintext highlighter-rouge">const</code>를 사용하는 것이 좋습니다. 만약 객체 타입 변수의 주소값을 변경(재할당)해야 한다면 <code class="language-plaintext highlighter-rouge">let</code>을 사용합니다.</p>
+
+<p><br></p>
+
+<h2 id="i"><strong>끝으로</strong></h2>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">ES6(2015)+</code>를 사용한다면 <code class="language-plaintext highlighter-rouge">var</code>를 사용하지 않는 것이 좋습니다.</li>
+  <li>자바스크립트 코드양이 많아질 수록 의도치 않은 재할당 실수를 하게되는데 이를 방지하기 위해 <code class="language-plaintext highlighter-rouge">const</code>를 사용합니다.</li>
+  <li>재할당이 필요한 경우에는 <code class="language-plaintext highlighter-rouge">let</code>을 사용합니다.</li>
+</ul>
+
+
+    </div>
+
+</article>
+<div class="post-nav">
+<a class="previous" href="/jekyll-theme-yat/javascript/2022/01/02/javascript-03.html" title="[Javascript] Scope 개념 확실히 알고 넘어가자">[Javascript] Scope 개념 확실히 알고 넘어가자...</a><a class="next" href="/jekyll-theme-yat/eslint/2022/01/05/eslint-01.html" title="[ESLint] ESLint 시작하기">[ESLint] ESLint 시작하기</a>
+</div>
+<div class="post-related">
+      <div>Related Articles</div>
+      <ul>
+        <li><a class="post-link" href="/jekyll-theme-yat/babel/2021/12/23/Babel-02.html" title="[ESLint] ESLint 시작하기">[Babel] 바벨의 프레셋(Presets) 사용</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/web/2021/12/21/Web-SSR-CSR.html" title="[ESLint] ESLint 시작하기">[Web] 서버 사이드 렌더링(SSR)과 클라이언트 사이드 렌더링(CSR) 개념</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/javascript/2022/01/02/javascript-04.html" title="[ESLint] ESLint 시작하기">[ECMAScript6] let, const 키워드</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/eslint/2022/01/06/eslint-02.html" title="[ESLint] ESLint 시작하기">[ESLint] Style-Guide 설정</a></li>
+</ul>
+    </div>
+<div class="post-comments"></div></section>
+</div>
+<script>
+  new Zooming().listen('img')
+</script>
+
+  </section>
+  <section class="sidebar" style="margin-left: 15px;">
+    <!-- Get sidebar items --><style type="text/css" media="screen">
+.post-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+</style>
+
+<div class="post-menu">
+  <div class="post-menu-title">TOC</div>
+  <div class="post-menu-content"></div>
+</div>
+
+<script>
+  function generateContent() {
+    var menu = document.querySelector(".post-menu");
+    var menuContent =  menu.querySelector(".post-menu-content");
+    var headings = document.querySelector(".post-content").querySelectorAll("h2, h3, h4, h5, h6");
+
+    // Hide menu when no headings
+    if (headings.length === 0) {
+      return menu.style.display = "none";
+    }
+
+    // Generate post menu
+    var menuHTML = '';
+    for (var i = 0; i < headings.length; i++) {
+      var h = headings[i];
+      menuHTML += (
+        '<li class="h-' + h.tagName.toLowerCase() + '">'
+        + '<a href="#h-' + h.getAttribute('id') + '">' + h.textContent + '</a></li>');
+    }
+
+    menuContent.innerHTML = '<ul>' + menuHTML + '</ul>';
+
+    // The header element
+    var header = document.querySelector('header.site-header');
+
+    function doMenuCollapse(index, over_items) {
+      var items = menuContent.firstChild.children;
+
+      if (over_items == undefined) {
+        over_items = 20;
+      }
+
+      if (items.length < over_items) {
+        return;
+      }
+
+      var activeItem = items[index];
+      var beginItem = activeItem
+      var endItem = activeItem
+      var beginIndex = index;
+      var endIndex = index + 1;
+      while (beginIndex >= 0
+        && !items[beginIndex].classList.contains('h-h2')) {
+        beginIndex -= 1;
+      }
+      while (endIndex < items.length
+        && !items[endIndex].classList.contains('h-h2')) {
+        endIndex += 1;
+      }
+      for (var i = 0; i < beginIndex; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+      for (var i = beginIndex + 1; i < endIndex; i++) {
+        item = items[i]
+        // if (!item.classList.contains('h-h2')) {
+          item.style.display = '';
+        // }
+      }
+      for (var i = endIndex; i < items.length; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+    }
+
+    // Init menu collapsed
+    doMenuCollapse(-1);
+
+    // Active the menu item
+    window.addEventListener('scroll', function (event) {
+      var lastActive = menuContent.querySelector('.active');
+      var changed = true;
+      var activeIndex = -1;
+      for (var i = headings.length - 1; i >= 0; i--) {
+        var h = headings[i];
+        var headingRect = h.getBoundingClientRect();
+        var headerRect = header.getBoundingClientRect();
+        var headerTop = Math.floor(headerRect.top);
+        var headerHeight = Math.floor(headerRect.height);
+        var headerHeight = headerTop + headerHeight + 20;
+        if (headingRect.top <= headerHeight) {
+          var id = 'h-' + h.getAttribute('id');
+          var a = menuContent.querySelector('a[href="#' + id  + '"]');
+          var curActive = a.parentNode;
+          if (curActive) {
+            curActive.classList.add('active');
+            activeIndex = i;
+          }
+          if (lastActive == curActive) {
+            changed = false;
+          }
+          break;
+        }
+      }
+      if (changed) {
+        if (lastActive) {
+          lastActive.classList.remove('active');
+        }
+        doMenuCollapse(activeIndex);
+      }
+      event.preventDefault();
+    });
+  }
+  generateContent();
+</script>
+</section>
+</div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jekyll-theme-yat/"></data>
+
+  <div class="wrapper">
+    <div class="site-footer-inner">
+<div>
+<span class="copyleft">©</span> 2022 Seo SeongSik. All rights reserved</div>
+      <div>Go to <a title="github" href="https://github.com/s-seongsik">Github</a>
+</div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

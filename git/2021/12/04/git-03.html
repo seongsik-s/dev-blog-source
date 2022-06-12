@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>[Git] branch의 이해와 사용 | IT 데이터베이스</title>
+<meta name="generator" content="Jekyll v4.2.2">
+<meta property="og:title" content="[Git] branch의 이해와 사용">
+<meta name="author" content="GitHub User">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="브랜치(branch)란?">
+<meta property="og:description" content="브랜치(branch)란?">
+<link rel="canonical" href="/jekyll-theme-yat/git/2021/12/04/git-03.html">
+<meta property="og:url" content="/jekyll-theme-yat/git/2021/12/04/git-03.html">
+<meta property="og:site_name" content="IT 데이터베이스">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2021-12-04T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="[Git] branch의 이해와 사용">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"GitHub User"},"dateModified":"2021-12-04T00:00:00+00:00","datePublished":"2021-12-04T00:00:00+00:00","description":"브랜치(branch)란?","headline":"[Git] branch의 이해와 사용","mainEntityOfPage":{"@type":"WebPage","@id":"/jekyll-theme-yat/git/2021/12/04/git-03.html"},"url":"/jekyll-theme-yat/git/2021/12/04/git-03.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-noto-sans@0.0.72/index.min.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/main.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/image-popup.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="/jekyll-theme-yat/assets/js/main.js"></script>
+  <script src="/jekyll-theme-yat/assets/js/zooming.min.js"></script><link type="application/atom+xml" rel="alternate" href="/jekyll-theme-yat/feed.xml" title="IT 데이터베이스">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+<!-- and it's easy to individually load additional languages -->
+<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/go.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Init highlight js
+document.addEventListener('DOMContentLoaded', function(event) {
+  var els = document.querySelectorAll('pre code')
+
+  function addLangData(block) {
+    var outer = block.parentElement.parentElement.parentElement;
+    var lang = block.getAttribute('data-lang');
+    for (var i = 0; i < outer.classList.length; i++) {
+      var cls = outer.classList[i];
+      if (cls.startsWith('language-')) {
+        lang = cls;
+        break;
+      }
+    }
+    if (!lang) {
+      cls = block.getAttribute('class');
+      lang = cls ? cls.replace('hljs ', '') : '';
+    }
+    if (lang.startsWith('language-')) {
+      lang = lang.substr(9);
+    }
+    block.setAttribute('class', 'hljs ' + lang);
+    block.parentNode.setAttribute('data-lang', lang);
+  }
+
+  function addBadge(block) {
+    var enabled = ('true' || 'true').toLowerCase();
+    if (enabled == 'true') {
+      var pre = block.parentElement;
+      pre.classList.add('badge');
+    }
+  }
+
+  function handle(block) {
+    addLangData(block);
+    addBadge(block)
+    hljs.highlightBlock(block);
+  }
+
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i];
+    handle(el);
+  }
+});
+</script>
+
+<style>
+  /* code language badge */
+  pre.badge::before {
+    content: attr(data-lang);
+    color: #fff;
+    background-color: #ff4e00;
+    padding: 0 .5em;
+    border-radius: 0 2px;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 32px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+  }
+
+  /* fix wrong badge display for firefox browser */
+  code > table pre::before {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="site-header site-header-transparent" role="banner">
+
+  <div class="wrapper">
+    <div class="site-header-inner">
+<span class="site-brand"><a class="site-brand-inner" rel="author" href="/jekyll-theme-yat/">
+  <img class="site-favicon" title="IT 데이터베이스" src="" onerror="this.style.display='none'">
+  IT 데이터베이스
+</a>
+</span><nav class="site-nav">
+          <input type="checkbox" id="nav-trigger" class="nav-trigger">
+          <label for="nav-trigger">
+            <span class="menu-icon">
+              <svg viewbox="0 0 18 15" width="18px" height="15px">
+                <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+              </svg>
+            </span>
+          </label>
+
+          <div class="trigger">
+<a class="page-link" href="/jekyll-theme-yat/about.html">ABOUT</a><a class="page-link" href="/jekyll-theme-yat/archives.html">ARCHIVES</a><a class="page-link" href="/jekyll-theme-yat/categories.html">CATEGORIES</a><a class="page-link" href="/jekyll-theme-yat/">HOME</a><a class="page-link" href="/jekyll-theme-yat/tags.html">TAGS</a>
+
+
+
+
+
+
+
+
+
+<span class="page-link">
+
+
+
+<div id="google_translate_element" style="display: none;">
+</div>
+
+<span class="ct-language">
+  <ul class="list-unstyled ct-language-dropdown">
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="en">
+          
+          <img src="https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png" title="English">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="fr">
+          
+          <img src="https://cdn.countryflags.com/thumbs/france/flag-400.png" title="French">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="zh-CN">
+          
+          <img src="https://cdn.countryflags.com/thumbs/china/flag-400.png" title="Chinese(Simple)">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ja">
+          
+          <img src="https://cdn.countryflags.com/thumbs/japan/flag-400.png" title="Japanese">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ko">
+          
+          <img src="https://cdn.countryflags.com/thumbs/south-korea/flag-400.png" title="Korean">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ru">
+          
+          <img src="https://cdn.countryflags.com/thumbs/russia/flag-400.png" title="Russian">
+          
+        </a>
+      </li>
+    
+  </ul>
+</span>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false,
+    layout: google.translate.TranslateElement.InlineLayout.VERTICAL
+  }, 'google_translate_element');
+
+  // Links to cross-origin destinations are unsafe
+  var gll = document.getElementsByClassName('goog-logo-link')[0];
+  if (gll) {
+    gll.setAttribute('rel', 'noopener');
+  }
+
+  function restoreLang() {
+    var iframe = document.getElementsByClassName('goog-te-banner-frame')[0];
+    if (!iframe) return;
+
+    var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+    var restore_el = innerDoc.getElementsByTagName("button");
+
+    for (var i = 0; i < restore_el.length; i++) {
+      if (restore_el[i].id.indexOf("restore") >= 0) {
+        restore_el[i].click();
+        var close_el = innerDoc.getElementsByClassName("goog-close-link");
+        close_el[0].click();
+        return;
+      }
+    }
+  }
+
+  function triggerHtmlEvent(element, eventName) {
+    var event;
+    if (document.createEvent) {
+      event = document.createEvent('HTMLEvents');
+      event.initEvent(eventName, true, true);
+      element.dispatchEvent(event);
+    } else {
+      event = document.createEventObject();
+      event.eventType = eventName;
+      element.fireEvent('on' + event.eventType, event);
+    }
+  }
+
+  var googleCombo = document.querySelector("select.goog-te-combo");
+  var langSelect = document.querySelector('.ct-language');
+  langSelect.addEventListener('click', function(event) {
+    if (!event.target) {
+      return;
+    }
+
+    var selected = document.querySelector('.ct-language .ct-language-selected');
+    if (selected) {
+      selected.classList.remove('ct-language-selected');
+    }
+
+    var target = event.target;
+    while (target && target !== langSelect ) {
+      if (target.matches('.lang-select')) {
+        break;
+      }
+      target = target.parentElement;
+    }
+
+    if (target && target.matches('.lang-select')) {
+      var lang = target.getAttribute('data-lang');
+      if (googleCombo.value == lang) {
+        restoreLang();
+      } else {
+        target.parentElement.classList.add('ct-language-selected');
+        googleCombo.value = lang;
+        triggerHtmlEvent(googleCombo, 'change');
+      }
+    }
+
+    event.preventDefault();
+  });
+}
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</span>
+</div>
+        </nav>
+</div>
+  </div>
+</header>
+
+<script>
+  function initHeader() {
+    var lastScrollY = getScrollPos().y;
+    var documentElement = document.documentElement;
+
+    function storeScrollData() {
+      var y = getScrollPos().y;documentElement.setAttribute("data-header-transparent", "");var scrollStatus = "";
+
+      if (y <= 0) {
+        scrollStatus = "top";
+      } else if ((window.innerHeight + y) >= document.body.offsetHeight) {
+        scrollStatus = "bottom";
+      } else {
+        var isScrollDown = (y - lastScrollY > 0) ? true : false;
+        scrollStatus = isScrollDown ? "down" : "up";
+      }
+
+      lastScrollY = y;
+      documentElement.setAttribute("data-scroll-status", scrollStatus);
+    }
+
+    window.addEventListener('scroll', function(e) {
+      storeScrollData();
+    });
+
+    storeScrollData();
+  }
+  document.addEventListener('DOMContentLoaded', initHeader);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    html .page-banner {
+      background: #000;
+    }
+  </style>
+<style>html .page-banner {
+      height:  36.8vh;
+      min-height: 38vh;
+    }
+    html[data-scroll-status="top"] .page-banner {
+      height: 100vh;
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-img > *:first-child {
+      opacity: 0.618;
+    }
+
+    html[data-theme="dark"] .page-banner .page-banner-img > *:first-child {
+      opacity: 0.443724;
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-inner > *:first-child > *:nth-child(1) {
+      font-size: 3.25em; font-weight: bold; text-decoration: underline
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-inner > *:first-child > *:nth-child(2) {
+      color: gold
+    }
+  </style>
+<section class="page-banner">
+    <div class="page-banner-img">
+<div style="background-image: url(/jekyll-theme-yat/assets/images/banners/git.png)"></div>
+        <img class="img-placeholder" src="/jekyll-theme-yat/assets/images/banners/git.png">
+</div>
+    <div class="wrapper">
+      <div class="page-banner-inner">
+<header class="post-header">
+  <h1 class="post-title p-name" itemprop="name headline">[Git] branch의 이해와 사용</h1>
+  <h2 class="post-subtitle"></h2>
+
+  <p class="post-meta">
+    <time class="dt-published" datetime="2021-12-04T00:00:00+00:00" itemprop="datePublished"><i class="fa fa-calendar"></i> Dec 04, 2021
+    </time>
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span class="post-reading-time left-vsplit"><i class="fa fa-clock-o"></i> About 6 mins</span>
+  </p>
+<div class="post-tags">
+<a class="post-tag" href="/jekyll-theme-yat/tags.html#Git">#Git</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#Github">#Github</a>
+</div></header>
+</div>
+    </div>
+  </section><script>
+  function hashLocate(hashValue) {
+    hashValue = hashValue.replace(/^.*#h-/, '');
+    hashValue = decodeURIComponent(hashValue);
+    var element = document.getElementById(hashValue);
+
+    if (!element) {
+      return;
+    }
+
+    var header = document.querySelector('header.site-header');
+    var headerRect = header.getBoundingClientRect();
+    var headerTop = Math.floor(headerRect.top);
+    var headerHeight = Math.floor(headerRect.height);
+    var scrollPos = getScrollPos();
+    var offsetY = element.offsetTop - (headerTop + headerHeight + 20);
+
+    if (offsetY == scrollPos.y) {
+      return;
+    }
+
+    if (headerTop == 0  && offsetY > scrollPos.y) {
+      offsetY += headerHeight + 2;
+    } else if (headerTop < 0  && offsetY < scrollPos.y) {
+      offsetY -= headerHeight - 2;
+    }
+
+    smoothScrollTo(offsetY);
+  }
+
+  // The first event occurred
+  window.addEventListener('load', function(event) {
+    if (window.location.hash) {
+      hashLocate(window.location.hash);
+    }
+  });
+
+  // The first event occurred
+  window.addEventListener('click', function(event) {
+    if (event.target.tagName.toLowerCase() == 'a') {
+      hashLocate(event.target.getAttribute('href'));
+    }
+  });
+</script>
+<div class="theme-toggle">
+  <input type="checkbox" id="theme-switch">
+  <label for="theme-switch">
+    <div class="toggle"></div>
+    <div class="names">
+      <p class="light">Light</p>
+      <p class="dark">Dark</p>
+    </div>
+  </label>
+</div>
+
+
+
+
+<script>
+  (function() {
+    var sw = document.getElementById('theme-switch');
+    var html = document.getElementsByTagName('html')[0];
+    var nightModeOption = ('auto' || 'auto').toLowerCase();
+    var storage = nightModeOption === 'manual'
+        ? localStorage
+        : sessionStorage;
+    var themeData = loadThemeData();
+
+    function saveThemeData(data) {
+      storage.setItem('theme', JSON.stringify(data));
+    }
+
+    function loadThemeData() {
+      var data = storage.getItem('theme');
+      try {
+        data = JSON.parse(data ? data : '');
+      } catch(e) {
+        data = { nightShift: undefined, autoToggleAt: 0 };
+        saveThemeData(data);
+      }
+      return data;
+    }
+
+    function handleThemeToggle(nightShift) {
+      themeData.nightShift = nightShift;
+      saveThemeData(themeData);
+      html.dataset.theme = nightShift ? 'dark' : 'light';
+      setTimeout(function() {
+        sw.checked = nightShift ? true : false;
+      }, 50);
+    }
+
+    function autoThemeToggle() {
+      // Next time point of theme toggle
+      var now = new Date();
+      var toggleAt = new Date();
+      var hours = now.getHours();
+      var nightShift = hours >= 19 || hours <=7;
+
+      if (nightShift) {
+        if (hours > 7) {
+          toggleAt.setDate(toggleAt.getDate() + 1);
+        }
+        toggleAt.setHours(7);
+      } else {
+        toggleAt.setHours(19);
+      }
+
+      toggleAt.setMinutes(0);
+      toggleAt.setSeconds(0);
+      toggleAt.setMilliseconds(0)
+
+      var delay = toggleAt.getTime() - now.getTime();
+
+      // auto toggle theme mode
+      setTimeout(function() {
+        handleThemeToggle(!nightShift);
+      }, delay);
+
+      return {
+        nightShift: nightShift,
+        toggleAt: toggleAt.getTime()
+      };
+    }
+
+    // Listen the theme toggle event
+    sw.addEventListener('change', function(event) {
+      handleThemeToggle(event.target.checked);
+    });
+
+    if (nightModeOption == 'auto') {
+      var data = autoThemeToggle();
+
+      // Toggle theme by local setting
+      if (data.toggleAt > themeData.autoToggleAt) {
+        themeData.autoToggleAt = data.toggleAt;
+        handleThemeToggle(data.nightShift);
+      } else {
+        handleThemeToggle(themeData.nightShift);
+      }
+    } else if (nightModeOption == 'manual') {
+      handleThemeToggle(themeData.nightShift);
+    } else {
+      var nightShift = themeData.nightShift;
+      if (nightShift === undefined) {
+        nightShift = nightModeOption === 'on';
+      }
+      handleThemeToggle(nightShift);
+    }
+  })();
+</script>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="framework">
+  <section class="main">
+
+     <div class="post">
+  <section>
+
+
+
+
+
+
+
+
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <div class="post-content e-content" itemprop="articleBody">
+
+      <h2 id="브랜치branch란"><strong>브랜치(branch)란?</strong></h2>
+
+<hr>
+
+<p>프로젝트를 진행할 때 개발자들은 동일한 소스코드를 같이 공유하고 작업하게 된다. 같이 작업을 하다보면 어떤 개발자는 새로운 기능을 추가하고 또 다른 개발자는 버그를 잡아내거나 합니다.
+이와 같이 동일한 소스코드를 공유하더라도 하는 업무는 다르기 때문에 각기 다른 버전의 코드가 만들어 질 수 밖에 없다.</p>
+
+<p>이럴 때 사용하는게 바로 <code class="language-plaintext highlighter-rouge">브랜치(branch)</code> 기능이다. <br>
+<code class="language-plaintext highlighter-rouge">브랜치(branch)</code>는 여러 개발자가 협업할 때 각기 다른 버전관리를 할 수 있도록 해준다. 각자 독립적인 작업 영역(저장소) 안에서 마음대로 소스코드를 생성 및 변경한다. 이렇게 분리된 여러 작업 내용들을 원래의 버전과 비교하여 <code class="language-plaintext highlighter-rouge">병합(merge)</code>하게 된다.</p>
+
+<p><br></p>
+
+<h3 id="브랜치는-메인-브랜치를-복제한다"><strong>브랜치는 메인 브랜치를 복제한다.</strong></h3>
+
+<p>처음 저장소를 생성하면, Git은 <code class="language-plaintext highlighter-rouge">master</code>라는 이름의 브랜치를 만들어 준다. 이걸 메인 브랜치라고 부르며, 새로운 브랜치를 생성하게되면 메인브랜치의 최신 소스코드를 복제하여 가져오게 된다.</p>
+
+<p><img src="/assets/images/banners/branch.png" alt="Desktop View" style="width:1000px">  <br>
+<a href="https://backlog.com/git-tutorial/kr/stepup/stepup1_1.html">이미지 출처</a></p>
+
+<p><br></p>
+
+<h2 id="브랜치의-종류"><strong>브랜치의 종류</strong></h2>
+
+<hr>
+
+<p>프로젝트 버전관리를 효과적으로 하기 위해선, 협업하는 개발자들과 어떻게 브랜치를 생성할 것이며 어떻게 통합할 것인지 미리 정하고 작업한다.
+브랜치는 크게 2가지로 나누어 관리한다.</p>
+
+<p><br></p>
+
+<h3 id="통합-브랜치integration-branch"><strong>통합 브랜치(Integration Branch)</strong></h3>
+
+<p>통합 브랜치는 언제든 배포할 수 있는 버전을 유지해야 하는 브랜치이다. 따라서, 미완성되거나 불안정한 상태의 소스코드가 있으면 안된다.
+다시 말해, 늘 <code class="language-plaintext highlighter-rouge">안정적인 상태</code>를 유지해야 한다는 것이다. 여기서 <code class="language-plaintext highlighter-rouge">안정적인 상태</code>란 애플리케이션의 모든 기능이 정상적으로 동작하는 상태를 말한다.</p>
+
+<p>따라서, 새로운 기능을 추가한다거나 버그를 수정할 때 통합 브랜치에서 작업하는 것이 아니라 <code class="language-plaintext highlighter-rouge">토픽 브랜치</code>를 따로 만들어서 작업을 해야 한다.</p>
+
+<p>일반적으로 저장소를 처음 생성할 때 <code class="language-plaintext highlighter-rouge">master</code>라는 이름의 브랜치가 생성되는데 이것을 통합 브랜치로 사용한다.</p>
+
+<p><br></p>
+
+<h3 id="토픽-브랜치topic-branch"><strong>토픽 브랜치(Topic Branch)</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">토픽 브랜치</code>란 기능추가, 개선, 수정 등의 Task 작업을 진행할 때 사용하는 브랜치이다. 여러 개의 작업을 동시에 진행할 때에는, 그 수만큼 토픽 브랜치를 생성할 수 있다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">토픽 브랜치</code>는 <code class="language-plaintext highlighter-rouge">통합 브랜치</code>의 최신 소스코드를 복제하여 만들어진다. <code class="language-plaintext highlighter-rouge">토픽 브랜치</code>의 작업이 완료되면 <code class="language-plaintext highlighter-rouge">통합 브랜치</code>에 병합한다. 이러한 <code class="language-plaintext highlighter-rouge">토픽 브랜치</code> 방식을 <code class="language-plaintext highlighter-rouge">Feature Branch</code>라고도 부른다.</p>
+
+<p><img src="/assets/images/banners/topicbranch.png" alt="Desktop View" style="width:1000px">
+<a href="https://backlog.com/git-tutorial/kr/stepup/stepup1_1.html">이미지 출처</a></p>
+
+<p><br></p>
+
+<h2 id="브랜치-사용하기"><strong>브랜치 사용하기</strong></h2>
+
+<p>이론보다는 실습이 이해가 빠르므로 간단한 예제를 통해 브랜치 생성부터 병합까지 진행해보자.</p>
+
+<p>일단 저장소 하나를 생성하자.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/151470177-db134678-dadb-4311-8644-82d9f6a93ab2.png" alt="image"></p>
+
+<p><br></p>
+
+<p>로컬 작업 디렉토리를 하나 생성하고 원격 저장소랑 <code class="language-plaintext highlighter-rouge">연동</code>한다.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">  $</span><span class="w"> </span><span class="nb">echo</span> <span class="s2">"# branch_test"</span> <span class="o">&gt;&gt;</span> README.md
+<span class="gp">  $</span><span class="w"> </span>git init
+<span class="gp">  $</span><span class="w"> </span>git add README.md
+<span class="gp">  $</span><span class="w"> </span>git commit <span class="nt">-m</span> <span class="s2">"first commit"</span>
+<span class="gp">  $</span><span class="w"> </span>git remote add origin https://github.com/s-seongsik/branch_test.git
+<span class="gp">  $</span><span class="w"> </span>git push <span class="nt">-u</span> origin master
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/151471008-04f6f800-cd04-45d0-b436-c4f6c94e1f8f.png" alt="image"></p>
+
+<p><br></p>
+
+<h3 id="브랜치-생성하기"><strong>브랜치 생성하기</strong></h3>
+
+<p>해당 명령어로 로컬 브랜치를 하나 생성할 수 있다.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>git branch &lt;branchname&gt;
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">add_branch</code>의 이름으로 만들어보자.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git branch add_branch
+
+$ git branch -v
+  add_branch a9f3bae first commit
+* master     a9f3bae first commit
+</code></pre></div></div>
+
+<p><br></p>
+
+<h3 id="브랜치-전환하기"><strong>브랜치 전환하기</strong></h3>
+
+<p>생성한 <code class="language-plaintext highlighter-rouge">add_branch</code> 브랜치에서 작업하기 위해서는 해당 브랜치로 전환해야한다.<br>
+전환하게 되면 브랜치 안에 있는 마지막 커밋 내용이 작업 트리에 펼쳐진다. 
+브랜치가 전환되고 이 후의 커밋내용은 전환된 브랜치에 추가된다.<br>
+브랜치를 전환할 때 사용하는 명령어는 <code class="language-plaintext highlighter-rouge">checkout</code> 이다.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>git checkout  add_branch
+<span class="go">Switched to branch 'add_branch'
+</span></code></pre></div></div>
+
+<p>Tip) 브랜치 생성과 동시에 전환을 하고 싶다면 <code class="language-plaintext highlighter-rouge">-b</code> 옵션을 넣으면 된다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git checkout -b add_branch
+</code></pre></div></div>
+
+<p><br></p>
+
+<h3 id="토픽-브랜치에서-작업하기"><strong>토픽 브랜치에서 작업하기</strong></h3>
+
+<p>add_branch의 내용을 담고있는 <code class="language-plaintext highlighter-rouge">add_file.py</code>파일을 하나 생성한다. 그리고 해당 로컬 브랜치에 커밋한다.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span><span class="nb">echo</span> <span class="s2">"# add_branch"</span> <span class="o">&gt;&gt;</span> add_file.py
+<span class="gp">$</span><span class="w"> </span>ll
+<span class="go">total 2
+-rw-r--r-- 1 seong 197610 13  1월 28 10:49 add_file.py
+-rw-r--r-- 1 seong 197610 14  1월 28 10:26 README.md
+
+</span><span class="gp">$</span><span class="w"> </span>git add add_file.py
+<span class="gp">$</span><span class="w"> </span>git commit <span class="nt">-m</span> <span class="s2">"add_file"</span>
+<span class="go">[add_branch ce2241e] add_file
+ 1 file changed, 1 insertion(+)
+ create mode 100644 add_file.py
+</span></code></pre></div></div>
+
+<p><br></p>
+
+<h3 id="로컬-토픽-브랜치를-원격-저장소에-푸시하기"><strong>로컬 토픽 브랜치를 원격 저장소에 푸시하기</strong></h3>
+
+<p>새로 만든 토픽 브랜치에 어려번 커밋을 하게 되더라도 결국 로컬에만 저장된다. 원격 저장소에 <code class="language-plaintext highlighter-rouge">백업</code> 및 <code class="language-plaintext highlighter-rouge">팀 구성원들이 작업 내용과 진도</code>를 확일할 수 있도록 <code class="language-plaintext highlighter-rouge">push</code>한다.
+원격 저장소에는 <code class="language-plaintext highlighter-rouge">add_branch</code> 브랜치가 없기 때문에 <code class="language-plaintext highlighter-rouge">git push -u origin &lt;branchname&gt;</code>으로 <code class="language-plaintext highlighter-rouge">push</code>한다.
+여기서 <code class="language-plaintext highlighter-rouge">-u (--set-upstream)</code> 옵션은 로컬 기능 개발 브랜치와 원격 저장소와 같은 이름의 브랜치를 연결하는 역할을 한다. 
+쉽게말해, 로컬 브랜치를 원격 저장소에 똑같은 이름으로 동기화 하겠다는 말이다. 한 번 연결한 브랜치는 이후 <code class="language-plaintext highlighter-rouge">git push</code>로 푸시할 수 있다.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>git push <span class="nt">-u</span> origin add_branch
+<span class="go">Enumerating objects: 4, done.
+Counting objects: 100% (4/4), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 289 bytes | 289.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+remote: 
+remote: Create a pull request for 'add_branch' on GitHub by visiting:
+remote:      https://github.com/s-seongsik/branch_test/pull/new/add_branch
+remote:
+To https://github.com/s-seongsik/branch_test.git
+</span><span class="gp"> * [new branch]      add_branch -&gt;</span><span class="w"> </span>add_branch
+<span class="go">Branch 'add_branch' set up to track remote branch 'add_branch' from 'origin'.
+</span></code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/151476818-335039b2-0450-4434-9dd7-b75acd170187.png" alt="image"></p>
+
+<p><br></p>
+
+<h3 id="풀-리퀘스트-검토-및-통합-브랜치에-병합하기"><strong>풀 리퀘스트 검토 및 통합 브랜치에 병합하기</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">add_branch</code> 브랜치의 변경 사항을 바로 <code class="language-plaintext highlighter-rouge">merge</code>하기 보다는 변경사항이 무엇인지 검토하고 관리자가 <code class="language-plaintext highlighter-rouge">통합 브랜치</code>에 병합하는게 좋다.(병합 작업은 누구든 할 수 있다.)<br>
+일단 로컬의 <code class="language-plaintext highlighter-rouge">master</code> 브랜치가 최신버전이라고 가정한다.</p>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">github</code>에서 풀 리퀘스트 내용을 확인해서 병합할 것인지 검토한다.(UI를 제공하므로 깃허브에서 확인하길 바람)</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">master</code> 브랜치로 전환</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">add_branch</code> 브랜치의 내용을 가져온다.(fetch는 원격 저장소의 변경 내용을 먼저 로컬 저장소로 가져오는 명령어)</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">add_branch</code> 브랜치의 내용을 로컬 <code class="language-plaintext highlighter-rouge">master</code> 브랜치와 병합한다.</li>
+  <li>로컬 <code class="language-plaintext highlighter-rouge">master</code> 브랜치의 내용을 원격 저장소에 <code class="language-plaintext highlighter-rouge">커밋</code>한다.</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">  $</span><span class="w"> </span>git checkout master
+<span class="gp">  $</span><span class="w"> </span>git fetch origin add_branch
+<span class="gp">  $</span><span class="w"> </span>git merge origin/add_branch
+<span class="gp">  $</span><span class="w"> </span>git push origin master
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/151477996-a55adcba-7b2a-4ed1-8065-104419fc232f.png" alt="image"></p>
+
+<p><br></p>
+
+<h3 id="브랜치-삭제하기"><strong>브랜치 삭제하기</strong></h3>
+
+<p>이제 통합 브랜치에 통합되었기 때문에 더이상 <code class="language-plaintext highlighter-rouge">add_branch</code> 브랜치는 필요가 없다. 
+따라서 브랜치를 삭제하면된다.</p>
+
+<p>참고) 삭제할 브랜치에서 다른 브랜치로 전환해야 삭제가 가능하므로 참고바란다.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">seong@DESKTOP-O5CIEJV MINGW64 /e/study/branch_test (add_branch)
+</span><span class="gp">$</span><span class="w"> </span>git branch <span class="nt">-d</span> add_branch
+<span class="go">error: Cannot delete branch 'add_branch' checked out at 'E:/study/branch_test'
+</span></code></pre></div></div>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>git checkout master
+<span class="gp">$</span><span class="w"> </span>git branch <span class="nt">-d</span> add_branch
+<span class="gp">$</span><span class="w"> </span>git branch
+<span class="go">* master
+</span></code></pre></div></div>
+
+
+
+    </div>
+
+</article>
+<div class="post-nav">
+<a class="previous" href="/jekyll-theme-yat/git/2021/12/03/git-02.html" title="[Git] Github 원격저장소와 로컬저장소 연동하기">[Git] Github 원격저장소와 로컬저장소 연동하기</a><a class="next" href="/jekyll-theme-yat/tdd/2021/12/06/TDD.html" title="TDD란 무엇이고, 왜 많은 기업에서 TDD 방식을 선호하지 않을까?">TDD란 무엇이고, 왜 많은 기업에서 TDD...</a>
+</div>
+<div class="post-related">
+      <div>Related Articles</div>
+      <ul>
+        <li><a class="post-link" href="/jekyll-theme-yat/webpack/2021/12/15/Webpack-03.html" title="TDD란 무엇이고, 왜 많은 기업에서 TDD 방식을 선호하지 않을까?">[Webpack] loader (1)</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/nuxt.js/2022/01/25/nuxtJs-02.html" title="TDD란 무엇이고, 왜 많은 기업에서 TDD 방식을 선호하지 않을까?">[Nuxt.js] 공식문서로 빠르게 배우기 2탄 - 디렉토리 구조 및 구성파일 설정</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/react/2022/05/09/react-03.html" title="TDD란 무엇이고, 왜 많은 기업에서 TDD 방식을 선호하지 않을까?">[React] 엘리먼트, 컴포넌트, 인스턴스 개념</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/python/2021/11/30/python-scheduler.html" title="TDD란 무엇이고, 왜 많은 기업에서 TDD 방식을 선호하지 않을까?">[python] Apscheduler vs Cron Job</a></li>
+</ul>
+    </div>
+<div class="post-comments"></div></section>
+</div>
+<script>
+  new Zooming().listen('img')
+</script>
+
+  </section>
+  <section class="sidebar" style="margin-left: 15px;">
+    <!-- Get sidebar items --><style type="text/css" media="screen">
+.post-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+</style>
+
+<div class="post-menu">
+  <div class="post-menu-title">TOC</div>
+  <div class="post-menu-content"></div>
+</div>
+
+<script>
+  function generateContent() {
+    var menu = document.querySelector(".post-menu");
+    var menuContent =  menu.querySelector(".post-menu-content");
+    var headings = document.querySelector(".post-content").querySelectorAll("h2, h3, h4, h5, h6");
+
+    // Hide menu when no headings
+    if (headings.length === 0) {
+      return menu.style.display = "none";
+    }
+
+    // Generate post menu
+    var menuHTML = '';
+    for (var i = 0; i < headings.length; i++) {
+      var h = headings[i];
+      menuHTML += (
+        '<li class="h-' + h.tagName.toLowerCase() + '">'
+        + '<a href="#h-' + h.getAttribute('id') + '">' + h.textContent + '</a></li>');
+    }
+
+    menuContent.innerHTML = '<ul>' + menuHTML + '</ul>';
+
+    // The header element
+    var header = document.querySelector('header.site-header');
+
+    function doMenuCollapse(index, over_items) {
+      var items = menuContent.firstChild.children;
+
+      if (over_items == undefined) {
+        over_items = 20;
+      }
+
+      if (items.length < over_items) {
+        return;
+      }
+
+      var activeItem = items[index];
+      var beginItem = activeItem
+      var endItem = activeItem
+      var beginIndex = index;
+      var endIndex = index + 1;
+      while (beginIndex >= 0
+        && !items[beginIndex].classList.contains('h-h2')) {
+        beginIndex -= 1;
+      }
+      while (endIndex < items.length
+        && !items[endIndex].classList.contains('h-h2')) {
+        endIndex += 1;
+      }
+      for (var i = 0; i < beginIndex; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+      for (var i = beginIndex + 1; i < endIndex; i++) {
+        item = items[i]
+        // if (!item.classList.contains('h-h2')) {
+          item.style.display = '';
+        // }
+      }
+      for (var i = endIndex; i < items.length; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+    }
+
+    // Init menu collapsed
+    doMenuCollapse(-1);
+
+    // Active the menu item
+    window.addEventListener('scroll', function (event) {
+      var lastActive = menuContent.querySelector('.active');
+      var changed = true;
+      var activeIndex = -1;
+      for (var i = headings.length - 1; i >= 0; i--) {
+        var h = headings[i];
+        var headingRect = h.getBoundingClientRect();
+        var headerRect = header.getBoundingClientRect();
+        var headerTop = Math.floor(headerRect.top);
+        var headerHeight = Math.floor(headerRect.height);
+        var headerHeight = headerTop + headerHeight + 20;
+        if (headingRect.top <= headerHeight) {
+          var id = 'h-' + h.getAttribute('id');
+          var a = menuContent.querySelector('a[href="#' + id  + '"]');
+          var curActive = a.parentNode;
+          if (curActive) {
+            curActive.classList.add('active');
+            activeIndex = i;
+          }
+          if (lastActive == curActive) {
+            changed = false;
+          }
+          break;
+        }
+      }
+      if (changed) {
+        if (lastActive) {
+          lastActive.classList.remove('active');
+        }
+        doMenuCollapse(activeIndex);
+      }
+      event.preventDefault();
+    });
+  }
+  generateContent();
+</script>
+</section>
+</div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jekyll-theme-yat/"></data>
+
+  <div class="wrapper">
+    <div class="site-footer-inner">
+<div>
+<span class="copyleft">©</span> 2022 Seo SeongSik. All rights reserved</div>
+      <div>Go to <a title="github" href="https://github.com/s-seongsik">Github</a>
+</div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

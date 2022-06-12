@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>[Web] 서버 인증방식 Cookie, Session, Token | IT 데이터베이스</title>
+<meta name="generator" content="Jekyll v4.2.2">
+<meta property="og:title" content="[Web] 서버 인증방식 Cookie, Session, Token">
+<meta name="author" content="GitHub User">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="이번에node.js기반 Vue.js로 웹 프론트엔드 개발을 맡게 되었는데 로그인 기능을 구현하면서 혼동되는 세션, 쿠키, 토큰의 개념을 정확하게 짚고 넘어가고 싶었다.">
+<meta property="og:description" content="이번에node.js기반 Vue.js로 웹 프론트엔드 개발을 맡게 되었는데 로그인 기능을 구현하면서 혼동되는 세션, 쿠키, 토큰의 개념을 정확하게 짚고 넘어가고 싶었다.">
+<link rel="canonical" href="/jekyll-theme-yat/web/2022/01/19/web-Autorization.html">
+<meta property="og:url" content="/jekyll-theme-yat/web/2022/01/19/web-Autorization.html">
+<meta property="og:site_name" content="IT 데이터베이스">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2022-01-19T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="[Web] 서버 인증방식 Cookie, Session, Token">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"GitHub User"},"dateModified":"2022-01-19T00:00:00+00:00","datePublished":"2022-01-19T00:00:00+00:00","description":"이번에node.js기반 Vue.js로 웹 프론트엔드 개발을 맡게 되었는데 로그인 기능을 구현하면서 혼동되는 세션, 쿠키, 토큰의 개념을 정확하게 짚고 넘어가고 싶었다.","headline":"[Web] 서버 인증방식 Cookie, Session, Token","mainEntityOfPage":{"@type":"WebPage","@id":"/jekyll-theme-yat/web/2022/01/19/web-Autorization.html"},"url":"/jekyll-theme-yat/web/2022/01/19/web-Autorization.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-noto-sans@0.0.72/index.min.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/main.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/image-popup.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="/jekyll-theme-yat/assets/js/main.js"></script>
+  <script src="/jekyll-theme-yat/assets/js/zooming.min.js"></script><link type="application/atom+xml" rel="alternate" href="/jekyll-theme-yat/feed.xml" title="IT 데이터베이스">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+<!-- and it's easy to individually load additional languages -->
+<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/go.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Init highlight js
+document.addEventListener('DOMContentLoaded', function(event) {
+  var els = document.querySelectorAll('pre code')
+
+  function addLangData(block) {
+    var outer = block.parentElement.parentElement.parentElement;
+    var lang = block.getAttribute('data-lang');
+    for (var i = 0; i < outer.classList.length; i++) {
+      var cls = outer.classList[i];
+      if (cls.startsWith('language-')) {
+        lang = cls;
+        break;
+      }
+    }
+    if (!lang) {
+      cls = block.getAttribute('class');
+      lang = cls ? cls.replace('hljs ', '') : '';
+    }
+    if (lang.startsWith('language-')) {
+      lang = lang.substr(9);
+    }
+    block.setAttribute('class', 'hljs ' + lang);
+    block.parentNode.setAttribute('data-lang', lang);
+  }
+
+  function addBadge(block) {
+    var enabled = ('true' || 'true').toLowerCase();
+    if (enabled == 'true') {
+      var pre = block.parentElement;
+      pre.classList.add('badge');
+    }
+  }
+
+  function handle(block) {
+    addLangData(block);
+    addBadge(block)
+    hljs.highlightBlock(block);
+  }
+
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i];
+    handle(el);
+  }
+});
+</script>
+
+<style>
+  /* code language badge */
+  pre.badge::before {
+    content: attr(data-lang);
+    color: #fff;
+    background-color: #ff4e00;
+    padding: 0 .5em;
+    border-radius: 0 2px;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 32px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+  }
+
+  /* fix wrong badge display for firefox browser */
+  code > table pre::before {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="site-header site-header-transparent" role="banner">
+
+  <div class="wrapper">
+    <div class="site-header-inner">
+<span class="site-brand"><a class="site-brand-inner" rel="author" href="/jekyll-theme-yat/">
+  <img class="site-favicon" title="IT 데이터베이스" src="" onerror="this.style.display='none'">
+  IT 데이터베이스
+</a>
+</span><nav class="site-nav">
+          <input type="checkbox" id="nav-trigger" class="nav-trigger">
+          <label for="nav-trigger">
+            <span class="menu-icon">
+              <svg viewbox="0 0 18 15" width="18px" height="15px">
+                <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+              </svg>
+            </span>
+          </label>
+
+          <div class="trigger">
+<a class="page-link" href="/jekyll-theme-yat/about.html">ABOUT</a><a class="page-link" href="/jekyll-theme-yat/archives.html">ARCHIVES</a><a class="page-link" href="/jekyll-theme-yat/categories.html">CATEGORIES</a><a class="page-link" href="/jekyll-theme-yat/">HOME</a><a class="page-link" href="/jekyll-theme-yat/tags.html">TAGS</a>
+
+
+
+
+
+
+
+
+
+<span class="page-link">
+
+
+
+<div id="google_translate_element" style="display: none;">
+</div>
+
+<span class="ct-language">
+  <ul class="list-unstyled ct-language-dropdown">
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="en">
+          
+          <img src="https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png" title="English">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="fr">
+          
+          <img src="https://cdn.countryflags.com/thumbs/france/flag-400.png" title="French">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="zh-CN">
+          
+          <img src="https://cdn.countryflags.com/thumbs/china/flag-400.png" title="Chinese(Simple)">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ja">
+          
+          <img src="https://cdn.countryflags.com/thumbs/japan/flag-400.png" title="Japanese">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ko">
+          
+          <img src="https://cdn.countryflags.com/thumbs/south-korea/flag-400.png" title="Korean">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ru">
+          
+          <img src="https://cdn.countryflags.com/thumbs/russia/flag-400.png" title="Russian">
+          
+        </a>
+      </li>
+    
+  </ul>
+</span>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false,
+    layout: google.translate.TranslateElement.InlineLayout.VERTICAL
+  }, 'google_translate_element');
+
+  // Links to cross-origin destinations are unsafe
+  var gll = document.getElementsByClassName('goog-logo-link')[0];
+  if (gll) {
+    gll.setAttribute('rel', 'noopener');
+  }
+
+  function restoreLang() {
+    var iframe = document.getElementsByClassName('goog-te-banner-frame')[0];
+    if (!iframe) return;
+
+    var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+    var restore_el = innerDoc.getElementsByTagName("button");
+
+    for (var i = 0; i < restore_el.length; i++) {
+      if (restore_el[i].id.indexOf("restore") >= 0) {
+        restore_el[i].click();
+        var close_el = innerDoc.getElementsByClassName("goog-close-link");
+        close_el[0].click();
+        return;
+      }
+    }
+  }
+
+  function triggerHtmlEvent(element, eventName) {
+    var event;
+    if (document.createEvent) {
+      event = document.createEvent('HTMLEvents');
+      event.initEvent(eventName, true, true);
+      element.dispatchEvent(event);
+    } else {
+      event = document.createEventObject();
+      event.eventType = eventName;
+      element.fireEvent('on' + event.eventType, event);
+    }
+  }
+
+  var googleCombo = document.querySelector("select.goog-te-combo");
+  var langSelect = document.querySelector('.ct-language');
+  langSelect.addEventListener('click', function(event) {
+    if (!event.target) {
+      return;
+    }
+
+    var selected = document.querySelector('.ct-language .ct-language-selected');
+    if (selected) {
+      selected.classList.remove('ct-language-selected');
+    }
+
+    var target = event.target;
+    while (target && target !== langSelect ) {
+      if (target.matches('.lang-select')) {
+        break;
+      }
+      target = target.parentElement;
+    }
+
+    if (target && target.matches('.lang-select')) {
+      var lang = target.getAttribute('data-lang');
+      if (googleCombo.value == lang) {
+        restoreLang();
+      } else {
+        target.parentElement.classList.add('ct-language-selected');
+        googleCombo.value = lang;
+        triggerHtmlEvent(googleCombo, 'change');
+      }
+    }
+
+    event.preventDefault();
+  });
+}
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</span>
+</div>
+        </nav>
+</div>
+  </div>
+</header>
+
+<script>
+  function initHeader() {
+    var lastScrollY = getScrollPos().y;
+    var documentElement = document.documentElement;
+
+    function storeScrollData() {
+      var y = getScrollPos().y;documentElement.setAttribute("data-header-transparent", "");var scrollStatus = "";
+
+      if (y <= 0) {
+        scrollStatus = "top";
+      } else if ((window.innerHeight + y) >= document.body.offsetHeight) {
+        scrollStatus = "bottom";
+      } else {
+        var isScrollDown = (y - lastScrollY > 0) ? true : false;
+        scrollStatus = isScrollDown ? "down" : "up";
+      }
+
+      lastScrollY = y;
+      documentElement.setAttribute("data-scroll-status", scrollStatus);
+    }
+
+    window.addEventListener('scroll', function(e) {
+      storeScrollData();
+    });
+
+    storeScrollData();
+  }
+  document.addEventListener('DOMContentLoaded', initHeader);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    html .page-banner {
+      background: #000;
+    }
+  </style>
+<style>html .page-banner {
+      height:  36.8vh;
+      min-height: 38vh;
+    }
+    html[data-scroll-status="top"] .page-banner {
+      height: 100vh;
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-img > *:first-child {
+      opacity: 0.618;
+    }
+
+    html[data-theme="dark"] .page-banner .page-banner-img > *:first-child {
+      opacity: 0.443724;
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-inner > *:first-child > *:nth-child(1) {
+      font-size: 3.25em; font-weight: bold; text-decoration: underline
+    }
+  </style>
+<style>
+    html .page-banner .page-banner-inner > *:first-child > *:nth-child(2) {
+      color: gold
+    }
+  </style>
+<section class="page-banner">
+    <div class="page-banner-img">
+<div style="background-image: url(/jekyll-theme-yat/assets/images/banners/auth.png)"></div>
+        <img class="img-placeholder" src="/jekyll-theme-yat/assets/images/banners/auth.png">
+</div>
+    <div class="wrapper">
+      <div class="page-banner-inner">
+<header class="post-header">
+  <h1 class="post-title p-name" itemprop="name headline">[Web] 서버 인증방식 Cookie, Session, Token</h1>
+  <h2 class="post-subtitle"></h2>
+
+  <p class="post-meta">
+    <time class="dt-published" datetime="2022-01-19T00:00:00+00:00" itemprop="datePublished"><i class="fa fa-calendar"></i> Jan 19, 2022
+    </time>
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span class="post-reading-time left-vsplit"><i class="fa fa-clock-o"></i> About 6 mins</span>
+  </p>
+<div class="post-tags">
+<a class="post-tag" href="/jekyll-theme-yat/tags.html#Web">#Web</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#Cookie">#Cookie</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#Session">#Session</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#Token">#Token</a>
+</div></header>
+</div>
+    </div>
+  </section><script>
+  function hashLocate(hashValue) {
+    hashValue = hashValue.replace(/^.*#h-/, '');
+    hashValue = decodeURIComponent(hashValue);
+    var element = document.getElementById(hashValue);
+
+    if (!element) {
+      return;
+    }
+
+    var header = document.querySelector('header.site-header');
+    var headerRect = header.getBoundingClientRect();
+    var headerTop = Math.floor(headerRect.top);
+    var headerHeight = Math.floor(headerRect.height);
+    var scrollPos = getScrollPos();
+    var offsetY = element.offsetTop - (headerTop + headerHeight + 20);
+
+    if (offsetY == scrollPos.y) {
+      return;
+    }
+
+    if (headerTop == 0  && offsetY > scrollPos.y) {
+      offsetY += headerHeight + 2;
+    } else if (headerTop < 0  && offsetY < scrollPos.y) {
+      offsetY -= headerHeight - 2;
+    }
+
+    smoothScrollTo(offsetY);
+  }
+
+  // The first event occurred
+  window.addEventListener('load', function(event) {
+    if (window.location.hash) {
+      hashLocate(window.location.hash);
+    }
+  });
+
+  // The first event occurred
+  window.addEventListener('click', function(event) {
+    if (event.target.tagName.toLowerCase() == 'a') {
+      hashLocate(event.target.getAttribute('href'));
+    }
+  });
+</script>
+<div class="theme-toggle">
+  <input type="checkbox" id="theme-switch">
+  <label for="theme-switch">
+    <div class="toggle"></div>
+    <div class="names">
+      <p class="light">Light</p>
+      <p class="dark">Dark</p>
+    </div>
+  </label>
+</div>
+
+
+
+
+<script>
+  (function() {
+    var sw = document.getElementById('theme-switch');
+    var html = document.getElementsByTagName('html')[0];
+    var nightModeOption = ('auto' || 'auto').toLowerCase();
+    var storage = nightModeOption === 'manual'
+        ? localStorage
+        : sessionStorage;
+    var themeData = loadThemeData();
+
+    function saveThemeData(data) {
+      storage.setItem('theme', JSON.stringify(data));
+    }
+
+    function loadThemeData() {
+      var data = storage.getItem('theme');
+      try {
+        data = JSON.parse(data ? data : '');
+      } catch(e) {
+        data = { nightShift: undefined, autoToggleAt: 0 };
+        saveThemeData(data);
+      }
+      return data;
+    }
+
+    function handleThemeToggle(nightShift) {
+      themeData.nightShift = nightShift;
+      saveThemeData(themeData);
+      html.dataset.theme = nightShift ? 'dark' : 'light';
+      setTimeout(function() {
+        sw.checked = nightShift ? true : false;
+      }, 50);
+    }
+
+    function autoThemeToggle() {
+      // Next time point of theme toggle
+      var now = new Date();
+      var toggleAt = new Date();
+      var hours = now.getHours();
+      var nightShift = hours >= 19 || hours <=7;
+
+      if (nightShift) {
+        if (hours > 7) {
+          toggleAt.setDate(toggleAt.getDate() + 1);
+        }
+        toggleAt.setHours(7);
+      } else {
+        toggleAt.setHours(19);
+      }
+
+      toggleAt.setMinutes(0);
+      toggleAt.setSeconds(0);
+      toggleAt.setMilliseconds(0)
+
+      var delay = toggleAt.getTime() - now.getTime();
+
+      // auto toggle theme mode
+      setTimeout(function() {
+        handleThemeToggle(!nightShift);
+      }, delay);
+
+      return {
+        nightShift: nightShift,
+        toggleAt: toggleAt.getTime()
+      };
+    }
+
+    // Listen the theme toggle event
+    sw.addEventListener('change', function(event) {
+      handleThemeToggle(event.target.checked);
+    });
+
+    if (nightModeOption == 'auto') {
+      var data = autoThemeToggle();
+
+      // Toggle theme by local setting
+      if (data.toggleAt > themeData.autoToggleAt) {
+        themeData.autoToggleAt = data.toggleAt;
+        handleThemeToggle(data.nightShift);
+      } else {
+        handleThemeToggle(themeData.nightShift);
+      }
+    } else if (nightModeOption == 'manual') {
+      handleThemeToggle(themeData.nightShift);
+    } else {
+      var nightShift = themeData.nightShift;
+      if (nightShift === undefined) {
+        nightShift = nightModeOption === 'on';
+      }
+      handleThemeToggle(nightShift);
+    }
+  })();
+</script>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="framework">
+  <section class="main">
+
+     <div class="post">
+  <section>
+
+
+
+
+
+
+
+
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <div class="post-content e-content" itemprop="articleBody">
+
+      <p>이번에<code class="language-plaintext highlighter-rouge">node.js</code>기반 <code class="language-plaintext highlighter-rouge">Vue.js</code>로 웹 프론트엔드 개발을 맡게 되었는데 로그인 기능을 구현하면서 혼동되는 <code class="language-plaintext highlighter-rouge">세션</code>, <code class="language-plaintext highlighter-rouge">쿠키</code>, <code class="language-plaintext highlighter-rouge">토큰</code>의 개념을 정확하게 짚고 넘어가고 싶었다.</p>
+
+<p><br></p>
+
+<h2 id="서버-인증이-필요한-이유"><strong>서버 인증이 필요한 이유</strong></h2>
+
+<hr>
+
+<p>현재 앱/웹 서비스에서 가장 많이 쓰이는 통신 방식은 <code class="language-plaintext highlighter-rouge">HTTP</code>이다. <br>
+클라이언트는 서버에게 <code class="language-plaintext highlighter-rouge">GET</code>, <code class="language-plaintext highlighter-rouge">POST</code>, <code class="language-plaintext highlighter-rouge">PUT</code>, <code class="language-plaintext highlighter-rouge">DELETE</code> 방식 중 하나로 요청을 보내게되고 요청 받은 자원에 대해 응답을 하게 된다. <br>
+그런데 여기서 문제는 통신에 대한 기록이 남지 않는다는 것이다. 즉, <code class="language-plaintext highlighter-rouge">서버는 사용자가 누군지 모른다.</code></p>
+
+<p>그 이유는 <code class="language-plaintext highlighter-rouge">HTTP</code>는 <code class="language-plaintext highlighter-rouge">무상태 프로토콜(Stateless Protocol)</code>이기 때문이다.<br>
+무상태 프로토콜을 간단하게 말하면 통신 파트너에 대한 세션 정보나 상태 보관을 요구(저장)하지 않는다는 것이다.</p>
+
+<p>인증이 필요없는 웹/앱이라면 상관없지만 사용자 정보에 따라 컨텐츠를 제공하거나 달라져야하는 경우에는 서버는 사용자가 누군지 알아야한다.
+따라서, <code class="language-plaintext highlighter-rouge">사용자 정보</code>를 알릴 수 있는 방법이 <code class="language-plaintext highlighter-rouge">세션</code>, <code class="language-plaintext highlighter-rouge">쿠키</code>, <code class="language-plaintext highlighter-rouge">토큰</code> 이다.</p>
+
+<p><br></p>
+
+<h2 id="쿠키cookie란"><strong>쿠키(Cookie)란</strong></h2>
+
+<hr>
+
+<ul>
+  <li>클라이언트 로컬에 <code class="language-plaintext highlighter-rouge">key-value</code> 형태로 저장되어있는 파일이다.</li>
+  <li>클라이언트 상태 정보를 브라우저에 저장하여 참조한다.</li>
+  <li>이름, 값, 유효 시간, 경로 등을 포함하고 있다.</li>
+</ul>
+
+<h3 id="구성요소"><strong>구성요소</strong></h3>
+<ul>
+  <li>쿠키의 이름</li>
+  <li>쿠키의 값</li>
+  <li>쿠키의 유효시간</li>
+  <li>쿠키를 전송할 도메인 이름</li>
+  <li>쿠키를 전송할 경로</li>
+  <li>보안 연결 여부</li>
+  <li>HttpOnly 여부</li>
+</ul>
+
+<h3 id="특징"><strong>특징</strong></h3>
+<ul>
+  <li>쿠키 시간을 지정할 수 있다</li>
+  <li>브라우저가 종료되어도 유지된다</li>
+  <li>최대 저장할 수 있는 쿠키는 300개, 도메인당 20개, 쿠키 하나당 4096bytes(4Kb) 이</li>
+  <li>요청 시 자동으로 헤더에 넣어서 보냄</li>
+  <li>응답 헤더에 Set-Cookie 속성을 사용하면 쿠키를 생성할 수 있다</li>
+</ul>
+
+<h3 id="동작방식"><strong>동작방식</strong></h3>
+
+<p><img src="/assets/images/banners/cookie.png" alt="Desktop View"><br>
+<a href="https://interconnection.tistory.com/74">이미지 출처 : https://interconnection.tistory.com/74</a></p>
+
+<ul>
+  <li>클라이언트가 서버에 요청을 보낸다.</li>
+  <li>상태를 유지하고 싶은 정보를 쿠키로 생성한다. <code class="language-plaintext highlighter-rouge">(Set-Cookie)</code>
+</li>
+  <li>전달받은 쿠키는 브라우저 로컬에 저장/관리하고 있다가, 다음 요청 때 쿠키를 헤더에 넣어서 보낸다.</li>
+  <li>서버는 쿠키 정보를 받아 이전 상태 정보를 확인하여 응답한다.</li>
+</ul>
+
+<h3 id="쿠키-사용-예시"><strong>쿠키 사용 예시</strong></h3>
+<ul>
+  <li>아이디/비밀번호 저장</li>
+  <li>쇼핑몰 장바구니</li>
+</ul>
+
+<p><br></p>
+
+<h2 id="세션session이란"><strong>세션(Session)이란</strong></h2>
+
+<hr>
+
+<ul>
+  <li>일정 시간 동안 같은 브라우저로 들어오는 요청을 <code class="language-plaintext highlighter-rouge">하나의 상태</code>로 보고 그 상태를 유지하는 기술이다.</li>
+  <li>웹 브라우저를 통해 서버에 접속한 이후부터 종료하는 시점까지 유지되는 상태이다.</li>
+  <li>세션도 쿠키를 사용하여 <code class="language-plaintext highlighter-rouge">key-value</code>을 주고 받으며 통신한다.</li>
+</ul>
+
+<h3 id="동작방식-1"><strong>동작방식</strong></h3>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/150248262-1da44f75-4505-4974-a904-a491f703ead2.png" alt="image"><br>
+<a href="https://doooyeon.github.io/2018/09/10/cookie-and-session.html">이미지 출처: https://doooyeon.github.io/2018/09/10/cookie-and-session.html</a></p>
+
+<ul>
+  <li>클라이언트가 서버에 요청</li>
+  <li>서버는 요청한 클라이언트에게 유일한 <code class="language-plaintext highlighter-rouge">세션ID</code>를 부여한다.</li>
+  <li>서버는 응답 헤더<code class="language-plaintext highlighter-rouge">(Set-Cookie)</code>에 <code class="language-plaintext highlighter-rouge">세션ID</code>를 넣어서 전송한다.</li>
+  <li>클라이언트는 이후 웹 브라우저를 종료하기 전까지 다음 요청부터는 부여된 <code class="language-plaintext highlighter-rouge">세션ID</code>를 요청헤더에 넣어서 전송한다.</li>
+  <li>서버는 <code class="language-plaintext highlighter-rouge">세션ID</code>를 확인하고, 해당 세션에 대한 정보를 확인하여 응답한다.</li>
+</ul>
+
+<h3 id="세션-사용-예시"><strong>세션 사용 예시</strong></h3>
+<ul>
+  <li>로그인</li>
+</ul>
+
+<p><br></p>
+
+<h2 id="b"><strong>쿠키(Cookie) vs 세션(Session)</strong></h2>
+
+<hr>
+
+<p><strong>저장위치 :</strong></p>
+<ul>
+  <li>쿠키 : 클라이언트(브라우저)</li>
+  <li>세션 : 서버</li>
+</ul>
+
+<p><strong>보안 :</strong></p>
+<ul>
+  <li>쿠키 : 클라이언트에 저장되므로 보안에 취약</li>
+  <li>세션 : 쿠키를 이용해 Session ID만 저장하고 이 값으로 구분해서 서버에서 처리하므로 비교적 보안성이 좋다.</li>
+</ul>
+
+<p><strong>라이프사이클</strong></p>
+<ul>
+  <li>쿠키 : 만료시간에 따라 브라우저를 종료해도 계속해서 남아 있을 수 있다.</li>
+  <li>세션 : 만료시간을 정할 수 있지만 브라우저가 종료되면 만료시간에 상관없이 삭제된다.</li>
+</ul>
+
+<p><strong>속도</strong></p>
+<ul>
+  <li>쿠키 : 클라이언트에 저장되어서 서버에 요청 시 빠르다.</li>
+  <li>세션 : 실제 저장된 정보가 서버에 있으므로 서버의 처리가 필요해 쿠키보다 느리다.</li>
+</ul>
+
+<p><br></p>
+
+<h2 id="세션session의-한계"><strong>세션(Session)의 한계</strong></h2>
+
+<hr>
+
+<p><a href="https://m.blog.naver.com/PostView.nhn?blogId=ithink3366&logNo=221366364878&proxyReferer=https:%2F%2Fwww.google.com%2F">참고 블로그 : [Web]쿠키, 세션 그리고 토큰</a>
+<a href="https://fierycoding.tistory.com/69">참고 블로그 : [인증/인가]Session(세션)과 Token(토큰)(JWT)의 차이점</a></p>
+
+<h3 id="한계-1-안정성"><strong>한계 1: 안정성</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">세션</code>은 서버에서 저장/관리하기 때문에 상대적으로 온전한 상태를 유지하기 유리하다.<br>
+하지만 공격에 대한 취약점이 존재하기 때문에 유효기간, HttpOnly, Secure 옵션 등을 주어 쿠키에 저장한다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">토큰</code>은 반대로 웹 브라우저(로컬스토리지, 쿠키 등)에 저장되기 때문에 공격에 노출될 가능성이 더 크다.<br>
+이를 대비해 <code class="language-plaintext highlighter-rouge">토큰</code>은 민감한 정보를 담지 않는다. 그리고 유효기간도 짧게 설정하여 공격에 대한 노출시간을 최소화한다.<br>
+하지만 짧은 유효기간으로 토큰이 무효화되면 사용자는 계속해서 토큰을 요청해야하는 번거로움이 있기 때문에 애초에 로그인(인증)시 refresh token이라는 것을 추가적으로 발급한다.</p>
+
+<p>refresh token은 좀 더 긴 유효기간을 가졌으며 최대한 안전한 곳에 저장된다.
+기존 토큰이 만료되거나 변질되면 refresh token을 통해 재발급한다.</p>
+
+<p><br></p>
+
+<h3 id="한계-2-저장소-부하"><strong>한계 2: 저장소 부하</strong></h3>
+
+<p>세션은 서버에 저장하기 때문에 클라이언트가 많으면 많을수록 많은 세션정보를 서버에서 감당해야 한다.
+세션 전용 서버를 만들어 DB에 저장해도 DB를 부하시키는 건 똑같다.</p>
+
+<p><br></p>
+
+<h3 id="한계-3--확장성"><strong>한계 3 : 확장성</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">한계 2</code>의 문제를 해결하기 위해 서버를 여러 대를 뒀다고 가정해보자.
+서버가 스케일아웃되서 여러 개가 생기면 각 서버마다 세션 정보를 저장하게 된다.<br>
+이렇게 되면 세션정보가 없는 다른 서버에 접속할 때마다 계속 로그인해줘야 한다.</p>
+
+<p><br></p>
+
+<h3 id="한계-4--웹앱-간-상이한-세션-처리-로직"><strong>한계 4 : 웹/앱 간 상이한 세션 처리 로직</strong></h3>
+
+<p>모바일이 나오기 전에는 클라이언트는 웹이 유일했다. 하지만 모바일이 생기면서 앱이 생겼고 이를 처리하는 경우도 생각해야한다.
+웹과 앱의 쿠키 처리 방법이 다르고, 만약에 다른 클라이언트가 생긴다면 이에 맞는 처리 로직을 또 생각해야한다.</p>
+
+<p><br></p>
+
+<h2 id="token의-등장"><strong>Token의 등장</strong></h2>
+
+<hr>
+
+<p>세션의 한게를 해결하기 위해 등장한게 <code class="language-plaintext highlighter-rouge">Token</code> 방식이다.
+토큰은 서버에 상태를 저장하지 않으며 토큰 자체로 정보를 담고있기 때문에 별도의 인증서버를 둘 필요가 없다. 따라서 요청 받을 서버 자체에서 인증 프로세스를 수행할 수 있다.
+또한 토큰은 <code class="language-plaintext highlighter-rouge">Json</code> 포맷으로 통신하기 때문에 어떤 클라이언트<code class="language-plaintext highlighter-rouge">(웹/앱)</code>에서 통신을 보내도 <code class="language-plaintext highlighter-rouge">Json</code> 포맷만 맞춰서 이용하면 토큰을 사용할 수 있다.</p>
+
+<p>토큰은 세션과 달리 유효시간을 짧게 설정하여 공격에 노출되는 시간을 최소화 한다고 설명했다. 그리고 민감한 정보는 담지 않기 때문에 세션보다 <code class="language-plaintext highlighter-rouge">비교적 안전</code>하다
+유효시간이 끝나면 새로운 <code class="language-plaintext highlighter-rouge">Access Token</code>을 발급받는 방식을 사용한다.</p>
+
+<p><br></p>
+
+<h3 id="access-token-vs-refresh-token"><strong>[Access Token] VS [Refresh Token]</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">Access Token(JWT)</code>는 제 3자에게 탈취당할 경우 보안에 취약하다는 단점이 있다. 
+이를 해결하기 위해 <code class="language-plaintext highlighter-rouge">Access Token</code>의 유효기간을 짧게 설정하는데 사용자는 만료될 때마다 로그인을 해서 <code class="language-plaintext highlighter-rouge">Token</code>을 재발급 해야하는 번거로움이 있다.</p>
+
+<p>그래서 등장한게 <code class="language-plaintext highlighter-rouge">Refresh Token</code>이다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">Refresh Token</code>은 <code class="language-plaintext highlighter-rouge">Access Token</code>와 같은 <code class="language-plaintext highlighter-rouge">JWT</code>이지만 처음 로그인을 완료 했을 때 <code class="language-plaintext highlighter-rouge">Access Token</code>과 동시에 발급된다.
+<code class="language-plaintext highlighter-rouge">Refresh Token</code>은 긴 유효기간을 가지면서 <code class="language-plaintext highlighter-rouge">Access Token</code>가 만료 됐을 대 재발급해주는 열쇠 역할을 한다.</p>
+
+<p>예를 들어, <code class="language-plaintext highlighter-rouge">Access Token</code>은 유효기간이 30분, <code class="language-plaintext highlighter-rouge">Refresh Token</code>은 유효기간이 2주라고 가정하고, 사용자는 로그인을 하고 <code class="language-plaintext highlighter-rouge">Access Token</code>과 <code class="language-plaintext highlighter-rouge">Refresh Token</code>을 받는다.<br>
+클라이언트는 <code class="language-plaintext highlighter-rouge">Refresh Token</code>을 안전한 곳(Local Storage?) 에 저장하고, <code class="language-plaintext highlighter-rouge">API</code> 요청은 <code class="language-plaintext highlighter-rouge">Access Token</code>을 가지고 할 수 있다.<br>
+30분이 지나 토큰이 만료되면 <code class="language-plaintext highlighter-rouge">Refresh Token</code>을 서버에 보냄으로써 새로운 <code class="language-plaintext highlighter-rouge">Access Token</code>을 발급받을 수 있게 되고, 발급받은 <code class="language-plaintext highlighter-rouge">Access Token</code>으로 다시 API요청을 할 수 있게 된다.</p>
+
+<p><br></p>
+
+<p><img src="/assets/images/banners/token.png" alt="Desktop View"> <br>
+<a href="https://velog.io/@hoo00nn/Token-%EC%9D%B8%EC%A6%9D-%EB%B0%A9%EC%8B%9D%EC%9D%B4%EB%9E%80">출처 : Token 인증 방식이란?</a></p>
+
+
+    </div>
+
+</article>
+<div class="post-nav">
+<a class="previous" href="/jekyll-theme-yat/vue.js/2022/01/18/vueJs-05.html" title="[Vue.js] Vue의 핵심 기능인 컴포넌트는 무엇이고 어떻게 사용할까?">[Vue.js] Vue의 핵심 기능인 컴포넌트는 무엇이고...</a><a class="next" href="/jekyll-theme-yat/nuxt.js/2022/01/24/nuxtJs-01.html" title="[Nuxt.js] 공식문서로 빠르게 배우기 1탄 - 시작하기">[Nuxt.js] 공식문서로 빠르게 배우기 1탄 -...</a>
+</div>
+<div class="post-related">
+      <div>Related Articles</div>
+      <ul>
+        <li><a class="post-link" href="/jekyll-theme-yat/three.js/2021/10/28/three.js-chapter01.html" title="[Nuxt.js] 공식문서로 빠르게 배우기 1탄 - 시작하기">01.Three.js 이해</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/vue.js/2022/01/10/vueJs-01.html" title="[Nuxt.js] 공식문서로 빠르게 배우기 1탄 - 시작하기">[Vue.js] 사전 필수요소</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/jekyll/2018/12/07/welcome-to-jekyll.html" title="[Nuxt.js] 공식문서로 빠르게 배우기 1탄 - 시작하기">example</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/git/2022/01/26/git-05.html" title="[Nuxt.js] 공식문서로 빠르게 배우기 1탄 - 시작하기">[Git] 개발자들은 Git으로 어떻게 협업할까? 워크플로우 배워보자</a></li>
+</ul>
+    </div>
+<div class="post-comments"></div></section>
+</div>
+<script>
+  new Zooming().listen('img')
+</script>
+
+  </section>
+  <section class="sidebar" style="margin-left: 15px;">
+    <!-- Get sidebar items --><style type="text/css" media="screen">
+.post-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+</style>
+
+<div class="post-menu">
+  <div class="post-menu-title">TOC</div>
+  <div class="post-menu-content"></div>
+</div>
+
+<script>
+  function generateContent() {
+    var menu = document.querySelector(".post-menu");
+    var menuContent =  menu.querySelector(".post-menu-content");
+    var headings = document.querySelector(".post-content").querySelectorAll("h2, h3, h4, h5, h6");
+
+    // Hide menu when no headings
+    if (headings.length === 0) {
+      return menu.style.display = "none";
+    }
+
+    // Generate post menu
+    var menuHTML = '';
+    for (var i = 0; i < headings.length; i++) {
+      var h = headings[i];
+      menuHTML += (
+        '<li class="h-' + h.tagName.toLowerCase() + '">'
+        + '<a href="#h-' + h.getAttribute('id') + '">' + h.textContent + '</a></li>');
+    }
+
+    menuContent.innerHTML = '<ul>' + menuHTML + '</ul>';
+
+    // The header element
+    var header = document.querySelector('header.site-header');
+
+    function doMenuCollapse(index, over_items) {
+      var items = menuContent.firstChild.children;
+
+      if (over_items == undefined) {
+        over_items = 20;
+      }
+
+      if (items.length < over_items) {
+        return;
+      }
+
+      var activeItem = items[index];
+      var beginItem = activeItem
+      var endItem = activeItem
+      var beginIndex = index;
+      var endIndex = index + 1;
+      while (beginIndex >= 0
+        && !items[beginIndex].classList.contains('h-h2')) {
+        beginIndex -= 1;
+      }
+      while (endIndex < items.length
+        && !items[endIndex].classList.contains('h-h2')) {
+        endIndex += 1;
+      }
+      for (var i = 0; i < beginIndex; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+      for (var i = beginIndex + 1; i < endIndex; i++) {
+        item = items[i]
+        // if (!item.classList.contains('h-h2')) {
+          item.style.display = '';
+        // }
+      }
+      for (var i = endIndex; i < items.length; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+    }
+
+    // Init menu collapsed
+    doMenuCollapse(-1);
+
+    // Active the menu item
+    window.addEventListener('scroll', function (event) {
+      var lastActive = menuContent.querySelector('.active');
+      var changed = true;
+      var activeIndex = -1;
+      for (var i = headings.length - 1; i >= 0; i--) {
+        var h = headings[i];
+        var headingRect = h.getBoundingClientRect();
+        var headerRect = header.getBoundingClientRect();
+        var headerTop = Math.floor(headerRect.top);
+        var headerHeight = Math.floor(headerRect.height);
+        var headerHeight = headerTop + headerHeight + 20;
+        if (headingRect.top <= headerHeight) {
+          var id = 'h-' + h.getAttribute('id');
+          var a = menuContent.querySelector('a[href="#' + id  + '"]');
+          var curActive = a.parentNode;
+          if (curActive) {
+            curActive.classList.add('active');
+            activeIndex = i;
+          }
+          if (lastActive == curActive) {
+            changed = false;
+          }
+          break;
+        }
+      }
+      if (changed) {
+        if (lastActive) {
+          lastActive.classList.remove('active');
+        }
+        doMenuCollapse(activeIndex);
+      }
+      event.preventDefault();
+    });
+  }
+  generateContent();
+</script>
+</section>
+</div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jekyll-theme-yat/"></data>
+
+  <div class="wrapper">
+    <div class="site-footer-inner">
+<div>
+<span class="copyleft">©</span> 2022 Seo SeongSik. All rights reserved</div>
+      <div>Go to <a title="github" href="https://github.com/s-seongsik">Github</a>
+</div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

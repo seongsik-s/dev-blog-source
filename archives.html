@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Archives | IT 데이터베이스</title>
+<meta name="generator" content="Jekyll v4.2.2">
+<meta property="og:title" content="Archives">
+<meta name="author" content="GitHub User">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.">
+<meta property="og:description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.">
+<link rel="canonical" href="/jekyll-theme-yat/archives.html">
+<meta property="og:url" content="/jekyll-theme-yat/archives.html">
+<meta property="og:site_name" content="IT 데이터베이스">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="Archives">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"GitHub User"},"description":"Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.","headline":"Archives","url":"/jekyll-theme-yat/archives.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-noto-sans@0.0.72/index.min.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/main.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/image-popup.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="/jekyll-theme-yat/assets/js/main.js"></script>
+  <script src="/jekyll-theme-yat/assets/js/zooming.min.js"></script><link type="application/atom+xml" rel="alternate" href="/jekyll-theme-yat/feed.xml" title="IT 데이터베이스">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+<!-- and it's easy to individually load additional languages -->
+<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/go.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Init highlight js
+document.addEventListener('DOMContentLoaded', function(event) {
+  var els = document.querySelectorAll('pre code')
+
+  function addLangData(block) {
+    var outer = block.parentElement.parentElement.parentElement;
+    var lang = block.getAttribute('data-lang');
+    for (var i = 0; i < outer.classList.length; i++) {
+      var cls = outer.classList[i];
+      if (cls.startsWith('language-')) {
+        lang = cls;
+        break;
+      }
+    }
+    if (!lang) {
+      cls = block.getAttribute('class');
+      lang = cls ? cls.replace('hljs ', '') : '';
+    }
+    if (lang.startsWith('language-')) {
+      lang = lang.substr(9);
+    }
+    block.setAttribute('class', 'hljs ' + lang);
+    block.parentNode.setAttribute('data-lang', lang);
+  }
+
+  function addBadge(block) {
+    var enabled = ('true' || 'true').toLowerCase();
+    if (enabled == 'true') {
+      var pre = block.parentElement;
+      pre.classList.add('badge');
+    }
+  }
+
+  function handle(block) {
+    addLangData(block);
+    addBadge(block)
+    hljs.highlightBlock(block);
+  }
+
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i];
+    handle(el);
+  }
+});
+</script>
+
+<style>
+  /* code language badge */
+  pre.badge::before {
+    content: attr(data-lang);
+    color: #fff;
+    background-color: #ff4e00;
+    padding: 0 .5em;
+    border-radius: 0 2px;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 32px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+  }
+
+  /* fix wrong badge display for firefox browser */
+  code > table pre::before {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="site-header " role="banner">
+
+  <div class="wrapper">
+    <div class="site-header-inner">
+<span class="site-brand"><a class="site-brand-inner" rel="author" href="/jekyll-theme-yat/">
+  <img class="site-favicon" title="IT 데이터베이스" src="" onerror="this.style.display='none'">
+  IT 데이터베이스
+</a>
+</span><nav class="site-nav">
+          <input type="checkbox" id="nav-trigger" class="nav-trigger">
+          <label for="nav-trigger">
+            <span class="menu-icon">
+              <svg viewbox="0 0 18 15" width="18px" height="15px">
+                <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+              </svg>
+            </span>
+          </label>
+
+          <div class="trigger">
+<a class="page-link" href="/jekyll-theme-yat/about.html">ABOUT</a><a class="page-link" href="/jekyll-theme-yat/archives.html">ARCHIVES</a><a class="page-link" href="/jekyll-theme-yat/categories.html">CATEGORIES</a><a class="page-link" href="/jekyll-theme-yat/">HOME</a><a class="page-link" href="/jekyll-theme-yat/tags.html">TAGS</a>
+
+
+
+
+
+
+
+
+
+<span class="page-link">
+
+
+
+<div id="google_translate_element" style="display: none;">
+</div>
+
+<span class="ct-language">
+  <ul class="list-unstyled ct-language-dropdown">
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="en">
+          
+          <img src="https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png" title="English">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="fr">
+          
+          <img src="https://cdn.countryflags.com/thumbs/france/flag-400.png" title="French">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="zh-CN">
+          
+          <img src="https://cdn.countryflags.com/thumbs/china/flag-400.png" title="Chinese(Simple)">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ja">
+          
+          <img src="https://cdn.countryflags.com/thumbs/japan/flag-400.png" title="Japanese">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ko">
+          
+          <img src="https://cdn.countryflags.com/thumbs/south-korea/flag-400.png" title="Korean">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ru">
+          
+          <img src="https://cdn.countryflags.com/thumbs/russia/flag-400.png" title="Russian">
+          
+        </a>
+      </li>
+    
+  </ul>
+</span>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false,
+    layout: google.translate.TranslateElement.InlineLayout.VERTICAL
+  }, 'google_translate_element');
+
+  // Links to cross-origin destinations are unsafe
+  var gll = document.getElementsByClassName('goog-logo-link')[0];
+  if (gll) {
+    gll.setAttribute('rel', 'noopener');
+  }
+
+  function restoreLang() {
+    var iframe = document.getElementsByClassName('goog-te-banner-frame')[0];
+    if (!iframe) return;
+
+    var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+    var restore_el = innerDoc.getElementsByTagName("button");
+
+    for (var i = 0; i < restore_el.length; i++) {
+      if (restore_el[i].id.indexOf("restore") >= 0) {
+        restore_el[i].click();
+        var close_el = innerDoc.getElementsByClassName("goog-close-link");
+        close_el[0].click();
+        return;
+      }
+    }
+  }
+
+  function triggerHtmlEvent(element, eventName) {
+    var event;
+    if (document.createEvent) {
+      event = document.createEvent('HTMLEvents');
+      event.initEvent(eventName, true, true);
+      element.dispatchEvent(event);
+    } else {
+      event = document.createEventObject();
+      event.eventType = eventName;
+      element.fireEvent('on' + event.eventType, event);
+    }
+  }
+
+  var googleCombo = document.querySelector("select.goog-te-combo");
+  var langSelect = document.querySelector('.ct-language');
+  langSelect.addEventListener('click', function(event) {
+    if (!event.target) {
+      return;
+    }
+
+    var selected = document.querySelector('.ct-language .ct-language-selected');
+    if (selected) {
+      selected.classList.remove('ct-language-selected');
+    }
+
+    var target = event.target;
+    while (target && target !== langSelect ) {
+      if (target.matches('.lang-select')) {
+        break;
+      }
+      target = target.parentElement;
+    }
+
+    if (target && target.matches('.lang-select')) {
+      var lang = target.getAttribute('data-lang');
+      if (googleCombo.value == lang) {
+        restoreLang();
+      } else {
+        target.parentElement.classList.add('ct-language-selected');
+        googleCombo.value = lang;
+        triggerHtmlEvent(googleCombo, 'change');
+      }
+    }
+
+    event.preventDefault();
+  });
+}
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</span>
+</div>
+        </nav>
+</div>
+  </div>
+</header>
+
+<script>
+  function initHeader() {
+    var lastScrollY = getScrollPos().y;
+    var documentElement = document.documentElement;
+
+    function storeScrollData() {
+      var y = getScrollPos().y;var scrollStatus = "";
+
+      if (y <= 0) {
+        scrollStatus = "top";
+      } else if ((window.innerHeight + y) >= document.body.offsetHeight) {
+        scrollStatus = "bottom";
+      } else {
+        var isScrollDown = (y - lastScrollY > 0) ? true : false;
+        scrollStatus = isScrollDown ? "down" : "up";
+      }
+
+      lastScrollY = y;
+      documentElement.setAttribute("data-scroll-status", scrollStatus);
+    }
+
+    window.addEventListener('scroll', function(e) {
+      storeScrollData();
+    });
+
+    storeScrollData();
+  }
+  document.addEventListener('DOMContentLoaded', initHeader);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  function hashLocate(hashValue) {
+    hashValue = hashValue.replace(/^.*#h-/, '');
+    hashValue = decodeURIComponent(hashValue);
+    var element = document.getElementById(hashValue);
+
+    if (!element) {
+      return;
+    }
+
+    var header = document.querySelector('header.site-header');
+    var headerRect = header.getBoundingClientRect();
+    var headerTop = Math.floor(headerRect.top);
+    var headerHeight = Math.floor(headerRect.height);
+    var scrollPos = getScrollPos();
+    var offsetY = element.offsetTop - (headerTop + headerHeight + 20);
+
+    if (offsetY == scrollPos.y) {
+      return;
+    }
+
+    if (headerTop == 0  && offsetY > scrollPos.y) {
+      offsetY += headerHeight + 2;
+    } else if (headerTop < 0  && offsetY < scrollPos.y) {
+      offsetY -= headerHeight - 2;
+    }
+
+    smoothScrollTo(offsetY);
+  }
+
+  // The first event occurred
+  window.addEventListener('load', function(event) {
+    if (window.location.hash) {
+      hashLocate(window.location.hash);
+    }
+  });
+
+  // The first event occurred
+  window.addEventListener('click', function(event) {
+    if (event.target.tagName.toLowerCase() == 'a') {
+      hashLocate(event.target.getAttribute('href'));
+    }
+  });
+</script>
+<div class="theme-toggle">
+  <input type="checkbox" id="theme-switch">
+  <label for="theme-switch">
+    <div class="toggle"></div>
+    <div class="names">
+      <p class="light">Light</p>
+      <p class="dark">Dark</p>
+    </div>
+  </label>
+</div>
+
+
+
+
+<script>
+  (function() {
+    var sw = document.getElementById('theme-switch');
+    var html = document.getElementsByTagName('html')[0];
+    var nightModeOption = ('auto' || 'auto').toLowerCase();
+    var storage = nightModeOption === 'manual'
+        ? localStorage
+        : sessionStorage;
+    var themeData = loadThemeData();
+
+    function saveThemeData(data) {
+      storage.setItem('theme', JSON.stringify(data));
+    }
+
+    function loadThemeData() {
+      var data = storage.getItem('theme');
+      try {
+        data = JSON.parse(data ? data : '');
+      } catch(e) {
+        data = { nightShift: undefined, autoToggleAt: 0 };
+        saveThemeData(data);
+      }
+      return data;
+    }
+
+    function handleThemeToggle(nightShift) {
+      themeData.nightShift = nightShift;
+      saveThemeData(themeData);
+      html.dataset.theme = nightShift ? 'dark' : 'light';
+      setTimeout(function() {
+        sw.checked = nightShift ? true : false;
+      }, 50);
+    }
+
+    function autoThemeToggle() {
+      // Next time point of theme toggle
+      var now = new Date();
+      var toggleAt = new Date();
+      var hours = now.getHours();
+      var nightShift = hours >= 19 || hours <=7;
+
+      if (nightShift) {
+        if (hours > 7) {
+          toggleAt.setDate(toggleAt.getDate() + 1);
+        }
+        toggleAt.setHours(7);
+      } else {
+        toggleAt.setHours(19);
+      }
+
+      toggleAt.setMinutes(0);
+      toggleAt.setSeconds(0);
+      toggleAt.setMilliseconds(0)
+
+      var delay = toggleAt.getTime() - now.getTime();
+
+      // auto toggle theme mode
+      setTimeout(function() {
+        handleThemeToggle(!nightShift);
+      }, delay);
+
+      return {
+        nightShift: nightShift,
+        toggleAt: toggleAt.getTime()
+      };
+    }
+
+    // Listen the theme toggle event
+    sw.addEventListener('change', function(event) {
+      handleThemeToggle(event.target.checked);
+    });
+
+    if (nightModeOption == 'auto') {
+      var data = autoThemeToggle();
+
+      // Toggle theme by local setting
+      if (data.toggleAt > themeData.autoToggleAt) {
+        themeData.autoToggleAt = data.toggleAt;
+        handleThemeToggle(data.nightShift);
+      } else {
+        handleThemeToggle(themeData.nightShift);
+      }
+    } else if (nightModeOption == 'manual') {
+      handleThemeToggle(themeData.nightShift);
+    } else {
+      var nightShift = themeData.nightShift;
+      if (nightShift === undefined) {
+        nightShift = nightModeOption === 'on';
+      }
+      handleThemeToggle(nightShift);
+    }
+  })();
+</script>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="framework">
+  <section class="main">
+
+     
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  <div class="page-segments">
+  <ul class="page-segments-list">
+    
+    <h2 id="2022" class="segment-name">2022</h2>
+      
+      
+        
+        <li> 
+<span class="post-meta">Jun 07, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/blockchain/2022/06/07/blockchain-02.html">
+    [블록체인] 기본 개념 - 스마트 컨트랙트
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Jun 06, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/blockchain/2022/06/06/blockchain-01.html">
+    [블록체인] 기본 개념 - DApp이란?
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">May 17, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/typescirpt/2022/05/17/typescript-02.html">
+    [TypeScript] 인터페이스 이해하기
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">May 12, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/javascript/2022/05/12/javascript-14.html">
+    [Javascript] 함수형 프로그래밍 - go, pipe, curry
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">May 09, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/react/2022/05/09/react-03.html">
+    [React] 엘리먼트, 컴포넌트, 인스턴스 개념
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">May 08, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/react/2022/05/08/gatsby-01.html">
+    [Gatsby] 정적 웹사이트 설치부터 배포까지
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">May 02, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/git/2022/05/02/git-09.html">
+    [Git] 파일 및 폴더명 대소문자 변경 구분하기
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Apr 27, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/typescirpt/2022/04/27/typescript-01.html">
+    [TypeScript] TypeScript 시작하기
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Apr 21, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/react/2022/04/21/react-02.html">
+    [React] 라이프 사이클 메서드란?
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Apr 19, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/react/2022/04/19/react-01.html">
+    [React] JSX(JavaScript XML)란?
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Apr 14, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/javascript/2022/04/14/javascript-13.html">
+    [Javascript] 함수형 사고방식
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Apr 13, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/javascript/2022/04/13/javascript-12.html">
+    [Javascript] ES6의 Spread 연산자 &amp; Rest 파라미터
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Apr 11, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/javascript/2022/04/11/javascript-11.html">
+    [Javascript] ES6의 map, filter, reduce 사용
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Apr 11, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/javascript/2022/04/11/javascript-10.html">
+    [Javascript] ES6 순회와 이터러블&amp;이터레이터
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Mar 29, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/node.js/2022/03/29/Node.js-07.html">
+    [Node.js] 사용자 인증 (1) - JSON Web Tokens이란?
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Mar 23, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/nuxt.js/2022/03/23/nuxtJs-04.html">
+    [Vue.js] Vuetify 그리드 시스템 (1) - 레이아웃
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Mar 09, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/javascript/2022/03/09/javascript-09.html">
+    [Javascript] DOM의 개념
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Mar 07, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/javascript/2022/03/07/javascript-08.html">
+    [Javascript] 이벤트 버블링, 이벤트 캡쳐링, 이벤트 위임
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Mar 01, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/git/2022/03/01/git-08.html">
+    [Git] 요새 누가 GitBook없이 문서 만들어?
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Feb 24, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/javascript/2022/02/24/javascript-07.html">
+    [Javascript] 자바스크립트 비동기처리 (1) - Callback 함수
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Feb 22, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/node.js/2022/02/22/Node.js-06.html">
+    [Node.js] Docker에 Node.js 서버 배포하기
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Feb 20, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/javascript/2022/02/20/javascript-06.html">
+    [Javascript] 자바스크립트의 동작원리
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Feb 16, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/vue.js/2022/02/16/vueJs-06.html">
+    [Vue.js] 라이프사이클 훅 이해하기
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Feb 12, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/node.js/2022/02/12/Node.js-05.html">
+    [Node.js] Express API 서버 구축 - 라우팅 및 모듈화
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Feb 09, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/node.js/2022/02/09/Node.js-04.html">
+    [Node.js] Express API 서버 구축 - 앱 구조화 및 기본 라우팅
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Feb 09, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/node.js/2022/02/09/Node.js-03.html">
+    [Node.js] Express API 서버 구축 - 설치 및 실행
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Feb 08, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/git/2022/02/08/git-07.html">
+    [Git] .gitignore로 필요한 것만 관리하자
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Feb 07, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/javascript/2022/02/07/javascript-05.html">
+    [Javascript]] this는 어떻게 동작할까?
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Feb 07, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/git/2022/02/07/git-06.html">
+    [Git] Software 버전 관리 규칙, 어떻게 번호를 할당하는거야?
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Feb 01, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/nuxt.js/2022/02/01/nuxtJs-03.html">
+    [Nuxt.js] 공식문서로 빠르게 배우기 3탄 - Github에 정적 사이트 빌드 및 배포하기
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Jan 26, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/git/2022/01/26/git-05.html">
+    [Git] 개발자들은 Git으로 어떻게 협업할까? 워크플로우 배워보자
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Jan 25, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/nuxt.js/2022/01/25/nuxtJs-02.html">
+    [Nuxt.js] 공식문서로 빠르게 배우기 2탄 - 디렉토리 구조 및 구성파일 설정
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Jan 24, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/nuxt.js/2022/01/24/nuxtJs-01.html">
+    [Nuxt.js] 공식문서로 빠르게 배우기 1탄 - 시작하기
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Jan 19, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/web/2022/01/19/web-Autorization.html">
+    [Web] 서버 인증방식 Cookie, Session, Token
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Jan 18, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/vue.js/2022/01/18/vueJs-05.html">
+    [Vue.js] Vue의 핵심 기능인 컴포넌트는 무엇이고 어떻게 사용할까?
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Jan 17, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/vue.js/2022/01/17/vueJs-04.html">
+    [Vue.js] Vue.js 문법 총정리
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Jan 14, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/vue.js/2022/01/14/vueJs-03.html">
+    [Vue.js] Vuex의 이해와 컨셉
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Jan 10, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/vue.js/2022/01/10/vueJs-02.html">
+    [Vue.js] Vue CLI로 프로젝트 생성하기
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Jan 10, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/vue.js/2022/01/10/vueJs-01.html">
+    [Vue.js] 사전 필수요소
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Jan 06, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/eslint/2022/01/06/eslint-03.html">
+    [ESLint] 포맷팅에 특화된 프리티어(Prettier)
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Jan 06, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/eslint/2022/01/06/eslint-02.html">
+    [ESLint] Style-Guide 설정
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Jan 05, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/eslint/2022/01/05/eslint-01.html">
+    [ESLint] ESLint 시작하기
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Jan 02, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/javascript/2022/01/02/javascript-04.html">
+    [ECMAScript6] let, const 키워드
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Jan 02, 2022</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/javascript/2022/01/02/javascript-03.html">
+    [Javascript] Scope 개념 확실히 알고 넘어가자
+  </a>
+</span> </li>
+        
+      
+    
+    <h2 id="2021" class="segment-name">2021</h2>
+      
+      
+        
+        <li> 
+<span class="post-meta">Dec 28, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/babel/2021/12/28/Babel-03.html">
+    [Babel] Webpack에 통합하여 사용하기
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Dec 23, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/babel/2021/12/23/Babel-02.html">
+    [Babel] 바벨의 프레셋(Presets) 사용
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Dec 23, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/babel/2021/12/23/Babel-01.html">
+    [Babel] 바벨의 이해와 동작원리 파악하기
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Dec 21, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/web/2021/12/21/Web-SSR-CSR.html">
+    [Web] 서버 사이드 렌더링(SSR)과 클라이언트 사이드 렌더링(CSR) 개념
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Dec 17, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/webpack/2021/12/17/Webpack-05.html">
+    [Webpack] plugin
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Dec 15, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/webpack/2021/12/15/Webpack-04.html">
+    [Webpack] loader (2)
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Dec 15, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/webpack/2021/12/15/Webpack-03.html">
+    [Webpack] loader (1)
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Dec 14, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/webpack/2021/12/14/Webpack-02.html">
+    [Webpack] entry, output
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Dec 13, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/webpack/2021/12/13/Webpack-01.html">
+    [Webpack] 시작하기
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Dec 12, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/git/2021/12/12/git-04.html">
+    [Git] Git 되돌리기(undo)
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Dec 08, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/javascript/2021/12/08/javascript-02.html">
+    [Javascript] ES2015(ES6) 표준 모듈 시스템 (export, import)
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Dec 08, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/node.js/2021/12/08/Node.js-02.html">
+    [Node.js] 시작하기
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Dec 07, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/javascript/2021/12/07/javascript-01.html">
+    [Javascript] ECMAScript?, ES6? 개념 이해
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Dec 07, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/node.js/2021/12/07/Node.js-01.html">
+    [Node.js] 개념 이해하기
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Dec 06, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/tdd/2021/12/06/TDD.html">
+    TDD란 무엇이고, 왜 많은 기업에서 TDD 방식을 선호하지 않을까?
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Dec 04, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/git/2021/12/04/git-03.html">
+    [Git] branch의 이해와 사용
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Dec 03, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/git/2021/12/03/git-02.html">
+    [Git] Github 원격저장소와 로컬저장소 연동하기
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Dec 02, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/git/2021/12/02/git-01.html">
+    [Git] Git 이해하기
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Dec 01, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/python/2021/12/01/python-scheduler-windows.html">
+    [python] Windows 스케줄러 기능으로 파이썬 스크립트 작업 등록하기
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Nov 30, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/python/2021/11/30/python-scheduler.html">
+    [python] Apscheduler vs Cron Job
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Nov 04, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/cloud/2021/11/04/cloud.html">
+    네이버 클라우드에 putty, filezila 접속하기
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Nov 03, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/python/2021/11/03/python-async.html">
+    [python] 동기/비동기 프로그래밍의 이해
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Oct 28, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/three.js/2021/10/28/three.js-chapter01.html">
+    01.Three.js 이해
+  </a>
+</span> </li>
+        
+      
+        
+        <li> 
+<span class="post-meta">Oct 21, 2021</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/web/2021/10/21/web-cors.html">
+    [Web] CORS란 무엇이고, REST API에 어떻게 사용되는가?
+  </a>
+</span> </li>
+        
+      
+    
+    <h2 id="2018" class="segment-name">2018</h2>
+      
+      
+        
+        <li> 
+<span class="post-meta">Dec 07, 2018</span>
+<span>
+  <a class="post-link" href="/jekyll-theme-yat/jekyll/2018/12/07/welcome-to-jekyll.html">
+    example
+  </a>
+</span> </li>
+        
+      
+    
+  </ul>
+</div>
+
+
+  </section>
+  <section class="sidebar" style="margin-left: 15px;">
+    <!-- Get sidebar items -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="common-list">
+  <ul>
+    <li>
+      <a href="/jekyll-theme-yat/index.html">
+        All<span>69</span>
+      </a>
+    </li>
+
+    
+      <li>
+        <a href="/jekyll-theme-yat/archives.html#h-2018">
+          2018 <span>1</span>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/jekyll-theme-yat/archives.html#h-2021">
+          2021 <span>24</span>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/jekyll-theme-yat/archives.html#h-2022">
+          2022 <span>44</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+</section>
+</div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jekyll-theme-yat/"></data>
+
+  <div class="wrapper">
+    <div class="site-footer-inner">
+<div>
+<span class="copyleft">©</span> 2022 Seo SeongSik. All rights reserved</div>
+      <div>Go to <a title="github" href="https://github.com/s-seongsik">Github</a>
+</div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
