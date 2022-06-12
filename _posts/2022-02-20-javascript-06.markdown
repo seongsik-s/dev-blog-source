@@ -1,0 +1,195 @@
+---
+layout: post
+title: "[Javascript] 자바스크립트의 동작원리" 
+tags: [Javascript, ES6]
+categories: [Javascript]
+banner:
+  image: /assets/images/banners/es6.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## **시작으로**
+
+***
+
+프론트엔드 개발을 하고있어서 자바스크립트를 매일 다룬다. 개발을 하다보면 호출 순서, 출력 결과 등 예상되는 결과값이 나오지 않아 당황했던 적이 있었다.  
+앞으로, 고급개발자가 되려면 동작원리에 대해 정확하게 알아야 되겠다고 생각했다.
+
+감사하게도 많은 개발자 선배들이 자바스크립트 동작원리에 대해 정리를 해놨기 때문에 그들의 지식을 습득할 수 있었다.
+
+목차로는
+* 자바스크립트 엔진
+* V8
+* 자바스크립트 런타임
+* Call Stack과 Memory Heap
+
+
+<br>
+
+## **자바스크립트 엔진**
+
+***
+
+자바스크립트 엔진의 대표적인 예는 `Google V8` 엔진이다. `V8`은 Chrome과 node.js에서 사용한다.
+
+밑의 사진은 자바스크립트의 엔진 구성요소를 나타내고있다.
+
+![Desktop View](/assets/images/banners/engine.png)  
+
+* Memory Heap : 메모리 할당이 일어나는 곳
+* Call Stack : 호출 스택이 쌓이는 곳
+
+<br>
+
+## **V8**
+
+***
+
+구글이 주도하여 `C++`로 작성된 고성능의 자바스크립트 & 웹 어셈블리 언어이다. `ECMAScript`와 `Web Assembly` 표준에 맞게 구현하였다.  
+V8엔진이 자바스크립트 코드를 어떻게 실행시키는지 찾아봤는데 어머나.. 긴 시간이 필요할 것 같아서 간단하게 정리하고 넘어간다. (다음 주말에 공부해보자)
+
+![Desktop View](/assets/images/banners/v8-engine.png)  
+
+* V8은 작성한 자바스크립트 코드를 가져와서 `파서(Parser)`에게 넘긴다.
+* `Parser`는 파싱을 통해 `AST(Abstract Syntax Tree), 추상 구문 트리`로 변환시킨다.
+* `AST`를 `Ignition`에게 넘긴다. `Ignition`는 자바스크립트를 바이트 코드(Bytecode)로 변환하는 인터프리터이다. 즉, AST를 인터프리터를 통해 byte code로 변환(Ignition)한다.
+* 그리고 `bytecode`를 실행함으로써 작성된 소스 코드가 실제로 작동하게 된다.
+* 그 중 자주 사용되는 코드는 `TurboFan`으로 보내진다.
+* `TurboFan`는 보내진 코드를 `Optimized Machine Code` 즉, 최적화된 코드로 컴파일하여 사용한다.
+
+<br>
+
+## **자바스크립트 런타임**
+
+***
+
+자바스크립트는 엔진 밖에서도 자바스크립에 관여하는 요소들이 있다. Web API, callback Queue, Event Loop 등  
+`런타임`이란 특정 언어로 만든 프로그램들을 실행할 수 있는 환경을 말한다. 자바스크립트 런타임은 `크롬과 같은 브라우저`나 `Node.js`가 있다.
+
+![Desktop View](/assets/images/banners/engine-runtime.png)  
+
+<br>
+
+### **Web API**
+
+자바스크립트에서 자주 사용되는 setTimeout, DOM, AJAX 등과같은 API들은 `브라우저에서 제공`하는 API 입니다. 이들을 `Web API`라고 부릅니다.
+
+### **Callback Queue(Task Queue)**
+
+자바스크립트에서 비동기로 호출되는 함수들은 Call Stack에 쌓이지 않고 `Callback Queue(Task Queue)`로 보내진다.
+
+`Callback Queue(Task Queue)`는 Event 실행 관리를 하기 위해 사용되는 Queue이다.
+* 자바스크립트의 런타임 환경의 Callback Queue는 처리할 메시지 목록과 실행할 콜백 함수들의 리스트이다. 이벤트 리스너, DOM 이벤트, AJAX, setTimeout과 같은 비동기 함수는 Web API를 호출하며 Web API는 콜백 함수를 Callback Queue에 밀어 넣는다.
+* Callback Queue는 대기하다가 Call Stack이 비어 있으면 이벤트 루프를 돌려 콜백함수를 Stack에 넣는다. 이벤트 루프의 기본 역할은 큐와 스택 두 부분을 지켜보고 있다가 스택이 비는 시점에 콜백을 실행시켜 주는 것이다.
+* 브라우저에서 이벤트가 발생할 때마다 메시지가 추가되고 이벤트 리스너가 첨부된다. 콜백 함수의 호출은 호출 스택의 초기 프레임으로 사용되며 자바스크립트가 싱글 스레드 이므로 스택에 대한 모든 호출이 반환될 때까지 메세지 폴링 및 처리가 중지 된다. 동기식 함수 호출은 이와 반대로 새 호출 프레임을 스택에 추가한다.
+
+```javascript
+console.log('1')
+setTimeout(function(){console.log('2')}, 1000)
+console.log('3')
+```
+
+![image](https://user-images.githubusercontent.com/52439201/154839213-1d44aae5-6cd5-46b0-af94-7fcd72c0e56b.png)
+
+
+위의 코드를 실행해보면 출력 순서가 `"1" -> "2" -> "3"`이 아닌 `"1" -> "3" -> "2"`로 출력된다.
+아 당연히 `console.log('2')`는 1초 뒤에 출력되잖아요! 그럼 0초로 하면 어떻게 될까?
+
+![image](https://user-images.githubusercontent.com/52439201/154839276-13d1bfab-cd4b-4601-972c-2edbfb0b4ba8.png)
+
+위와 마찬가지로 `"1" -> "3" -> "2"` 순서로 출력되었다.
+
+그 이유는, 비동기로 호출되는 함수들은 `Call Stack`에 쌓이지 않고 `Callback Queue(Task Queue)`에 보내진다. 그리고 `Call Stack`이 비어있으면 콜백함수를 `Call Stack`에 넣는다. 이러한 원리를 이해하는 건 굉장히 중요하다. 
+
+<br>
+
+<br>
+
+## **Call Stack과 Memory Heap**
+
+***
+
+자바스크립트 엔진이 구동되면서 코드를 읽고 실행하는 과정에서 아주 중요한 두 가지 요소가 있다.
+* 정보(변수, 함수 등)들을 저장하는 것
+* 현재 실행되고 있는 코드를 트래킹하는 작업
+
+여기서 정보를 저장하는 공간이 `Memory Heap`이고, 실행 중인 코드를 트래킹하는 공간이 `Call Stack`이다.
+
+<br>
+
+### **Call Stack**
+
+개발자라면 기본으로 알고 있는 상식이 `자바스크립트는 싱클 쓰레드 기반 언어`라는 것이다.   
+즉, `Call Stack`이 하나이다. 따라서 한 번에 여러 개의 작업을 동시에 할 수 없으며 한 번에 한 작업만 처리할 수 있다.
+
+`Call Stack`은 메모리에 존재하는 공간 중 하나로, 코드를 읽어내려가면서 수행해야 할 작업들을 밑에서부터 하나씩 쌓는다.
+그리고 `Memory Heap`에서 필요한 정보들을 찾아서 작업을 수행하는 공간이다.
+
+![Desktop View](/assets/images/banners/callstack.png)  
+
+<br>
+
+아래의 예제 코드를 실행시켜보자. 
+
+```javascript
+function multiply(x, y) {
+    return x * y;
+}
+function printSquare(x) {
+    var s = multiply(x, x);
+    console.log(s);
+}
+printSquare(5);
+```
+1. 처음 자바스크립트 엔진이 코드를 실행하는 시점에서는 `Call Stack`이 비어있다
+2. `printSquare(5);`이 가장 먼저 실행되므로 `Call Stack`에 `push(쌓인다)`된다
+3. 다음으로 `multiply(x, x);`이 실행되므로 `printSquare(5);`위에 `push(쌓인다)`된다
+4. `multiply(x, x);`은 실행이 완료되어 `pop(빠진다)`되고 `console.log(s);`이 실행되므로 `push(쌓인다)`된다
+5. 다음으로, `console.log(s);`이 완료되어 `pop(빠진다)`된다
+6. `printSquare(5);` 이 모두 완료되어 `pop(빠진다)`된다
+
+![Desktop View](/assets/images/banners/call-stack.png)  
+
+<br>
+
+#### **Stack Overflow** 
+
+자바스크립트의 공간은 무제한이 아니고 한정적이기 때문에 `Call Stack`에 한정된 자원이 넘어서 계속 쌓다보면 Stack이 넘치게 된다. 이것을 `Stack Overflow`라 부른다. 
+
+아래의 예제 코드를 실행시켜보자. 
+
+```javascript
+function foo() {
+    foo();
+}
+foo();
+```
+
+자바스크립트 엔진에서 위의 코드를 실행하게되면 `Call Stack`에 무제한으로 foo()를 재귀 호출하게 된다.
+그렇게 되면 아래와 같이 `Call Stack`이 넘치게 되는 `Stack Overflow`이 발생하게 되면서 에러가 난다. 
+
+![Desktop View](/assets/images/banners/maximum-call-stack.png)
+
+![image](https://user-images.githubusercontent.com/52439201/154840516-4fa1d2d4-2fad-47a9-976a-8b1cfc522ec8.png)
+
+<br>
+
+### **Memory Heap**
+
+메로리 생존주기는 프로그래밍 언어와 관계없이 비슷하다.
+
+1. 할당
+2. 사용
+3. 제거
+
+두 번째 부분은 모든 언어에서 명시적으로 사용한다. 하지만 첫 번째와 세 번째는 저수준 언어에서는 명시적이며 자바스크립트와 같은 대부분의 고수준 프로그래밍 언어에서는 암묵적으로 작동한다.
+
+`Memory Heap`은 변수, 함수, 호출 등의 작업들이 발생하여 1~3번 단계가 진행되는 공간이다. 
+쉽게 말해,`'Memory Heap'`이라는 이름의 창고가 있고 변수나 함수들은 겉에 이름이 라벨지로 붙어있는 박스들인거다.
+
+![Desktop View](/assets/images/banners/memoryheap.png)

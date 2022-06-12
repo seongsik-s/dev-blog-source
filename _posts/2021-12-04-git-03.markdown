@@ -1,0 +1,224 @@
+---
+layout: post
+title: "[Git] branch의 이해와 사용"
+tags: [Git, Github]
+categories: [Git]
+banner:
+  image: /assets/images/banners/git.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## **브랜치(branch)란?**  
+
+***
+
+프로젝트를 진행할 때 개발자들은 동일한 소스코드를 같이 공유하고 작업하게 된다. 같이 작업을 하다보면 어떤 개발자는 새로운 기능을 추가하고 또 다른 개발자는 버그를 잡아내거나 합니다.
+이와 같이 동일한 소스코드를 공유하더라도 하는 업무는 다르기 때문에 각기 다른 버전의 코드가 만들어 질 수 밖에 없다.
+
+이럴 때 사용하는게 바로 `브랜치(branch)` 기능이다.   
+`브랜치(branch)`는 여러 개발자가 협업할 때 각기 다른 버전관리를 할 수 있도록 해준다. 각자 독립적인 작업 영역(저장소) 안에서 마음대로 소스코드를 생성 및 변경한다. 이렇게 분리된 여러 작업 내용들을 원래의 버전과 비교하여 `병합(merge)`하게 된다.
+
+<br>
+
+### **브랜치는 메인 브랜치를 복제한다.**
+
+처음 저장소를 생성하면, Git은 `master`라는 이름의 브랜치를 만들어 준다. 이걸 메인 브랜치라고 부르며, 새로운 브랜치를 생성하게되면 메인브랜치의 최신 소스코드를 복제하여 가져오게 된다.
+
+![Desktop View](/assets/images/banners/branch.png){: style="width:1000px"}    
+[이미지 출처](https://backlog.com/git-tutorial/kr/stepup/stepup1_1.html)
+
+
+<br>
+
+## **브랜치의 종류**
+
+***
+
+프로젝트 버전관리를 효과적으로 하기 위해선, 협업하는 개발자들과 어떻게 브랜치를 생성할 것이며 어떻게 통합할 것인지 미리 정하고 작업한다.
+브랜치는 크게 2가지로 나누어 관리한다.
+
+<br>
+
+### **통합 브랜치(Integration Branch)**
+
+통합 브랜치는 언제든 배포할 수 있는 버전을 유지해야 하는 브랜치이다. 따라서, 미완성되거나 불안정한 상태의 소스코드가 있으면 안된다.
+다시 말해, 늘 `안정적인 상태`를 유지해야 한다는 것이다. 여기서 `안정적인 상태`란 애플리케이션의 모든 기능이 정상적으로 동작하는 상태를 말한다.
+
+따라서, 새로운 기능을 추가한다거나 버그를 수정할 때 통합 브랜치에서 작업하는 것이 아니라 `토픽 브랜치`를 따로 만들어서 작업을 해야 한다.
+
+일반적으로 저장소를 처음 생성할 때 `master`라는 이름의 브랜치가 생성되는데 이것을 통합 브랜치로 사용한다.
+
+<br>
+
+### **토픽 브랜치(Topic Branch)**
+
+`토픽 브랜치`란 기능추가, 개선, 수정 등의 Task 작업을 진행할 때 사용하는 브랜치이다. 여러 개의 작업을 동시에 진행할 때에는, 그 수만큼 토픽 브랜치를 생성할 수 있다.
+
+`토픽 브랜치`는 `통합 브랜치`의 최신 소스코드를 복제하여 만들어진다. `토픽 브랜치`의 작업이 완료되면 `통합 브랜치`에 병합한다. 이러한 `토픽 브랜치` 방식을 `Feature Branch`라고도 부른다.
+
+![Desktop View](/assets/images/banners/topicbranch.png){: style="width:1000px"}
+[이미지 출처](https://backlog.com/git-tutorial/kr/stepup/stepup1_1.html)
+
+<br>
+
+## **브랜치 사용하기**
+
+이론보다는 실습이 이해가 빠르므로 간단한 예제를 통해 브랜치 생성부터 병합까지 진행해보자.
+
+일단 저장소 하나를 생성하자. 
+
+![image](https://user-images.githubusercontent.com/52439201/151470177-db134678-dadb-4311-8644-82d9f6a93ab2.png)
+
+<br>
+
+로컬 작업 디렉토리를 하나 생성하고 원격 저장소랑 `연동`한다.
+
+```console
+  $ echo "# branch_test" >> README.md
+  $ git init
+  $ git add README.md
+  $ git commit -m "first commit"
+  $ git remote add origin https://github.com/s-seongsik/branch_test.git
+  $ git push -u origin master
+```
+
+![image](https://user-images.githubusercontent.com/52439201/151471008-04f6f800-cd04-45d0-b436-c4f6c94e1f8f.png)
+
+<br>
+
+### **브랜치 생성하기**
+
+해당 명령어로 로컬 브랜치를 하나 생성할 수 있다.
+
+```console
+$ git branch <branchname>
+```
+
+`add_branch`의 이름으로 만들어보자. 
+
+```
+$ git branch add_branch
+
+$ git branch -v
+  add_branch a9f3bae first commit
+* master     a9f3bae first commit
+```
+
+<br>
+
+### **브랜치 전환하기**
+
+생성한 `add_branch` 브랜치에서 작업하기 위해서는 해당 브랜치로 전환해야한다.  
+전환하게 되면 브랜치 안에 있는 마지막 커밋 내용이 작업 트리에 펼쳐진다. 
+브랜치가 전환되고 이 후의 커밋내용은 전환된 브랜치에 추가된다.  
+브랜치를 전환할 때 사용하는 명령어는 `checkout` 이다.
+
+```console
+$ git checkout  add_branch
+Switched to branch 'add_branch'
+```
+
+Tip) 브랜치 생성과 동시에 전환을 하고 싶다면 `-b` 옵션을 넣으면 된다.
+
+```
+$ git checkout -b add_branch
+```
+
+<br>
+
+### **토픽 브랜치에서 작업하기**
+ 
+add_branch의 내용을 담고있는 `add_file.py`파일을 하나 생성한다. 그리고 해당 로컬 브랜치에 커밋한다.
+
+```console
+$ echo "# add_branch" >> add_file.py
+$ ll
+total 2
+-rw-r--r-- 1 seong 197610 13  1월 28 10:49 add_file.py
+-rw-r--r-- 1 seong 197610 14  1월 28 10:26 README.md
+
+$ git add add_file.py
+$ git commit -m "add_file"
+[add_branch ce2241e] add_file
+ 1 file changed, 1 insertion(+)
+ create mode 100644 add_file.py
+```
+
+<br>
+
+### **로컬 토픽 브랜치를 원격 저장소에 푸시하기**
+
+새로 만든 토픽 브랜치에 어려번 커밋을 하게 되더라도 결국 로컬에만 저장된다. 원격 저장소에 `백업` 및 `팀 구성원들이 작업 내용과 진도`를 확일할 수 있도록 `push`한다.
+원격 저장소에는 `add_branch` 브랜치가 없기 때문에 `git push -u origin <branchname>`으로 `push`한다.
+여기서 `-u (--set-upstream)` 옵션은 로컬 기능 개발 브랜치와 원격 저장소와 같은 이름의 브랜치를 연결하는 역할을 한다. 
+쉽게말해, 로컬 브랜치를 원격 저장소에 똑같은 이름으로 동기화 하겠다는 말이다. 한 번 연결한 브랜치는 이후 `git push`로 푸시할 수 있다. 
+
+```console
+$ git push -u origin add_branch
+Enumerating objects: 4, done.
+Counting objects: 100% (4/4), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 289 bytes | 289.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+remote: 
+remote: Create a pull request for 'add_branch' on GitHub by visiting:
+remote:      https://github.com/s-seongsik/branch_test/pull/new/add_branch
+remote:
+To https://github.com/s-seongsik/branch_test.git
+ * [new branch]      add_branch -> add_branch
+Branch 'add_branch' set up to track remote branch 'add_branch' from 'origin'.
+```
+
+![image](https://user-images.githubusercontent.com/52439201/151476818-335039b2-0450-4434-9dd7-b75acd170187.png)
+
+<br>
+
+### **풀 리퀘스트 검토 및 통합 브랜치에 병합하기**
+
+`add_branch` 브랜치의 변경 사항을 바로 `merge`하기 보다는 변경사항이 무엇인지 검토하고 관리자가 `통합 브랜치`에 병합하는게 좋다.(병합 작업은 누구든 할 수 있다.)  
+일단 로컬의 `master` 브랜치가 최신버전이라고 가정한다.  
+
+* `github`에서 풀 리퀘스트 내용을 확인해서 병합할 것인지 검토한다.(UI를 제공하므로 깃허브에서 확인하길 바람)
+* `master` 브랜치로 전환
+* `add_branch` 브랜치의 내용을 가져온다.(fetch는 원격 저장소의 변경 내용을 먼저 로컬 저장소로 가져오는 명령어)
+* `add_branch` 브랜치의 내용을 로컬 `master` 브랜치와 병합한다.
+* 로컬 `master` 브랜치의 내용을 원격 저장소에 `커밋`한다. 
+
+```console
+  $ git checkout master
+  $ git fetch origin add_branch
+  $ git merge origin/add_branch
+  $ git push origin master
+```
+
+![image](https://user-images.githubusercontent.com/52439201/151477996-a55adcba-7b2a-4ed1-8065-104419fc232f.png)
+
+
+<br>
+
+### **브랜치 삭제하기**
+
+이제 통합 브랜치에 통합되었기 때문에 더이상 `add_branch` 브랜치는 필요가 없다. 
+따라서 브랜치를 삭제하면된다. 
+
+참고) 삭제할 브랜치에서 다른 브랜치로 전환해야 삭제가 가능하므로 참고바란다.
+
+```console
+seong@DESKTOP-O5CIEJV MINGW64 /e/study/branch_test (add_branch)
+$ git branch -d add_branch
+error: Cannot delete branch 'add_branch' checked out at 'E:/study/branch_test'
+```
+
+```console
+$ git checkout master
+$ git branch -d add_branch
+$ git branch
+* master
+```
+

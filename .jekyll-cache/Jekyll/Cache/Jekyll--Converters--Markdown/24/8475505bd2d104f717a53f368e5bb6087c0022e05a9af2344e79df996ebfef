@@ -1,0 +1,279 @@
+I"7H<h2 id="a"><strong>프레셋(Presets)이란?</strong></h2>
+
+<hr />
+
+<p>플러그인으로 코드 변환을 하기 위해서는 필요한 플러그인을 각각 설정해야 했습니다.</p>
+
+<div file="babel.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">plugins</span><span class="p">:</span> <span class="p">[</span>
+            <span class="dl">"</span><span class="s2">@babel/plugin-transform-block-scoping</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">@babel/plugin-transform-arrow-functions</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">@babel/plugin-transform-strict-mode</span><span class="dl">"</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>혹은</p>
+
+<p><strong>build :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span><span class="w"> </span>npx app.js <span class="nt">--plugins</span><span class="o">=</span>@babel/plugin-transform-block-scoping <span class="nt">--plugins</span><span class="o">=</span>@babel/plugin-transform-arrow-functions <span class="nt">--plugins</span><span class="o">=</span>@babel/plugin-transform-strict-mode
+</code></pre></div></div>
+
+<p>바벨은 필요한 플러그인들을 모아 만든 <code class="language-plaintext highlighter-rouge">프레셋(Presets)</code>이라는 기능을 제공합니다.</p>
+
+<p>이제는 하나하나 세팅할 필요가 없습니다.</p>
+
+<p><br /></p>
+
+<h2 id="b"><strong>프레셋(Presets) 만들기</strong></h2>
+
+<hr />
+
+<p>기존의 세개의 플러그인을 하나의 <code class="language-plaintext highlighter-rouge">프리셋</code>으로 만들어 보겠습니다.</p>
+
+<div file="customPreset.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">custompreset</span><span class="p">(){</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="na">plugins</span><span class="p">:</span> <span class="p">[</span>
+                <span class="dl">"</span><span class="s2">@babel/plugin-transform-block-scoping</span><span class="dl">"</span><span class="p">,</span>
+                <span class="dl">"</span><span class="s2">@babel/plugin-transform-arrow-functions</span><span class="dl">"</span><span class="p">,</span>
+                <span class="dl">"</span><span class="s2">@babel/plugin-transform-strict-mode</span><span class="dl">"</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div file="babel.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">presets</span><span class="p">:[</span><span class="dl">'</span><span class="s1">./customPreset.js</span><span class="dl">'</span><span class="p">]</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>build 결과 :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span><span class="w"> </span>npx babel app.js
+<span class="gp">    "use strict";</span><span class="w">
+</span><span class="go">
+    // Babel Input: ES2015 arrow function, const/let 스코프
+    [1, 2, 3].map(function (data) {
+</span><span class="gp">    return data + 1;</span><span class="w">
+</span><span class="gp">    });</span><span class="w">
+</span><span class="gp">    var test = 3;</span><span class="w">
+</span><span class="gp">    var test2 = 5;</span><span class="w">
+</span></code></pre></div></div>
+
+<p>플러그인을 하나의 프리셋으로 묶어 <code class="language-plaintext highlighter-rouge">babel.config.js</code> 기본설정 파일 <code class="language-plaintext highlighter-rouge">presets</code> 배열에 추가만 해주면 됩니다.</p>
+
+<p><br />
+<br /></p>
+
+<h2 id="c"><strong>바벨의 프레셋(Presets) 사용하기</strong></h2>
+
+<hr />
+
+<p><a href="https://babeljs.io/docs/en/babel-preset-env">바벨 곰식홈페이지</a>에 들어가면 바벨은 목적에 맞는 프리셋을 제공합니다.</p>
+
+<p>실제로 실무에서는 플로그인이나 커스텀 프리셋을 만들지 않고 바벨이 제공하는 프리셋을 사용합니다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/147522388-cff9cfca-c604-468d-b1e5-f686efcd91e3.png" alt="image" /></p>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">preset-react</code>는 리액트를 <code class="language-plaintext highlighter-rouge">preset-typescript</code>는 타입스크립트를 <code class="language-plaintext highlighter-rouge">preset-flow</code>는 <code class="language-plaintext highlighter-rouge">flow</code>을 변환해주는 프리셋입니다. 
+이번 포스트는 <code class="language-plaintext highlighter-rouge">ES6</code> 문법으로 진행할 것이기 때문에 <code class="language-plaintext highlighter-rouge">preset-env</code>에 대해서만 알아보도록 하겠습니다.</p>
+
+<p><br />
+<br /></p>
+
+<h3 id="d"><strong>preset-env</strong></h3>
+
+<hr />
+
+<p><code class="language-plaintext highlighter-rouge">preset-env</code>은 대상 환경에 필요한 변환을 세세하게 관리할 필요 없이, 최신 ES2015+ Javascript를 사용할 수 있는 환경을 제공합니다. 이전에는 연도별로 프리셋을 제공했지만
+(babel-reset-es2015, babel-reset-es2016, babel-reset-es2017, babel-reset-latest …) 이제는 <code class="language-plaintext highlighter-rouge">preset-env</code>로 통합하여 제공합니다.</p>
+
+<p><strong>install :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    npm install --save-dev @babel/preset-env
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<div file="babel.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">presets</span><span class="p">:</span> <span class="p">[</span>
+            <span class="dl">"</span><span class="s2">@babel/preset-env</span><span class="dl">"</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>build 결과 :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span><span class="w"> </span>npx babel app.js
+<span class="gp">    "use strict";</span><span class="w">
+</span><span class="go">
+    // Babel Input: ES2015 arrow function, const/let 스코프
+    [1, 2, 3].map(function (data) {
+</span><span class="gp">    return data + 1;</span><span class="w">
+</span><span class="gp">    });</span><span class="w">
+</span><span class="gp">    var test = 3;</span><span class="w">
+</span><span class="gp">    var test2 = 5;</span><span class="w">
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="e"><strong>Options</strong></h3>
+
+<hr />
+
+<h4 id="f"><strong>targets</strong></h4>
+
+<ul>
+  <li>브라우저의 최소 환경 버전을 지정하여 타겟 브라우저 환경에 맞는 플러그인들을 찾아 변환해 줍니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">targets</code>에 아무것도 지정하지 않으면 최상위 옵션이 설정됩니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">targets</code>에 브라우저를 여러개 지정하면, 바벨은 알아서 최소 환경 기준으로 변환 합니다.</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>브라우저 호환성 체크</strong></p>
+<ul>
+  <li><a href="https://caniuse.com/">can i use 에서 확인</a></li>
+  <li>크롬 58 버전은 <code class="language-plaintext highlighter-rouge">arrow function</code>, <code class="language-plaintext highlighter-rouge">const</code>, <code class="language-plaintext highlighter-rouge">let</code>을 모두 제공하지만 <code class="language-plaintext highlighter-rouge">IE10</code>은 제공하지 않습니다. 최저 환경인 <code class="language-plaintext highlighter-rouge">IE10</code> 기준으로 변환 되는지 확인해보겠습니다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/147529461-ec5a1e72-5114-4ec2-967b-7eb186f55ed7.png" alt="image" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/147529475-9f1fe972-2a01-491a-bd11-557c0dd50e5e.png" alt="image" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/147529497-94a448bd-f08e-4755-827c-0a0e647738d6.png" alt="image" /></p>
+
+<p><br /></p>
+
+<div file="babel.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">presets</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">[</span>
+            <span class="dl">"</span><span class="s2">@babel/preset-env</span><span class="dl">"</span><span class="p">,</span>
+            <span class="p">{</span>
+            <span class="na">targets</span><span class="p">:</span> <span class="p">{</span>
+                <span class="na">chrome</span><span class="p">:</span> <span class="dl">"</span><span class="s2">58</span><span class="dl">"</span><span class="p">,</span> 
+                <span class="na">ie</span><span class="p">:</span> <span class="dl">"</span><span class="s2">10</span><span class="dl">"</span>
+            <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>build 결과 :</strong></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span><span class="w"> </span>npx babel app.js
+<span class="gp">    "use strict";</span><span class="w">
+</span><span class="go">
+    // Babel Input: ES2015 arrow function, const/let 스코프
+    [1, 2, 3].map(function (data) {
+</span><span class="gp">    return data + 1;</span><span class="w">
+</span><span class="gp">    });</span><span class="w">
+</span><span class="gp">    var test = 3;</span><span class="w">
+</span><span class="gp">    var test2 = 5;</span><span class="w">
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="g"><strong>폴리필(polyfills)</strong></h4>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">useBuiltIns</code> 옵션을 다루기전에 폴리필이라는 개념을 먼저 알아야합니다. 예제를 보시면 <code class="language-plaintext highlighter-rouge">app.js</code>에 ES6 문법인 <code class="language-plaintext highlighter-rouge">new Promise()</code> 사용했습니다.</li>
+  <li>하지만 <code class="language-plaintext highlighter-rouge">build</code> 결과는 변함이 없습니다. 바벨은 ES6에서 ES5로 변환할 수 있는 것만 빌드합니다.</li>
+  <li>그렇지 못한 것들은 <code class="language-plaintext highlighter-rouge">폴리필(polyfills)</code>이라고 부르는 코드조각을 추가하여 해결합니다.</li>
+  <li>정리하여 <code class="language-plaintext highlighter-rouge">Promise()</code>는 <code class="language-plaintext highlighter-rouge">ES5</code>로 변환할 수 없기 때문에, 폴리필을 사용하여 <code class="language-plaintext highlighter-rouge">ES5</code> 버전에서 구동될 수 있도록 구현합니다.</li>
+</ul>
+
+<div file="app.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// Babel Input: ES2015 Promise</span>
+    <span class="k">new</span> <span class="nb">Promise</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div file="babel.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">presets</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">[</span>
+            <span class="dl">"</span><span class="s2">@babel/preset-env</span><span class="dl">"</span><span class="p">,</span>
+            <span class="p">{</span>
+            <span class="na">targets</span><span class="p">:</span> <span class="p">{</span>
+                <span class="na">chrome</span><span class="p">:</span> <span class="dl">"</span><span class="s2">58</span><span class="dl">"</span><span class="p">,</span> 
+                <span class="na">ie</span><span class="p">:</span> <span class="dl">"</span><span class="s2">10</span><span class="dl">"</span>
+            <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>build 결과 :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span><span class="w"> </span>npx babel app.js
+<span class="gp">    "use strict";</span><span class="w">
+</span><span class="go">
+    // Babel Input: ES2015 Promise
+</span><span class="gp">    new Promise();</span><span class="w">
+</span></code></pre></div></div>
+
+<p>분명 <code class="language-plaintext highlighter-rouge">preset-env</code> 프리셋을 적용했는대도 ES5로 변환이 안됩니다. 그</p>
+
+<p><br />
+<br /></p>
+
+<h4 id="h"><strong>useBuiltIns</strong></h4>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">useBuiltIns</code>은 폴리필을 처리하는 방법을 구성합니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">"usage"</code>, <code class="language-plaintext highlighter-rouge">"entry"</code>, <code class="language-plaintext highlighter-rouge">false</code> 3가지 중 하나를 선택, default는 false</li>
+  <li><code class="language-plaintext highlighter-rouge">"usage"</code>, <code class="language-plaintext highlighter-rouge">"entry"</code> 옵션을 선택하면 <code class="language-plaintext highlighter-rouge">core-js</code>을 모듈로 가져와서 사용합니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">@babel/polyfill</code>은 7.4.0버전부터는 사용되지 않습니다. 따라서 직접 추가하는 것을 추천하고 있습니다.</li>
+</ul>
+
+<p><strong>install :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    npm install core-js@3 --save
+
+</span><span class="gp">    #</span><span class="c"># or</span>
+<span class="go">
+    npm install core-js@2 --save
+</span></code></pre></div></div>
+
+<p>corejs의 기본값은 “2” 버전입니다.</p>
+
+<div file="babel.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">presets</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">[</span>
+        <span class="dl">"</span><span class="s2">@babel/preset-env</span><span class="dl">"</span><span class="p">,</span>
+        <span class="p">{</span>
+            <span class="na">useBuiltIns</span><span class="p">:</span> <span class="dl">"</span><span class="s2">usage</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">corejs</span><span class="p">:</span> <span class="p">{</span>
+            <span class="na">version</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+        <span class="p">],</span>
+    <span class="p">],</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>build 결과 :</strong></p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">corejs</code>의 기본값은 “2” 버전입니다. <code class="language-plaintext highlighter-rouge">build</code> 결과를 보면 <code class="language-plaintext highlighter-rouge">corejs</code>에서 <code class="language-plaintext highlighter-rouge">Promise</code> 모듈을 <code class="language-plaintext highlighter-rouge">import</code>하는 구문이 상단에 추가된 것을 확인할 수 있습니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">corejs</code>를 <code class="language-plaintext highlighter-rouge">install</code>해서 직접 <code class="language-plaintext highlighter-rouge">import</code> 구문을 추가하는 방법을 사용해도 무관합니다.</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span><span class="w"> </span>npx babel app.js   
+<span class="gp">    "use strict";</span><span class="w">
+</span><span class="go">
+</span><span class="gp">    require("core-js/modules/es6.object.to-string.js");</span><span class="w">
+</span><span class="gp">    require("core-js/modules/es6.promise.js");</span><span class="w">
+</span><span class="go">
+    // Babel Input: ES2015 Promise
+</span><span class="gp">    new Promise();</span><span class="w">
+</span></code></pre></div></div>
+:ET

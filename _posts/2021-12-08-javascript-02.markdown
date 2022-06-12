@@ -1,0 +1,307 @@
+---
+layout: post
+title: "[Javascript] ES2015(ES6) 표준 모듈 시스템 (export, import)" 
+tags: [Javascript, ES6]
+categories: [Javascript]
+banner:
+  image: /assets/images/banners/es6.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+---
+
+
+## **표준 모듈 시스템의 등장 배경**
+
+***
+
+모듈 시스템이 없었던 자바스크립트 환경은 html 헤더에 script 태그를 명시하여 js를 `순서대로` 불러오는 방법을 사용했습니다. 
+이러한 방식은 여러가지 문제점을 발생시켰습니다. 그 중 가장 문제점은 전역 스코프가 충돌 된다는 것입니다.
+
+그 이유는, `script`로 태그된 `js`파일들을 로드할 때 함수와 변수가 전역 공간에 노출되기 때문입니다.
+
+* `math.js`에 sum이라는 함수를 만들고, `app.js`에서 console.log로 찍어보겠습니다.
+* `html`에서는 `math.js` -> `app.js` 순서대로 불러오겠습니다.
+* 웹서버를 하나 띄어서 개발자 도구로 `log`가 찍히는지 확인해보겠습니다.
+
+```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <script src="src/math.js"></script>
+        <script src="src/app.js"></script>
+    </body>
+    </html>
+```
+{: file="index.html"}
+  
+```javascript 
+    function sum(input1, input2){
+        return input1+input2;
+    }
+```  
+{: file="math.js"}
+
+```javascript 
+    console.log(math.sum(10,20));
+```
+{: file="app.js"}
+
+<br>
+
+`결과` : console log에 30이 찍힌 것을 확인할 수 있습니다. 또한 sum 함수를 전역함수로 사용할 수 있습니다.
+![image](https://user-images.githubusercontent.com/52439201/145338702-6df3abbd-2461-46fd-b795-700ff055aae6.png)  
+
+<br>
+
+## **모듈 시스템 이전의 문제점**
+
+***
+
+### 문제1 : 설계 및 개발 완료 후 테스트를 진행하므로, 잘못된 설계 및 개발코드의 재수정 필요
+
+* app.js와 math.js 태그 순서를 바꿔본다.
+
+```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <script src="src/app.js"></script>
+        <script src="src/math.js"></script>
+    </body>
+    </html>
+```  
+{: file="index.html"}
+
+`결과` : app.js을 먼저 로드할 때 app.js 입장에서는 sum이라는 함수가 정의되어 있지 않기 사용할 수 없습니다.
+![image](https://user-images.githubusercontent.com/52439201/145339683-682f4f07-73f5-490e-9944-8c4294e974c4.png)
+
+<br>
+
+### 문제2 : 전역 스코프 충돌
+
+* app.js 에 sum 함수를 정의해 줍니다.
+
+```javascript 
+    function sum(input1, input2){
+        return input1+input2;
+    }
+```  
+{: file="math.js"}
+
+```javascript 
+    sum = function(input1,input2){
+        return input1 - input2;
+    }
+
+    console.log(sum(10,20));
+```  
+{: file="app.js"}
+
+`결과` : math.js에서 선언한 sum 함수가, 나중에 호출된 app.js sum 함수로 재정의 되어 실행된 것을 확인할 수 있습니다.
+![image](https://user-images.githubusercontent.com/52439201/145342810-2793e88d-a7f7-4745-b9ad-d760cd1bfa4c.png)
+
+이렇듯, js가 로드되는 순서와 변수와 함수가 전역 공간에 노출되기 때문에 같은 각기 다른 js에서 동일한 이름으로 선언한다면 충돌이 발생하게 된다.
+이런 문제들을 해결하고자 모듈화 방법들이 나오게 되었다.
+
+<br>
+
+## **ES2015(ES6) 표준 모듈 시스템**
+
+***
+
+대표적인 명세인 AMD와 CommonJS가 있지만, 서로 다른 스펙을 제안하기 때문에 이를 통합하고자 `ES2015(ES6) 표준 모듈 시스템`이 등장하게 되었다.
+
+<br>
+
+## **export**
+
+***
+
+[참고자료](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Statements/export)
+
+* javascript 모듈에서 함수, 객체, 원시 값을 내보낼 때 사용합니다.
+* export된 값은 다른 프로그램에서 import로 사용할 수 있습니다.
+* 내보내는 모듈은 "use strict"의 존재 유무와 상관없이 무조건 엄격 모드입니다. 
+* HTML 안에 작성된 스크립트에서는 사용할 수 없습니다.
+* 내보내기 방법은 **named**, **default** 내보내기가 있습니다.
+* 모듈 하나에서 **named** 내보내기는 여러 개 존재할 수 있지만, **default** 내보내기는 하나만 가능합니다.
+
+<br>
+
+### **export named**
+```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <script type="module" src="src/import.js"></script>
+    </body>
+    </html>
+```  
+{: file="index.html"}
+
+* 내보낼 식별자 이름을 명시해서 내보냅니다.
+* export { cube, foo, graph }  
+
+```javascript 
+    function cube(x) {
+        return x * x * x;
+    }
+
+    const foo = Math.PI + Math.SQRT2;
+
+    var graph = {
+        options: {
+            color:'white',
+            thickness:'2px'
+        },
+        draw: function() {
+            console.log('From graph draw function');
+        }
+    }
+    // 내보낼 식별자 이름을 사용하여 export 합니다.
+    export { cube, foo, graph };
+```  
+{: file="export.js"}
+ 
+```javascript 
+    import { cube, foo, graph } from './export.js';
+
+    console.log(graph.options); // {color:'white', thickness:'2px'}
+
+    graph.options = {
+        color:'blue',
+        thickness:'3px'
+    };
+
+    console.log(graph.options); // {color:'blue', thickness:'3px'}
+    graph.draw(); // From graph draw function
+    console.log(cube(3)); // 27
+    console.log(foo);    // 4.555806215962888
+```  
+{: file="import.js"}
+
+`결과 :`   
+![image](https://user-images.githubusercontent.com/52439201/145350820-6a36165b-0193-41ba-a31d-a1d49532bfca.png)
+
+<br>
+
+### **export default**
+* export default에서 var, let, const는 사용할 수 없습니다.
+
+```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <script type="module" src="src/import.js"></script>
+    </body>
+    </html>
+```  
+{: file="index.html"}
+
+
+```javascript 
+    export default function cube(x) {
+        return x * x * x;
+    }
+```  
+{: file="export.js"}
+
+```javascript 
+    import cube from './export.js';
+    console.log(cube(3)); // 27
+```  
+{: file="import.js"}
+
+`결과 :`   
+![image](https://user-images.githubusercontent.com/52439201/145351355-773bd31f-516a-4f9d-82fb-184c16092adb.png)
+
+<br>
+
+## **import**
+
+***
+
+[참고자료](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Statements/import)
+
+* 다른 모듈에서 내보낸 바인딩을 가져올 때 사용합니다.
+* 내보내는 모듈은 "use strict"의 존재 유무와 상관없이 무조건 엄격 모드입니다. 
+* HTML 안에 작성한 스크립트에서는 import를 사용할 수 없습니다.
+* 함수형 구문을 가진 동적 import()도 있으며, type="module"를 필요로 하지않습니다.
+* 동적 가져오기는 모듈을 **조건적, 필요할 때**에 유용합니다.
+* 초기 의존성을 불러올 때엔 정적 가져오기가 더 좋습니다.
+
+### **export named -> import**
+
+```javascript 
+   // export한 모든 것들은 myModule로 바인딩 되어 들어갑니다. 별칭으로 이해하는게 쉽겠네요.
+   import * as myModule from "my-module.js";
+
+   // export한 모듈에서 하나의 멤버만 가져옵니다.
+   import {myMember} from "my-module.js";
+
+   // export한 모듈에서 여러 개의 멤버를 가져옵니다.
+   import {foo, bar} from "my-module.js";
+
+   // export한 모듈에서 멤버를 가져오고, 별칭을 사용하여 좀더 편리한 name으로 사용합니다.
+   import {reallyReallyLongModuleMemberName as shortName} from "my-module.js";
+
+   // export한 모듈에서 여러 개의 멤버를 가져오고, 별칭을 사용하여 좀더 편리한 name으로 사용합니다.
+   import {reallyReallyLongModuleMemberName as shortName, anotherLongModuleName as short} from "my-module.js";
+
+   // 어떠한 바인딩 없이 모듈 전체를 가져옵니다.
+   import "my-module.js";
+```  
+
+<br>
+
+### **default export -> import**
+
+```javascript 
+   // default를 가져오는 가장 간단한 방법입니다.
+   import myModule from "my-module.js";
+
+   // default와 named를 함께 사용할 수 있습니다. 단, default를 먼저 선언해야 합니다.
+   // myModule used as a namespace
+   import myDefault, * as myModule from "my-module.js"; 
+
+   import myDefault, {foo, bar} from "my-module.js";
+```  
+
+<br>
+
+## **브라우저 호환성**
+
+### **export**  
+![image](https://user-images.githubusercontent.com/52439201/145359723-b39157e0-190d-48f8-9688-740502823aa5.png)
+
+<br>
+
+### **import**
+![image](https://user-images.githubusercontent.com/52439201/145359836-cc531723-8aa0-44f9-99f4-fe61f4897bda.png)

@@ -1,0 +1,215 @@
+---
+layout: post
+title: "[ESLint] Style-Guide 설정"
+tags: [Webpack, Babel, Node.js, Javascript]
+categories: [ESLint]
+banner:
+  image: /assets/images/banners/eslint.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## **style-guide**
+{: id="a"}
+
+***
+
+`ESLint`는 커스터마이징이 쉽고 확장성이 뛰어나 많이 사용되고 있는 추세이다.
+또한, `ESLint`는 개발자들이 커스터마이징한 `style-guide` 설정들을 외부에 공개하여 공유할 수 있다. 
+
+가장 널리 쓰고있는 2가지를 소개하자면
+
+* [Airbnb Style Guide](https://github.com/airbnb/javascript)
+* [Google Style Guide](https://github.com/google/eslint-config-google)
+
+서로 제공하는 `Style Guide`를 참고하여 사용자의 목적에 맞게 사용하면 된다.
+
+<br>
+
+### **init**
+{: id="a-1"}
+
+`npx eslint --init`으로  `.eslintrc` 파일을 생성한다.
+
+```console
+    $ npx eslint --init
+    √ How would you like to use ESLint? · problems
+    √ What type of modules does your project use? · esm
+    √ Which framework does your project use? · none
+    √ Does your project use TypeScript? · No / Yes
+    √ Where does your code run? · browser
+    √ What format do you want your config file to be in? · JavaScript
+    Successfully created .eslintrc.js file in E:\study\frontend\eslint_sample
+```
+
+프로젝트 루트에 `.eslintrc.js` 파일이 생성되었을 것이다. 만약 `--init`에서 마지막 물음에 대한 답변이 `js`가 아니라면
+본인이 설정한 파일 포멧에 맞춰 `.eslintrc.*`로 생성되었을 것이다. 나는 js를 선택했다.
+
+```javascript
+module.exports = {
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "ecmaVersion": 13,
+        "sourceType": "module"
+    },
+    "rules": {
+    }
+};
+```
+{: file=".eslintrc.js"}
+
+
+<br>
+
+## **Airbnb Style Guide**
+{: id="b"}
+
+***
+
+[자세한 설치 가이드 참고](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb-base)
+
+### **install**
+{: id="b-1"}
+
+```console
+    $ npm install --save-dev eslint-config-airbnb-base
+```
+
+<br>
+
+### **extends에 airbnb-base 추가하기**
+{: id="b-2"}
+
+기존 eslint에서 제공하는 `eslint:recommended` 설정을 지우고  `airbnb-base`를 추가  
+
+```javascript
+module.exports = {
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": "airbnb-base",
+    "parserOptions": {
+        "ecmaVersion": 13,
+        "sourceType": "module"
+    },
+    "rules": {
+    }
+};
+```
+{: file=".eslintrc.js"}
+
+```javascript
+    var x = 30;;;;;;;;;
+    var y = 20;;;;;;;;;
+
+    function test(){console.log(x)}
+```
+{: file="app.js"}
+
+<br>
+
+`build` 결과를 보면 아래의 내용이 적용 된 것을 확인할 수 있다.
+* var 키워드를 const 키워드로 수정
+* 세미클론 수정
+* 함수의 띄어쓰기 수정
+
+이것은 airbnb에서 제공하는 코드작성 스타일가이드가 적용된 것이다.
+
+```console
+    $ npx eslint app.js --fix
+ 
+    E:\study\frontend\eslint_sample\app.js
+        2:7   error    'y' is assigned a value but never used  no-unused-vars
+        4:10  error    'test' is defined but never used        no-unused-vars
+        4:19  warning  Unexpected console statement            no-console
+
+    ✖ 3 problems (2 errors, 1 warning)
+```
+```javascript
+    const x = 30;
+    const y = 20;
+
+    function test() { console.log(x); }
+```
+{: file="app.js"}
+
+<br>
+
+## **google Style Guide**
+{: id="c"}
+
+***
+
+### **install**
+{: id="c-1"}
+
+```console
+    $ npm install --save-dev eslint-config-google
+```
+
+### **extends에 google 추가하기**
+{: id="c-2"}
+
+```javascript
+module.exports = {
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": "google",
+    "parserOptions": {
+        "ecmaVersion": 13,
+        "sourceType": "module"
+    },
+    "rules": {
+    }
+};
+```
+{: file=".eslintrc.js"}
+
+```javascript
+    var x = 30;;;;;;;;;
+    var y = 20;;;;;;;;;
+
+    function test(){console.log(x)}
+```
+{: file="app.js"}
+
+
+<br>
+
+`build` 결과를 보면 airbnb에서 제공하는 코드작성 스타일가이드와 다르게 google은  
+
+* 세미클론이 없는 경우에는 추가로 작성해주지만 중복 세미클론에 대해서는 없애지않고 띄어쓰기한다.
+* 자바스크립트에서는 중복 세미클론을 한다고 해서 오류가 아니기 때문에 google 스타일 가이드에서는 없애지 않는 것 같다.
+* 또한, 함수에서 들여쓰기로 가독성을 높여준 것을 확인할 수 있다.
+
+```console
+    $ npx eslint app.js --fix
+ 
+    E:\study\frontend\eslint_sample\app.js
+        2:7   error  'y' is assigned a value but never used  no-unused-vars
+        4:1   error  Missing JSDoc comment                   require-jsdoc
+        4:10  error  'test' is defined but never used        no-unused-vars
+
+    ✖ 3 problems (3 errors, 0 warnings)
+```
+```javascript
+    const x = 30; ;;;;;;;;
+    const y = 20; ;;;;;;;;
+
+    function test() {
+        console.log(x);
+    }
+
+```
+{: file="app.js"}

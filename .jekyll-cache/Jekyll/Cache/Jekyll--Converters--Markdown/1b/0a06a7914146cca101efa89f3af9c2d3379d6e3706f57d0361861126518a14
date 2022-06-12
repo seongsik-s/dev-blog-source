@@ -1,0 +1,119 @@
+I"�<h2 id="babel-loader"><strong>babel-loader</strong></h2>
+
+<hr />
+
+<ul>
+  <li>바벨을 직접사용하여 변환하는 것보다는 <code class="language-plaintext highlighter-rouge">Webpack</code>과 통합여 사용하는 것이 일반적입니다.</li>
+  <li>바벨 로더를 사용하면 <code class="language-plaintext highlighter-rouge">Babel</code> 및 <code class="language-plaintext highlighter-rouge">Webpack</code>을 사용하여 <code class="language-plaintext highlighter-rouge">Javascript</code> 파일을 변환할 수 있습니다.</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>install :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    npm install -D babel-loader
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>./src/app.js :</strong></p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">const</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">b</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+
+    <span class="kd">const</span> <span class="nx">alert_func</span> <span class="o">=</span> <span class="nx">msg</span> <span class="o">=&gt;</span> <span class="nb">window</span><span class="p">.</span><span class="nx">alert</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
+    <span class="nx">alert_func</span><span class="p">(</span><span class="nx">a</span><span class="o">+</span><span class="nx">b</span><span class="p">);</span>
+
+    <span class="kd">const</span> <span class="nx">aa</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>webpack.config.js :</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">babel-loader</code>는 <code class="language-plaintext highlighter-rouge">.js</code> 확장자로 끝나는 파일들을 모두 처리합니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">babel.config.js</code>에서 프리셋 설정을 <code class="language-plaintext highlighter-rouge">options</code> 객체에 <code class="language-plaintext highlighter-rouge">babel.config.js</code>의 내용을 넣어서 사용하면 됩니다.</li>
+  <li>만약, <code class="language-plaintext highlighter-rouge">babel.config.js</code> 설정파일을 사용하고 싶으면  <code class="language-plaintext highlighter-rouge">babel-loader</code>만 로드시키십시오. 그러면 바벨로더가 빌드시 자동으로 <code class="language-plaintext highlighter-rouge">babel.config.js</code> 설정파일을 읽습니다.</li>
+  <li>바벨로더는 프로젝트안에서 <code class="language-plaintext highlighter-rouge">.js</code> 확장자를 모두 처리하기 때문에 <code class="language-plaintext highlighter-rouge">exclude</code>에 <code class="language-plaintext highlighter-rouge">node_modules</code>를 설정하여 <code class="language-plaintext highlighter-rouge">node_modules</code>안에 있는 라이브러리까지 처리 하지 않게 제외시킬 수 있습니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">exclude</code>에 <code class="language-plaintext highlighter-rouge">node_modules</code>을 제외시키면 <code class="language-plaintext highlighter-rouge">core-js</code>를 설치 해야합니다. 그 이유는, 폴리필 설정 시</li>
+  <li><code class="language-plaintext highlighter-rouge">require("core-js/modules/es6.promise")</code></li>
+  <li><code class="language-plaintext highlighter-rouge">require("core-js/modules/es6.object.to-string")</code></li>
+  <li>위 코드를 바벨이 생성 하게 되는데, <code class="language-plaintext highlighter-rouge">node_modules</code>을 제외시켰기 때문에 <code class="language-plaintext highlighter-rouge">core-js</code>를 찾을 수 없습니다. 따라서 별도의 <code class="language-plaintext highlighter-rouge">core-js</code>를 설치해야 합니다.</li>
+</ul>
+
+<p><strong>install :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    npm install core-js@3 --save
+
+</span><span class="gp">    #</span><span class="c"># or</span>
+<span class="go">
+    npm install core-js@2 --save
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    module.exports = {
+        module: {
+            rules: [
+                {
+</span><span class="gp">                    test: /\.m?js$</span>/,
+<span class="go">                    exclude: /(node_modules|bower_components)/,
+                    use: {
+                        loader: 'babel-loader',
+                        options: {
+                            presets: [
+                                [
+                                "@babel/preset-env",
+                                {
+                                    targets: {
+                                        chrome: "79", 
+                                        ie: "10"
+                                    },
+                                    useBuiltIns: "usage",
+                                    corejs: {
+                                        version: 2,
+                                    },
+                                },
+                                ],
+                            ],
+                        }
+                    }
+                },
+            ],
+        },
+    }
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>build 결과 :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span><span class="w"> </span>npm run build
+</code></pre></div></div>
+
+<p><strong>build된 output인 ./dist/main.js를 살펴보면 babel이 적용된 것을 확인할 수 있습니다.</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span><span class="w"> </span>npm run build
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">core-js</code> 패키지로부터 <code class="language-plaintext highlighter-rouge">promise</code> 모듈을 가져오는 임포트 구문이 추가되었습니다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/147547817-823a62d9-2c08-40e5-9746-87359a954cdf.png" alt="image" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/147547880-888dfa9b-6831-4dda-968a-9d4b19d4499e.png" alt="image" /></p>
+
+<p><br /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">arrow function</code>인 <code class="language-plaintext highlighter-rouge">alert_func</code> 함수가 일반 함수로 바뀌었고, <code class="language-plaintext highlighter-rouge">const -&gt; var</code>로 변경되었습니다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/147547976-56db565b-7e51-4fe4-8683-0d733f3b3968.png" alt="image" /></p>
+
+<p><br /></p>
+
+<ul>
+  <li>const a = 30; -&gt; var a = 30;</li>
+  <li>let b = 20; -&gt; var b = 20; 으로 변경되었습니다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/147548073-1648616b-2fb9-4b0f-bb94-93ec7485a192.png" alt="image" /></p>
+:ET

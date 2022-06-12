@@ -1,0 +1,283 @@
+I"��<h2 id="es5에서의-리스트-순회">ES5에서의 리스트 순회</h2>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// ES5에서의 리스트 순회</span>
+
+<span class="kd">const</span> <span class="nx">list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">];</span>
+
+<span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span><span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">str</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">abc</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">str</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span><span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">str</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>ES5에서의 for문은 시작과 끝을 정의해주고 하나씩 증가하여 리스트를 순회 했었다. 이것은 <code class="language-plaintext highlighter-rouge">length</code> 라는 속성에 의존해야 하는 문제점이 있었다.
+즉, 순회하려면 <code class="language-plaintext highlighter-rouge">__proto__</code> 또는 <code class="language-plaintext highlighter-rouge">constructor</code> 에서 <code class="language-plaintext highlighter-rouge">length</code> 를 프로토타입 기반으로 상속을 받아야 된다는 점이다.</p>
+
+<p><br /></p>
+
+<h2 id="es6에서의-리스트-순회-for-of-iterable">ES6에서의 리스트 순회 (for of iterable)</h2>
+
+<ul>
+  <li>Array에서의 순회</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">];</span>
+
+<span class="k">for</span><span class="p">(</span><span class="kd">const</span> <span class="nx">a</span> <span class="k">of</span> <span class="nx">arr</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
+
+<span class="c1">// 1</span>
+<span class="c1">// 2</span>
+<span class="c1">// 3</span>
+
+<span class="kd">const</span> <span class="nx">str</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">abc</span><span class="dl">'</span>
+
+<span class="k">for</span><span class="p">(</span><span class="kd">const</span> <span class="nx">a</span> <span class="k">of</span> <span class="nx">str</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
+
+<span class="c1">// a</span>
+<span class="c1">// b</span>
+<span class="c1">// b</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Set에서의 순회</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="kd">set</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]);</span>
+
+<span class="k">for</span><span class="p">(</span><span class="kd">const</span> <span class="nx">a</span> <span class="k">of</span> <span class="kd">set</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
+
+<span class="c1">// 1</span>
+<span class="c1">// 2</span>
+<span class="c1">// 3</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Map에서의 순회</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Map</span><span class="p">([[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="dl">'</span><span class="s1">c</span><span class="dl">'</span><span class="p">,</span><span class="mi">3</span><span class="p">]]);</span>
+
+<span class="k">for</span><span class="p">(</span><span class="kd">const</span> <span class="nx">a</span> <span class="k">of</span> <span class="nx">map</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
+
+<span class="c1">// ['a', 1]</span>
+<span class="c1">// ['b', 2]</span>
+<span class="c1">// ['c', 3]</span>
+</code></pre></div></div>
+
+<p>ES2015에 도입된 <code class="language-plaintext highlighter-rouge">for of Iterable</code>이 어떤 식으로 작동하는지 자세히 알아볼 필요가 있다.</p>
+
+<p><br /></p>
+
+<h2 id="iterable-객체">iterable 객체</h2>
+
+<p>반복 가능한(iterable, 이터러블) 객체는 배열을 일반화한 객체이다. <code class="language-plaintext highlighter-rouge">for..of</code> 구문과 함께 ES2015에서 도입되었다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">배열</code>은 대표적인 이터러블이다. 배열 외에도 다수의 내장 객체가 반복 가능한 이터러블이다. 문자열 역시 이터러블의 예이다.</p>
+
+<p>배열이 아닌 객체(목록, 집합 등)도 <code class="language-plaintext highlighter-rouge">for..of</code> 문법을 적용할 수 있다면 컬렉션을 순회하는데 유용하다.</p>
+
+<p>반복 가능한 객체와 아닌 객체를 구분짓는 큰 특징은, 객체의 <code class="language-plaintext highlighter-rouge">Symbol.iterator</code> 속성에 특별한 형태의 함수가 들어있다는 점이다.</p>
+
+<p>객체의 <code class="language-plaintext highlighter-rouge">Symbol.iterator</code> 속성에 특정 형태의 함수가 들어있다면, 이를 반복 가능한 객체 즉 <code class="language-plaintext highlighter-rouge">iterable</code>이라 부른다.
+이를 <code class="language-plaintext highlighter-rouge">iterable protocol</code>를 따른다고 말한다.</p>
+
+<p><br /></p>
+
+<h2 id="symboliterator">Symbol.iterator</h2>
+
+<p>밑의 코드를 보면 Array 타입의 <code class="language-plaintext highlighter-rouge">arr</code>는 인덱스로 접근이 가능하지만 Set, Map은 인덱스로 접근이 불가능하다. 그런데 <code class="language-plaintext highlighter-rouge">for..of</code>로 순회가 가능한 이유는 <code class="language-plaintext highlighter-rouge">iterable protocol</code>를 따르기 때문이다.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">];</span>
+<span class="kd">const</span> <span class="kd">set</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]);</span>
+<span class="kd">const</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Map</span><span class="p">([[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="dl">'</span><span class="s1">c</span><span class="dl">'</span><span class="p">,</span><span class="mi">3</span><span class="p">]])</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1">// 1</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="kd">set</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1">// undefined</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">map</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1">// undefined</span>
+
+<span class="k">for</span><span class="p">(</span><span class="kd">const</span> <span class="nx">a</span> <span class="k">of</span> <span class="nx">arr</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span> <span class="c1">// 1 2 3</span>
+<span class="k">for</span><span class="p">(</span><span class="kd">const</span> <span class="nx">a</span> <span class="k">of</span> <span class="kd">set</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span> <span class="c1">// 1 2 3 </span>
+<span class="k">for</span><span class="p">(</span><span class="kd">const</span> <span class="nx">a</span> <span class="k">of</span> <span class="nx">map</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span> <span class="c1">// ['a', 1] ['b', 2] ['c', 3]</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p>아래의 코드를 보면 <code class="language-plaintext highlighter-rouge">Array</code>객체에 <code class="language-plaintext highlighter-rouge">Symbol.iterator</code>를 null로 주었을 때 <code class="language-plaintext highlighter-rouge">arr</code>는 <code class="language-plaintext highlighter-rouge">iterable</code>이 아니다라고 에러가 발생하는 것을 확인할 수 있다.</p>
+
+<p>다시말해, <code class="language-plaintext highlighter-rouge">iterable protocol</code>를 따른다는 것은 이터러블을 <code class="language-plaintext highlighter-rouge">for..of</code>, <code class="language-plaintext highlighter-rouge">전개 연산자</code> 등과 함께 동작한다는 규약이라고 이해하면 된다.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">];</span>
+    
+<span class="nx">arr</span><span class="p">[</span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">iterator</span><span class="p">]</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+<span class="k">for</span><span class="p">(</span><span class="kd">const</span> <span class="nx">a</span> <span class="k">of</span> <span class="nx">arr</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
+
+<span class="c1">// Uncaught TypeError: arr is not iterable</span>
+</code></pre></div></div>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">];</span>
+<span class="nx">arr</span><span class="p">[</span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">iterator</span><span class="p">]</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">arr2</span> <span class="o">=</span> <span class="p">[...</span><span class="nx">arr</span><span class="p">];</span>
+<span class="c1">// Uncaught TypeError: arr is not iterable</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="iterator-protocol">Iterator Protocol</h2>
+
+<p><code class="language-plaintext highlighter-rouge">iterable</code> 객체는 <code class="language-plaintext highlighter-rouge">iterable Protocol</code>를 따른다고 했다. (이터러블과 이터레이터를 혼동할 수 있는데 잘 구분해서 이해해야한다.)</p>
+
+<p><code class="language-plaintext highlighter-rouge">iterable Protocol</code>를 따른다는 말은 <code class="language-plaintext highlighter-rouge">Symbol.iterator</code> 속성에 특별한 형태의 함수가 저장되어 있다는 말이다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">iterable Protocol</code>를 만족하려면 <code class="language-plaintext highlighter-rouge">Symbol.iterator</code> 속성에 저장되어 있는 함수는 <code class="language-plaintext highlighter-rouge">iterator</code> 객체를 반환해야 한다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">iterator</code>는 아래의 조건을 만족하는 객체이다.</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">next</code> 메서드를 갖는다.</li>
+  <li><code class="language-plaintext highlighter-rouge">next</code> 메서드는 <code class="language-plaintext highlighter-rouge">value</code>, <code class="language-plaintext highlighter-rouge">done</code> 두 속성을 갖는 객체를 반환한다.</li>
+</ul>
+
+<p>위 조건을 <code class="language-plaintext highlighter-rouge">iterator protocol</code>이라고 한다.</p>
+
+<p>아래의 예제를 통해 쉽게 이해해보자.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// iterable Array 객체로부터 iterator를 생성한다.</span>
+<span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">];</span>
+<span class="kd">const</span> <span class="nx">iterator</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">[</span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">iterator</span><span class="p">]();</span>
+
+<span class="c1">// iterator의 next 메서드를 통해 객체를 반환한다.</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">iterator</span><span class="p">.</span><span class="nx">next</span><span class="p">());</span> <span class="c1">// {value: 1, done: false}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">iterator</span><span class="p">.</span><span class="nx">next</span><span class="p">());</span> <span class="c1">// {value: 2, done: false}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">iterator</span><span class="p">.</span><span class="nx">next</span><span class="p">());</span> <span class="c1">// {value: 3, done: false}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">iterator</span><span class="p">.</span><span class="nx">next</span><span class="p">());</span> <span class="c1">// {value: undefined, done: true}</span>
+</code></pre></div></div>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// iterable Set 객체로부터 iterator를 생성한다.</span>
+<span class="kd">const</span> <span class="kd">set</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]);</span>
+<span class="kd">const</span> <span class="nx">iterator</span> <span class="o">=</span> <span class="kd">set</span><span class="p">[</span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">iterator</span><span class="p">]();</span>
+
+<span class="c1">// iterator의 next 메서드를 통해 객체를 반환한다.</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">iterator</span><span class="p">.</span><span class="nx">next</span><span class="p">());</span> <span class="c1">// {value: 1, done: false}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">iterator</span><span class="p">.</span><span class="nx">next</span><span class="p">());</span> <span class="c1">// {value: 2, done: false}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">iterator</span><span class="p">.</span><span class="nx">next</span><span class="p">());</span> <span class="c1">// {value: 3, done: false}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">iterator</span><span class="p">.</span><span class="nx">next</span><span class="p">());</span> <span class="c1">// {value: undefined, done: true}</span>
+</code></pre></div></div>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// iterable Map 객체로부터 iterator를 생성한다.</span>
+<span class="kd">const</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Map</span><span class="p">([[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="dl">'</span><span class="s1">c</span><span class="dl">'</span><span class="p">,</span><span class="mi">3</span><span class="p">]]);</span>
+<span class="kd">const</span> <span class="nx">iterator</span> <span class="o">=</span> <span class="nx">map</span><span class="p">[</span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">iterator</span><span class="p">]();</span>
+
+<span class="c1">// iterator의 next 메서드를 통해 객체를 반환한다.</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">iterator</span><span class="p">.</span><span class="nx">next</span><span class="p">());</span> <span class="c1">// {value: Array(2), done: false}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">iterator</span><span class="p">.</span><span class="nx">next</span><span class="p">());</span> <span class="c1">// {value: Array(2), done: false}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">iterator</span><span class="p">.</span><span class="nx">next</span><span class="p">());</span> <span class="c1">// {value: Array(2), done: false}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">iterator</span><span class="p">.</span><span class="nx">next</span><span class="p">());</span> <span class="c1">// {value: undefined, done: false}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">Iterable protocol</code>과 <code class="language-plaintext highlighter-rouge">iterator protocol</code>에 대해 이해가 됐다면, <code class="language-plaintext highlighter-rouge">iterable</code>를 직접 구현해보자.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">iterable</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">[</span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">iterator</span><span class="p">](){</span>
+        <span class="kd">let</span> <span class="nx">range</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="nx">next</span><span class="p">(){</span>
+                <span class="k">return</span> <span class="nx">range</span><span class="o">&lt;</span><span class="mi">4</span> <span class="p">?</span> <span class="p">{</span><span class="na">value</span><span class="p">:</span> <span class="nx">range</span><span class="o">++</span><span class="p">,</span> <span class="na">done</span><span class="p">:</span> <span class="kc">false</span><span class="p">}</span> <span class="p">:</span> <span class="p">{</span><span class="na">value</span><span class="p">:</span> <span class="kc">undefined</span><span class="p">,</span> <span class="na">done</span><span class="p">:</span> <span class="kc">true</span><span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">iterator</span> <span class="o">=</span> <span class="nx">iterable</span><span class="p">[</span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">iterator</span><span class="p">]();</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">iterator</span><span class="p">.</span><span class="nx">next</span><span class="p">());</span> <span class="c1">// {value: 1, done: false}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">iterator</span><span class="p">.</span><span class="nx">next</span><span class="p">());</span> <span class="c1">// {value: 2, done: false}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">iterator</span><span class="p">.</span><span class="nx">next</span><span class="p">());</span> <span class="c1">// {value: 3, done: false}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">iterator</span><span class="p">.</span><span class="nx">next</span><span class="p">());</span> <span class="c1">// {value: undefined, done: true}</span>
+</code></pre></div></div>
+
+<p>그럼 직접만든 이터러블 객체를 <code class="language-plaintext highlighter-rouge">for..of</code>로 순회해보자. <code class="language-plaintext highlighter-rouge">iterable</code>이 아니라고 에러가 발생할 것이다.</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">iterable</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">[</span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">iterator</span><span class="p">](){</span>
+        <span class="kd">let</span> <span class="nx">range</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="nx">next</span><span class="p">(){</span>
+                <span class="k">return</span> <span class="nx">range</span><span class="o">&lt;</span><span class="mi">4</span> <span class="p">?</span> <span class="p">{</span><span class="na">value</span><span class="p">:</span> <span class="nx">range</span><span class="o">++</span><span class="p">,</span> <span class="na">done</span><span class="p">:</span> <span class="kc">false</span><span class="p">}</span> <span class="p">:</span> <span class="p">{</span><span class="na">value</span><span class="p">:</span> <span class="kc">undefined</span><span class="p">,</span> <span class="na">done</span><span class="p">:</span> <span class="kc">true</span><span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">iterator</span> <span class="o">=</span> <span class="nx">iterable</span><span class="p">[</span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">iterator</span><span class="p">]();</span>
+
+<span class="k">for</span><span class="p">(</span><span class="kd">const</span> <span class="nx">a</span> <span class="k">of</span> <span class="nx">iterator</span><span class="p">)</span> <span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span> <span class="c1">// Uncaught TypeError: iterator is not iterable</span>
+</code></pre></div></div>
+
+<p>그 이유는 iterator도 <code class="language-plaintext highlighter-rouge">Symbol.iterator</code>를 가지고 있으며, 이것은 자기 자신이다. <br />
+즉, <code class="language-plaintext highlighter-rouge">iterator</code>는 자기 자신을(this)를 반환하는 <code class="language-plaintext highlighter-rouge">Symbol.iterator</code>를 가지고 있다는 말이다.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">];</span>
+<span class="kd">const</span> <span class="nx">arr2</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">[</span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">iterator</span><span class="p">]();</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr2</span><span class="p">[</span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">iterator</span><span class="p">]()</span><span class="o">==</span><span class="nx">arr2</span><span class="p">)</span> <span class="c1">// true</span>
+</code></pre></div></div>
+
+<p>이제 자기 자신을(this)를 반환하는 <code class="language-plaintext highlighter-rouge">Symbol.iterator</code> 메서드를 추가해주자.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">iterable</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">[</span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">iterator</span><span class="p">](){</span>
+        <span class="kd">let</span> <span class="nx">range</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="nx">next</span><span class="p">(){</span>
+                <span class="k">return</span> <span class="nx">range</span><span class="o">&lt;</span><span class="mi">4</span> <span class="p">?</span> <span class="p">{</span><span class="na">value</span><span class="p">:</span> <span class="nx">range</span><span class="o">++</span><span class="p">,</span> <span class="na">done</span><span class="p">:</span> <span class="kc">false</span><span class="p">}</span> <span class="p">:</span> <span class="p">{</span><span class="na">value</span><span class="p">:</span> <span class="kc">undefined</span><span class="p">,</span> <span class="na">done</span><span class="p">:</span> <span class="kc">true</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="p">[</span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">iterator</span><span class="p">](){</span>
+                <span class="k">return</span> <span class="k">this</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">iterator</span> <span class="o">=</span> <span class="nx">iterable</span><span class="p">[</span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">iterator</span><span class="p">]();</span>
+
+<span class="k">for</span><span class="p">(</span><span class="kd">const</span> <span class="nx">a</span> <span class="k">of</span> <span class="nx">iterator</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span> <span class="c1">// 1 2 3 </span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="재밌는-사실">재밌는 사실</h2>
+
+<p><code class="language-plaintext highlighter-rouge">javascript</code>가 사용되는 환경인 <code class="language-plaintext highlighter-rouge">Web API</code> 라던지, <code class="language-plaintext highlighter-rouge">DOM</code>과 같은 많은 값들도 <code class="language-plaintext highlighter-rouge">이터러블&amp;이터레이터 프로토콜</code>을 따른다.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"X-UA-Compatible"</span> <span class="na">content=</span><span class="s">"IE=edge"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Document<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">querySelectorAll()</code> 메서드는 <code class="language-plaintext highlighter-rouge">NodeList</code>를 반환한다. 즉, 배열이 아닌데도 <code class="language-plaintext highlighter-rouge">for..of</code> 순회가 가능하다.</p>
+
+<p>그 이유는 <code class="language-plaintext highlighter-rouge">이터러블&amp;이터레이터 프로토콜</code>따르고 <code class="language-plaintext highlighter-rouge">Symbol.iterator</code>가 구현되어있기 때문이다.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">dom</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="dl">'</span><span class="s1">*</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">iterator</span> <span class="o">=</span> <span class="nx">dom</span><span class="p">[</span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">iterator</span><span class="p">]();</span>
+
+<span class="k">for</span><span class="p">(</span><span class="kd">const</span> <span class="nx">a</span> <span class="k">of</span> <span class="nx">iterator</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/162863675-81213c45-1025-4dc2-a1b9-aa7cfda4beac.png" alt="image" /></p>
+:ET

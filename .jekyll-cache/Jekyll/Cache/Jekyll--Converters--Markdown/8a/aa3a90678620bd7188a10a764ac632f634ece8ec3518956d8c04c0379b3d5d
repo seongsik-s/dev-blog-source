@@ -1,0 +1,66 @@
+I"d<h2 id="시작으로"><strong>시작으로</strong></h2>
+
+<p>먼저, <a href="https://www.atlassian.com/git/tutorials/comparing-workflows">Comparing Workflows</a>의 글에서 자세히 공부할 수 있었다.<br />
+협업 뿐만아니라 Git에 대해 자세히 정리되어 있으니 참고하길 바란다.</p>
+
+<p>글에서 정리한 대표적인 <code class="language-plaintext highlighter-rouge">Git</code> 워크플로우는 4가지이다.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Centralized Workflow</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Feature Branch Workflow</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Gitflow Workflow</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Forking Workflow</code></li>
+</ul>
+
+<p>이제 시작해보자~</p>
+
+<p><br /></p>
+
+<h2 id="centralized-workflow"><strong>Centralized Workflow</strong></h2>
+
+<hr />
+
+<p><img src="/assets/images/banners/flow1.svg" alt="Desktop View" /></p>
+
+<p>중앙 집중식 워크플로우로 <code class="language-plaintext highlighter-rouge">SVN</code>과 똑같이 중앙이 되는 <code class="language-plaintext highlighter-rouge">메인 저장소</code>를 중심으로 모든 변경 사항에 대해 main 분기에 커밋된다.
+즉, Subversion을 사용하는 것과 똑같은 방식으로 프로젝트를 개발할 수 있다는 말이다.</p>
+
+<p>하지만, <code class="language-plaintext highlighter-rouge">SVN</code>에 비해 몇가지 <code class="language-plaintext highlighter-rouge">장점</code>이 있다.</p>
+
+<p>첫째, <code class="language-plaintext highlighter-rouge">모든 개발자는 로컬 저장소에서 일할 수 있다.</code><br />
+로컬 저장소는 완전하게 격리된 공간으로 다른 구성원 및 중앙 저장소에 구애받지 않고 일할 수 있다.</p>
+
+<p>둘째, <code class="language-plaintext highlighter-rouge">Git의 강력한 분기 및 병합 모델에 대한 엑세스를 제공한다.</code><br />
+쉽게 말해, Git 브랜치와 병합 기능으로 안전하게 코드를 변경하고 다른 브랜치에 병합할 수 있다.</p>
+
+<p><br /></p>
+
+<h3 id="작동원리"><strong>작동원리</strong></h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Centralized Workflow</code>는 중앙 저장소를 중심으로 시작한다.</li>
+  <li>모든 개발자는 중앙 저장소를 복제하여 자기 로컬 저장소에 가져온다.</li>
+  <li><code class="language-plaintext highlighter-rouge">SVN</code>과 달리 모든 변경 사항의 커밋은 로컬에 저장되며 중앙 저장소와 완전하게 격리되어있다.</li>
+  <li>개발자는 언제든 편한 중단점에서 중앙 저장소와 동기화할 수 있다.</li>
+  <li>모든 개발자는 <code class="language-plaintext highlighter-rouge">master</code> 브랜치를 사용하고, 모든 변경사항은 이 브랜치에 커밋한다.</li>
+  <li>중앙 저장소에 변경 사항을 반영하려면 개발자는 로컬 <code class="language-plaintext highlighter-rouge">master</code> 브랜치에서 중앙 저장소로 <code class="language-plaintext highlighter-rouge">push</code>한다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="충돌관리"><strong>충돌관리</strong></h3>
+<ul>
+  <li>항상 중앙 저장소의 커밋이력을 기준으로 한다.</li>
+  <li>개발자의 변경 내용인 로컬 커밋이 중앙 저장소에 <code class="language-plaintext highlighter-rouge">push</code> 할 때, 둘의 커밋이력이 다르다면 변경 사항 <code class="language-plaintext highlighter-rouge">push</code>를 거부한다.</li>
+  <li>따라서, 개발자는 먼저 중앙 저장소의 변경 내용을 <code class="language-plaintext highlighter-rouge">fetch</code>로 가져와서, 그 위에 변경 사항을 <code class="language-plaintext highlighter-rouge">rebase</code>해야 한다. 즉, <code class="language-plaintext highlighter-rouge">다른 사람들이 이미 변경한 작업에 내 변경 사항을 추가할래</code> 이다.</li>
+  <li><code class="language-plaintext highlighter-rouge">rebase</code> 도중에 중앙 저장소의 변경 내용과 로컬 변경 내용이 충돌난다면, Git은 <code class="language-plaintext highlighter-rouge">rebase</code> 를 일시 중지하고 수동으로 해결하라고 한다.</li>
+  <li>수동으로 해결할 때, <code class="language-plaintext highlighter-rouge">git status</code>와 <code class="language-plaintext highlighter-rouge">git add</code>로 충돌내용을 확인하고 수정하여 해결한다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="예시"><strong>예시</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">철수</code>와 <code class="language-plaintext highlighter-rouge">영희</code> 2명의 개발자가 <code class="language-plaintext highlighter-rouge">Centralized Workflow</code>로 어떻게 협업하는지 직접 해보자.</p>
+
+:ET

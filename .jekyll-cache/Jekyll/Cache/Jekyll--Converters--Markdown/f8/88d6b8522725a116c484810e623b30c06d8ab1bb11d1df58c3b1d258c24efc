@@ -1,0 +1,190 @@
+I"7;<h2 id="시작으로"><strong>시작으로</strong></h2>
+
+<hr />
+
+<p>프론트엔드 개발을 하고있어서 자바스크립트를 매일 다룬다. 개발을 하다보면 호출 순서, 출력 결과 등 예상되는 결과값이 나오지 않아 당황했던 적이 있었다.<br />
+앞으로, 고급개발자가 되려면 동작원리에 대해 정확하게 알아야 되겠다고 생각했다.</p>
+
+<p>감사하게도 많은 개발자 선배들이 자바스크립트 동작원리에 대해 정리를 해놨기 때문에 그들의 지식을 습득할 수 있었다.</p>
+
+<p>목차로는</p>
+<ul>
+  <li>자바스크립트 엔진</li>
+  <li>V8</li>
+  <li>자바스크립트 런타임</li>
+  <li>Call Stack과 Memory Heap</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="자바스크립트-엔진"><strong>자바스크립트 엔진</strong></h2>
+
+<hr />
+
+<p>자바스크립트 엔진의 대표적인 예는 <code class="language-plaintext highlighter-rouge">Google V8</code> 엔진이다. <code class="language-plaintext highlighter-rouge">V8</code>은 Chrome과 node.js에서 사용한다.</p>
+
+<p>밑의 사진은 자바스크립트의 엔진 구성요소를 나타내고있다.</p>
+
+<p><img src="/assets/images/banners/engine.png" alt="Desktop View" /></p>
+
+<ul>
+  <li>Memory Heap : 메모리 할당이 일어나는 곳</li>
+  <li>Call Stack : 호출 스택이 쌓이는 곳</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="v8"><strong>V8</strong></h2>
+
+<hr />
+
+<p>구글이 주도하여 <code class="language-plaintext highlighter-rouge">C++</code>로 작성된 고성능의 자바스크립트 &amp; 웹 어셈블리 언어이다. <code class="language-plaintext highlighter-rouge">ECMAScript</code>와 <code class="language-plaintext highlighter-rouge">Web Assembly</code> 표준에 맞게 구현하였다.<br />
+V8엔진이 자바스크립트 코드를 어떻게 실행시키는지 찾아봤는데 어머나.. 긴 시간이 필요할 것 같아서 간단하게 정리하고 넘어간다. (다음 주말에 공부해보자)</p>
+
+<p><img src="/assets/images/banners/v8-engine.png" alt="Desktop View" /></p>
+
+<ul>
+  <li>V8은 작성한 자바스크립트 코드를 가져와서 <code class="language-plaintext highlighter-rouge">파서(Parser)</code>에게 넘긴다.</li>
+  <li><code class="language-plaintext highlighter-rouge">Parser</code>는 파싱을 통해 <code class="language-plaintext highlighter-rouge">AST(Abstract Syntax Tree), 추상 구문 트리</code>로 변환시킨다.</li>
+  <li><code class="language-plaintext highlighter-rouge">AST</code>를 <code class="language-plaintext highlighter-rouge">Ignition</code>에게 넘긴다. <code class="language-plaintext highlighter-rouge">Ignition</code>는 자바스크립트를 바이트 코드(Bytecode)로 변환하는 인터프리터이다. 즉, AST를 인터프리터를 통해 byte code로 변환(Ignition)한다.</li>
+  <li>그리고 <code class="language-plaintext highlighter-rouge">bytecode</code>를 실행함으로써 작성된 소스 코드가 실제로 작동하게 된다.</li>
+  <li>그 중 자주 사용되는 코드는 <code class="language-plaintext highlighter-rouge">TurboFan</code>으로 보내진다.</li>
+  <li><code class="language-plaintext highlighter-rouge">TurboFan</code>는 보내진 코드를 <code class="language-plaintext highlighter-rouge">Optimized Machine Code</code> 즉, 최적화된 코드로 컴파일하여 사용한다.</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="자바스크립트-런타임"><strong>자바스크립트 런타임</strong></h2>
+
+<hr />
+
+<p>자바스크립트는 엔진 밖에서도 자바스크립에 관여하는 요소들이 있다. Web API, callback Queue, Event Loop 등<br />
+<code class="language-plaintext highlighter-rouge">런타임</code>이란 특정 언어로 만든 프로그램들을 실행할 수 있는 환경을 말한다. 자바스크립트 런타임은 <code class="language-plaintext highlighter-rouge">크롬과 같은 브라우저</code>나 <code class="language-plaintext highlighter-rouge">Node.js</code>가 있다.</p>
+
+<p><img src="/assets/images/banners/engine-runtime.png" alt="Desktop View" /></p>
+
+<p><br /></p>
+
+<h3 id="web-api"><strong>Web API</strong></h3>
+
+<p>자바스크립트에서 자주 사용되는 setTimeout, DOM, AJAX 등과같은 API들은 <code class="language-plaintext highlighter-rouge">브라우저에서 제공</code>하는 API 입니다. 이들을 <code class="language-plaintext highlighter-rouge">Web API</code>라고 부릅니다.</p>
+
+<h3 id="callback-queuetask-queue"><strong>Callback Queue(Task Queue)</strong></h3>
+
+<p>자바스크립트에서 비동기로 호출되는 함수들은 Call Stack에 쌓이지 않고 <code class="language-plaintext highlighter-rouge">Callback Queue(Task Queue)</code>로 보내진다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">Callback Queue(Task Queue)</code>는 Event 실행 관리를 하기 위해 사용되는 Queue이다.</p>
+<ul>
+  <li>자바스크립트의 런타임 환경의 Callback Queue는 처리할 메시지 목록과 실행할 콜백 함수들의 리스트이다. 이벤트 리스너, DOM 이벤트, AJAX, setTimeout과 같은 비동기 함수는 Web API를 호출하며 Web API는 콜백 함수를 Callback Queue에 밀어 넣는다.</li>
+  <li>Callback Queue는 대기하다가 Call Stack이 비어 있으면 이벤트 루프를 돌려 콜백함수를 Stack에 넣는다. 이벤트 루프의 기본 역할은 큐와 스택 두 부분을 지켜보고 있다가 스택이 비는 시점에 콜백을 실행시켜 주는 것이다.</li>
+  <li>브라우저에서 이벤트가 발생할 때마다 메시지가 추가되고 이벤트 리스너가 첨부된다. 콜백 함수의 호출은 호출 스택의 초기 프레임으로 사용되며 자바스크립트가 싱글 스레드 이므로 스택에 대한 모든 호출이 반환될 때까지 메세지 폴링 및 처리가 중지 된다. 동기식 함수 호출은 이와 반대로 새 호출 프레임을 스택에 추가한다.</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">1</span><span class="dl">'</span><span class="p">)</span>
+<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">2</span><span class="dl">'</span><span class="p">)},</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">3</span><span class="dl">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/154839213-1d44aae5-6cd5-46b0-af94-7fcd72c0e56b.png" alt="image" /></p>
+
+<p>위의 코드를 실행해보면 출력 순서가 <code class="language-plaintext highlighter-rouge">"1" -&gt; "2" -&gt; "3"</code>이 아닌 <code class="language-plaintext highlighter-rouge">"1" -&gt; "3" -&gt; "2"</code>로 출력된다.
+아 당연히 <code class="language-plaintext highlighter-rouge">console.log('2')</code>는 1초 뒤에 출력되잖아요! 그럼 0초로 하면 어떻게 될까?</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/154839276-13d1bfab-cd4b-4601-972c-2edbfb0b4ba8.png" alt="image" /></p>
+
+<p>위와 마찬가지로 <code class="language-plaintext highlighter-rouge">"1" -&gt; "3" -&gt; "2"</code> 순서로 출력되었다.</p>
+
+<p>그 이유는, 비동기로 호출되는 함수들은 <code class="language-plaintext highlighter-rouge">Call Stack</code>에 쌓이지 않고 <code class="language-plaintext highlighter-rouge">Callback Queue(Task Queue)</code>에 보내진다. 그리고 <code class="language-plaintext highlighter-rouge">Call Stack</code>이 비어있으면 콜백함수를 <code class="language-plaintext highlighter-rouge">Call Stack</code>에 넣는다. 이러한 원리를 이해하는 건 굉장히 중요하다.</p>
+
+<p><br /></p>
+
+<p><br /></p>
+
+<h2 id="call-stack과-memory-heap"><strong>Call Stack과 Memory Heap</strong></h2>
+
+<hr />
+
+<p>자바스크립트 엔진이 구동되면서 코드를 읽고 실행하는 과정에서 아주 중요한 두 가지 요소가 있다.</p>
+<ul>
+  <li>정보(변수, 함수 등)들을 저장하는 것</li>
+  <li>현재 실행되고 있는 코드를 트래킹하는 작업</li>
+</ul>
+
+<p>여기서 정보를 저장하는 공간이 <code class="language-plaintext highlighter-rouge">Memory Heap</code>이고, 실행 중인 코드를 트래킹하는 공간이 <code class="language-plaintext highlighter-rouge">Call Stack</code>이다.</p>
+
+<p><br /></p>
+
+<h3 id="call-stack"><strong>Call Stack</strong></h3>
+
+<p>개발자라면 기본으로 알고 있는 상식이 <code class="language-plaintext highlighter-rouge">자바스크립트는 싱클 쓰레드 기반 언어</code>라는 것이다. <br />
+즉, <code class="language-plaintext highlighter-rouge">Call Stack</code>이 하나이다. 따라서 한 번에 여러 개의 작업을 동시에 할 수 없으며 한 번에 한 작업만 처리할 수 있다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">Call Stack</code>은 메모리에 존재하는 공간 중 하나로, 코드를 읽어내려가면서 수행해야 할 작업들을 밑에서부터 하나씩 쌓는다.
+그리고 <code class="language-plaintext highlighter-rouge">Memory Heap</code>에서 필요한 정보들을 찾아서 작업을 수행하는 공간이다.</p>
+
+<p><img src="/assets/images/banners/callstack.png" alt="Desktop View" /></p>
+
+<p><br /></p>
+
+<p>아래의 예제 코드를 실행시켜보자.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">multiply</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">x</span> <span class="o">*</span> <span class="nx">y</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">printSquare</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">multiply</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">x</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">printSquare</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+</code></pre></div></div>
+<ol>
+  <li>처음 자바스크립트 엔진이 코드를 실행하는 시점에서는 <code class="language-plaintext highlighter-rouge">Call Stack</code>이 비어있다</li>
+  <li><code class="language-plaintext highlighter-rouge">printSquare(5);</code>이 가장 먼저 실행되므로 <code class="language-plaintext highlighter-rouge">Call Stack</code>에 <code class="language-plaintext highlighter-rouge">push(쌓인다)</code>된다</li>
+  <li>다음으로 <code class="language-plaintext highlighter-rouge">multiply(x, x);</code>이 실행되므로 <code class="language-plaintext highlighter-rouge">printSquare(5);</code>위에 <code class="language-plaintext highlighter-rouge">push(쌓인다)</code>된다</li>
+  <li><code class="language-plaintext highlighter-rouge">multiply(x, x);</code>은 실행이 완료되어 <code class="language-plaintext highlighter-rouge">pop(빠진다)</code>되고 <code class="language-plaintext highlighter-rouge">console.log(s);</code>이 실행되므로 <code class="language-plaintext highlighter-rouge">push(쌓인다)</code>된다</li>
+  <li>다음으로, <code class="language-plaintext highlighter-rouge">console.log(s);</code>이 완료되어 <code class="language-plaintext highlighter-rouge">pop(빠진다)</code>된다</li>
+  <li><code class="language-plaintext highlighter-rouge">printSquare(5);</code> 이 모두 완료되어 <code class="language-plaintext highlighter-rouge">pop(빠진다)</code>된다</li>
+</ol>
+
+<p><img src="/assets/images/banners/call-stack.png" alt="Desktop View" /></p>
+
+<p><br /></p>
+
+<h4 id="stack-overflow"><strong>Stack Overflow</strong></h4>
+
+<p>자바스크립트의 공간은 무제한이 아니고 한정적이기 때문에 <code class="language-plaintext highlighter-rouge">Call Stack</code>에 한정된 자원이 넘어서 계속 쌓다보면 Stack이 넘치게 된다. 이것을 <code class="language-plaintext highlighter-rouge">Stack Overflow</code>라 부른다.</p>
+
+<p>아래의 예제 코드를 실행시켜보자.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">foo</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="nx">foo</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>자바스크립트 엔진에서 위의 코드를 실행하게되면 <code class="language-plaintext highlighter-rouge">Call Stack</code>에 무제한으로 foo()를 재귀 호출하게 된다.
+그렇게 되면 아래와 같이 <code class="language-plaintext highlighter-rouge">Call Stack</code>이 넘치게 되는 <code class="language-plaintext highlighter-rouge">Stack Overflow</code>이 발생하게 되면서 에러가 난다.</p>
+
+<p><img src="/assets/images/banners/maximum-call-stack.png" alt="Desktop View" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/154840516-4fa1d2d4-2fad-47a9-976a-8b1cfc522ec8.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h3 id="memory-heap"><strong>Memory Heap</strong></h3>
+
+<p>메로리 생존주기는 프로그래밍 언어와 관계없이 비슷하다.</p>
+
+<ol>
+  <li>할당</li>
+  <li>사용</li>
+  <li>제거</li>
+</ol>
+
+<p>두 번째 부분은 모든 언어에서 명시적으로 사용한다. 하지만 첫 번째와 세 번째는 저수준 언어에서는 명시적이며 자바스크립트와 같은 대부분의 고수준 프로그래밍 언어에서는 암묵적으로 작동한다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">Memory Heap</code>은 변수, 함수, 호출 등의 작업들이 발생하여 1~3번 단계가 진행되는 공간이다. 
+쉽게 말해,<code class="language-plaintext highlighter-rouge">'Memory Heap'</code>이라는 이름의 창고가 있고 변수나 함수들은 겉에 이름이 라벨지로 붙어있는 박스들인거다.</p>
+
+<p><img src="/assets/images/banners/memoryheap.png" alt="Desktop View" /></p>
+:ET

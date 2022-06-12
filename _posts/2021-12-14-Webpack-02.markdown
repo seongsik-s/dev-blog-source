@@ -1,0 +1,203 @@
+---
+layout: post
+title: "[Webpack] entry, output"
+tags: [Webpack, Babel, Node.js, Javascript]
+categories: [Webpack]
+banner:
+  image: /assets/images/banners/webpack.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+webpack의 번들링 작업을 실행하는 방법은 2가지가 있습니다.
+
+1. `콘솔 실행`
+2. `./webpack.config.js` 파일로 실행 
+
+2가지 실행 방법과 결과에 대해 알아보겠습니다.
+
+<br>
+
+## **프로젝트 구조 확인**
+{: id="a" }
+
+***
+
+```console
+    webpack-demo
+        |- /moda_modules
+        |- package.json
+        |- package-lock.json
+        |- index.html
+        |- /src
+            |- app.js
+            |- math.js
+```
+
+<br>
+
+* 번들링 결과의 예상 경로로 script 태그를 수정합니다.
+
+```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <!-- type=modules 삭제, script 경로 수정 -->
+        <script src="./dist/main.js"></script>
+    </head>
+    <body>
+    </body>
+    </html>
+```
+{: file="index.html"}
+
+```javascript
+    import * as math from './math.js'
+
+    console.log(math.sum(1, 2));
+```
+{: file="app.js"}
+
+```javascript
+    export function sum(a, b){
+        return a + b;
+    }
+```
+{: file="math.js"}
+
+<br>
+
+## **콘솔 실행**
+{: id="b" } 
+
+*** 
+
+* `entry` : 번들링할 파일을 `"./src/app.js"` 로 설정
+* `output` : 결과가 저장될 경로를 `"./dist/"` 로 설정, default는 `"main.js"`로 생성됩니다. 
+* `mode` : 개발모드로 진행할 것이기 때문에 `"development"` 로 설정
+* `명령어` : `".\node_modules\.bin\webpack --mode development --entry ./src/app.js --output-path ./dist/"`
+
+```console
+    >.\node_modules\.bin\webpack --mode development --entry ./src/app.js --output-path ./dist/ 
+    asset main.js 4.08 KiB [emitted] (name: main)
+    runtime modules 670 bytes 3 modules
+    cacheable modules 110 bytes
+    ./src/app.js 64 bytes [built] [code generated]
+    ./src/math.js 46 bytes [built] [code generated]
+    webpack 5.65.0 compiled successfully in 162 ms
+```
+
+* 결과물이 ./dist/main.js 경로에 생성된 것을 확인할 수 있습니다.  
+
+![image](https://user-images.githubusercontent.com/52439201/146138808-46043268-9734-4264-ae7d-7f983d084c8f.png)
+
+<br>
+
+* 주의해야 할점! 4버전에서는 `"--output ./dist/main.js"` -> 경로/파일명.js 로 생성됐지만 5버전부터는 경로로 인식하는 것 같습니다.
+* 따라서 `"./dist/main.js"`라고 입력하면 
+* `"./dist/main.js(폴더)/main.js(js)"` 로 결과물이 생성됩니다.  
+
+![image](https://user-images.githubusercontent.com/52439201/146133333-ebdfa683-746d-4f57-907d-13f9160e9180.png)
+ 
+<br>
+
+**결과 :**    
+
+![image](https://user-images.githubusercontent.com/52439201/146139767-698b54b4-f62c-4aaf-a59c-3327d2cb9b38.png)
+
+<br>
+<br>
+
+## **webpack.config.js 파일로 실행**
+{: id="c" } 
+
+***
+
+* 기본적으로 webpack은 `./webpack.config.js` 설정 파일이 있는지 찾고 있으면 파일을 읽습니다.
+```javascript
+    const path = require('path');
+
+    module.exports = {
+        mode : 'development',
+        entry : {
+            main : './src/app.js'
+        },
+        output : {
+            path : path.resolve('./dist'),
+            filename : '[name].js'
+        }
+    }
+```
+{: file="webpack.config.js"}
+
+<br>
+
+* scripts에 `build`라는 명령어를 등록합니다. `build` 명령어는 webpack을 실행시킵니다.
+```json
+    {
+        "name": "webpack-demo",
+        "version": "1.0.0",
+        "description": "",
+        "main": "index.js",
+        "scripts": {
+            "test": "echo \"Error: no test specified\" && exit 1",
+            "build" : "webpack"
+        },
+        "author": "",
+        "license": "ISC",
+        "devDependencies": {
+            "webpack": "^4.41.5",
+            "webpack-cli": "^3.3.10"
+        }
+    }
+```
+{: file="package.json"}
+
+<br>
+
+* `"npm run build"`로 webpack 실행
+
+```console
+    >npm run build
+
+    > webpack-demo@1.0.0 build
+    > webpack
+
+    asset main.js 4.09 KiB [emitted] (name: main)
+    runtime modules 670 bytes 3 modules
+    cacheable modules 113 bytes
+    ./src/app.js 65 bytes [built] [code generated]
+    ./src/math.js 48 bytes [built] [code generated]
+    webpack 5.65.0 compiled successfully in 203 ms
+```
+
+<br>
+
+* `".\node_modules\.bin\webpack"` 파일을 실행해도 결과는 같습니다.
+
+```console
+    >.\node_modules\.bin\webpack
+
+    asset main.js 4.09 KiB [emitted] (name: main)
+    runtime modules 670 bytes 3 modules
+    cacheable modules 113 bytes
+    ./src/app.js 65 bytes [built] [code generated]
+    ./src/math.js 48 bytes [built] [code generated]
+    webpack 5.65.0 compiled successfully in 150 ms
+```
+
+![image](https://user-images.githubusercontent.com/52439201/146143478-f2976672-a0d1-49a8-b41a-5a4ed933d890.png)
+
+<br>
+
+**결과 :**
+
+![image](https://user-images.githubusercontent.com/52439201/146290942-b00d0b23-8233-4049-ba5b-8038f1e6bf03.png)

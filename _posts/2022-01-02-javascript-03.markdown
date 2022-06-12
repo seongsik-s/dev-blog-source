@@ -1,0 +1,240 @@
+---
+layout: post
+title: "[Javascript] Scope 개념 확실히 알고 넘어가자"
+tags: [Javascript, ES6]
+categories: [Javascript]
+banner:
+  image: /assets/images/banners/es6.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## **자바스크립트 Scope**
+{: id="a"}
+
+*** 
+
+Scope는 변수의 접근성을 결정합니다. 
+
+ES6(2015) 이전에는 자바스크립트에 `Global Scope` 와 `Function Scope`만 있었습니다. 
+
+ES6(2015)가 생기면서 `const`와 `let` 이 도입되었고, 이 두 키워드는 자바스크립트에서 `Block Scope`를 제공합니다.
+
+> 자바스크립트의 3가지 Scope 유형 :
+  * Block scope
+  * Function scope
+  * Global scope
+
+> 자바스크립트의 2가지 변수 유형 :
+  * Global variable
+  * Local variable
+
+<br>
+
+### **Scope 예시**
+{: id="aa"}
+
+***
+
+Scope는 변수의 접근성을 결정한다고 했는데, 정의로 이해하는 것보다 실습으로 이해해봅시다.
+
+`x`변수에 `Global Scope` 선언과 `fn` 함수내부 `x`변수에 `Function Scope`를 선언하였습니다. 
+
+똑같은 이름으로 중복 선언을 하였는데 실행하면 어떤 결과가 나올까요?
+
+```javascript
+  var x = 'Global Scope';
+
+  function fn () {
+      var x = 'Functuin Scope'
+      console.log(x);
+  }
+
+  fn(); 
+  console.log(x);
+```
+```console
+  Functuin Scope
+  Global Scope
+```
+
+실행 순서대로 `Functuin Scope` -> `Global Scope`가 `console.log`에 찍힌 것을 확인할 수 있습니다. 
+
+스코프는 `참조 대상 식별자(identifier, 변수, 함수의 이름과 같이 어떤 대상을 다른 대상과 구분하여 식별할 수 있는 유일한 이름)`를 찾아내기 위한 규칙입니다. 
+
+자바스크립트는 이 규칙대로 식별자를 찾습니다.
+
+프로그래밍은 변수를 선언하고 값을 할당하여 변수를 참조하는 기본적인 기능을 제공합니다. 이것으로 프로그램의 상태를 관리할 수 있습니다. 변수는 전역 또는 코드 블록(`if`, `for`, `while`, `try/catch` 등)이나 함수 내에 선언하며 코드 블록이나 함수는 중첩될 수 있다. 식별자는 자신이 어디에서 선언됐는지에 의해 자신이 유효한(다른 코드가 자신을 참조할 수 있는) 범위를 갖습니다.
+
+다시 예제로 돌아와, 전역에 선언된 `x`는 어디에든 참조할 수 있습니다. 하지만 `fn()` 함수 안에 선언된 `x`는 함수 내부에서만 참조할 수 있고 함수 외부에서는 참조할 수 없습니다.
+이것을 `스코프(Scope)`라 부릅니다.
+
+`스코프(Scope)`가 있기 때문에 같은 식별자 이름은 중복되서 사용할 수 없게하여 식별자 이름의 충돌을 방지합니다. 
+
+<br>
+
+## **블록 스코프(block Scope)**
+{: id="b"}
+
+***
+
+자바스크립트는 기본적으로 `함수 레벨 스코프(function-level scope)`를 따릅니다. `함수 레벨 스코프`란 함수 코드 블록 내에서 선언된 변수는 함수 코드 블록 내에서만 유효하고 함수 외부에서는 참조할 수 없습니다. 
+
+하지만, ES6(2015)에 도입된 `let`, `const`는 `블록 레벨 스코프(block-level scope)`를 제공합니다.
+
+```javascript
+  {
+    let x = 10;
+    const y = 20;
+  }
+
+  console.log(x);
+  console.log(y);
+```
+```console
+  Uncaught ReferenceError: x is not defined
+    at <anonymous>:6:13
+```
+
+<br>
+
+```javascript
+  if (true) {
+    let x = 10;
+    const y = 20;
+  }
+
+  console.log(x);
+  console.log(y);
+```
+```console
+  Uncaught ReferenceError: x is not defined
+    at <anonymous>:6:13
+```
+
+{ } 블록 내부에 `let`과 `const`로 선언된 `x`,`y`는 `블록 레벨 스코프`를 따르기 때문에 외부에서 접근할 수 없습니다. 
+
+<br>
+
+하지만, `var` 키워드로 선언된 변수는 `블록 레벨 스코프`를 가질 수 없습니다. { } 블록 내부에 선언된 변수는 외부에서 접근할 수 있습니다. 
+
+```javascript
+  {
+    var x = 10;
+  }
+
+  console.log(x);
+```
+```console
+  10
+```
+
+<br>
+
+```javascript
+  if (true) {
+    var x = 10;
+  }
+
+  console.log(x);
+```
+```console
+  10
+```
+
+<br>
+
+## **전역 스코프(Global Scope)**
+{: id="c"}
+
+***
+
+전역으로 선언된 변수(함수 외부)는 `전역 스코프(Global Scope)`를 가지며, 자바스크립트 프로그램의 어디에서나 접근할 수 있습니다.
+
+`var`, `let`, `const`로 선언된 변수는 모두 `Global Scope`가 있습니다.
+
+```javascript
+  var x = 10;
+  let y = 20;
+  const z = 30;
+
+  function fn(){
+      console.log(x);
+      console.log(y);
+      console.log(z);
+  }
+
+  fn();
+```
+```console
+  10
+  20
+  30
+```
+
+<br>
+
+## **함수 스코프(Function Scope)**
+{: id="e"}
+
+***
+
+아까 자바스크립트는 기본적으로 함수 레벨 스코프를 따른다고 말씀드렸습니다.
+
+다시 말해, 함수 내에서 선언된 변수는 함수 외부에서는 접근할 수 없습니다.
+
+```javascript
+  function fn(){
+    var x = 20;
+  }
+
+  console.log(x);
+```
+```console
+  Uncaught ReferenceError: x is not defined
+    at <anonymous>:5:13
+```
+
+<br>
+
+## **자동 전역 스코프(Automatically Global Scope)**
+{: id="d"}
+
+***
+
+만약 `var` or `let` or `const` 로 선언되지 않은 변수에 값을 할당하게 되면 `자동`으로 `전역 변수`가 됩니다.
+
+```javascript
+  function fn(){
+    x = 20;
+  }
+
+  fn();
+
+  console.log(x);
+```
+```console
+  20
+```
+
+<br>
+
+## **엄격모드(Strict Mode)**
+{: id="f"}
+
+***
+
+엄격모드에서는 선언되지 않는 변수는 자동으로 전역적이지 않습니다.
+
+
+<br>
+
+## **참고자료 출저**
+
+[스코프](https://poiemaweb.com/js-scope)
+
+[JavaScript Scope](https://www.w3schools.com/js/js_scope.asp)

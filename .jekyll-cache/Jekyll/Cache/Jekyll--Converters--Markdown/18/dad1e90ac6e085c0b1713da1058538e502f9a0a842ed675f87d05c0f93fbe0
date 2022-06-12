@@ -1,0 +1,189 @@
+I"�;<h2 id="express-애플리케이션-생성기"><strong>Express 애플리케이션 생성기</strong></h2>
+
+<hr />
+
+<p>Express 구조화된 애플리케이션을 생성하고 싶다면 <code class="language-plaintext highlighter-rouge">express-generator</code>를 사용하여 시작하면 된다.</p>
+
+<p>일단 npm 패키지로 설치한다.</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>npm <span class="nb">install </span>express-generator <span class="nt">-g</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">groupware-back-app</code>이라는 Express 앱을 생성해보자.</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>express <span class="nt">--view</span><span class="o">=</span>pug groupware-back-app
+<span class="go">
+   create : groupware-back-app\
+   create : groupware-back-app\public\
+   create : groupware-back-app\public\javascripts\
+   create : groupware-back-app\public\images\
+   create : groupware-back-app\public\stylesheets\
+   create : groupware-back-app\public\stylesheets\style.css
+   create : groupware-back-app\routes\
+   create : groupware-back-app\routes\index.js
+   create : groupware-back-app\routes\users.js
+   create : groupware-back-app\views\
+   create : groupware-back-app\views\error.pug
+   create : groupware-back-app\views\index.pug
+   create : groupware-back-app\views\layout.pug
+   create : groupware-back-app\app.js
+   create : groupware-back-app\package.json
+   create : groupware-back-app\bin\
+   create : groupware-back-app\bin\www
+
+   change directory:
+</span><span class="gp">     &gt;</span><span class="w"> </span><span class="nb">cd </span>groupware-back-app
+<span class="go">
+   install dependencies:
+</span><span class="gp">     &gt;</span><span class="w"> </span>npm <span class="nb">install</span>
+<span class="go">
+   run the app:
+</span><span class="gp">     &gt;</span><span class="w"> </span>SET <span class="nv">DEBUG</span><span class="o">=</span>groupware-back-app:<span class="k">*</span> &amp; npm start
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>생성된 디렉토리로 이동 후 종속성을 설치한다.</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span><span class="nb">cd </span>groupware-back-app
+<span class="gp">$</span><span class="w"> </span>npm <span class="nb">install</span>
+</code></pre></div></div>
+
+<p><strong>MacOS 또는 Linux에서 다음 명령으로 앱을 실행</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span><span class="nv">DEBUG</span><span class="o">=</span>groupware-back-app:<span class="k">*</span> npm start
+</code></pre></div></div>
+
+<p><strong>Windows 명령 프롬프트에서 다음 명령으로 앱을 실행</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&gt;</span><span class="w"> </span><span class="nb">set </span><span class="nv">DEBUG</span><span class="o">=</span>groupware-back-app:<span class="k">*</span> &amp; npm start
+</code></pre></div></div>
+
+<p><strong>Windows PowerShell에서 다음 명령으로 앱을 실행</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">PS&gt;</span><span class="w"> </span><span class="nv">$env</span>:DEBUG<span class="o">=</span><span class="s1">'groupware-back-app:*'</span><span class="p">;</span> npm start
+</code></pre></div></div>
+
+<p><a href="http://localhost:3000/">http://localhost:3000/</a>으로 접속해서 아래와 같이 출력한다면 정상적으로 실행한 것이다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/153125368-09364fcc-66c8-4b90-bcb3-2b93f32c8036.png" alt="image" /></p>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">package.json</code>에서 scripts.start 명령어가 <code class="language-plaintext highlighter-rouge">express</code>를 실행해주는 명령어인가보다.
+(전 포스팅에서 <code class="language-plaintext highlighter-rouge">node app.js</code>와 같다고 보면된다.)</p>
+
+<div file="package.json" class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"groupware-back-app"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.0.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"private"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"start"</span><span class="p">:</span><span class="w"> </span><span class="s2">"node ./bin/www"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"dependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"cookie-parser"</span><span class="p">:</span><span class="w"> </span><span class="s2">"~1.4.4"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"debug"</span><span class="p">:</span><span class="w"> </span><span class="s2">"~2.6.9"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"express"</span><span class="p">:</span><span class="w"> </span><span class="s2">"~4.16.1"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"http-errors"</span><span class="p">:</span><span class="w"> </span><span class="s2">"~1.6.3"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"morgan"</span><span class="p">:</span><span class="w"> </span><span class="s2">"~1.9.1"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"pug"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.0.0-beta11"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<p>bin디렉토리안에 <code class="language-plaintext highlighter-rouge">www</code> 파일을 보면 node 서버 구성 환경에 대한 코드들이 들어가 있다.</p>
+
+<div file="./bin/www" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#!/usr/bin/env node
+</span>
+<span class="cm">/**
+ * Module dependencies.
+ */</span>
+
+<span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">../app</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">debug</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">debug</span><span class="dl">'</span><span class="p">)(</span><span class="dl">'</span><span class="s1">groupware-back-app:server</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">http</span><span class="dl">'</span><span class="p">);</span>
+
+<span class="cm">/**
+ * Get port from environment and store in Express.
+ */</span>
+
+<span class="kd">var</span> <span class="nx">port</span> <span class="o">=</span> <span class="nx">normalizePort</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span> <span class="o">||</span> <span class="dl">'</span><span class="s1">3000</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="kd">set</span><span class="p">(</span><span class="dl">'</span><span class="s1">port</span><span class="dl">'</span><span class="p">,</span> <span class="nx">port</span><span class="p">);</span>
+
+<span class="cm">/**
+ * Create HTTP server.
+ */</span>
+
+<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="nx">app</span><span class="p">);</span>
+
+<span class="cm">/**
+ * Listen on provided port, on all network interfaces.
+ */</span>
+
+<span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">port</span><span class="p">);</span>
+<span class="nx">server</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">error</span><span class="dl">'</span><span class="p">,</span> <span class="nx">onError</span><span class="p">);</span>
+<span class="nx">server</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">listening</span><span class="dl">'</span><span class="p">,</span> <span class="nx">onListening</span><span class="p">);</span>
+
+<span class="p">...</span>
+<span class="p">...</span>
+<span class="p">...</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="express-애플리케이션-구조"><strong>Express 애플리케이션 구조</strong></h3>
+
+<hr />
+
+<p><img src="https://user-images.githubusercontent.com/52439201/153127492-0ae84775-2549-4942-808d-3712683bb354.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h2 id="기본-라우팅"><strong>기본 라우팅</strong></h2>
+
+<hr />
+<p>라우팅은 URI(또는 경로) 및 특정 HTTP 요청 방법(GET, POST, PUT, DELETE)에 대한 클라이언트 요청에따라 애플리케이션이 응답하는 방식을 결정하는 방법을 말한다.</p>
+
+<p>각 경로에는 경로가 일치할 때 실행되는 하나 이상의 처리기 기능이 있을 수 있다.</p>
+
+<p>경로 정의는 다음과 같다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">참고</code>: express 생성기로 만든 구조화된 애플리케이션이 아닌 초기 애플리케이션이라고 가정하고 진행한다.<br />
+<a href="/posts/Node.js-03/">[Node.js] Express API 서버 구축 - 설치 및 실행</a>을 참고</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="nx">METHOD</span><span class="p">(</span><span class="nx">PATH</span><span class="p">,</span> <span class="nx">HANDLER</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">app</code>은 express의 인스턴스이다.</li>
+  <li><code class="language-plaintext highlighter-rouge">METHOD</code>는 소문자로된 HTTP 요청 메서드이다.(<code class="language-plaintext highlighter-rouge">get</code>, <code class="language-plaintext highlighter-rouge">post</code>, <code class="language-plaintext highlighter-rouge">put</code>, <code class="language-plaintext highlighter-rouge">delete</code>)</li>
+  <li><code class="language-plaintext highlighter-rouge">PATH</code>는 서버의 경로이다.</li>
+  <li><code class="language-plaintext highlighter-rouge">HANDLER</code>는 경로가 일치할 때 실행하는 함수이다.</li>
+</ul>
+
+<h3 id="get"><strong>GET</strong></h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">/get</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">'</span><span class="s1">get 방식입니다.</span><span class="dl">'</span><span class="p">)</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<h3 id="post"><strong>POST</strong></h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">/post</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">'</span><span class="s1">post 방식입니다.</span><span class="dl">'</span><span class="p">)</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<h3 id="put"><strong>PUT</strong></h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">/put</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">'</span><span class="s1">put 방식입니다.</span><span class="dl">'</span><span class="p">)</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<h3 id="delete"><strong>DELETE</strong></h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">/delete</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">'</span><span class="s1">delete 방식입니다.</span><span class="dl">'</span><span class="p">)</span>
+<span class="p">})</span>
+</code></pre></div></div>
+:ET

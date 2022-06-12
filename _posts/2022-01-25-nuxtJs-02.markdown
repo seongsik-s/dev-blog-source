@@ -1,0 +1,546 @@
+---
+layout: post
+title: "[Nuxt.js] 공식문서로 빠르게 배우기 2탄 - 디렉토리 구조 및 구성파일 설정"
+tags: [Nuxt.js, Vue.js, Webpack, Babel, Node.js, Javascript]
+categories: [Nuxt.js]
+banner:
+  image: /assets/images/banners/nuxtjs.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## **시작하기**
+
+***
+
+`Nuxt.js`는 `Vue.js`기반 프레임워크이기 때문에 컴포넌트 구성 및 사용방법은 비슷할 것이라고 생각한다. 
+
+아래의 목차대로 빠르게 익혀보자.
+
+* Nuxt.js의 프로젝트 구조
+* 라우터 방식의 차이
+* Layout 디렉토리
+
+
+<br>
+
+## **Nuxt.js 프로젝트 구조**
+
+*** 
+
+npm으로 생성한 프로젝트 구조를 살펴보면 아래와 같다.
+
+![image](https://user-images.githubusercontent.com/52439201/151694647-c47f58bb-6218-43e5-a378-39dd01752269.png)
+
+<br>
+
+### **Assets 디렉토리**
+SASS, CSS, IMAGES, Javascript와 같은 컴파일되지 않는 에셋들을 포함하는 디렉토리이다.
+
+### **components 디렉토리**
+Vue.js 컴포넌트를 포함하는 디렉토리이다. Nuxt.js는 이러한 컴포넌트에 데이터 메소드를 크게 신경쓰지 않는다.
+
+### **Layouts 디렉토리**
+디렉토리는 애플리케이션의 레이아웃을 포함하는 디렉토리. 사이드바를 포함하거나 모아빌 및 데스크탑에 대한 고유한 레이아웃(이 디렉토리는 추가 구성 없이는 이름을 바꿀 수 없다.)
+
+### **Pages 디렉토리**
+views와 router가 포합된 디렉토리이다. `Nuxt.js`는 모든 `.vue` 파일을 읽고 애플리케이션의 라우터를 생성한다.
+
+### **Static 디렉토리**
+정적 파일들을 포함하는 디렉토리이다. 이 디렉토리 파일들은 `/`에 연결한다.
+
+### **Store 디렉토리**
+Vuex store 파일을 포함하는 디렉토리이다. Vuex Store는 기본적으로 Nuxt와 함께 제공되지만 기본적으로 비활성 되어있다. `index.js`을 디렉토리에 만들면 저장소가 자동으로 활성화한다.
+
+### **nuxt.config.js**
+Nuxt.js의 사용자 정의 설정을 포함하는 파일, 모듈을 추가하거나 기본 설정을 무시하려면 변경 사항을 여기에 적용해야 한다.
+
+### **package.json**
+애플리케이션에 대한 모든 종속성과 스크립트를 포함하는 파일이다.
+
+<br>
+
+vue cli(+3)로 생성한 프로젝트 구조랑 다른점이라면 
+* src 디렉토리 밑에 있던 디렉토리들이 전부 루트레벨로 올라왔다는 점이다.
+* `router`, `views` 디렉토리가 없어지고 `pages` 디렉토리가 이 두 가지 기능을 대체하게 되었다. `Nuxt.js`는 빌드시 자동으로 `pages`의 폴더 구조대로 라우터를 생성한다.  
+* `layouts` 디렉토리가 추가되었다. 이것은 애플리케이션의 레이아웃을 포함하는 디렉토리이다.
+
+다만, `component`, `store`, `assets은` `Vue.js`프로젝트의 기능은 똑같이 유지된 것으로 확인된다.
+
+
+<br>
+
+## **Nuxt 구성파일 설정**
+
+*** 
+
+
+Nuxt.js의 기본 구성 파일은 `nuxt.config.js` 파일로 사용한다. 구성파일에 사용되는 옵션에 대해 알아보자.
+
+### **build**
+이 옵션을 사용하면 빌드를 포함하여 `loaders`, `filenames`, `webpack`, `transpilation`에 대한 다양한 설정을 구성할 수 있다.
+
+[The build property](https://nuxtjs.org/docs/configuration-glossary/configuration-build) 
+
+위의 공식문서에서 자세한 가이드를 참고하자.
+
+### **css**
+이 옵션을 사용하면 모든 페이지에서 전역으로 사용할 CSS / 모듈 / 라이브러리 파일을 설정할 수 있다.
+
+```javascript
+export default {
+  css: [
+    // Load a Node.js module directly (here it's a Sass file)
+    'bulma',
+    // CSS file in the project
+    '@/assets/css/main.css',
+    // SCSS file in the project
+    '@/assets/css/main.scss'
+  ]
+}
+```
+
+Nuxt 구성 파일의 css배열에 나열된  CSS/SCSS/Postcss/Less/Stylus/... 파일의 파일 확장자를 생략할 수 있다.
+
+```javascript
+export default {
+  css: ['~/assets/css/main', '~/assets/css/animations']
+}
+```
+
+### **dev**
+이 옵션을 사용하면 Nuxt.js의 `development` 또는  `production` 모드를 정의할 수 있다.
+
+* 유형:Boolean
+* 기본:true
+
+이 속성은 nuxt 명령으로 덮어쓴다.
+
+* dev는 nuxt에 의해 true값이 강제로 적용된다.
+* dev는 nuxt build, nuxt start, nuxt generate 명령어로 강제로 false가 된다.
+
+```javascript
+module.exports = {
+  dev: (process.env.NODE_ENV !== 'production')
+}
+```
+{: file="nuxt.config.js"}
+
+```javascript
+const { Nuxt, Builder } = require('nuxt')
+const app = require('express')()
+const port = process.env.PORT || 3000
+
+// We instantiate Nuxt with the options
+const config = require('./nuxt.config.js')
+const nuxt = new Nuxt(config)
+app.use(nuxt.render)
+
+// Build only in dev mode
+if (config.dev) {
+  new Builder(nuxt).build()
+}
+
+// Listen the server
+app.listen(port, '0.0.0.0').then(() => {
+  console.log(`Server is listening on port: ${port}`)
+})
+```
+{: file="server.js"}
+
+```json
+{
+  "scripts": {
+    "dev": "node server.js",
+    "build": "nuxt build",
+    "start": "NODE_ENV=production node server.js"
+  }
+}
+```
+{: file="package.json"}
+
+위의 예제를 사용하기 위해서는 `npm install --save-dev cross-env` 명령어가 필요할 것이다. 만약 윈도우에서 개발하지 않는다면 `cross-env`를 `start` 스크립트에서 제외하고 `NODE_ENV`에 설정할 수 있다.
+
+
+### **env**
+이 옵션을 사용하면 클라이언트 및 서버에서 사용 가능한 환경 변수를 정의 할 수 있다.
+
+```javascript
+module.exports = {
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+  }
+}
+```
+{: file="nuxt.config.js"}
+
+`BASE_URL`가 정의되어 있다면, `baseUrl` 프로피티를 만들 수 있으며 `baseUrl`은 `http://localhost:3000`과 같다.
+
+자신의 `baseUrl`로 접근할 2가지 방법이 있다.
+* process.env.baseUrl
+* context.baseUrl
+
+예제의 `public token`을 제공하기 위해 `env` 프로퍼티를 사용한다.
+예제를 사용하기 위해 `axios`를 사용합니다.
+
+```javascript
+import axios from 'axios'
+
+export default axios.create({
+  baseURL: process.env.baseUrl
+})
+```
+{: file="plugins/axios.js"}
+
+### **generate**
+이 옵션을 사용하면 애플리케이션에서 Nuxt.js가 HTML 파일로 변환할 모든 동적인 경로에 대한 각각의 파라미터 값을 정의할 수 있다.
+
+```javascript
+export default {
+  generate: {
+    ...
+  }
+}
+```
+{: file="nuxt.config.js"}
+
+옵션 사용방법은 [공식문서](https://nuxtjs.org/docs/configuration-glossary/configuration-generate)를 참고.
+
+### **head**
+이 옵션을 사용하면 애플리케이션의 모든 기본 `메타`를 정의 할 수 있다.
+
+```javascript
+export default {
+  head: {
+    titleTemplate: '%s - 서성식',
+    title: '타이틀',
+    htmlAttrs: {
+      lang: 'ko'
+    },
+    meta: [
+      { charset: 'utf-8' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { hid: 'description', name: 'description', content: '' },
+      { name: 'format-detection', content: 'telephone=no' }
+    ],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ]
+  }
+}
+```
+{: file="nuxt.config.js"}
+
+`head`에 적용할 수 있는 옵션 목록은 [Vue-meta 문서](https://vue-meta.nuxtjs.org/api/#meta-inject)를 참고.
+
+### **loading**
+이 옵션을 사용하면 Nuxt.js를 사용하여 기본적으로 불러올 `loading` 컴포넌트를 사용자 정의 할 수 있다.
+
+**진행률 표시줄 비활성화 :**  
+```javascript
+export default {
+  loading: false
+}
+```
+{: file="nuxt.config.js"}
+
+<br>
+
+**진행률 표시줄 사용자 지정 :**  
+```javascript
+export default {
+  loading: {
+    color: 'blue',
+    height: '5px'
+  }
+}
+```
+{: file="nuxt.config.js"}
+
+<br>
+
+**커스텀 로딩 컴포넌트 사용 :**  
+
+| Method                       | Required | Description |
+|:-----------------------------|:---------|:--------|
+| start()                      | Required | 경로가 변경될 때 호출되며 구성 요소를 표시하는 곳이다. |
+| finish()                     | Required | 라우트가 로드될 대(및 데이터를 가져올 때) 호출되며, 여기에서 구성 요소를 숨긴다.      |
+| fail(error)                  | Optional | 경로를 로드할 수 없을 때 호출된다(예: 데이터 가져오기 실패).   |
+| increase(num)                | Optional | 경로 구성 요소를 로드하는 동안 호출 num되며 Integer < 100   |
+
+```vue
+<template lang="html">
+  <div class="loading-page" v-if="loading">
+    <p>Loading...</p>
+  </div>
+</template>
+
+<script>
+  export default {
+    data: () => ({
+      loading: false
+    }),
+    methods: {
+      start() {
+        this.loading = true
+      },
+      finish() {
+        this.loading = false
+      }
+    }
+  }
+</script>
+
+<style scoped>
+  .loading-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding-top: 200px;
+    font-size: 30px;
+    font-family: sans-serif;
+  }
+</style>
+```
+{: file="components/loading.vue"}
+
+```javascript
+export default {
+  loading: '~/components/loading.vue'
+}
+```
+{: file="nuxt.config.js"}
+
+### **modules**
+모듈은 핵심 기능을 확장하고 끝없는 통합을 추가할 수 있는 Nuxt 확장이다.
+
+```javascript
+export default {
+  modules: [
+    // Using package name
+    '@nuxtjs/axios',
+
+    // Relative to your project srcDir
+    '~/modules/awesome.js',
+
+    // Providing options
+    ['@nuxtjs/google-analytics', { ua: 'X1234567' }],
+
+    // Inline definition
+    function () {}
+  ]
+}
+```
+{: file="nuxt.config.js"}
+
+* 모듈은 순차적으로 실행되므로 순서가 중요하다. 
+* 모듈에 의해 주입된 모든 플러그인 은 플러그인 목록 의 시작 부분 에 추가된다.
+* 다른 모듈에 의존하는 경우 모듈의 순서를 반대로 작성한다.
+
+### **modulesDir**
+`moduleDir` 속성은 경로 해석을 위한 모듈 디렉토리를 설정하는 데 사용된다.  
+즉, `Nuxt` 애플리케이션의 모듈 디렉토리를 정의하는데 사용
+
+```javascript
+export default {
+  modulesDir: ['../../node_modules']
+}
+```
+{: file="nuxt.config.js"}
+
+### **plugins**
+이 옵션을 사용하면 루트 `vue.js` 어플리케이션을 인스턴스화 하기 전에 실행할 `Javascript` 플러그인을 정의 할 수 있다.
+
+`plugins` 속성을 사용하면 `Vue.js` 플러그인을 기본 애플리케이션에 쉽게 추가할 수 있다.
+```javascript
+export default {
+  plugins: [
+    { src: '~/plugins/both-sides.js' },
+    { src: '~/plugins/client-only.js', mode: 'client' },
+    { src: '~/plugins/server-only.js', mode: 'server' }
+  ]
+}
+```
+{: file="nuxt.config.js"}
+
+```javascript
+export default {
+  plugins: ['@/plugins/ant-design-vue']
+}
+```
+{: file="nuxt.config.js"}
+
+```javascript
+import Vue from 'vue'
+import Antd from 'ant-design-vue'
+import 'ant-design-vue/dist/antd.css' // Per Ant Design's docs
+
+Vue.use(Antd)
+```
+{: file="plugins/ant-design-vue.js"}
+
+
+### **router**
+`router` 옵션을 사용하면 Vue 라우터의 기본 Nuxt 구성을 덮어쓸 수 있다.  
+즉, `Nuxt` 라우터를 사용자 지정할 수 있다.
+
+[공식 문서 참고](https://nuxtjs.org/docs/configuration-glossary/configuration-router)
+
+### **server**
+이 옵션을 사용하면 Nuxt 애플리케이션의 서버 인스턴스에 대한 연결 변수를 구성할 수 있다.
+
+**기본 사용 :**
+```javascript
+export default {
+  server: {
+    port: 8000, // default: 3000
+    host: '0.0.0.0', // default: localhost,
+    timing: false
+  }
+}
+```
+{: file="nuxt.config.js"}
+
+<br>
+
+**HTTPS 구성 사용 :**
+```javascript
+import path from 'path'
+import fs from 'fs'
+
+export default {
+  server: {
+    https: {
+      key: fs.readFileSync(path.resolve(__dirname, 'server.key')),
+      cert: fs.readFileSync(path.resolve(__dirname, 'server.crt'))
+    }
+  }
+}
+```
+{: file="nuxt.config.js"}
+
+<br>
+
+**소켓 구성사용 :**  
+```javascript
+export default {
+  server: {
+    socket: '/tmp/nuxt.socket'
+  }
+}
+```
+{: file="nuxt.config.js"}
+
+<br>
+
+**타이밍 :**  
+
+옵션을 활성화하면 `server.timing`서버 측 렌더링 동안 경과된 시간을 측정하는 미들웨어가 추가되고 헤더에 `'Server-Timing'`으로 추가된다.
+
+```javascript
+export default {
+  server: {
+    timing: {
+      total: true
+    }
+  }
+}
+```
+{: file="nuxt.config.js"}
+
+
+
+### **srcDir**
+이 옵션을 사용하면 `nuxt.js` 어플리케이션의 `src` 디렉토리를 정의 할 수 있다.
+
+```javascript
+export default {
+  srcDir: 'src/'
+}
+```
+{: file="nuxt.config.js"}
+
+`src`디렉토리에 Nuxt 애플리케이션이 있는 프로젝트 구조 예시
+```
+**-| app/
+---| node_modules/
+---| nuxt.config.js
+---| package.json
+---| client/
+------| assets/
+------| components/
+------| layouts/
+------| middleware/
+------| pages/
+------| plugins/
+------| static/
+------| store/**
+```
+
+### **dir**
+이 옵션을 사용하면 Nuxt 디렉토리의 사용자 정의 이름을 정의할 수 있다.
+
+```javascript
+export default {
+  dir: {
+    assets: 'custom-assets',
+    app: 'custom-app',
+    layouts: 'custom-layouts',
+    middleware: 'custom-middleware',
+    pages: 'custom-pages',
+    static: 'custom-static',
+    store: 'custom-store'
+  }
+}
+```
+{: file="nuxt.config.js"}
+
+
+### **Transition**
+이 옵션을 사용하면 페이지 전환의 기본 속성을 정의할 수 있다.
+
+<br>
+
+**pageTransition 속성 :**
+
+페이지 전환의 기본 속성을 설정하는 데 사용한다.
+
+```javascript
+export default {
+  pageTransition: 'page'
+  // or
+  pageTransition: {
+    name: 'page',
+    mode: 'out-in',
+    beforeEnter (el) {
+      console.log('Before enter...');
+    }
+  }
+}
+```
+{: file="nuxt.config.js"}
+
+<br>
+
+**layoutTransition 속성 :**
+레이아웃 전환의 기본 속성을 설정하는 데 사용됩니다. `name` 옵션에 제공된 값은 `layouts` 폴더의 `layout`에 제공된 이름과 함께 작동하도록 구성됩니다.
+
+```javascript
+export default {
+  layoutTransition: 'layout'
+  // or
+  layoutTransition: {
+    name: 'layout',
+    mode: 'out-in'
+  }
+}
+```
+{: file="nuxt.config.js"}

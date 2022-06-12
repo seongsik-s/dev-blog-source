@@ -1,0 +1,563 @@
+---
+layout: post
+title: "[Webpack] plugin"
+tags: [Webpack, Babel, Node.js, Javascript]
+categories: [Webpack]
+banner:
+  image: /assets/images/banners/webpack.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+
+## **plugin란?**
+{: id="a" } 
+
+***
+
+파일단위로 처리하는 `loader`와 다르게 플러그인은 번들링된 결과를 처리합니다. 번들링된 자바스크립트를 난독화하거나 텍스트를 추출하는 등의 용도로 사용합니다.
+플러그인을 빌드하는 것은 로더를 빌드하는 것보다 조금 더 고급입니다. 플러그인을 이해하려면 `webpack` 저수준 내부의 이해가 필요합니다.
+
+이해를 위해 플러그인을 직접 만들어보고 내부적으로 어떻게 작동하는지 알아보겠습니다!
+
+<br>
+<br>
+
+## **plugin 만들기** 
+{: id="b" }
+
+***
+
+* `plugin`은 `apply` 메소드가 있는 `javascript` 객체입니다.
+* `apply` 메서드는 웹팩 컴파일러에 의해 한 번 호출되어 전체 컴파일에 대한 엑서스를 제공합니다.
+
+<br>
+
+```javascript
+   class HelloWorldPlugin {
+    apply(compiler) {
+        compiler.hooks.done.tap(
+        'Hello World Plugin',
+        (
+            stats /* stats is passed as an argument when done hook is tapped.  */
+        ) => {
+            console.log('Hello World!');
+        }
+        );
+    }
+    }
+
+    module.exports = HelloWorldPlugin;
+```
+{: file="myplugin.js"}
+
+<br>
+
+```javascript
+    const MyPlugin = require("./myplugin")
+
+
+    module.exports = {
+        ...
+        plugins: [new MyPlugin()],
+    }
+```
+{: file="webpack.config.js"}
+
+<br>
+
+**build 결과 :**  
+* 맨위에 `Hellow World!` `log`가 찍힌 것을 확인할 수 있습니다.
+```console
+    > npm run build
+
+    > webpack-demo@1.0.0 build
+    > webpack
+
+    Hello World!
+    asset images/bg.jpg 612 KiB [emitted] [from: src/bg.jpg] (auxiliary name: main)
+    asset main.js 33.8 KiB [emitted] (name: main)
+    runtime modules 2.39 KiB 7 modules
+    javascript modules 10.8 KiB
+    modules by path ./node_modules/ 8.66 KiB
+        modules by path ./node_modules/style-loader/dist/runtime/*.js 5.75 KiB 6 modules
+        modules by path ./node_modules/css-loader/dist/runtime/*.js 2.91 KiB 3 modules
+    modules by path ./src/ 2.19 KiB
+        modules by path ./src/*.js 323 bytes 2 modules
+        modules by path ./src/*.css 1.88 KiB
+        ./src/app.css 1.11 KiB [built] [code generated]
+        ./node_modules/css-loader/dist/cjs.js!./src/app.css 785 bytes [built] [code generated]
+    asset modules 5.17 KiB (javascript) 612 KiB (asset)
+    ./src/webpack.png 5.13 KiB [built] [code generated]
+    ./src/bg.jpg 42 bytes (javascript) 612 KiB (asset) [built] [code generated]
+    webpack 5.65.0 compiled successfully in 867 ms
+```
+
+여기서 중요한 건 `loader`는 파일 수 만큼 `log`가 찍혔다면 `plugin`은 한 번만 찍힌 것을 확인할 수 있습니다.  
+위에 설명대로 `plugin`은 하나로 번들링된 결과에 대해서 처리하기 때문입니다. 
+
+<br>
+
+## **번들링된 결과(파일) 접근**
+{: id="c" }
+
+***
+
+* 비동기 이벤트 후크 : `tapAsync`
+* `tapAsync` 메소드를 사용하여 플로그인을 사용할 때는 함수의 마지막 인수로 제공되는 콜백 함수를 호출해야 합니다.
+* `compiler` 모듈은 `CLI` 또는 `Node API`를 통해 전달된 모든 옵션으로 컴파일 인스턴스를 생성하는 메인 엔진입니다. 
+* `Compilation` 모듈은 `compiler`에서 새 컴파일 또는 빌드를 만드는데 사용합니다. `Compilation` 객체는는 모든 모듈과 디펜던시에 접근할 수 있습니다.
+
+`compiler`에 의해 번들링된 결과가 `compilation` 인자로 들어오면 `compilation` 객체로 청크를 복원하여 파일 소스를 콘솔에 찍습니다.
+
+```javascript
+   class MyPlugin {
+        apply(compiler) {
+            compiler.hooks.emit.tapAsync('MyPlugin', (compilation, callback) => {
+            // 각 청크를 탐색합니다.
+            compilation.chunks.forEach((chunk) => {
+                // 청크에 의해 생성된 각 asset 파일 이름을 탐색합니다.
+                chunk.files.forEach((filename) => {
+                // 청크에 의해 생성된 각 파일의 asset 소스를 가져옵니다.
+                var source = compilation.assets['main.js'].source();
+                console.log(source);
+                });
+            });
+
+            callback();
+            });
+        }
+    }
+
+  module.exports = MyPlugin;
+```
+{: file="myplugin.js"}
+
+**build 결과 : log 상단의 주석과 번들링 결과인 main.js의 상단의 주석이 같은 것을 확인할 수 있습니다.**  
+
+![image](https://user-images.githubusercontent.com/52439201/146717570-03fc40d1-46ef-4fe2-a74a-277ca721fa74.png)
+
+
+![image](https://user-images.githubusercontent.com/52439201/146717618-46741cb1-7205-4120-94c8-df42fa43ca7a.png)
+
+<br>
+
+## **[BannerPlugin](https://webpack.kr/plugins/banner-plugin/)**
+{: id="d" }
+
+***
+
+* 생성된 각 `chunk` 상단에 정보들을 추가 입력할 수 있게 도와주는 플러그인입니다.
+* 예) 빌드 버전, 커밋 버전, 개발자명, 참여인원, 수정날짜 등
+
+### **BannerPlugin :**  
+```javascript
+    const webpack = require('webpack');
+
+    new webpack.BannerPlugin(banner);
+    // or
+    new webpack.BannerPlugin(options);
+```
+
+### **Options :**  
+```javascript
+    {
+        banner: string | function, // the banner as string or function, it will be wrapped in a comment
+        raw: boolean, // if true, banner will not be wrapped in a comment
+        entryOnly: boolean, // if true, the banner will only be added to the entry chunks
+        test: string | RegExp | [string, RegExp], // Include all modules that pass test assertion.
+        include: string | RegExp | [string, RegExp], // Include all modules matching any of these conditions.
+        exclude: string | RegExp | [string, RegExp], // Exclude all modules matching any of these conditions.
+    }
+```
+
+### **사용방법 :**  
+```javascript
+    import webpack from 'webpack';
+
+    // string
+    new webpack.BannerPlugin({
+        banner: 'hello world',
+    });
+
+    // function
+    new webpack.BannerPlugin({
+        banner: (yourVariable) => {
+            return `yourVariable: ${yourVariable}`;
+        },
+    });
+    Place
+```
+
+### **배너 파일 생성 :**  
+* 배너 정보가 많을 경우에는 파일을 따로 생성해서 적용할 수 있습니다.
+
+```javascript
+    const webpack  = require('webpack');
+    const banner = require('./banner.js');
+
+    module.exports = {
+        ...
+        plugins : [new webpack.BannerPlugin(banner)],
+    }
+```
+{: file="webpack.config.js"}
+
+<br>
+
+```javascript
+    const childProcess = require("child_process");
+
+    module.exports = function banner() {
+        const user_name = childProcess.execSync("git config user.name");
+        const date = new Date().toLocaleString();
+        const commit = childProcess.execSync("git rev-parse --short HEAD")
+        const node = childProcess.execSync("node --version")
+
+        return (
+            `
+                user name : ${user_name}
+            `+
+            `
+                Build date : ${date}
+            `+
+            `
+                Commit version : ${commit}
+            `+
+            `
+                node.js version : ${node}
+            `
+        )
+        
+    }
+```
+{: file="banner.js"}
+
+<br>
+
+**build 결과 :**  
+
+![image](https://user-images.githubusercontent.com/52439201/146729580-518bfbb5-3e83-481c-a23f-a72e1830a605.png)
+  
+
+<br>
+
+## **[DefinePlugin](https://webpack.kr/plugins/define-plugin/)**
+{: id="e" }
+
+***
+
+* `DefinePlugin`을 사용하면 컴파일 타임에 구성할 수 있는 전역 상수를 만들 수 있습니다.
+* `DefinePlugin`은 개발환경, 운영환경에 따라 다른 동작을 하고 싶을 때 사용합니다.
+* 가령, 개발환경에서는 로깅을 수행하지만, 운영환경에서는 수행하지 않는 경우에 전역 상수를 사용하여 로깅의 수행여부를 결정할 수 있습니다.
+* `DefinePlugin`을 사용하여 개발 및 운영 빌드 환경을 잊어버리시면 됩니다.
+* 참고로, `process.env.NODE_ENV` 는 노드 환경정보가 들어있는 변수이다. 처음 `webpack` 설정의 `mode`값이 들어가 있다.
+
+```javascript
+    const webpack  = require('webpack');
+
+    module.exports = {
+        ...
+        plugins : [
+            new webpack.DefinePlugin({
+                PRODUCTION: JSON.stringify(true),
+                VERSION: JSON.stringify('5fa3b9'),
+                BROWSER_SUPPORTS_HTML5: true,
+                TWO: '1+1',
+                'typeof window': JSON.stringify('object')
+            })
+        ],
+    }
+```
+{: file="webpack.config.js"}
+
+<br>
+
+```javascript
+    
+    ...
+
+    // DefinePlugin에서 구성한 전역 상수를 사용할 수 있다.
+    console.log(PRODUCTION);
+    console.log(VERSION);
+    console.log(BROWSER_SUPPORTS_HTML5);
+    console.log(TWO);
+    console.log(typeof window);
+    console.log(process.env.NODE_ENV);
+```
+{: file="app.js"}
+
+<br>
+
+**build 결과 :**  
+
+![image](https://user-images.githubusercontent.com/52439201/146736575-7266cce1-eeb0-4409-95a2-e707dcaa6fc4.png)
+
+<br>
+
+## **[CleanWebpackPlugin](https://www.npmjs.com/package/clean-webpack-plugin)**
+{: id="f" }
+
+***
+
+* `CleanWebpackPlugin`은 `build`된 폴더를 제거/정리하는 `webpack plugin` 입니다.
+* `Node v10+` 및 `webpack v4+` 에서 지원됩니다.
+* 기본적으로 이 플러그인은 `output.path` 성공적인 재구축 후 `webpack` 디렉토리 내의 모든 파일과 사용되지 않는 `webpack` 자산들을 모두 제거합니다.
+
+**install :**  
+```console
+    npm install --save-dev clean-webpack-plugin
+```
+
+<br>
+
+```javascript
+    // default export가 아니기 때문에 { name } 으로 불러옵니다.
+    const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
+    module.exports = {
+        ...
+        plugins : [
+            new CleanWebpackPlugin(),
+        ],
+    }
+```
+{: file="webpack.config.js"}
+
+<br>
+
+**dist 폴더에 test.js 추가 :**  
+
+![image](https://user-images.githubusercontent.com/52439201/147094133-81634633-f3fc-45d2-afa7-1acfed5c94c6.png)
+
+<br>
+
+**build 결과 :**
+```console
+    npm run build
+
+    > webpack-demo@1.0.0 build
+    > webpack
+
+    asset images/bg.jpg 612 KiB [emitted] [from: src/bg.jpg] (auxiliary name: main)
+    asset main.js 34.1 KiB [emitted] (name: main)
+    runtime modules 2.39 KiB 7 modules
+    javascript modules 11 KiB
+    modules by path ./node_modules/ 8.66 KiB
+        modules by path ./node_modules/style-loader/dist/runtime/*.js 5.75 KiB 6 modules
+        modules by path ./node_modules/css-loader/dist/runtime/*.js 2.91 KiB 3 modules
+    modules by path ./src/ 2.36 KiB
+        modules by path ./src/*.js 494 bytes 2 modules
+        modules by path ./src/*.css 1.88 KiB
+        ./src/app.css 1.11 KiB [built] [code generated]
+        ./node_modules/css-loader/dist/cjs.js!./src/app.css 785 bytes [built] [code generated]
+    asset modules 5.17 KiB (javascript) 612 KiB (asset)
+    ./src/webpack.png 5.13 KiB [built] [code generated]
+    ./src/bg.jpg 42 bytes (javascript) 612 KiB (asset) [built] [code generated]
+    webpack 5.65.0 compiled successfully in 3267 ms
+```
+
+<br>
+
+dist 디렉토리를 깔끔하게 지우고 다시 build된 것을 확인할 수 있습니다.
+
+![image](https://user-images.githubusercontent.com/52439201/147094643-c68e75f6-44da-4dd9-92c1-17d212fb3a14.png)
+
+<br>
+
+## **[HtmlWebpackPlugin](https://webpack.kr/plugins/html-webpack-plugin/)**
+{: id="g" }
+
+***
+
+* `HtmlWebpackPlugin`은 `HTML`파일 생성을 단순화합니다. 빌드 타임에 값을 넣거나 코드를 압축할 수 있습니다.
+* `webpack.config.js`에서 설정한 `output path`에 `dist/index.html` 파일이 생성됩니다.  
+* `3rd party` 패키지입니다.
+
+**install :**   
+```console
+   npm install --save-dev html-webpack-plugin
+```
+
+**./index.html :**  
+```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <!-- 스크립트 제거 -->
+        <!-- <script src="./dist/main.js"></script> -->
+    </body>
+    </html>
+```
+{: file="./index.html"}
+
+<br>
+
+```javascript
+   const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+   module.exports = {
+        ...
+        plugins : [
+            new HtmlWebpackPlugin(),
+        ],
+    }
+```
+{: file="webpack.config.js"}
+
+<br>
+
+**build 결과 :**  
+* `dist/index.html` 파일이 생성되었고 `webpack`의 엔트리 포인트는 생성된 `HTML`에 모두 <code>&lt;script&gt;</code> 태그로 포함됩니다.
+* 만약 `webpack` 출력에 `css asset`이 있다면((MiniCssExtractPlugin으로 추출된 `CSS`) 이들은 생성된 `HTML` 파일의 <code>&lt;head&gt;</code>요소 안에 <code>&lt;link&gt;</code> 태그로 포함됩니다.  
+
+![image](https://user-images.githubusercontent.com/52439201/147100685-deb96832-c010-40a4-9208-df4db1ca66f7.png)
+ 
+<br>
+
+######## **Options를 줘서 커스텀할 수 있습니다.**
+* [HtmlWebpackPlugin Options 참고하기 (click)](https://github.com/jantimon/html-webpack-plugin##options)
+* `./index.html` -> `src/index.html`에 하나 복사합니다.
+
+```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>webpack app <%= env %></title>
+    </head>
+    <body>
+        <!-- <script src="./dist/main.js"></script> -->
+    </body>
+    </html>
+```
+{: file="./src/index.html"}
+
+<br>
+ 
+```javascript
+   const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+   module.exports = {
+        ...
+        plugins : [
+            new HtmlWebpackPlugin({
+            title: 'siksik webpack',        // 생성된 HTML에 사용할 제목
+            filename : 'siksik.html',       // 생성할 HTML 파일명, 기본값은 index.html
+            template: './src/index.html',   // 템플릿 경로를 지정
+            templateParameters: {           // 템플릿에 사용된 매개변수를 덮어쓸 수 있습니다.
+              env: process.env.NODE_ENV === 'development' ? '(development)' : '(product)',
+            },
+        })
+        ],
+    }
+```
+{: file="webpack.config.js"}
+
+<br>
+ 
+**NODE_ENV=production npm run build 결과 :**
+```console
+   NODE_ENV=production npm run build
+```
+
+![image](https://user-images.githubusercontent.com/52439201/147105393-146accb4-e78c-4fac-b1ad-c459f81dbc7f.png)
+
+<br>
+
+**NODE_ENV=development npm run build 결과 :**
+```console
+   NODE_ENV=development npm run build
+```
+
+![image](https://user-images.githubusercontent.com/52439201/147105637-ae593f49-67d0-4526-a31f-4131fb6c28fc.png)
+
+<br>
+<br>
+
+## **[MiniCssExtractPlugin](https://webpack.kr/plugins/mini-css-extract-plugin/)**
+{: id="h" }
+
+***
+
+* `MiniCssExtractPlugin`은 `CSS`를 별도의 파일로 추출합니다. `CSS`가 포함된 JS파일별로 `CSS`파일을 생성합니다.
+* `CSS`가 많아 질수록 하나의 Js 결과물로 만드는 것이 부담될 수 있습니다. 번들된 결과에서 `CSS` 코드만 뽑아 별도의 `CSS` 파일로 만들어 파일을 분리하는게 유리할 수 있습니다. 브라우저에서 큰 파일을 하나 받는 것 보다, 여러 개의 작은 파일을 동시에 다운로드하는게 빠릅니다.
+* `css-loader`와 함께 사용합니다.
+* `production` 환경인 경우엔 `MiniCssExtractPlugin.loader`를 사용하고  `development` 환경인 경우엔 `style-loader`를 사용해보자
+* `MiniCssExtractPlugin.loader`는 `MiniCssExtractPlugin`에서 제공하는 로더이다.
+
+**install :**
+```console
+   npm install --save-dev mini-css-extract-plugin
+```
+
+<br>
+
+```javascript
+   const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+   module.exports = {
+       plugins: [new MiniCssExtractPlugin()],
+       module: {
+           rules: [
+               {
+                   test: /\.css$/i,
+                   use: [
+                        process.env.NODE_ENV === 'production'
+                        ? MiniCssExtractPlugin.loader
+                        : 'style-loader',
+                        'css-loader'
+                   ]
+               },
+            ],
+        },
+        plugins : [
+            ...(process.env.NODE_ENV === 'production'
+            ? [new MiniCssExtractPlugin({filename: '[name].css'})]
+            : []
+        ],
+    };
+```
+{: file="webpack.config.js"}
+
+<br>
+
+```javascript
+    import './app.css';
+    ...
+```
+<br>
+
+**app.css :**
+```css
+    body {
+        background-image: url(bg.jpg);
+    }
+```
+{: file="app.js"}
+
+<br>
+
+**NODE_ENV=production npm run build 결과 :**
+
+* `main.css` 파일이 dist 폴더에 생성된 것을 확인할 수 있습니다.
+
+![image](https://user-images.githubusercontent.com/52439201/147108573-c929018b-c6e2-46c3-8f59-eab5fe98ea2a.png)
+
+<br>
+
+* `HtmlWebpackPlugin`에 의해 생성된 `HTML`안에 `css asset(main.css)`이 <code>&lt;head&gt;</code> 요소 안에 <code>&lt;link&gt;</code> 태그로 포함된 것을 확인할 수 있습니다.  
+
+![image](https://user-images.githubusercontent.com/52439201/147108652-5e60ce99-1139-48e9-a615-c4e5681fdae9.png)

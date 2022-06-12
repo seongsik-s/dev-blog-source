@@ -1,0 +1,232 @@
+---
+layout: post
+title: "[Vue.js] Vue CLI로 프로젝트 생성하기"
+tags: [Webpack, Babel, Node.js, Javascript]
+categories: [Vue.js]
+banner:
+  image: /assets/images/banners/vue.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## **Vue-CLI**
+
+***
+
+`Vue-CLI`는 신속하게 Vue.js 개발환경을 설정할 수 있도록 도와주는 도구이다.  
+기본적으로 초기 프로젝트 세팅을 생성해주기 때문에 프로젝트 구조, Lint, webpack, babel과 같은 도구들의 설정 고민을 덜 수 있다.
+
+
+`CLI`란
+* 명령 줄 인터페이스(CLI, Command line interface) 또는 명령어 인터페이스는 텍스트 터미널을 통해 사용자와 컴퓨터가 상호 작용하는 방식을 뜻한다. 
+* 즉, 작업 명령은 사용자가 컴퓨터 키보드 등을 통해 문자열의 형태로 입력하며, 컴퓨터로부터의 출력 역시 문자열의 형태로 주어진다. 
+
+<br>
+
+### **설치**
+
+`Node 버전 요구 사항`
+* Vue CLI 4.x에는 Node.js 버전 8.9 이상이 필요. (v10+ 권장)
+
+`이전 버전에 대한 경고`
+* 패키지 이름이 `vue-cli`에서 `@vue/cli`으로 변경.
+* 만약 `이전 버전(vue-cli)`을 사용하고 있다면, 이전 버전을 먼저 `제거(uninstall)`하고 `새 버전(@vue/cli)`을 설치.
+
+```console
+  npm install -g @vue/cli
+  # OR
+  yarn global add @vue/cli
+```
+
+`vue --version` 명령어를 입력했을 때 vue의 version이 나온다면 정상적으로 설치   
+```console
+  vue --version
+
+  @vue/cli 4.5.15
+```
+
+<br>
+
+### **프로젝트 생성**
+
+```console
+  // vue create [프로젝트명]
+
+  vue create sample-vue
+```
+
+대화형으로 프로젝트 구성을 선택할 수 있다. `Manually select features` 선택한다. `select`형식으로 프로젝트를 구성할 수 있다.
+
+![image](https://user-images.githubusercontent.com/52439201/148722920-4515c644-81d7-43f1-b990-92f847fc779f.png)
+
+<br>
+
+`3) Check the features needed for your project:`
+
+[x] Choose Vue version  
+[x] Babel  
+[x] TypeScript  
+[ ] Progressive Web App (PWA) Support  
+[x] Router 
+[x] Vuex  
+[x] CSS Pre-processors  
+[x] Linter / Formatter  
+[ ] Unit Testing  
+[ ] E2E Testing  
+
+<br>
+
+`4) Choose a version of Vue.js that you want to start the project with`
+
+[x] 2.x  
+[ ] 3.x (Preview)  
+
+사용할 Vue.js 버전 선택
+
+<br>
+
+`5) Use class-style component syntax? (y/N)`
+
+N
+
+<br>
+
+`6) Use Babel alongside TypeScript (required for modern mode, auto-detected polyfills, transpiling JSX)? (Y/n)`
+
+N (TypeScript에 Babel을 같이 사용 여부)  
+
+<br>
+
+`7) Use history mode for router? (Requires proper server setup for index fallback in production) (Y/n)`
+
+Y
+
+<br>
+
+`8) Pick a CSS pre-processor (PostCSS, Autoprefixer and CSS Modules are supported by default):`
+
+[x] Sass/SCSS (with dart-sass)  
+[ ] Sass/SCSS (with node-sass)  
+[ ] Less  
+[ ] Stylus  
+
+<br>
+
+`9) Pick a linter / formatter config: (Use arrow keys)`
+
+[ ] ESLint with error prevention only  
+[ ] ESLint + Airbnb config  
+[ ] ESLint + Standard config  
+[x] ESLint + Prettier  
+[ ] TSLint (deprecated)  
+
+(ESLint와 포맷터를 어떻게 구성할 것인지 물어보는 것)
+
+<br>
+
+`10) Pick additional lint features:`
+
+[x] Lint on save            // 저장 시 lint 검사  
+[x] Lint and fix on commit  // commit 시 lint 검사  
+
+<br>
+
+`11) Where do you prefer placing config for Babel, ESLint, etc.?`
+
+[x] In dedicated config files  
+[ ] In package.json  
+
+Babel, ESLint, etc. 들을 따로 config 파일을 생성해서 관리할 것인가? 아니면 package.json에 같이 관리할 것인가?  
+관리측면에서 개별적으로 관리하는 것이 좋아보인다.
+
+<br>
+
+`12) Save this as a preset for future projects? (y/N)`
+
+N
+
+<br>
+
+
+생성된 프로젝트로 들어가서 `npm run serve`로 dev 서버를 실행한다.
+```console
+  // cd [프로젝트명]
+
+  E:\study>cd sample-vue
+
+  E:\study\sample-vue>npm run serve
+```
+
+`serve`라는 명령어는 `Vue-CLI`에서 제공하는 명령어가 아니라 `package.json` 스크립트에 명령어를 설정하여 `npm run [명령어]`로 구동하는 것입니다.
+
+```json
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  }
+```
+{: file="package.json"}
+
+
+npx를 사용하여 직접 서버를 구동시킬 수도 있다.
+```console
+  npx vue-cli-service serve
+```
+
+
+서버구동이 완료되고 `http://localhost:8080/`로 접속하여 아래와 같은 화면이 나온다면 성공이다.
+
+![image](https://user-images.githubusercontent.com/52439201/148723880-da116c96-4e23-405e-8ade-a7f3d2ced550.png)
+
+<br>
+
+### **프로젝트 구조**
+
+vue-CLI로 프로젝트를 생성하게 되면 아래와 같은 구조를 갖게 된다. (CLI 버전 3이상)
+
+```
+프로젝트
+  ├─ node_modules/
+  ├─ public
+  ├─ src/
+  ├─ package.json
+  └─ src
+    ├─ asstes/
+    ├─ components/
+    ├─ router/
+    ├─ store/
+    ├─ views/
+    ├─ App.vue
+    └─ main.js
+  ├─ .browserslistrc
+  ├─ .eslintrc.js
+  ├─ .gitignore
+  ├─ babel.config.js
+  ├─ package-lock.json
+  ├─ package.json
+  └─ README.md
+```
+
+* `node_modules`: npm 라이브러리들이 있는 폴더(package.json에 종속되어있는 라이브러리)
+* `public`: 빌드시 웹팩 처리를 받지 않고 퍼블리싱되는 정적 자산을 포함하는 폴더이다(static assets)
+* `src`: 애플리케이션 디렉토리
+* `src/assets`: css, images 등의 정적 assets을 저장하는 폴더
+* `src/components`: 컴포넌트를 담는 폴더
+* `src/router`: Vue Router 관련 폴더
+* `src/store`: Vuex 관련 폴더
+* `src/views`: 라우터 페이지 관련 폴더
+* `src/APP.vue`: 프로젝트 최상위 컴포넌트 파일
+* `src/main.js`: 프로젝트 entry .js 파일
+* `.eslintrc.js`: ESLint 설정 파일
+* `babel.config.js`: babel 설정 파일
+* `package.json`: 프로젝트 패키지관리 파일
+* `package-lock.json`: 프로젝트 의존성 트리에 대한 정보를 담은 파일
+
+`Vue CLI` 도구를 사용하여 프로젝트를 생성 및 기본적인 구조에 대해서 알아봤다. 
+하지만, 프로젝트의 깊은 이해를 바탕으로 개발을 하기위해서는...`Vue`의 핵심 구성요소를 알아야겠다 
+다음 포스팅은 `Vue`의 3대 필수 구성인 `Vuex`와 `Vue CLI`, 그리고 `Vue Router`에 대해 자세히 공부해서 포스팅해야겠다.

@@ -1,0 +1,286 @@
+I"cP<h2 id="a"><strong>Babel의 등장 배경</strong></h2>
+
+<hr />
+
+<ul>
+  <li>브라우저마다 사용하는 언어가 다르다.</li>
+  <li><code class="language-plaintext highlighter-rouge">ECMAScript2015+</code> 이후의 <code class="language-plaintext highlighter-rouge">Javascript</code> 언어를 특정 브라우저 및 버전에 따라 사용할 수 없는 문제</li>
+  <li>예를 들어, 크롬 79버전 기준으로 개발했으나, <code class="language-plaintext highlighter-rouge">IE</code>에서는 작동이 안되는 크로스브라우징이 발생한다.</li>
+  <li><code class="language-plaintext highlighter-rouge">Babel</code>은 이러한 크로스브라우징 이슈를 해결해준다. <code class="language-plaintext highlighter-rouge">ECMAScript2015+</code> 로 작성한 코드를 모든 브라우저에 호환할 수 있도록 코드를 변환해준다.</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="b"><strong>Babel의 동작원리</strong></h2>
+
+<hr />
+<p>교육자료 : <a href="https://jeonghwan-kim.github.io/series/2019/12/22/frontend-dev-env-babel.html">프론트엔드 개발환경의 이해: Babel</a><br />
+참고자료 : <a href="https://babeljs.io/docs/en/">Babel 공식사이트</a><br />
+참고자료 : <a href="https://github.com/jamiebuilds/babel-handbook/blob/master/translations/ko/plugin-handbook.md">Babel Plugin Handbook</a></p>
+
+<h3 id="b-1"><strong>기본 동작</strong></h3>
+
+<ol>
+  <li>파싱(Parsing) - 코드를 토큰별로 분해</li>
+  <li>변환(Transforming) - 파싱한 코드를 ES5로 변환한다.(플러그인 담당)</li>
+  <li>출력(Printing) - 변환된 결과물을 출력하여 작업을 완료</li>
+</ol>
+
+<p><code class="language-plaintext highlighter-rouge">ECMAScript2015+</code> 문법을 사용한 <code class="language-plaintext highlighter-rouge">.js</code>파일을 생성하고 이 파일을 <code class="language-plaintext highlighter-rouge">IE</code>에서도 읽을 수 있도록 변환해 보는 작업을 진행해 봅시다.</p>
+
+<p><strong>install :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span><span class="w"> </span>npm <span class="nb">install</span> <span class="nt">--save-dev</span> @babel/core @babel/cli
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div file="./app.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// Babel Input: ES2015 arrow function</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">].</span><span class="nx">map</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="nx">data</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+
+    <span class="c1">// Babel Input: ES2015 const, let 스코프</span>
+    <span class="kd">const</span> <span class="nx">test</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">test2</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<ul>
+  <li>일단 path.node.name의 값들은 무엇인지 살펴보자.</li>
+</ul>
+
+<div file="./myBabelPlugin.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">myBabelPlugin</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span>
+        <span class="na">visitor</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nx">Identifier</span><span class="p">(</span><span class="nx">path</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">node</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+            
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Identifier() name:</span><span class="dl">"</span><span class="p">,</span> <span class="nx">name</span><span class="p">)</span>
+
+            <span class="c1">// reverse the name: JavaScript -&gt; tpircSavaJ</span>
+            <span class="c1">// path.node.name = name</span>
+            <span class="c1">//    .split("")</span>
+            <span class="c1">//    .reverse()</span>
+            <span class="c1">//    .join("");</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>babel build :</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">path.node.name</code>의 값들을 확인할 수 있습니다.</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">
+</span><span class="gp">    &gt;</span><span class="w"> </span>npx babel app.js <span class="nt">--plugins</span> ./myBabelPlugin.js
+<span class="go">
+    Identifier() name: map
+    Identifier() name: data
+    Identifier() name: data
+    Identifier() name: test
+    Identifier() name: test2
+
+</span><span class="c">    ...
+</span><span class="go">
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<ul>
+  <li>플로그인은 <code class="language-plaintext highlighter-rouge">visitor</code> 객체를 반환해야 합니다. 이 객체는 바벨이 파싱하여 만든 <code class="language-plaintext highlighter-rouge">추상 구문 트리(AST)</code>에 접근할 수 있는 메소드를 제공합니다.</li>
+  <li>그 중 <code class="language-plaintext highlighter-rouge">Identifier()</code> 메소드의 동작을 알아보면 <code class="language-plaintext highlighter-rouge">Identifier()</code>에 들어온 인자 <code class="language-plaintext highlighter-rouge">path</code>에 접근하면 파싱된 코드들을 뒤집어서 집어 넣는 예제입니다.</li>
+  <li>실제로 <code class="language-plaintext highlighter-rouge">./app.js</code>의 코드들이 뒤집혀 출력되는지 확인해봅시다.</li>
+</ul>
+
+<div file="./myBabelPlugin.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">myBabelPlugin</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span>
+        <span class="na">visitor</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nx">Identifier</span><span class="p">(</span><span class="nx">path</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">node</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+            <span class="c1">// reverse the name: JavaScript -&gt; tpircSavaJ</span>
+            <span class="nx">path</span><span class="p">.</span><span class="nx">node</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span>
+                <span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">""</span><span class="p">)</span>
+                <span class="p">.</span><span class="nx">reverse</span><span class="p">()</span>
+                <span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="dl">""</span><span class="p">);</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p>직접만든 <code class="language-plaintext highlighter-rouge">babel</code> 플로그인을 사용해서 <code class="language-plaintext highlighter-rouge">./app.js</code> 변환 :</p>
+
+<ul>
+  <li>path.node.name : map, data, data, test, test2 들이 뒤집혀서 출력</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    // npx babel [변환할.js] --plugins [적용할 plugin]
+</span><span class="gp">    &gt;</span><span class="w"> </span>npx babel app.js <span class="nt">--plugins</span> ./myBabelPlugin.js
+<span class="go">
+    // Babel Input: ES2015 arrow function, const/let 스코프
+</span><span class="gp">    [1, 2, 3].pam(atad =&gt;</span><span class="w"> </span>atad + 1<span class="o">)</span><span class="p">;</span>
+<span class="gp">    const tset = 3;</span><span class="w">
+</span><span class="gp">    let 2tset = 5;</span><span class="w">
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="b-2"><strong>VariableDeclaration를 사용하여 const, let 스코프를 var로 변환해주는 코드 작성해보기</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">VariableDeclaration()</code> 메소드는 이름 그대로 변수가 어떤 스코프로 선언되었는지 참조할 수 있습니다.</p>
+
+<p>AST Node VariableDeclaration shape:
+* kind: "var" | "let" | "const" (required)</p>
+<ul>
+  <li>declarations: Array<VariableDeclarator> (required)</VariableDeclarator></li>
+  <li>declare: boolean (default: null, excluded from builder function)</li>
+</ul>
+
+<p><br /></p>
+
+<p>app.js에서 변수선언의 종류를 <code class="language-plaintext highlighter-rouge">console.log</code>로 확인</p>
+<div file="myBabelPlugin.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">myBabelPlugin</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span>
+        <span class="na">visitor</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nx">VariableDeclaration</span><span class="p">(</span><span class="nx">path</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">VariableDeclaration() kind:</span><span class="dl">"</span><span class="p">,</span> <span class="nx">path</span><span class="p">.</span><span class="nx">node</span><span class="p">.</span><span class="nx">kind</span><span class="p">)</span> <span class="c1">// const</span>
+                
+            <span class="p">},</span>
+        <span class="p">},</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>build 결과 :</strong></p>
+
+<p>const, let이 출력</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span><span class="w"> </span>npx babel app.js <span class="nt">--plugins</span><span class="o">=</span>./myBabelPlugin.js
+<span class="go">
+    VariableDeclaration() kind: const
+    VariableDeclaration() kind: let
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<p>const, let -&gt; var로 변경</p>
+<div file="myBabelPlugin.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">myBabelPlugin</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span>
+        <span class="na">visitor</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nx">VariableDeclaration</span><span class="p">(</span><span class="nx">path</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">VariableDeclaration() kind:</span><span class="dl">"</span><span class="p">,</span> <span class="nx">path</span><span class="p">.</span><span class="nx">node</span><span class="p">.</span><span class="nx">kind</span><span class="p">)</span>
+                
+                <span class="c1">// const, let -&gt; var 로 변환</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">node</span><span class="p">.</span><span class="nx">kind</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">const</span><span class="dl">"</span> <span class="o">||</span> <span class="nx">path</span><span class="p">.</span><span class="nx">node</span><span class="p">.</span><span class="nx">kind</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">let</span><span class="dl">"</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">path</span><span class="p">.</span><span class="nx">node</span><span class="p">.</span><span class="nx">kind</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">var</span><span class="dl">"</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>build 결과 :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span><span class="w"> </span>npx babel app.js <span class="nt">--plugins</span><span class="o">=</span>./myBabelPlugin.js
+<span class="go">
+    // Babel Input: ES2015 arrow function, const/let 스코프
+</span><span class="gp">    [1, 2, 3].map(data =&gt;</span><span class="w"> </span>data + 1<span class="o">)</span><span class="p">;</span>
+<span class="gp">    var test = 3;</span><span class="w">
+</span><span class="gp">    var test2 = 5;</span><span class="w">
+</span></code></pre></div></div>
+
+<p><br />
+<br /></p>
+
+<h2 id="c"><strong>플러그인 사용</strong></h2>
+
+<hr />
+<p><code class="language-plaintext highlighter-rouge">babel</code>에서 제공하는 플러그인들을 사용해서 변환해보겠습니다.</p>
+
+<h3 id="babelplugin-transform-block-scoping"><strong>@babel/plugin-transform-block-scoping</strong></h3>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">block scoping</code>을 따르는 <code class="language-plaintext highlighter-rouge">const</code>, <code class="language-plaintext highlighter-rouge">let</code>을 함수 스코핑인 <code class="language-plaintext highlighter-rouge">const</code>, <code class="language-plaintext highlighter-rouge">let</code> 처럼 블록 스코핑을 따르는 예약어를 함수 스코핑을 사용하는 <code class="language-plaintext highlighter-rouge">var</code>로 변경해 준다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="babelplugin-transform-arrow-functions"><strong>@babel/plugin-transform-arrow-functions</strong></h3>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">arrow function</code>을 일반 함수로 변경해 준다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="babelplugin-transform-strict-mode"><strong>@babel/plugin-transform-strict-mode</strong></h3>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">strict 모드</code>는 ES5(ECMA Script 5)에 추가된 키워드입니다.</li>
+  <li>자바스크립트가 묵인했던 에러들의 에러 메세지를 발생시킵니다. 즉, 엄격하게 문법검사를 하겠다로 이해하면 됩니다.</li>
+  <li>스크립트 시작부분에 <code class="language-plaintext highlighter-rouge">"use strict"</code>를 선언하면 strict 모드로 코드를 작성할 수 있습니다.</li>
+</ul>
+
+<p><strong>install :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span><span class="w"> </span>npm <span class="nb">install</span> <span class="nt">--save-dev</span> @babel/plugin-transform-block-scoping @babel/plugin-transform-arrow-functions @babel/plugin-transform-strict-mode
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p>package.json devDependencies 에 추가된 것을 확인할 수 있습니다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/147197000-b1faaf65-3690-4d53-b158-8257257e45a8.png" alt="image" /></p>
+
+<p><br /></p>
+
+<p><strong>build 결과 :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span><span class="w"> </span>npx babel app.js <span class="nt">--plugins</span><span class="o">=</span>@babel/plugin-transform-block-scoping <span class="nt">--plugins</span><span class="o">=</span>@babel/plugin-transform-arrow-functions <span class="nt">--plugins</span><span class="o">=</span>@babel/plugin-transform-strict-mode
+<span class="go">
+</span><span class="gp">    "use strict";</span><span class="w">
+</span><span class="go">
+    // Babel Input: ES2015 arrow function, const/let 스코프
+    [1, 2, 3].map(function (data) {
+</span><span class="gp">    return data + 1;</span><span class="w">
+</span><span class="gp">    });</span><span class="w">
+</span><span class="gp">    var test = 3;</span><span class="w">
+</span><span class="gp">    var test2 = 5;</span><span class="w">
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="d"><strong>babel.config.js(기본 설정파일) 사용하기</strong></h2>
+
+<hr />
+
+<p>사용하려는 <code class="language-plaintext highlighter-rouge">babel</code> 플러그인이 많아지면 많아질수록 커맨드 명령어도 길어지기 때문에 <code class="language-plaintext highlighter-rouge">webpack.config.js</code> 처럼 설정파일로 분리하여 사용하는 것이 좋습니다. 이 역할을 <code class="language-plaintext highlighter-rouge">babel.config.js</code>가 합니다. <code class="language-plaintext highlighter-rouge">babel</code>은 <code class="language-plaintext highlighter-rouge">babel.config.js</code> 파일이 있으면 자동으로 처리합니다.</p>
+
+<div file="./babel.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">plugins</span><span class="p">:</span> <span class="p">[</span>
+            <span class="dl">"</span><span class="s2">@babel/plugin-transform-block-scoping</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">@babel/plugin-transform-arrow-functions</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">@babel/plugin-transform-strict-mode</span><span class="dl">"</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>build 결과 :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span><span class="w"> </span>npx babel app.js
+<span class="go">
+</span><span class="gp">    "use strict";</span><span class="w">
+</span><span class="go">
+    // Babel Input: ES2015 arrow function, const/let 스코프
+    [1, 2, 3].map(function (data) {
+</span><span class="gp">    return data + 1;</span><span class="w">
+</span><span class="gp">    });</span><span class="w">
+</span><span class="gp">    var test = 3;</span><span class="w">
+</span><span class="gp">    var test2 = 5;</span><span class="w">
+</span></code></pre></div></div>
+:ET

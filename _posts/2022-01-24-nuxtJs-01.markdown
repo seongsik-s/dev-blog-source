@@ -1,0 +1,119 @@
+---
+layout: post
+title: "[Nuxt.js] 공식문서로 빠르게 배우기 1탄 - 시작하기"
+tags: [Nuxt.js, Vue.js, Webpack, Babel, Node.js, Javascript]
+categories: [Nuxt.js]
+banner:
+  image: /assets/images/banners/nuxtjs.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## **시작하기**
+
+***
+
+Vue.js로 프로젝트를 진행하면서 SSR 웹 페이지를 만들 수 있도록 도와주는 Nuxt.js를 배워보고 싶다는 생각이 들었다. 설명과 이론을 최대한 배제하고 실무용으로 설치부터 배포까지 빠르게 익히기 위한 포스팅이다. `깃허브` 정적 호스팅 서비스에 배포 할 `Resume` 정적 웹사이트를 만들어 보면서 빠르게 익혀보도록 하자.
+
+<br>
+
+## **Nuxt.js 사용하기 위한 전제 조건**
+
+*** 
+
+* `node.js` 최신 `LTS 버전`을 설치하는 것을 권장한다.
+* 텍스트 편집기, Vetur 확장 기능이 있는 `VSCode` 또는 `WebStorm` 편집기를 사용하는 것을 권장한다.
+* 터미널은 `VSCode`의 통합 터미널, `WebStorm` 터미널 사용을 권장한다.
+* `npm(v6.1+)`을 설치했는지 확인
+
+`참고로 npm기반으로 프로젝트를 진행한다.`
+
+<br>
+
+## **설치 방법**
+
+***
+
+수동설치도 있지만, 명령어를 통해 설치하는 것을 권장한다.
+
+### **create-nuxt-app 명령어로 설치**
+```console
+npm init nuxt-app@latest <my-project>
+```
+
+몇 가지 대화형으로 질문을 묻는다. [create-nuxt-app 설명서를 참고한다.](https://github.com/nuxt/create-nuxt-app/blob/master/README.md)
+
+정적 호스팅(깃허브)에 정적 웹 페이지를 만들 것이기 때문에 아래와 같이 선택한다.
+
+**1. Package manager**
+* Npm
+
+**2. Programming language**
+* JavaScript
+
+**3. UI framework(UI 프레임워크)**
+* Vuetify
+
+**4. Nuxt.js modules**
+* Axios - Promise based HTTP client
+
+**5. Linting tools**
+* ESLint
+
+**6. Testing framework**
+* None
+
+**7. Rendering mode(렌더링 모드)**
+* Universal (SSR / Static)
+
+**8. Deployment target(배포 대상)**
+* Static (Static/JAMStack hosting)
+
+**9. Development tools(개발도구)**
+* jsconfig.json
+
+**10. What is your GitHub username(깃허브 아이디)**
+* s-seongsik
+
+**11. Version control System(버전관리)**
+* Git
+
+<br>
+
+## **프로젝트 시작하기**
+
+***
+package.json에 다음과 같은 명령어가 있어야 한다.
+```json
+"scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+}
+```
+
+### **대상: server**
+* `nuxt dev` - 개발 서버를 시작
+* `nuxt build` - 프로덕션용 웹팩으로 애플리케이션을 빌드하고 최적화
+* `nuxt start` - 프로덕션 서버를 시작한다. (실행 후 nuxt build) Heroku, Digital Ocean 등과 같은 Node.js 호스팅에 사용
+
+### **대상: static**
+* `nuxt dev` - 개발 서버를 시작
+* `nuxt generate` - 애플리케이션을 빌드하고(필요한 경우) 모든 경로를 HTML 파일로 생성하고 정적으로 `dist/` 디렉토리로 내보낸다. (정적 호스팅에 사용)
+* `nuxt start` - `dist/` 정적 호스팅 방식과 같은 디렉토리를 제공하여 배포 전 테스트에 적합
+
+<br>
+
+```console
+npm run dev
+```
+
+아래와 같은 화면이 뜨면 정상적으로 프로젝트가 생성된 것이다.
+
+![image](https://user-images.githubusercontent.com/52439201/150933363-5dec0eb5-687e-4f63-95f9-457a6da32f80.png)
+

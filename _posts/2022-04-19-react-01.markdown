@@ -1,0 +1,206 @@
+---
+layout: post
+title: "[React] JSX(JavaScript XML)란?"
+tags: [React, Gatsby, Next.js, Node.js, Typescirpt, Javascript, ES6]
+categories: [React]
+banner:
+  image: /assets/images/banners/react.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## JSX란?
+
+*** 
+
+```js
+const element = <h1>Hello, world!</h1>; 
+```
+
+위의 코드는 문자열도, HTML도 아니다. 
+
+* `JSX`라고 하며 javascirpt를 확장한 문법이다. JSX라고 하면 템플릿 언어가 떠오를 수 있지만, Javascirpt의 모든 기능이 포함되어 있다.  
+* `JSK`는 리액트에서 UI가 어떻게 생겼는지를 정의하고, 사용하는 문법이다. 
+* 브라우저에서 실행하기 전에 babel 이 JSX문법을 JavaScript로 변환한다.
+
+밑의 JSX 문법을 바벨로 변환해보자.
+
+```js
+function App() { 
+  return ( <h1>Hello, siksik blog!</h1> ); 
+}
+```
+
+이렇듯 바벨을 JSX 문법을 자바스크립트 문법으로 변환->출력 해준다.
+
+![image](https://user-images.githubusercontent.com/52439201/164239872-4d475ec1-2e81-4132-bf04-7163724cb55a.png)
+
+
+리액트에서 JSX는 HTML을 작성하듯 사용하기 때문에 가독성과 유연성이 높고 자바스크립트와 동시에 사용할 수 있어 편리하다.
+
+<br>
+
+## JSX 문법
+
+***
+
+### 최상위 부모 요소 하나로 존재해야 한다.
+Virtual DOM에서 컴포넌트 변화를 감지할 때 효율적으로 비교할 수 있도록 컴포넌트 내부는 하나의 DOM 트리 구조로 이루어져야 한다는 규칙이 있기 때문이다.
+
+* 밑에는 같은 레벨의 `div` 요소가 2개 존재하므로 에러를 발생시킨다.
+```JS
+// Parsing error: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>? (7:6)
+const App = () => {
+  return (
+      <div>안녕하세요?</div>
+      <div>반갑습니다.</div>
+  )
+}
+```
+
+* 따라서 아래와 같이 작성해야 한다.
+```js
+const App = () => {
+  return (
+      <div>
+        <div>안녕하세요?</div>
+        <div>반갑습니다.</div>
+      </div>
+  )
+}
+```
+
+<br>
+
+### JSX 표현식 포함
+JSX의 중괄호안에는 유효한 모든 `JavaScript` 표현식을 넣을 수 있다.
+
+```js
+const App = () => {
+    const name = '서성식';
+    return (
+        <div>
+            <div>안녕하세요?</div>
+            <div>저는 {name}입니다.</div>
+        </div>
+    )
+}
+```
+
+### JSX도 표현식이다.
+JSX를 `if`구문이나 `for` loop 안에 넣어 사용하고, 변수에 할당하고, 인자로서 받고, 함수로부터 반환할 수 있다.
+
+```js
+const App = () => {
+    // if구문안에 사용
+    if (user) {
+        return (
+            <div>
+                <div>안녕하세요?</div>
+                <div>저는 {formatName(user)}입니다.</div>
+            </div>
+        )
+    }
+    return ( <div>안녕하세요?. 서성식입니다.</div>)
+}
+```
+
+반대로, `if`구문이나 `for` loop는 JavaScript 표현식이 아니기 때문에 JSX 내부 자바스크립트 표현식에서는 사용할 수 없다.
+따라서, 조건에 따라 JSX 주변 코드에서 `if`구문을 사용하거나, 중괄호안에 삼항 연산자(조건부 연산자)를 넣어 사용한다.
+
+```js
+const App = () => {
+    const man = 'Y';
+    if (user) {
+        return (
+            <div>
+                <div>안녕하세요?</div>
+                <div>저는 {formatName(user)}입니다.</div>
+                {man==='Y' ? (
+                    <div>저는 남자입니다.</div>
+                ) : (
+                    <div>저는 여자입니다.</div>
+                )}
+            </div>
+    )}
+    return ( <div>안녕하세요?. 서성식입니다.</div>)
+}
+```
+
+### React DOM은 HTML 어트리뷰트 이름 대신 camelCase 명명 규칙을 사용 한다.
+* JSX에서 자바스크립트를 사용하려면 중괄호를 사용하는 것처럼, CSS을 적용하려면 객체 형태로 넣어야 한다.
+* camelCase 표기법으로 작성해야한다.(background-color => backgroundColor)
+
+```js
+const App = () => {
+    const man = 'Y';
+    const css = { backgroundColor: 'red', fontSize: '20px' }
+    if (user) {
+        return (
+            <div>
+                <div style={css}>안녕하세요?</div>
+                <div style={css}>저는 {formatName(user)}입니다.</div>
+                {man==='Y' ? (
+                    <div>저는 남자입니다.</div>
+                ) : (
+                    <div>저는 여자입니다.</div>
+                )}
+            </div>
+    )}
+    return ( <div>안녕하세요?. 서성식입니다.</div>)
+}
+```
+
+### class 대신 className
+* JSX에서는 class대신 className으로 사용해야 한다.
+
+```js
+const App = () => {
+    const man = 'Y';
+    const css = { backgroundColor: 'red', fontSize: '20px' }
+    if (user) {
+        return (
+            <div>
+                <div style={css}>안녕하세요?</div>
+                <div className='testClass' >저는 {formatName(user)}입니다.</div>
+                {man==='Y' ? (
+                    <div>저는 남자입니다.</div>
+                ) : (
+                    <div>저는 여자입니다.</div>
+                )}
+            </div>
+    )}
+    return ( <div>안녕하세요?. 서성식입니다.</div>)
+}
+```
+
+![image](https://user-images.githubusercontent.com/52439201/164252264-1332b9b7-0f3a-4ff1-8c0e-cc58489928cb.png)
+
+### JSX에서 주석 사용
+* JSX 내에서 주석을 사용하려면 {/*...*/}와 같이 사용해야 한다.
+
+```js
+const App = () => {
+    const man = 'Y';
+    const css = { backgroundColor: 'red', fontSize: '20px' }
+    const title = response.potentiallyMaliciousInput;
+    if (user) {
+        return (
+            <div>
+                {/* 주석입니다. */}
+                <div style={css}>안녕하세요? {title}</div>
+                <div className='testClass' >저는 {formatName(user)}입니다.</div>
+                {man==='Y' ? (
+                    <div>저는 남자입니다.</div>
+                ) : (
+                    <div>저는 여자입니다.</div>
+                )}
+            </div>
+    )}
+    return ( <div>안녕하세요?. 서성식입니다.</div>)
+}
+```

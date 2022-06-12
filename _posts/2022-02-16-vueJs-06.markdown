@@ -1,0 +1,332 @@
+---
+layout: post
+title: "[Vue.js] 라이프사이클 훅 이해하기"
+tags: [Webpack, Babel, Node.js, Javascript]
+categories: [Vue.js]
+banner:
+  image: /assets/images/banners/vue.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## **시작으로**
+{: id="a"}
+
+***
+
+`라이프사이클이란` Vue의 인스턴스나 컴포넌트가 생성되어 소멸되기까지의 과정을 의미한다. 각 컴포넌트는 생성될 때 일련의 초기화 단계를 거치게 된다.
+
+에를들어, 데이터 관찰, 템플릿 컴파일, 인스턴스를 DOM에 마운트, 데이터 변경 시 DOM 업데이트 등 그 과정에서 `라이프사이클 훅`이라는 함수도 실행되며, 사용자가 특정 단계에서 자신의 코드를 추가할 수 있는 기회를 제공한다.
+
+밑에는 Vue.js 공식문서에서 제공하는 라이프사이클 다이어그램이다.
+
+![Desktop View](/assets/images/banners/lifecycle.svg)
+
+정리해서 Vue 인스턴스는 크게 4가지의 과정을 거치게 된다. 
+* 생성 (create)
+* DOM 부착 (mount)
+* 업데이트 (update)
+* 소멸 (destroy)
+
+위의 과정에서, Vue는 각 단계에서 `훅(Hook)`을 할 수 있도록 API를 제공한다. 그 종류는 아래와 같다.
+* beforeCreate
+* created
+* beforeMount
+* mounted
+* beforeUpdate
+* updated 
+* beforeDestroy
+* destroyed
+
+이제부터 각 `훅(Hook)`들의 특징을 알아보도록 하자.
+
+<br>
+
+## **라이프사이클 훅(Hook)**
+{: id="a"}
+
+***
+
+모든 `라이프사이클 훅(Hook)`은 자동으로 `this`컨텍스트가 인스턴스에 바인딩되어 있으므로, data, computed 및 methods 속성에 접근할 수 있다.
+
+그리고 모든 훅들을 정의할 때는 `화살표 함수를 사용해서 라이프사이클 메소드를 정의해서는 안된다.` 그 이유는 화살표 함수가 부모 컨텍스트를 바인딩하기 때문이다.  
+(예: `created: () => this.fetchTodos()`) this는 예상하는 바와 같이 컴포넌트 인스턴스가 아니며 this.fetchTodos는 정의되지 않는다(undefined).
+
+라이플 사이클 훅의 이해가 중요한 이유는 특정 시점에 원하는 로직을 구현하기 위함이다.  
+예를 들어, 컴포넌트가 생성되자마자 데이터를 서버에서 받아오고 싶다거나, 어떤 이벤트가 발생하면 DOM을 변경한다거나 등의 처리를 하기 위해서 필요하다. 
+
+<br>
+
+### **beforeCreate**
+
+인스턴스가 초기화 된 후 바로 실행되는 훅이다. 컴포넌트가 DOM에 부착되기 전이기 때문에 `this.$el`에 접근할 수 없다. 또한, `data`, `methods`에 접근할 수 없다.
+
+```javascript
+export default {
+  name: "App",
+  data() {
+    return {
+      text: "data 입니다.",
+    };
+  },
+  methods: {
+    test(text) {
+      console.log(text);
+    },
+  },
+  beforeCreate() {
+    console.log(this.text); // undefined
+    this.test(this.text); // 아예 접근조차 안함.
+  },
+};
+```
+
+<br>
+
+### **created**
+
+인스턴스가 생성된 후 동기적으로 호출하는 훅이다. 이 단계에서는 `data`, `methods`, `computed`, `methods`, `watch/이벤트 콜백` 등의 설정이 준비되었음을 의미하는 옵션 처리를 완료하여 접근이 가능하다. 
+하지만 아직 DOM(마운트 단계)에는 추가되지 않은 상태이므로 `$el` 속성을 사용할 수 없다.
+
+`data`에 접근이 가능하므로, 외부(서버)에서 전달받은 데이터들을 초기 세팅해야한다면 `created` 단계가 가장 적절하다.
+
+
+```javascript
+export default {
+  name: "App",
+  data() {
+    return {
+      text: "data 입니다.",
+    };
+  },
+  methods: {
+    test(text) {
+      console.log(text);
+    },
+  },
+  created() {
+    console.log(this.text); // data 입니다.
+    this.test(this.text); // data 입니다.
+  },
+};
+```
+
+<br>
+
+### **beforeMount**
+
+마운트가 시작되기 직전에 호출되는 훅이다. render 함수가 처음으로 호출된다.
+가상 DOM은 생성되어 있으나, 실제 DOM은 부착되지 않은 상태이다.`(이 훅은 서버측 렌더링 중 호출되지 않는다)`
+
+```vue
+{% raw %}
+<template>
+  <div>{{ mount_test() }}</div>
+</template>
+
+<script>
+export default {
+  name: "App",
+  beforeMount() {
+    console.log("beforeMount"); // 1. DOM이 생성되기 전이므로 먼저 실행된다. 
+  },
+  methods: {
+    mount_test() {
+      console.log("on Mounting"); // 2. DOM(div)가 생성되고 실행된다.
+    },
+  },
+};
+</script>
+{% endraw %}
+```
+
+![image](https://user-images.githubusercontent.com/52439201/154603591-891b3c3a-416f-4be7-90ab-013bfb72bb12.png)
+
+<br>
+
+### **mounted**
+
+인스턴스가 마운트된 후 호출되는 훅이다. 일반적으로 가장 많이 사용되는 훅으로 가상 DOM의 내용이 실제 DOM에 부착되고 난 이후에 실행된다.
+`$el`에 접근할 수 있으며 `data`, `computed`, `methods`, `watch` 등 모든 요소에 접근이 가능하다.
+
+```vue
+{% raw %}
+<template>
+  <div>{{ mount_test() }}</div>
+</template>
+
+<script>
+export default {
+  name: "App",
+  mounted() {
+    console.log("mounted"); // DOM이 생성되고나서 실행되므로 나중에 호출된다.
+  },
+  methods: {
+    mount_test() {
+      console.log("on Mounting"); // 2. DOM(div)가 생성되고 실행된다.
+    },
+  },
+};
+</script>
+{% endraw %}
+```
+
+![image](https://user-images.githubusercontent.com/52439201/154603968-412c3de7-2ea4-404a-915c-b2822c168fdb.png)
+
+<br>
+
+여기서 알아야 할 내용은 부모와 자식 컴포넌트 간의 `created 훅` 순서는 `부모->자식` 이지만
+`mounted 훅` 순서는 `자식->부모` 순서로 실행된다.
+
+`mounted`는 모든 자식 컴포넌트가 마운트되었음을 보장하지 않는다. 전체 화면내용이 렌더링될 때까지 기다리려면 `mounted` 내에서 `vm.$nextTick`를 사용하면 된다.
+
+```javascript
+mounted() {
+  this.$nextTick(function () {
+    // 전체 화면내용이 렌더링된 후에 아래의 코드가 실행된다.
+  })
+}
+```
+
+<br>
+
+### **beforeUpdate**
+
+DOM이 패치되기 전에 데이터가 변경될 때 호출된다. 이 훅은 업데이트 전에 기존 DOM에 접근할 수 있다.
+변경될 데이터에 접근할 수 있으며, 변경될 데이터와 관련된 로직을 미리 넣어 사용할 수 있다.
+
+```vue
+{% raw %}
+<template>
+  <!-- <router-view /> -->
+  <div>
+    <p id="dom">{{ text }}</p>
+    <v-btn color="primary" dark elevation="2" v-on:click="dataUpdate">update</v-btn>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "App",
+  data() {
+    return {
+      text: "No update",
+    };
+  },
+  beforeUpdate() {
+    this.text;
+
+    // 변경된 데이터에 접근
+    console.log("1. 변경된 데이터", this.text);
+
+    // DOM이 패치되기 전
+    const test = document.querySelector("#dom");
+    console.log("2. 돔 데이터 : ", test.textContent);
+  },
+  methods: {
+    dataUpdate() {
+      this.text = "update success";
+    },
+  },
+};
+</script>
+{% endraw %}
+```
+
+1. 데이터가 변경이 먼저 이루어 지므로 console.log에는 `"update success"`가 출력된다.
+2. DOM이 패치되기 전이므로 DOM에 패치되어 있는 데이터는 이전 데이터인 `"No update"`로 출력된다. 
+
+![image](https://user-images.githubusercontent.com/52439201/154616987-9122ff85-8b53-464e-87e7-a5fee5cb30ab.png)
+
+<br>
+
+### **updated**
+
+`beforeUpdate 훅` 은 DOM패치 전에 호출되었다면, `updated 훅`은 DOM이 다시 렌더링되고 패치된 후에 호출된다.  
+
+updated가 호출될 때 컴포넌트의 DOM이 업데이트되므로, DOM의 종속적인 연산을 할 수 있다. 하지만 공식문서에서는 대부분의 경우 훅 내부에서 상태를 변경하지 말라고 한다.  
+상태 변경에 반응하기 위해서는 일반적으로 `computed property` 속성이나 `watcher`를 사용하는 것이 더 좋다.
+
+만약 변경된 값들을 DOM을 이용해 접근하고 싶다면 `update 훅`이 가장 적절하다.
+
+`update 훅`도 `mounted 훅`과 마찬가지로 모든 하위 컴포넌트가 다시 렌더링되었음을 보장하지 않는다.  전체 화면이 재렌더링 될 때까지 기다리려면 `vm.$nextTick`을 사용한다.
+
+```vue
+{% raw %}
+<template>
+  <!-- <router-view /> -->
+  <div>
+    <p id="dom">{{ text }}</p>
+    <v-btn color="primary" dark elevation="2" v-on:click="dataUpdate">update</v-btn>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "App",
+  data() {
+    return {
+      text: "No update",
+    };
+  },
+  updated() {
+    this.text;
+
+    // 변경된 데이터에 접근
+    console.log("1. 변경된 데이터", this.text);
+
+    // DOM이 패치되기 전
+    const test = document.querySelector("#dom");
+    console.log("2. 돔 데이터 : ", test.textContent);
+  },
+  methods: {
+    dataUpdate() {
+      this.text = "update success";
+    },
+  },
+};
+</script>
+{% endraw %}
+```
+
+1. 데이터가 변경이 먼저 이루어 지므로 console.log에는 `"update success"`가 출력된다.
+2. DOM이 패치되고 나서 호출되므로 DOM의 데이터는 `"update success"`로 출력된다.
+
+![image](https://user-images.githubusercontent.com/52439201/154616987-9122ff85-8b53-464e-87e7-a5fee5cb30ab.png)
+
+<br>
+
+### **beforeDestroy**
+
+컴포넌트 인스턴스가 마운트 해제(unmounted)되기 직전에 호출된다. 아직 마운트가 해제되기 전이므로 인스턴스는 완전하게 작동한다. 따라서 모든 속성에 접근이 가능하다.
+이 단계에서는 이벤트 리스너를 해제하는 등 인스턴스가 없어지기 전에 처리해야할 로직을 넣는다.
+
+```vue
+<script>
+export default {
+  beforeDestroy() {
+    console.log('beforeDestroy');
+  },
+};
+</script>
+```
+
+<br>
+
+### **destroyed**
+
+컴포넌트 인스턴스가 마운트 해제(unmounted)된 후 호출된다. 이 훅이 호출되면 해제가 끝났기 때문에 이전 인스턴스의 속성에 접근할 수 없다. 모든 자식 컴포넌트 컴포넌트도 마운트 해제(unmounted)된다.
+
+```vue
+<script>
+export default {
+  destroyed() {
+    console.log('destroyed');
+  },
+};
+</script>
+```

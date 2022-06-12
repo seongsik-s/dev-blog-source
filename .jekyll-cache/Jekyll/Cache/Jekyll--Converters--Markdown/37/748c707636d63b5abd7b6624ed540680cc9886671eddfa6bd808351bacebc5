@@ -1,0 +1,178 @@
+I"�5<h2 id="a"><strong>style-guide</strong></h2>
+
+<hr />
+
+<p><code class="language-plaintext highlighter-rouge">ESLint</code>는 커스터마이징이 쉽고 확장성이 뛰어나 많이 사용되고 있는 추세이다.
+또한, <code class="language-plaintext highlighter-rouge">ESLint</code>는 개발자들이 커스터마이징한 <code class="language-plaintext highlighter-rouge">style-guide</code> 설정들을 외부에 공개하여 공유할 수 있다.</p>
+
+<p>가장 널리 쓰고있는 2가지를 소개하자면</p>
+
+<ul>
+  <li><a href="https://github.com/airbnb/javascript">Airbnb Style Guide</a></li>
+  <li><a href="https://github.com/google/eslint-config-google">Google Style Guide</a></li>
+</ul>
+
+<p>서로 제공하는 <code class="language-plaintext highlighter-rouge">Style Guide</code>를 참고하여 사용자의 목적에 맞게 사용하면 된다.</p>
+
+<p><br /></p>
+
+<h3 id="a-1"><strong>init</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">npx eslint --init</code>으로  <code class="language-plaintext highlighter-rouge">.eslintrc</code> 파일을 생성한다.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    $</span><span class="w"> </span>npx eslint <span class="nt">--init</span>
+<span class="go">    √ How would you like to use ESLint? · problems
+    √ What type of modules does your project use? · esm
+    √ Which framework does your project use? · none
+    √ Does your project use TypeScript? · No / Yes
+    √ Where does your code run? · browser
+    √ What format do you want your config file to be in? · JavaScript
+    Successfully created .eslintrc.js file in E:\study\frontend\eslint_sample
+</span></code></pre></div></div>
+
+<p>프로젝트 루트에 <code class="language-plaintext highlighter-rouge">.eslintrc.js</code> 파일이 생성되었을 것이다. 만약 <code class="language-plaintext highlighter-rouge">--init</code>에서 마지막 물음에 대한 답변이 <code class="language-plaintext highlighter-rouge">js</code>가 아니라면
+본인이 설정한 파일 포멧에 맞춰 <code class="language-plaintext highlighter-rouge">.eslintrc.*</code>로 생성되었을 것이다. 나는 js를 선택했다.</p>
+
+<div file=".eslintrc.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">env</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">browser</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">es2021</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span>
+    <span class="p">},</span>
+    <span class="dl">"</span><span class="s2">extends</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">eslint:recommended</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">parserOptions</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">ecmaVersion</span><span class="dl">"</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sourceType</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">module</span><span class="dl">"</span>
+    <span class="p">},</span>
+    <span class="dl">"</span><span class="s2">rules</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="b"><strong>Airbnb Style Guide</strong></h2>
+
+<hr />
+
+<p><a href="https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb-base">자세한 설치 가이드 참고</a></p>
+
+<h3 id="b-1"><strong>install</strong></h3>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    $</span><span class="w"> </span>npm <span class="nb">install</span> <span class="nt">--save-dev</span> eslint-config-airbnb-base
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="b-2"><strong>extends에 airbnb-base 추가하기</strong></h3>
+
+<p>기존 eslint에서 제공하는 <code class="language-plaintext highlighter-rouge">eslint:recommended</code> 설정을 지우고  <code class="language-plaintext highlighter-rouge">airbnb-base</code>를 추가</p>
+
+<div file=".eslintrc.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">env</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">browser</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">es2021</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span>
+    <span class="p">},</span>
+    <span class="dl">"</span><span class="s2">extends</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">airbnb-base</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">parserOptions</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">ecmaVersion</span><span class="dl">"</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sourceType</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">module</span><span class="dl">"</span>
+    <span class="p">},</span>
+    <span class="dl">"</span><span class="s2">rules</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<div file="app.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;;;;;;;;;</span>
+    <span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;;;;;;;;;</span>
+
+    <span class="kd">function</span> <span class="nx">test</span><span class="p">(){</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">)}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">build</code> 결과를 보면 아래의 내용이 적용 된 것을 확인할 수 있다.</p>
+<ul>
+  <li>var 키워드를 const 키워드로 수정</li>
+  <li>세미클론 수정</li>
+  <li>함수의 띄어쓰기 수정</li>
+</ul>
+
+<p>이것은 airbnb에서 제공하는 코드작성 스타일가이드가 적용된 것이다.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    $</span><span class="w"> </span>npx eslint app.js <span class="nt">--fix</span>
+<span class="go"> 
+    E:\study\frontend\eslint_sample\app.js
+        2:7   error    'y' is assigned a value but never used  no-unused-vars
+        4:10  error    'test' is defined but never used        no-unused-vars
+        4:19  warning  Unexpected console statement            no-console
+
+    ✖ 3 problems (2 errors, 1 warning)
+</span></code></pre></div></div>
+<div file="app.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">const</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="nx">test</span><span class="p">()</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="c"><strong>google Style Guide</strong></h2>
+
+<hr />
+
+<h3 id="c-1"><strong>install</strong></h3>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    $</span><span class="w"> </span>npm <span class="nb">install</span> <span class="nt">--save-dev</span> eslint-config-google
+</code></pre></div></div>
+
+<h3 id="c-2"><strong>extends에 google 추가하기</strong></h3>
+
+<div file=".eslintrc.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">env</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">browser</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">es2021</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span>
+    <span class="p">},</span>
+    <span class="dl">"</span><span class="s2">extends</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">google</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">parserOptions</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">ecmaVersion</span><span class="dl">"</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sourceType</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">module</span><span class="dl">"</span>
+    <span class="p">},</span>
+    <span class="dl">"</span><span class="s2">rules</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<div file="app.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;;;;;;;;;</span>
+    <span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;;;;;;;;;</span>
+
+    <span class="kd">function</span> <span class="nx">test</span><span class="p">(){</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">)}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">build</code> 결과를 보면 airbnb에서 제공하는 코드작성 스타일가이드와 다르게 google은</p>
+
+<ul>
+  <li>세미클론이 없는 경우에는 추가로 작성해주지만 중복 세미클론에 대해서는 없애지않고 띄어쓰기한다.</li>
+  <li>자바스크립트에서는 중복 세미클론을 한다고 해서 오류가 아니기 때문에 google 스타일 가이드에서는 없애지 않는 것 같다.</li>
+  <li>또한, 함수에서 들여쓰기로 가독성을 높여준 것을 확인할 수 있다.</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    $</span><span class="w"> </span>npx eslint app.js <span class="nt">--fix</span>
+<span class="go"> 
+    E:\study\frontend\eslint_sample\app.js
+        2:7   error  'y' is assigned a value but never used  no-unused-vars
+        4:1   error  Missing JSDoc comment                   require-jsdoc
+        4:10  error  'test' is defined but never used        no-unused-vars
+
+    ✖ 3 problems (3 errors, 0 warnings)
+</span></code></pre></div></div>
+<div file="app.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">const</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span> <span class="p">;;;;;;;;</span>
+    <span class="kd">const</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span> <span class="p">;;;;;;;;</span>
+
+    <span class="kd">function</span> <span class="nx">test</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+    <span class="p">}</span>
+
+</code></pre></div></div>
+:ET

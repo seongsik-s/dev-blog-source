@@ -1,0 +1,318 @@
+I"�<h2 id="시작으로">시작으로</h2>
+
+<blockquote>
+  <p>해당 글은 유인동님의 함수형 프로그래밍 강의내용을 정리하였습니다.</p>
+</blockquote>
+
+<p>아래와 같이 함수가 중첩되어 표현되면 가독성이 떨어지기 때문에 함수형 프로그래밍에서는 코드를 값으로 다뤄 표현력을 높일 수 있다.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">log</span><span class="p">(</span>
+    <span class="nx">reduce</span><span class="p">(</span>
+        <span class="nx">add</span><span class="p">,</span>
+        <span class="nx">map</span><span class="p">(</span><span class="nx">p</span><span class="o">=&gt;</span><span class="nx">p</span><span class="p">.</span><span class="nx">price</span><span class="p">,</span> 
+        <span class="nx">filter</span><span class="p">(</span><span class="nx">p</span><span class="o">=&gt;</span><span class="nx">p</span><span class="p">.</span><span class="nx">price</span><span class="o">&gt;</span><span class="mi">2000</span><span class="p">,</span> <span class="nx">prod</span><span class="p">))</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="go">go</h2>
+
+<p>go함수에는 첫 번째는 값의 시작값을 넣고 그 외는 나머지 연산자로 함수들을 받아 값을 다음 함수로 계속해서 넘기면서 함수를 실행시켜주는 함수이다.</p>
+
+<p>밑의 예제를 통해 쉽게 이해해보자.</p>
+
+<h3 id="reduce-활용">reduce 활용</h3>
+
+<p>go 함수는 함수들을 차례대로 실행하면서 첫 번째 인자값을 축약하는 함수이기 때문에 reduce 함수를 활용한다.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">reduce</span> <span class="o">=</span> <span class="p">(</span><span class="nx">func</span><span class="p">,</span> <span class="nx">acc</span><span class="p">,</span> <span class="nx">iter</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">iter</span><span class="p">){</span>
+        <span class="nx">iter</span> <span class="o">=</span> <span class="nx">acc</span><span class="p">[</span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">iterator</span><span class="p">]();</span>
+        <span class="nx">acc</span> <span class="o">=</span> <span class="nx">iter</span><span class="p">.</span><span class="nx">next</span><span class="p">().</span><span class="nx">value</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span><span class="p">(</span><span class="kd">const</span> <span class="nx">a</span> <span class="k">of</span> <span class="nx">iter</span><span class="p">){</span>
+        <span class="nx">acc</span> <span class="o">=</span> <span class="nx">func</span><span class="p">(</span><span class="nx">acc</span><span class="p">,</span><span class="nx">a</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">acc</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="구현">구현</h3>
+<p>아래의 go함수는 0값을 차례대로 5개의 함수에 넘겨 처리하는 함수이다. 실행순서는 다음과 같다.</p>
+
+<blockquote>
+  <p>0, a =&gt; a+1</p>
+  <ul>
+    <li>0을 인자로 받아 0+1을 처리하여 <code class="language-plaintext highlighter-rouge">1</code>을 리턴한다.</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p>1, a =&gt; a+10</p>
+  <ul>
+    <li>1을 인자로 받아 1+10을 처리하여 <code class="language-plaintext highlighter-rouge">11</code>을 리턴한다.</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p>11, a =&gt; a+100</p>
+  <ul>
+    <li>11을 인자로 받아 11+100을 처리하여 <code class="language-plaintext highlighter-rouge">111</code>을 리턴한다.</li>
+  </ul>
+</blockquote>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">log</span> <span class="o">=</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">go</span> <span class="o">=</span> <span class="p">(...</span><span class="nx">arg</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">reduce</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span><span class="nx">f</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">f</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span> <span class="nx">arg</span><span class="p">)</span>
+
+<span class="nx">go</span><span class="p">(</span>
+    <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">a</span> <span class="o">=&gt;</span> <span class="nx">a</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+    <span class="nx">a</span> <span class="o">=&gt;</span> <span class="nx">a</span><span class="o">+</span><span class="mi">10</span><span class="p">,</span>
+    <span class="nx">a</span> <span class="o">=&gt;</span> <span class="nx">a</span><span class="o">+</span><span class="mi">100</span><span class="p">,</span>
+    <span class="nx">log</span> <span class="c1">// 출력 : 111</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="pipe">pipe</h2>
+<p>pipe함수는 go함수와 다르게 함수를 리턴하는 함수이다. pipe함수는 여러 함수들을 인자로 받아 하나의 함수로 리턴한다.
+그리고 go함수를 사용한다.</p>
+
+<h3 id="구현-1">구현</h3>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">pipe</span> <span class="o">=</span> <span class="p">(...</span><span class="nx">fs</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">a</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">go</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="p">...</span><span class="nx">fs</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">f</span> <span class="o">=</span> <span class="nx">pipe</span><span class="p">(</span>
+    <span class="nx">a</span><span class="o">=&gt;</span><span class="nx">a</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+    <span class="nx">a</span><span class="o">=&gt;</span><span class="nx">a</span><span class="o">+</span><span class="mi">10</span><span class="p">,</span>
+    <span class="nx">a</span><span class="o">=&gt;</span><span class="nx">a</span><span class="o">+</span><span class="mi">100</span><span class="p">,</span>
+    <span class="nx">log</span>
+<span class="p">)</span>
+
+<span class="nx">f</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1">/// 111 출력</span>
+<span class="nx">f</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="c1">/// 121 출력</span>
+</code></pre></div></div>
+
+<h3 id="여러개의-인자를-받도록-수정">여러개의 인자를 받도록 수정</h3>
+<p>그런데 여기서 go함수는 첫 번째 인자에 <code class="language-plaintext highlighter-rouge">add(0,10)</code>와 같이 인자를 두개 전달하여 처리된 값을 함수로 전달할 수 있다.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">go</span><span class="p">(</span>
+    <span class="nx">add</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>
+    <span class="nx">a</span><span class="o">=&gt;</span><span class="nx">a</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+    <span class="nx">a</span><span class="o">=&gt;</span><span class="nx">a</span><span class="o">+</span><span class="mi">10</span><span class="p">,</span>
+    <span class="nx">a</span><span class="o">=&gt;</span><span class="nx">a</span><span class="o">+</span><span class="mi">100</span><span class="p">,</span>
+    <span class="nx">log</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>pipe도 그렇게 할수 있도록 코드를 수정해보자.</p>
+
+<blockquote>
+  <p>첫 번째로 받은 <code class="language-plaintext highlighter-rouge">f</code> 함수와 <code class="language-plaintext highlighter-rouge">...fs</code>를 따로 받는다. 그리고 리턴된 합성함수의 인자를 rest 파라미터로 처리하여 f함수에 넣고 그 결과를 나머지 함수들이 받으면서 처리하는 구조이다.</p>
+</blockquote>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">pipe</span> <span class="o">=</span> <span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="p">...</span><span class="nx">fs</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(...</span><span class="nx">arg</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">go</span><span class="p">(</span><span class="nx">f</span><span class="p">(...</span><span class="nx">arg</span><span class="p">),</span> <span class="p">...</span><span class="nx">fs</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">f</span> <span class="o">=</span> <span class="nx">pipe</span><span class="p">(</span>
+    <span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">a</span><span class="o">+</span><span class="nx">b</span><span class="p">,</span>
+    <span class="nx">a</span><span class="o">=&gt;</span><span class="nx">a</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+    <span class="nx">a</span><span class="o">=&gt;</span><span class="nx">a</span><span class="o">+</span><span class="mi">10</span><span class="p">,</span>
+    <span class="nx">a</span><span class="o">=&gt;</span><span class="nx">a</span><span class="o">+</span><span class="mi">100</span><span class="p">,</span>
+    <span class="nx">log</span>
+<span class="p">)</span>
+
+<span class="nx">f</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="c1">// 114</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="go함수를-활용하여-더-좋은-코드로-개선">go함수를 활용하여 더 좋은 코드로 개선</h2>
+
+<ul>
+  <li>개선전 코드</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">log</span> <span class="o">=</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">prod</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="na">name</span><span class="p">:</span><span class="dl">'</span><span class="s1">과자</span><span class="dl">'</span><span class="p">,</span> <span class="na">price</span><span class="p">:</span><span class="mi">2500</span><span class="p">},</span>
+    <span class="p">{</span><span class="na">name</span><span class="p">:</span><span class="dl">'</span><span class="s1">소시지</span><span class="dl">'</span><span class="p">,</span> <span class="na">price</span><span class="p">:</span><span class="mi">2000</span><span class="p">},</span>
+    <span class="p">{</span><span class="na">name</span><span class="p">:</span><span class="dl">'</span><span class="s1">맥주</span><span class="dl">'</span><span class="p">,</span> <span class="na">price</span><span class="p">:</span><span class="mi">5000</span><span class="p">},</span>
+    <span class="p">{</span><span class="na">name</span><span class="p">:</span><span class="dl">'</span><span class="s1">음료수</span><span class="dl">'</span><span class="p">,</span> <span class="na">price</span><span class="p">:</span><span class="mi">1500</span><span class="p">},</span>
+    <span class="p">{</span><span class="na">name</span><span class="p">:</span><span class="dl">'</span><span class="s1">껌</span><span class="dl">'</span><span class="p">,</span> <span class="na">price</span><span class="p">:</span><span class="mi">1000</span><span class="p">},</span>
+<span class="p">]</span>
+
+<span class="kd">const</span> <span class="nx">add</span> <span class="o">=</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">a</span><span class="o">+</span><span class="nx">b</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">map</span> <span class="o">=</span> <span class="p">(</span><span class="nx">func</span><span class="p">,</span> <span class="nx">iter</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">[];</span>
+    
+    <span class="k">for</span><span class="p">(</span><span class="kd">const</span> <span class="nx">a</span> <span class="k">of</span> <span class="nx">iter</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">func</span><span class="p">(</span><span class="nx">a</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">filter</span> <span class="o">=</span> <span class="p">(</span><span class="nx">func</span><span class="p">,</span> <span class="nx">iter</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">[];</span>
+
+    <span class="k">for</span><span class="p">(</span><span class="kd">const</span> <span class="nx">a</span> <span class="k">of</span> <span class="nx">iter</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">func</span><span class="p">(</span><span class="nx">a</span><span class="p">)){</span>
+            <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">reduce</span> <span class="o">=</span> <span class="p">(</span><span class="nx">func</span><span class="p">,</span> <span class="nx">acc</span><span class="p">,</span> <span class="nx">iter</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">iter</span><span class="p">){</span>
+        <span class="nx">iter</span> <span class="o">=</span> <span class="nx">acc</span><span class="p">[</span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">iterator</span><span class="p">]();</span>
+        <span class="nx">acc</span> <span class="o">=</span> <span class="nx">iter</span><span class="p">.</span><span class="nx">next</span><span class="p">().</span><span class="nx">value</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span><span class="p">(</span><span class="kd">const</span> <span class="nx">a</span> <span class="k">of</span> <span class="nx">iter</span><span class="p">){</span>
+        <span class="nx">acc</span> <span class="o">=</span> <span class="nx">func</span><span class="p">(</span><span class="nx">acc</span><span class="p">,</span><span class="nx">a</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">acc</span>
+<span class="p">}</span>
+
+<span class="nx">log</span><span class="p">(</span>
+  <span class="nx">reduce</span><span class="p">(</span>
+      <span class="nx">add</span><span class="p">,</span>
+      <span class="nx">map</span><span class="p">(</span><span class="nx">p</span><span class="o">=&gt;</span><span class="nx">p</span><span class="p">.</span><span class="nx">price</span><span class="p">,</span> 
+      <span class="nx">filter</span><span class="p">(</span><span class="nx">p</span><span class="o">=&gt;</span><span class="nx">p</span><span class="p">.</span><span class="nx">price</span><span class="o">&gt;</span><span class="mi">2000</span><span class="p">,</span> <span class="nx">prod</span><span class="p">))</span>
+  <span class="p">)</span>
+<span class="p">)</span> <span class="c1">// 출력 : 7500</span>
+  
+</code></pre></div></div>
+
+<ul>
+  <li>개선후 코드</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">go</span><span class="p">(</span>
+    <span class="nx">prod</span><span class="p">,</span>
+    <span class="nx">prod</span> <span class="o">=&gt;</span> <span class="nx">filter</span><span class="p">(</span><span class="nx">p</span> <span class="o">=&gt;</span> <span class="nx">p</span><span class="p">.</span><span class="nx">price</span><span class="o">&gt;</span><span class="mi">2000</span><span class="p">,</span> <span class="nx">prod</span><span class="p">),</span>
+    <span class="nx">prod</span> <span class="o">=&gt;</span> <span class="nx">map</span><span class="p">(</span><span class="nx">p</span> <span class="o">=&gt;</span> <span class="nx">p</span><span class="p">.</span><span class="nx">price</span><span class="p">,</span> <span class="nx">prod</span><span class="p">),</span>
+    <span class="nx">prices</span> <span class="o">=&gt;</span> <span class="nx">reduce</span><span class="p">(</span><span class="nx">add</span><span class="p">,</span> <span class="nx">prices</span><span class="p">),</span>
+    <span class="nx">log</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="curry">curry</h2>
+<p>curry를 사용하면 함수를 부분적으로 사용할 수 있게 된다.
+기존의 map, filter, reduce 함수들은 인자값을 2개를 받아야 실행되었다.
+curry를 감싸게 되면 부족한 인자가 들어올 때까지 대기하다가 들어오면 함수를 실행하게 된다.</p>
+
+<ul>
+  <li>curry는 함수를 인자로 받아 함수를 리턴해준다.</li>
+  <li>리턴받은 합성함수는 1개 이상의 인자를 받는데 인자의 갯수가 2개 이상이면 처음 받았던 함수를 즉시 실행하고, 2보다 적으면 기다렸다가 인자를 받으면 함수를 실행한다.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">curry</span> <span class="o">=</span> <span class="nx">f</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="p">...</span><span class="nx">_</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">_</span><span class="p">.</span><span class="nx">length</span> <span class="p">?</span> <span class="nx">f</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="p">...</span><span class="nx">_</span><span class="p">)</span> <span class="p">:</span> <span class="p">(...</span><span class="nx">_</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">f</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="p">...</span><span class="nx">_</span><span class="p">);</span>
+
+<span class="c1">// 1. a와 b의 곱셈을 리턴하는 함수를 인자로 받는다. </span>
+<span class="c1">// 2. 그리고 함수를 리턴한다.</span>
+<span class="kd">const</span> <span class="nx">mult</span> <span class="o">=</span> <span class="nx">curry</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">a</span><span class="o">*</span><span class="nx">b</span><span class="p">);</span> 
+<span class="nx">log</span><span class="p">(</span><span class="nx">mult</span><span class="p">)</span> <span class="c1">// (a, ..._) =&gt; _.length ? f(a, ..._) : (..._) =&gt; f(a, ..._)</span>
+
+<span class="nx">log</span><span class="p">(</span><span class="nx">mult</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span> <span class="c1">// 인자가 1개이므로 (..._) =&gt; f(a, ..._)를 리턴한다.</span>
+<span class="nx">log</span><span class="p">(</span><span class="nx">mult</span><span class="p">(</span><span class="mi">3</span><span class="p">)(</span><span class="mi">6</span><span class="p">))</span> <span class="c1">// 리턴받은 함수에 6을 인자로 넘겨줬기 때문에 (6) =&gt; f(3, 6)이 실행된다.</span>
+</code></pre></div></div>
+
+<h3 id="go--curry를-사용하여-더-좋은-코드로-만들기">go + curry를 사용하여 더 좋은 코드로 만들기</h3>
+
+<ul>
+  <li>map, filter, reduce를 cuury로 감싼다.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">log</span> <span class="o">=</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">prod</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="na">name</span><span class="p">:</span><span class="dl">'</span><span class="s1">과자</span><span class="dl">'</span><span class="p">,</span> <span class="na">price</span><span class="p">:</span><span class="mi">2500</span><span class="p">},</span>
+    <span class="p">{</span><span class="na">name</span><span class="p">:</span><span class="dl">'</span><span class="s1">소시지</span><span class="dl">'</span><span class="p">,</span> <span class="na">price</span><span class="p">:</span><span class="mi">2000</span><span class="p">},</span>
+    <span class="p">{</span><span class="na">name</span><span class="p">:</span><span class="dl">'</span><span class="s1">맥주</span><span class="dl">'</span><span class="p">,</span> <span class="na">price</span><span class="p">:</span><span class="mi">5000</span><span class="p">},</span>
+    <span class="p">{</span><span class="na">name</span><span class="p">:</span><span class="dl">'</span><span class="s1">음료수</span><span class="dl">'</span><span class="p">,</span> <span class="na">price</span><span class="p">:</span><span class="mi">1500</span><span class="p">},</span>
+    <span class="p">{</span><span class="na">name</span><span class="p">:</span><span class="dl">'</span><span class="s1">껌</span><span class="dl">'</span><span class="p">,</span> <span class="na">price</span><span class="p">:</span><span class="mi">1000</span><span class="p">},</span>
+<span class="p">]</span>
+
+<span class="kd">const</span> <span class="nx">add</span> <span class="o">=</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">a</span><span class="o">+</span><span class="nx">b</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">curry</span> <span class="o">=</span> <span class="nx">f</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="p">...</span><span class="nx">_</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">_</span><span class="p">.</span><span class="nx">length</span> <span class="p">?</span> <span class="nx">f</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="p">...</span><span class="nx">_</span><span class="p">)</span> <span class="p">:</span> <span class="p">(...</span><span class="nx">_</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">f</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="p">...</span><span class="nx">_</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">map</span> <span class="o">=</span> <span class="nx">curry</span><span class="p">((</span><span class="nx">func</span><span class="p">,</span> <span class="nx">iter</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">[];</span>
+    
+    <span class="k">for</span><span class="p">(</span><span class="kd">const</span> <span class="nx">a</span> <span class="k">of</span> <span class="nx">iter</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">func</span><span class="p">(</span><span class="nx">a</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="kd">const</span> <span class="nx">filter</span> <span class="o">=</span> <span class="nx">curry</span><span class="p">((</span><span class="nx">func</span><span class="p">,</span> <span class="nx">iter</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">[];</span>
+
+    <span class="k">for</span><span class="p">(</span><span class="kd">const</span> <span class="nx">a</span> <span class="k">of</span> <span class="nx">iter</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">func</span><span class="p">(</span><span class="nx">a</span><span class="p">)){</span>
+            <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+<span class="p">})</span>
+
+<span class="kd">const</span> <span class="nx">reduce</span> <span class="o">=</span> <span class="nx">curry</span><span class="p">((</span><span class="nx">func</span><span class="p">,</span> <span class="nx">acc</span><span class="p">,</span> <span class="nx">iter</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">iter</span><span class="p">){</span>
+        <span class="nx">iter</span> <span class="o">=</span> <span class="nx">acc</span><span class="p">[</span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">iterator</span><span class="p">]();</span>
+        <span class="nx">acc</span> <span class="o">=</span> <span class="nx">iter</span><span class="p">.</span><span class="nx">next</span><span class="p">().</span><span class="nx">value</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span><span class="p">(</span><span class="kd">const</span> <span class="nx">a</span> <span class="k">of</span> <span class="nx">iter</span><span class="p">){</span>
+        <span class="nx">acc</span> <span class="o">=</span> <span class="nx">func</span><span class="p">(</span><span class="nx">acc</span><span class="p">,</span><span class="nx">a</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">acc</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<ul>
+  <li>기존의 go 함수를 아래와 같이 사용할 수 있다.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">go</span> <span class="o">=</span> <span class="p">(...</span><span class="nx">arg</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">reduce</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span><span class="nx">f</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">f</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span> <span class="nx">arg</span><span class="p">)</span>
+
+<span class="c1">// curry 적용 전</span>
+<span class="nx">go</span><span class="p">(</span>
+    <span class="nx">prod</span><span class="p">,</span>
+    <span class="nx">prod</span> <span class="o">=&gt;</span> <span class="nx">filter</span><span class="p">(</span><span class="nx">p</span> <span class="o">=&gt;</span> <span class="nx">p</span><span class="p">.</span><span class="nx">price</span><span class="o">&gt;</span><span class="mi">2000</span><span class="p">,</span> <span class="nx">prod</span><span class="p">),</span>
+    <span class="nx">prod</span> <span class="o">=&gt;</span> <span class="nx">map</span><span class="p">(</span><span class="nx">p</span> <span class="o">=&gt;</span> <span class="nx">p</span><span class="p">.</span><span class="nx">price</span><span class="p">,</span> <span class="nx">prod</span><span class="p">),</span>
+    <span class="nx">prices</span> <span class="o">=&gt;</span> <span class="nx">reduce</span><span class="p">(</span><span class="nx">add</span><span class="p">,</span> <span class="nx">prices</span><span class="p">),</span>
+    <span class="nx">log</span>
+<span class="p">)</span>
+
+<span class="c1">// cuury 적용 후</span>
+<span class="nx">go</span><span class="p">(</span>
+    <span class="nx">prod</span><span class="p">,</span>
+    <span class="nx">prod</span> <span class="o">=&gt;</span> <span class="nx">filter</span><span class="p">(</span><span class="nx">p</span> <span class="o">=&gt;</span> <span class="nx">p</span><span class="p">.</span><span class="nx">price</span><span class="o">&gt;</span><span class="mi">2000</span><span class="p">)(</span><span class="nx">prod</span><span class="p">),</span>
+    <span class="nx">prod</span> <span class="o">=&gt;</span> <span class="nx">map</span><span class="p">(</span><span class="nx">p</span> <span class="o">=&gt;</span> <span class="nx">p</span><span class="p">.</span><span class="nx">price</span><span class="p">)(</span><span class="nx">prod</span><span class="p">),</span>
+    <span class="nx">prices</span> <span class="o">=&gt;</span> <span class="nx">reduce</span><span class="p">(</span><span class="nx">add</span><span class="p">)(</span><span class="nx">prices</span><span class="p">),</span>
+    <span class="nx">log</span>
+<span class="p">)</span>
+
+<span class="c1">// cuury를 사용하고 있으므로 중복되는 prod를 제거해도 똑같이 실행된다.</span>
+<span class="nx">go</span><span class="p">(</span>
+    <span class="nx">prod</span><span class="p">,</span>
+    <span class="nx">filter</span><span class="p">(</span><span class="nx">p</span> <span class="o">=&gt;</span> <span class="nx">p</span><span class="p">.</span><span class="nx">price</span><span class="o">&gt;</span><span class="mi">2000</span><span class="p">),</span>
+    <span class="nx">map</span><span class="p">(</span><span class="nx">p</span> <span class="o">=&gt;</span> <span class="nx">p</span><span class="p">.</span><span class="nx">price</span><span class="p">),</span>
+    <span class="nx">reduce</span><span class="p">(</span><span class="nx">add</span><span class="p">),</span>
+    <span class="nx">log</span>
+<span class="p">)</span>
+</code></pre></div></div>
+:ET

@@ -1,0 +1,192 @@
+---
+layout: post
+title: "[Gatsby] 정적 웹사이트 설치부터 배포까지" 
+tags: [React, Gatsby, Next.js, Node.js, Typescirpt, Javascript, ES6]
+categories: [React]
+banner:
+  image: /assets/images/banners/gatsby.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## Gatsby CLI 설치하기
+
+Gatsby CLI는 Gatsby 기반의 사이트를 빠르게 생성하는데 도와주는 명령 도구이다.
+
+* 설치 
+
+```SHELL
+npm install -g gatsby-cli
+```
+
+
+* 버전확인
+
+```SHELL
+gatsby --version
+Gatsby CLI version: 4.12.1
+```
+
+
+* 사용 가능한 명령 참고하기
+
+```SHELL
+gatsby --help
+Usage: gatsby <command> [options]
+
+Commands:
+  gatsby develop                      Start development server. Watches files, rebuilds, and hot reloads if something
+                                      changes
+  gatsby build                        Build a Gatsby project.
+  gatsby serve                        Serve previously built Gatsby site.
+  gatsby info                         Get environment information for debugging and issue reporting
+  gatsby clean                        Wipe the local gatsby environment including built assets and cache
+  gatsby repl                         Get a node repl with context of Gatsby environment, see
+                                      (https://www.gatsbyjs.com/docs/gatsby-repl/)
+  gatsby plugin <cmd> [plugins...]    Useful commands relating to Gatsby plugins
+  gatsby new [rootPath] [starter]     Create new Gatsby project.
+  gatsby telemetry                    Enable or disable Gatsby anonymous analytics collection.
+  gatsby options [cmd] [key] [value]  View or set your gatsby-cli configuration settings.
+
+Options:
+  --verbose                Turn on verbose output                                             [boolean] [default: false]
+  --no-color, --no-colors  Turn off the color in output                                       [boolean] [default: false]
+  --json                   Turn on the JSON logger                                            [boolean] [default: false]
+  -h, --help               Show help                                                                           [boolean]
+  -v, --version            Show the version of the Gatsby CLI and the Gatsby package in the current project    [boolean]
+```
+
+<br>
+
+## Gatsby 프로젝트 생성
+
+* Gatsby 사이트를 만들 폴더로 이동 후 명령 실행
+```SHELL
+gatsby new
+```
+
+* 대화형으로 프롬프트가 프로젝트에 관련된 질문들을 입력 및 선택하라고 하는데 자세한 건 [공식문서](https://www.gatsbyjs.com/docs/tutorial/part-1/)를 참고한다.
+
+<br>
+
+## Gatsby 프로젝트 로컬에서 실행
+
+* 명령줄에서 생성한 프로젝트 디렉토리로 이동한다.
+
+```SHELL
+cd [생성한 프로젝트 이름]
+```
+
+* package.json > scripts를 확인하면 `develop`, `start`, `build`, `serve`, `clean`의 명령이 있는데 개발서버 실행은 `develop`이다. 
+
+```json
+{
+  "name": "my-gatsby-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "my-gatsby-site",
+  "author": "s-seongsik",
+  "keywords": [
+    "gatsby"
+  ],
+  "scripts": {
+    "develop": "gatsby develop",
+    "start": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean"
+  },
+  "dependencies": {
+    "gatsby": "^4.13.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  }
+}
+```
+
+아래와 같이 실행한다.
+
+```SHELL
+npm run develop or gatsby develop
+```
+
+![image](https://user-images.githubusercontent.com/52439201/167294372-4e28f7f9-8760-4f68-a69f-85941d2e6b25.png)
+
+<br>
+
+## Github에 배포
+
+### 1. Git Repository 생성하기
+
+* `my-gatsby-site`라는 name으로 저장소를 생성한다.
+
+![image](https://user-images.githubusercontent.com/52439201/167294467-dc460ec2-3420-4bf5-80a5-4fa1abb4a685.png)
+
+### 2. gh-pages package 설치
+
+* Gatsby app을 깃허브 페이지에 푸시하는 가장 쉬운 방법이 gh-pages package를 사용하는 것이다.
+
+```shell
+npm install gh-pages --save-dev
+```
+
+* 배포할 사이트 경로가 `username.github.io/reponame/`이기 때문에 `--prefix-paths` 플래그를 사용해 경로 접두사를 추가해줘야 404 에러가 발생하지 않는다.
+* ./gatsby-config.js에서 `pathPrefix`를 추가해준다.
+
+```js
+module.exports = {
+  siteMetadata: {
+    pathPrefix: `/[Repository name]`,
+    siteUrl: `https://www.yourdomain.tld`,
+  },
+  plugins: [],
+}
+```
+
+* package.json에 `deploy` 스크립트를 아래와 같이 추가해준다.
+
+```json
+{
+  "scripts": {
+    "develop": "gatsby develop",
+    "start": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean",
+    "deploy": "gatsby build --prefix-paths && gh-pages -d public"
+  },
+}
+```
+
+### 3. 원격저장소 연동
+
+```git
+git add .
+git commit -m "fist commit"
+git remote add origin https://github.com/s-seongsik/my-gatsby-site.git
+```
+
+### 4. GitHub Pages에 배포
+
+* package.json에 추가한 `deploy` 스크립트를 실행하면 build하고 build된 파일을 gh-pages라는 브랜치로 push한다.
+
+```shell
+npm run deploy
+```
+
+아래와 같이 원격저장소에 push된 것을 확인할 수 있다.
+
+![image](https://user-images.githubusercontent.com/52439201/167295442-6f509c5c-5482-4892-bdff-6a9a507fd160.png)
+
+
+* settings > pages에서 Source가 gh-pages여야 하므로 다른 브랜치로 되어있다면 변경해준다.
+
+![image](https://user-images.githubusercontent.com/52439201/167295506-f37cf8bf-0343-4fc4-90fb-0e95b11e28c1.png)
+
+* GitHub Pages에 접속
+
+![image](https://user-images.githubusercontent.com/52439201/167295545-c221315e-cf98-4843-9cc6-44aebbaa28f5.png)

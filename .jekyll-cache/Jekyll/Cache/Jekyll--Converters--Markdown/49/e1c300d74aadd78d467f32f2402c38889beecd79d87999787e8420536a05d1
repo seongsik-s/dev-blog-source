@@ -1,0 +1,223 @@
+I"F<h2 id="a"><strong>loader란</strong></h2>
+
+<hr />
+
+<p><code class="language-plaintext highlighter-rouge">로더</code>는 파일을 다른언어(예:TypeScript)에서 <code class="language-plaintext highlighter-rouge">javascript</code>로 변환하거나 인라인 이미지를 데이터 URL로 로드할 수 있습니다. 로더를 사용하면 import <code class="language-plaintext highlighter-rouge">javascript</code> 모듈에서 직접 <code class="language-plaintext highlighter-rouge">CSS</code>, <code class="language-plaintext highlighter-rouge">HTML</code> 파일과 같은 작업을 수행할 수 있습니다.</p>
+
+<p><br /></p>
+
+<h2 id="b"><strong>loader의 기능</strong></h2>
+
+<hr />
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">로더</code>는 Node.js에서 실행되며, 가능한 모든 작업을 수행할 수 있습니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">로더</code>를 연결할 수 있으며, 체인의 각 로더는 처리된 리소스에 변환을 적용합니다. 체인은 역순으로 실행됩니다. 첫 번째 로더의 결과를 다음 로더에 전달하는 식으로 진행합니다. webpack은 마지막 로더가 Javascript로 변환할 것으로 예상합니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">플러그인</code>은 <code class="language-plaintext highlighter-rouge">로더</code>에게 더 많은 기능을 제공합니다.</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="c"><strong>loader의 사용</strong></h2>
+
+<hr />
+
+<p>애플리케이션에서 로더를 사용하는 방법은 <code class="language-plaintext highlighter-rouge">두 가지 방법</code>이 있습니다.</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">Configuration(권장)</code> : webpack.config.js 파일에 로더를 지정합니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">Inline</code> : 각 import문에 명시적으로 지정합니다.</li>
+</ol>
+
+<p><strong>webpack에서 권장하는 1번 방법만 포스팅하였습니다.</strong></p>
+
+<p><br /></p>
+
+<h2 id="d"><strong>Configuration(권장) 작성 방법</strong></h2>
+
+<hr />
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">module.rules</code>(배열)로 webpack 구성 내에서 여러 로더를 지정할 수 있습니다. 이 방법은 로더를 표시하는 간결한 방법이고 깨끗한 코드를 유지하는데 도움이 됩니다.</li>
+  <li>로더는 오른쪽에서 왼쪽으로(또는 아래에서 위로) 실행됩니다. 즉, <code class="language-plaintext highlighter-rouge">역순으로 실행</code>됩니다</li>
+</ul>
+
+<p><strong>예시 :</strong></p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">module</span><span class="p">:</span> <span class="p">{</span>
+            <span class="na">rules</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.</span><span class="sr">css$/</span><span class="p">,</span>
+                    <span class="na">use</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="c1">// 세 번쨰로 실행됩니다.</span>
+                    <span class="p">{</span> <span class="na">loader</span><span class="p">:</span> <span class="dl">'</span><span class="s1">style-loader</span><span class="dl">'</span> <span class="p">},</span>
+                    <span class="c1">// 두 번쨰로 실행됩니다.</span>
+                    <span class="p">{</span>
+                        <span class="na">loader</span><span class="p">:</span> <span class="dl">'</span><span class="s1">css-loader</span><span class="dl">'</span><span class="p">,</span>
+                        <span class="na">options</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="na">modules</span><span class="p">:</span> <span class="kc">true</span>
+                        <span class="p">}</span>
+                    <span class="p">},</span>
+                    <span class="c1">// 첫 번쨰로 실행됩니다.</span>
+                    <span class="p">{</span> <span class="na">loader</span><span class="p">:</span> <span class="dl">'</span><span class="s1">sass-loader</span><span class="dl">'</span> <span class="p">}</span>
+                    <span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">module</span><span class="p">:</span> <span class="p">{</span>
+            <span class="na">rules</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.</span><span class="sr">css$/</span><span class="p">,</span>
+                    <span class="na">use</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="dl">'</span><span class="s1">style-loader</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// 세 번쨰로 실행됩니다.</span>
+                        <span class="dl">'</span><span class="s1">css-loader</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// 두 번쨰로 실행됩니다.</span>
+                        <span class="dl">'</span><span class="s1">sass-loader</span><span class="dl">'</span> <span class="c1">// 첫 번쨰로 실행됩니다.</span>
+                    <span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="e"><strong>작성 TIP</strong></h2>
+
+<hr />
+
+<ol>
+  <li>loader들을 단순하게 유지</li>
+  <li>체이닝을 활용,</li>
+  <li>모듈식 출력으로 내보내야 합니다. 로더 생성 모듈은 일반 모듈과 동일한 설게 원칙을 준수해야 합니다.</li>
+  <li>프로젝트의 루트가 이동할 때 해싱을 중단하므로 모듈 코드에 절대경로를 삽입하지 마세요.</li>
+</ol>
+
+<p><br /></p>
+
+<h2 id="f"><strong>로더의 동작원리를 이해하기 위해 직접 만들어보기</strong></h2>
+
+<hr />
+
+<p>로더에 사용되는 모듈형식은 표준 모듈 시스템이 아닌 webpack에서 사용하는 모듈을 사용합니다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">webpack.config.js</code>에서</p>
+
+<p><code class="language-plaintext highlighter-rouge">test</code>는 로딩에 적용할 파일 확장자를 지정합니다. <code class="language-plaintext highlighter-rouge">.js</code> 확장자를 갖는 파일을 모두 처리합니다.<br />
+<code class="language-plaintext highlighter-rouge">use</code>는 <code class="language-plaintext highlighter-rouge">test</code>에서 적용한 파일들을 처리할 로드를 설정합니다. 방금 만든 myloader를 지정합니다.</p>
+
+<p>로더는 <code class="language-plaintext highlighter-rouge">.js</code>를 갖는 모든 파일을 읽어 함수 인자 <code class="language-plaintext highlighter-rouge">content</code>로 전달됩니다.<br />
+전달받은 <code class="language-plaintext highlighter-rouge">content</code>에는 무엇이 있는지 확인해보기 위해 <code class="language-plaintext highlighter-rouge">console.log</code>를 찍어보겠습니다.</p>
+
+<div file="./myloader.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">myloader</span><span class="p">(</span><span class="nx">content</span><span class="p">){</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">content 시작</span><span class="dl">'</span><span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">content</span><span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">content 종료</span><span class="dl">'</span><span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="se">\n</span><span class="dl">'</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nx">content</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<div file="./webpack.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">const</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">path</span><span class="dl">'</span><span class="p">);</span>
+
+    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">mode</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">development</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">entry</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="na">main</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">./src/app.js</span><span class="dl">'</span>
+        <span class="p">},</span>
+        <span class="na">output</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="na">path</span> <span class="p">:</span> <span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="dl">'</span><span class="s1">./dist</span><span class="dl">'</span><span class="p">),</span>
+            <span class="na">filename</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">[name].js</span><span class="dl">'</span>
+        <span class="p">},</span>
+        <span class="na">module</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="na">rules</span> <span class="p">:</span> <span class="p">[{</span>
+                <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.</span><span class="sr">js$/</span><span class="p">,</span>
+                <span class="na">use</span><span class="p">:</span> <span class="p">[</span><span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="dl">'</span><span class="s1">./myloader.js</span><span class="dl">'</span><span class="p">)]</span>
+            <span class="p">}]</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<div file="./src/app.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">math</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./math.js</span><span class="dl">'</span>
+
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">math</span><span class="p">.</span><span class="nx">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">));</span>
+</code></pre></div></div>
+
+<div file="./src/math.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">export</span> <span class="kd">function</span> <span class="nx">sum</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">){</span>
+        <span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<div file="./index.html" class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cp">&lt;!DOCTYPE html&gt;</span>
+    <span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"X-UA-Compatible"</span> <span class="na">content=</span><span class="s">"IE=edge"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;title&gt;</span>Document<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"./dist/main.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+    <span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>webpack build :</strong></p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">webpack</code>을 <code class="language-plaintext highlighter-rouge">build</code> 할 때 모든 <code class="language-plaintext highlighter-rouge">.js</code> 파일을 로드하여 myloader 모듈에 넘겨 변환 합니다.</li>
+  <li>첫 번쨰로, <code class="language-plaintext highlighter-rouge">app.js</code>를 content로 넘겨받아 리턴</li>
+  <li>두 번쨰로 <code class="language-plaintext highlighter-rouge">math.js</code>를 content로 넘겨받아 리턴</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span><span class="w"> </span>npm run build
+<span class="go">
+</span><span class="gp">   &gt;</span><span class="w"> </span>webpack-demo@1.0.0 build
+<span class="gp">    &gt;</span><span class="w"> </span>webpack
+<span class="go">
+    content 시작
+    import * as math from './math.js'
+
+</span><span class="gp">    console.log(math.sum(1, 2));</span><span class="w">
+</span><span class="go">    content 종료
+
+
+    content 시작
+    export function sum(a, b){
+</span><span class="gp">        return a + b;</span><span class="w">
+</span><span class="go">    }
+    content 종료
+
+
+    asset main.js 4.09 KiB [compared for emit] (name: main)
+    runtime modules 670 bytes 3 modules
+    cacheable modules 113 bytes
+    ./src/app.js 65 bytes [built] [code generated]
+    ./src/math.js 48 bytes [built] [code generated]
+    webpack 5.65.0 compiled successfully in 277 ms
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="f-1"><strong>[.js] 소스코드 변환해보기</strong></h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">"console.log(" -&gt; "alart("</code> 로 수정하여 알람창이 뜨게 수정해봅시다.</li>
+</ul>
+
+<div file="./myloader.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">myloader</span><span class="p">(</span><span class="nx">content</span><span class="p">){</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">content 시작</span><span class="dl">'</span><span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">content</span><span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">content 종료</span><span class="dl">'</span><span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="se">\n</span><span class="dl">'</span><span class="p">);</span>
+        <span class="k">return</span> <span class="k">return</span> <span class="nx">content</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="dl">"</span><span class="s2">console.log(</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">alert(</span><span class="dl">"</span><span class="p">);</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>결과 :</strong></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146312731-cabf8282-a043-45a6-9cd1-cd0bfa85134b.png" alt="image" /></p>
+:ET

@@ -1,0 +1,238 @@
+I"�A<h2 id="a"><strong>ESLint란?</strong></h2>
+
+<hr />
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">ESLint</code>란 코딩 컨벤션에 위배되는 코드나 안티 패턴을 자동으로 검출하는 분석 도구이다.</li>
+  <li>코드를 분석하여 문법적인 오류나 안티 패턴을 찾고 일관된 코드 스타일로 작성할 수 있도록 도와준다.</li>
+  <li><code class="language-plaintext highlighter-rouge">ESLint</code>는 유용하게 사용할 수 있도록 <code class="language-plaintext highlighter-rouge">style-guide</code>를 제공한다.</li>
+  <li>대표적으로 <a href="https://github.com/airbnb/javascript">Airbnb Style Guide</a>, <a href="https://github.com/google/eslint-config-google">Google Style Guide</a>이 있다.</li>
+  <li>개발자가 직접 <code class="language-plaintext highlighter-rouge">style-guide</code>를 작성할 수도 있다.</li>
+</ul>
+
+<h2 id="b"><strong>Install</strong></h2>
+
+<hr />
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">   $</span><span class="w"> </span>npm <span class="nb">install </span>eslint <span class="nt">--save-dev</span>
+</code></pre></div></div>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">   $</span><span class="w"> </span><span class="nb">mkdir </span>eslint_sample  // 프로젝트 폴더 생성
+<span class="gp">   $</span><span class="w"> </span><span class="nb">cd </span>eslint_sample/    // 프로젝트 이동
+<span class="go">
+</span><span class="gp">   $</span><span class="w"> </span>npm init             // 프로젝트 생성
+<span class="go">  
+   // eslint 설치 
+</span><span class="gp">   $</span><span class="w"> </span>npm <span class="nb">install </span>eslint <span class="nt">--save-dev</span> 
+</code></pre></div></div>
+
+<p><strong>프로젝트 구조</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    eslint_sample/
+        ├── node_modules/
+        ├── package-lock.json
+        └── package.json
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="b"><strong>Configuration Files</strong></h2>
+
+<hr />
+
+<p>환경설정 파일에 대한 자세한 설명은 <a href="https://eslint.org/docs/user-guide/configuring/configuration-files#configuration-file-formats">Configuration File Formats</a>를 참조.</p>
+
+<p><code class="language-plaintext highlighter-rouge">ESLint</code>는 여러 형식의 구성 파일을 제공한다.</p>
+<ul>
+  <li>JavaScript</li>
+  <li>JavaScript (ESM)</li>
+  <li>YAML</li>
+  <li>JSON</li>
+  <li>package.json</li>
+</ul>
+
+<p>프로젝트 최상위 디렉토리에 여러 구성 파일이 있는 경우에는 <code class="language-plaintext highlighter-rouge">ESLint</code>는 하나의 구성파일만 사용한다. 그 우선순위는 다음과 같다.</p>
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">.eslintrc.js</code></li>
+  <li><code class="language-plaintext highlighter-rouge">.eslintrc.cjs</code></li>
+  <li><code class="language-plaintext highlighter-rouge">.eslintrc.yaml</code></li>
+  <li><code class="language-plaintext highlighter-rouge">.eslintrc.yml</code></li>
+  <li><code class="language-plaintext highlighter-rouge">.eslintrc.json</code></li>
+  <li><code class="language-plaintext highlighter-rouge">package.json</code></li>
+</ol>
+
+<p><br /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">.eslintrc.js</code>를 최상위 디렉토리에 생성합니다.</li>
+</ul>
+
+<div file=".eslintrc.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="c"><strong>Configuration Files 작성방법</strong></h2>
+
+<hr />
+
+<h3 id="c-1"><strong>rules</strong></h3>
+
+<p>ESLint는 검사 규칙을 제공한다. 자세한 내용은 <a href="https://eslint.org/docs/rules/">Rules</a>를 참조.</p>
+
+<p>그 중 하나인 <code class="language-plaintext highlighter-rouge">no-extra-semi</code>를 적용.</p>
+
+<p>밑에 <code class="language-plaintext highlighter-rouge">disallow unnecessary semicolons</code>라고 되어있다. 즉 불필요한 세미콜론을 허용하지 않겠다는건데 어떻게 적용되는지 확인해보자.<br />
+<img src="https://user-images.githubusercontent.com/52439201/148179556-dc5005ca-0717-4334-b902-330583db155a.png" alt="image" /></p>
+
+<p><br /></p>
+
+<p>규칙을 설정하는 값은 <code class="language-plaintext highlighter-rouge">3가지</code>로</p>
+
+<ul>
+  <li>“off” or 0 - turn the rule off, <code class="language-plaintext highlighter-rouge">규칙을 끔</code></li>
+  <li>“warn” or 1 - turn the rule on as a warning (doesn’t affect exit code), <code class="language-plaintext highlighter-rouge">규칙을 경고로 설정(종료 코드에 영향을 주지 않음)</code></li>
+  <li>“error” or 2 - turn the rule on as an error (exit code is 1 when triggered), <code class="language-plaintext highlighter-rouge">규칙을 오류로 설정(트리거될 때 종료 코드는 1)</code></li>
+</ul>
+
+<div file=".eslintrc.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">rules</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">no-extra-semi</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">error</span><span class="dl">"</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">./app.js</code> 를 생성하여 세미클론을 여러개 작성해본다.</p>
+<div file="./app.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;;</span>
+
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);;</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">실행</code>해보면 불필요한 세미클론 수 만큼 <code class="language-plaintext highlighter-rouge">error</code> 메시지를 출력한다.</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    $</span><span class="w"> </span>npx eslint app.js
+<span class="go">        
+    E:\study\frontend\eslint_sample\app.js
+    1:12  error  Unnecessary semicolon  no-extra-semi
+    3:16  error  Unnecessary semicolon  no-extra-semi
+
+    ✖ 2 problems (2 errors, 0 warnings)
+    2 errors and 0 warnings potentially fixable with the `--fix` option.
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">error</code> 메시지 맨 밑에<br />
+“2 errors and 0 warnings potentially fixable with the <code class="language-plaintext highlighter-rouge">--fix</code> option.” 문구를 보면 <code class="language-plaintext highlighter-rouge">--fix</code> 옵션을 줘서 자동으로 수정할 수 있는 옵션이 있다.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    $</span><span class="w"> </span>npx eslint app.js <span class="nt">--fix</span>
+</code></pre></div></div>
+
+<p>자동으로 세미클론을 수정.</p>
+<div file="./app.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span>
+
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p>이번에는 <code class="language-plaintext highlighter-rouge">no-unused-vars(사용하지 않는 변수를 허용하지 않음)</code> 규칙을 추가해보자.</p>
+
+<div file=".eslintrc.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">rules</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">no-extra-semi</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">error</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">no-unused-vars</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">error</span><span class="dl">"</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<div file="./app.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;;</span>
+    <span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);;</span>
+</code></pre></div></div>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    $</span><span class="w"> </span>npx eslint app.js <span class="nt">--fix</span>
+<span class="go">        
+    E:\study\frontend\eslint_sample\app.js
+    2:5  error  'y' is assigned a value but never used  no-unused-vars
+
+    ✖ 1 problem (1 error, 0 warnings)
+</span></code></pre></div></div>
+<p><br /></p>
+
+<p><strong>결과:</strong></p>
+<div file="./app.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>불필요한 세미클론은 제거가 되었는데 <code class="language-plaintext highlighter-rouge">var y = 20;</code>은 수정이 되지 않고 <code class="language-plaintext highlighter-rouge">error</code> 메시지만 출력한다. 왜 그럴까?<br />
+ESLint의 모든 규칙은 <code class="language-plaintext highlighter-rouge">--fix</code>가 적용되는 게 아니다.</p>
+
+<p>밑의 사진을 보자<br />
+왼편에 <code class="language-plaintext highlighter-rouge">no-extra-semi</code>는 수리 이모티콘이 있고 <code class="language-plaintext highlighter-rouge">no-unused-vars</code>는 수리 이모티콘이 없다.<br />
+즉, 수리 이모티콘이 있는 규칙만 <code class="language-plaintext highlighter-rouge">--fix</code>가 적용되기 때문에 개발자는 <code class="language-plaintext highlighter-rouge">error</code> 내용을 직접 수정 해야한다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/148188232-6b67a171-182d-4177-b1c9-39932edc653a.png" alt="image" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/148188339-b5a9ba15-e667-4e81-8030-2e0dca4b0414.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h3 id="c-2"><strong>Using [eslint:recommended]</strong></h3>
+
+<p>사용자가 필요한 규칙들을 일일이 명시하여 사용하는게 얼마나 귀찮은 일인가…</p>
+
+<p>따라서, <code class="language-plaintext highlighter-rouge">ESLint</code>는 규칙을 유형별로 그룹화하여 제공한다.</p>
+
+<p>그것이 <code class="language-plaintext highlighter-rouge">eslint:recommended</code>이다. <code class="language-plaintext highlighter-rouge">babel</code>의 프리셋이라고 생각하면 된다.</p>
+
+<p>이것을 사용하기 위해서는 <code class="language-plaintext highlighter-rouge">extends</code> 설정을 추가한다.</p>
+
+<div file=".eslintrc.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">extends</span><span class="p">:</span> <span class="p">[</span>
+            <span class="dl">"</span><span class="s2">eslint:recommended</span><span class="dl">"</span><span class="p">,</span> 
+        <span class="p">],</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><a href="https://eslint.org/docs/rules/">rules 적용된 목록</a>을 확인해 보시면 왼편에 <code class="language-plaintext highlighter-rouge">체크</code> 이모티콘이 표시된 규칙들이 해당 설정에 적용되어 있다.
+이외 추가적인 규칙이 필요하면 직접 <code class="language-plaintext highlighter-rouge">rules</code>에 추가하면 된다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/148310286-d2c4cbdc-2cff-4e37-8fb4-5283af3cd50e.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h3 id="c-3"><strong>–init</strong></h3>
+
+<p>configuration file을 구성하는 가장 쉬운 방법은, <code class="language-plaintext highlighter-rouge">--init</code> 플래그를 사용하는 것이다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">--init</code>을 명령하면 <code class="language-plaintext highlighter-rouge">대화식</code> 명령으로 어떻게 구성할 건지 물어보는데, 목적에 맞게 선택하면 된다.</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    $</span><span class="w"> </span>npx eslint <span class="nt">--init</span>
+<span class="go">    √ How would you like to use ESLint? · problems
+    √ What type of modules does your project use? · esm
+    √ Which framework does your project use? · none
+    √ Does your project use TypeScript? · No / Yes
+    √ Where does your code run? · browser
+    √ What format do you want your config file to be in? · JavaScript
+    Successfully created .eslintrc.js file in E:\study\frontend\eslint_sample
+</span></code></pre></div></div>
+
+<p>자동으로 생성</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">env</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">browser</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">es2021</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">extends</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">eslint:recommended</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">parserOptions</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">ecmaVersion</span><span class="dl">"</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">sourceType</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">module</span><span class="dl">"</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">rules</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+</code></pre></div></div>
+:ET

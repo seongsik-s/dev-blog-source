@@ -1,0 +1,210 @@
+I"$:<h2 id="a"><strong>자바스크립트 Scope</strong></h2>
+
+<hr />
+
+<p>Scope는 변수의 접근성을 결정합니다.</p>
+
+<p>ES6(2015) 이전에는 자바스크립트에 <code class="language-plaintext highlighter-rouge">Global Scope</code> 와 <code class="language-plaintext highlighter-rouge">Function Scope</code>만 있었습니다.</p>
+
+<p>ES6(2015)가 생기면서 <code class="language-plaintext highlighter-rouge">const</code>와 <code class="language-plaintext highlighter-rouge">let</code> 이 도입되었고, 이 두 키워드는 자바스크립트에서 <code class="language-plaintext highlighter-rouge">Block Scope</code>를 제공합니다.</p>
+
+<blockquote>
+  <p>자바스크립트의 3가지 Scope 유형 :</p>
+  <ul>
+    <li>Block scope</li>
+    <li>Function scope</li>
+    <li>Global scope</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p>자바스크립트의 2가지 변수 유형 :</p>
+  <ul>
+    <li>Global variable</li>
+    <li>Local variable</li>
+  </ul>
+</blockquote>
+
+<p><br /></p>
+
+<h3 id="aa"><strong>Scope 예시</strong></h3>
+
+<hr />
+
+<p>Scope는 변수의 접근성을 결정한다고 했는데, 정의로 이해하는 것보다 실습으로 이해해봅시다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">x</code>변수에 <code class="language-plaintext highlighter-rouge">Global Scope</code> 선언과 <code class="language-plaintext highlighter-rouge">fn</code> 함수내부 <code class="language-plaintext highlighter-rouge">x</code>변수에 <code class="language-plaintext highlighter-rouge">Function Scope</code>를 선언하였습니다.</p>
+
+<p>똑같은 이름으로 중복 선언을 하였는데 실행하면 어떤 결과가 나올까요?</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">Global Scope</span><span class="dl">'</span><span class="p">;</span>
+
+  <span class="kd">function</span> <span class="nx">fn</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">Functuin Scope</span><span class="dl">'</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="nx">fn</span><span class="p">();</span> 
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+</code></pre></div></div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  Functuin Scope
+  Global Scope
+</span></code></pre></div></div>
+
+<p>실행 순서대로 <code class="language-plaintext highlighter-rouge">Functuin Scope</code> -&gt; <code class="language-plaintext highlighter-rouge">Global Scope</code>가 <code class="language-plaintext highlighter-rouge">console.log</code>에 찍힌 것을 확인할 수 있습니다.</p>
+
+<p>스코프는 <code class="language-plaintext highlighter-rouge">참조 대상 식별자(identifier, 변수, 함수의 이름과 같이 어떤 대상을 다른 대상과 구분하여 식별할 수 있는 유일한 이름)</code>를 찾아내기 위한 규칙입니다.</p>
+
+<p>자바스크립트는 이 규칙대로 식별자를 찾습니다.</p>
+
+<p>프로그래밍은 변수를 선언하고 값을 할당하여 변수를 참조하는 기본적인 기능을 제공합니다. 이것으로 프로그램의 상태를 관리할 수 있습니다. 변수는 전역 또는 코드 블록(<code class="language-plaintext highlighter-rouge">if</code>, <code class="language-plaintext highlighter-rouge">for</code>, <code class="language-plaintext highlighter-rouge">while</code>, <code class="language-plaintext highlighter-rouge">try/catch</code> 등)이나 함수 내에 선언하며 코드 블록이나 함수는 중첩될 수 있다. 식별자는 자신이 어디에서 선언됐는지에 의해 자신이 유효한(다른 코드가 자신을 참조할 수 있는) 범위를 갖습니다.</p>
+
+<p>다시 예제로 돌아와, 전역에 선언된 <code class="language-plaintext highlighter-rouge">x</code>는 어디에든 참조할 수 있습니다. 하지만 <code class="language-plaintext highlighter-rouge">fn()</code> 함수 안에 선언된 <code class="language-plaintext highlighter-rouge">x</code>는 함수 내부에서만 참조할 수 있고 함수 외부에서는 참조할 수 없습니다.
+이것을 <code class="language-plaintext highlighter-rouge">스코프(Scope)</code>라 부릅니다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">스코프(Scope)</code>가 있기 때문에 같은 식별자 이름은 중복되서 사용할 수 없게하여 식별자 이름의 충돌을 방지합니다.</p>
+
+<p><br /></p>
+
+<h2 id="b"><strong>블록 스코프(block Scope)</strong></h2>
+
+<hr />
+
+<p>자바스크립트는 기본적으로 <code class="language-plaintext highlighter-rouge">함수 레벨 스코프(function-level scope)</code>를 따릅니다. <code class="language-plaintext highlighter-rouge">함수 레벨 스코프</code>란 함수 코드 블록 내에서 선언된 변수는 함수 코드 블록 내에서만 유효하고 함수 외부에서는 참조할 수 없습니다.</p>
+
+<p>하지만, ES6(2015)에 도입된 <code class="language-plaintext highlighter-rouge">let</code>, <code class="language-plaintext highlighter-rouge">const</code>는 <code class="language-plaintext highlighter-rouge">블록 레벨 스코프(block-level scope)</code>를 제공합니다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">y</span><span class="p">);</span>
+</code></pre></div></div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  Uncaught ReferenceError: x is not defined
+</span><span class="gp">    at &lt;anonymous&gt;</span>:6:13
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">if</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">y</span><span class="p">);</span>
+</code></pre></div></div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  Uncaught ReferenceError: x is not defined
+</span><span class="gp">    at &lt;anonymous&gt;</span>:6:13
+</code></pre></div></div>
+
+<p>{ } 블록 내부에 <code class="language-plaintext highlighter-rouge">let</code>과 <code class="language-plaintext highlighter-rouge">const</code>로 선언된 <code class="language-plaintext highlighter-rouge">x</code>,<code class="language-plaintext highlighter-rouge">y</code>는 <code class="language-plaintext highlighter-rouge">블록 레벨 스코프</code>를 따르기 때문에 외부에서 접근할 수 없습니다.</p>
+
+<p><br /></p>
+
+<p>하지만, <code class="language-plaintext highlighter-rouge">var</code> 키워드로 선언된 변수는 <code class="language-plaintext highlighter-rouge">블록 레벨 스코프</code>를 가질 수 없습니다. { } 블록 내부에 선언된 변수는 외부에서 접근할 수 있습니다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+</code></pre></div></div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  10
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">if</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+</code></pre></div></div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  10
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="c"><strong>전역 스코프(Global Scope)</strong></h2>
+
+<hr />
+
+<p>전역으로 선언된 변수(함수 외부)는 <code class="language-plaintext highlighter-rouge">전역 스코프(Global Scope)</code>를 가지며, 자바스크립트 프로그램의 어디에서나 접근할 수 있습니다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">var</code>, <code class="language-plaintext highlighter-rouge">let</code>, <code class="language-plaintext highlighter-rouge">const</code>로 선언된 변수는 모두 <code class="language-plaintext highlighter-rouge">Global Scope</code>가 있습니다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+  <span class="kd">let</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">z</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span>
+
+  <span class="kd">function</span> <span class="nx">fn</span><span class="p">(){</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">y</span><span class="p">);</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">z</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="nx">fn</span><span class="p">();</span>
+</code></pre></div></div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  10
+  20
+  30
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="e"><strong>함수 스코프(Function Scope)</strong></h2>
+
+<hr />
+
+<p>아까 자바스크립트는 기본적으로 함수 레벨 스코프를 따른다고 말씀드렸습니다.</p>
+
+<p>다시 말해, 함수 내에서 선언된 변수는 함수 외부에서는 접근할 수 없습니다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">function</span> <span class="nx">fn</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+</code></pre></div></div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  Uncaught ReferenceError: x is not defined
+</span><span class="gp">    at &lt;anonymous&gt;</span>:5:13
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="d"><strong>자동 전역 스코프(Automatically Global Scope)</strong></h2>
+
+<hr />
+
+<p>만약 <code class="language-plaintext highlighter-rouge">var</code> or <code class="language-plaintext highlighter-rouge">let</code> or <code class="language-plaintext highlighter-rouge">const</code> 로 선언되지 않은 변수에 값을 할당하게 되면 <code class="language-plaintext highlighter-rouge">자동</code>으로 <code class="language-plaintext highlighter-rouge">전역 변수</code>가 됩니다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">function</span> <span class="nx">fn</span><span class="p">(){</span>
+    <span class="nx">x</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">fn</span><span class="p">();</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+</code></pre></div></div>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  20
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="f"><strong>엄격모드(Strict Mode)</strong></h2>
+
+<hr />
+
+<p>엄격모드에서는 선언되지 않는 변수는 자동으로 전역적이지 않습니다.</p>
+
+<p><br /></p>
+
+<h2 id="참고자료-출저"><strong>참고자료 출저</strong></h2>
+
+<p><a href="https://poiemaweb.com/js-scope">스코프</a></p>
+
+<p><a href="https://www.w3schools.com/js/js_scope.asp">JavaScript Scope</a></p>
+:ET

@@ -1,0 +1,75 @@
+---
+layout: post
+title: "[Git] 파일 및 폴더명 대소문자 변경 구분하기" 
+tags: [Node.js, Javascript]
+categories: [Git]
+banner:
+  image: /assets/images/banners/git.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## 문제발생
+
+Vue 파일명을 첫 글자를 소문자로 되어있던 것을 대문자로 변경했다. 그리고 이것저것 수정하고 commit 했는데
+젠킨스에서 오류가 발생하는 것이다...
+
+로그를 확인해보니 라우터에서 바뀐 파일명을 참조하지 못하는 것이다... 이런
+
+결론은 Git은 변경내용을 체크하는데 기본적으로 파일명/폴더명 대소문자를 구분하지 않는다는 것이다.
+
+예를들어 `user.vue`라는 파일명을 `User.vue`로 첫 글자만 대문자로 변경해도 git은 알지 못한다.
+
+## 해결방안
+
+깃 설정을 변경해주면 깔끔하게 해결할 수 있다.
+
+```bash
+$ git config core.ignorecase false
+```
+
+위의 설정을 변경했는데도 해결되지 않는다면 캐시를 지워보자.
+
+```bash
+git rm -r --cached .
+```
+
+
+## 확인
+
+* ReportsManage.vue와 ReportsSummary.vue 파일의 첫 글자를 소문자로 변경해보자.
+
+![image](https://user-images.githubusercontent.com/52439201/166403356-5cfcaf74-f1ae-4673-bbbd-1bdf21f8f63e.png)
+
+![image](https://user-images.githubusercontent.com/52439201/166403722-daeb2d75-830d-4be5-be32-41561dd4c429.png)
+
+* Git 변경상태 확인을 해봐도 변경된게 없다고 나온다.
+
+```bash
+$ git status
+On branch dev
+nothing to commit, working tree clean
+```
+
+* 깃 설정 변경
+
+```bash
+$ git config core.ignorecase false
+```
+
+아래와 같이 변경내용을 추척한다. 
+
+```bash
+$ git status
+On branch dev
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        src/views/pages/reports/reportsManage.vue
+        src/views/pages/reports/reportsSummary.vue
+
+nothing added to commit but untracked files present (use "git add" to track)
+```

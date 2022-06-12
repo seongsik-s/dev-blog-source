@@ -1,0 +1,183 @@
+I"�,<p>개발을 하다보면 이전으로 되돌려야 하는 상황이 오기 마련입니다.</p>
+
+<p>Git에서도 <code class="language-plaintext highlighter-rouge">undo</code>의 기능을 제공합니다.</p>
+
+<p><br /></p>
+
+<h2 id="commit-재작성"><strong>commit 재작성</strong></h2>
+
+<hr />
+
+<ul>
+  <li>방금 commit하고 나서, 너무 일찍 commit 했거나 파일을 뺴먹었거나 commit 메시지를 잘못 입력했을 경우 사용합니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">--amend</code> 옵션을 사용하여 커밋을 재작성 할 수 있습니다.</li>
+  <li>다시 commit을 하고 싶으면, <code class="language-plaintext highlighter-rouge">[파일을 수정후]</code> -&gt; <code class="language-plaintext highlighter-rouge">[Staging Area에 추가]</code> -&gt; <code class="language-plaintext highlighter-rouge">[git commit --amend]</code> -&gt; <code class="language-plaintext highlighter-rouge">[재작성 후 저장하면 끝]</code></li>
+  <li><code class="language-plaintext highlighter-rouge">--amend</code> 옵션으로 커밋을 고치는 작업은, 추가로 작업한 일이 작다고 하더라도 이전의 커밋을 완전히 새로 고쳐서 새 커밋으로 변경합니다.</li>
+  <li>따라서, 이전의 커밋을 일어나지 않은 일이 되고 당연히 히스토리에도 남지 않습니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">--amend</code> 옵션의 장점은 아주 작게 뭔가를 빠드리거나, 변경한 것을 새 커밋으로 분리하지 않고 하나의 커밋으로 처리하는 것입니다.</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">        // test01.py 파일 생성
+</span><span class="gp">        $</span><span class="w"> </span>vi test01.py
+<span class="go">
+        // test02.py 파일 생성
+</span><span class="gp">        $</span><span class="w"> </span>vi test01.py
+<span class="go">
+        // test01.py만 Staging Area에 추가후 commit 진행
+</span><span class="gp">        $</span><span class="w"> </span>git add test01.py
+<span class="go">
+</span><span class="gp">        $</span><span class="w"> </span>git status
+<span class="go">        On branch test
+        Your branch is up to date with 'origin/test'.
+
+        Changes to be committed:
+</span><span class="gp">        (use "git restore --staged &lt;file&gt;</span>...<span class="s2">" to unstage)
+</span><span class="go">                new file:   test01.py
+
+
+</span><span class="gp">        $</span><span class="w"> </span>git commit <span class="nt">-m</span> <span class="s2">"new test01.py"</span>
+<span class="go">        [test 17156f0] new test01.py
+        1 file changed, 0 insertions(+), 0 deletions(-)
+        create mode 100644 test01.py
+
+        // 엇?! test02.py 파일도 같이 commit 해야 하므로 --amend 옵션 사용
+        // 먼저 test02.py 파일을 Staging Area에 추가
+</span><span class="gp">        $</span><span class="w"> </span>git add test02.py
+<span class="gp">        $</span><span class="w"> </span>git commit <span class="nt">--amend</span>
+<span class="go">        
+        // git commit --amend를 하게 되면 바로 이전 commit 을 재작성할 수 있습니다.
+</span><span class="gp">        // commit 메시지를 "new test01.py" -&gt;</span><span class="w"> </span><span class="s2">"new test01.py test02.py"</span> 로 변경 후 저장
+<span class="go">
+        new test01.py test02.py
+
+</span><span class="gp">        #</span><span class="w"> </span>Please enter the commit message <span class="k">for </span>your changes. Lines starting
+<span class="gp">        #</span><span class="w"> </span>with <span class="s1">'#'</span> will be ignored, and an empty message aborts the commit.
+<span class="gp">        #</span><span class="w">
+</span><span class="gp">        #</span><span class="w"> </span>Date:      Mon Dec 13 11:09:51 2021 +0900
+<span class="gp">        #</span><span class="w">
+</span><span class="gp">        #</span><span class="w"> </span>On branch <span class="nb">test</span>
+<span class="gp">        #</span><span class="w"> </span>Your branch is ahead of <span class="s1">'origin/test'</span> by 1 commit.
+<span class="gp">        #</span><span class="w">   </span><span class="o">(</span>use <span class="s2">"git push"</span> to publish your <span class="nb">local </span>commits<span class="o">)</span>
+<span class="gp">        #</span><span class="w">
+</span><span class="gp">        #</span><span class="w"> </span>Changes to be committed:
+<span class="gp">        #</span><span class="w">       </span>new file:   test01.py
+<span class="gp">        #</span><span class="w">       </span>new file:   test02.py
+<span class="gp">        #</span><span class="w">
+</span><span class="gp">        #</span><span class="w"> </span>Untracked files:
+<span class="gp">        #</span><span class="w">       </span>sample_01/
+<span class="go">        
+        // 히스토리를 확인해보면 변경된 것을 확인할 수 있습니다!
+</span><span class="gp">        $</span><span class="w"> </span>git log
+<span class="gp">        commit 4893401cd6b8723d49bfad2d6ae906d85f674c36 (HEAD -&gt;</span><span class="w"> </span><span class="nb">test</span><span class="o">)</span>
+<span class="gp">        Author: s-seongsik &lt;52439201+s-seongsik@users.noreply.github.com&gt;</span><span class="w">
+</span><span class="go">        Date:   Mon Dec 13 11:09:51 2021 +0900
+
+        new test01.py test02.py
+
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="unstage로-변경하기"><strong>Unstage로 변경하기</strong></h2>
+
+<hr />
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Working 디렉토리</code> &lt;-&gt; <code class="language-plaintext highlighter-rouge">Staging Area</code> 사이를 넘나드는 방법입니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">Working 디렉토리</code> -&gt;  <code class="language-plaintext highlighter-rouge">Staging Area</code>에 추가하는 방법은 <code class="language-plaintext highlighter-rouge">"git add [filename]"</code> 으로 알고 있습니다.</li>
+  <li>반대로 <code class="language-plaintext highlighter-rouge">Unstage</code> 상태로 되돌리기 위해서는 <code class="language-plaintext highlighter-rouge">"git restore --staged [filename]"</code>을 사용합니다.
+    <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">      // git test01.py을 수정한뒤 상태를 확인
+</span><span class="gp">      $</span><span class="w"> </span>git status
+<span class="go">      On branch test
+      Your branch is ahead of 'origin/test' by 1 commit.
+      (use "git push" to publish your local commits)
+
+      Changes not staged for commit:
+</span><span class="gp">      (use "git add &lt;file&gt;</span>...<span class="s2">" to update what will be committed)
+</span><span class="gp">      (use "git restore &lt;file&gt;</span><span class="s2">..."</span> to discard changes <span class="k">in </span>working directory<span class="o">)</span>
+<span class="go">              modified:   test01.py
+
+      // Staging Area에 추가
+      // 상태를 확인해보면 Staging Area에 추가된 것을 확인할 수 있습니다.
+</span><span class="gp">      $</span><span class="w"> </span>git add test01.py
+<span class="gp">      $</span><span class="w"> </span>git status
+<span class="go">      On branch test
+      Your branch is ahead of 'origin/test' by 1 commit.
+      (use "git push" to publish your local commits)
+
+      Changes to be committed:
+</span><span class="gp">      (use "git restore --staged &lt;file&gt;</span>...<span class="s2">" to unstage)
+</span><span class="go">              modified:   test01.py
+
+      // 다시 Unstage 상태로 되돌리기
+      // 상태를 확인해보면 Unstage 상태로 돌아간 것을 확인할 수 있습니다.
+</span><span class="gp">      $</span><span class="w"> </span>git restore <span class="nt">--staged</span> test01.py
+<span class="go">        
+</span><span class="gp">      $</span><span class="w"> </span>git status
+<span class="go">      On branch test
+      Your branch is ahead of 'origin/test' by 1 commit.
+      (use "git push" to publish your local commits)
+
+      Changes not staged for commit:
+</span><span class="gp">      (use "git add &lt;file&gt;</span>...<span class="s2">" to update what will be committed)
+</span><span class="gp">      (use "git restore &lt;file&gt;</span><span class="s2">..."</span> to discard changes <span class="k">in </span>working directory<span class="o">)</span>
+<span class="go">              modified:   test01.py
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="변경사항-취소하기"><strong>변경사항 취소하기</strong></h2>
+
+<hr />
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">modified</code>된 파일을 취소하는 방법입니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">"git restore [filename]"</code></li>
+  <li>해당 명령어는 변경된 사항을 취소하여 이전으로 되돌립니다.</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">        // 위에 Unstage로 변경된 test01.py의 상태를 확인해보시면
+</span><span class="gp">        // (use "git restore &lt;file&gt;</span>...<span class="s2">" to discard changes in working directory) 라는 문구를 확인할 수 있습니다.
+</span><span class="go">        // 해당 명령어로 Working 디렉토리에서 변경사항을 취소할 수 있다고 되어있습니다.
+        // 한번 실행해 보겠습니다.
+
+</span><span class="gp">        $</span><span class="w"> </span>git status
+<span class="go">        On branch test
+        Your branch is ahead of 'origin/test' by 1 commit.
+        (use "git push" to publish your local commits)
+
+        Changes not staged for commit:
+</span><span class="gp">        (use "git add &lt;file&gt;</span>...<span class="s2">" to update what will be committed)
+</span><span class="gp">        (use "git restore &lt;file&gt;</span><span class="s2">..."</span> to discard changes <span class="k">in </span>working directory<span class="o">)</span>
+<span class="go">                modified:   test01.py
+
+        // 참고로 test01.py 파일에는 x=10이라는 코드가 들어있습니다.
+        // 상태에서는 사라진 것을 확인할 수 있습니다.
+</span><span class="gp">        $</span><span class="w"> </span>git restore test01.py
+<span class="go">
+</span><span class="gp">        $</span><span class="w"> </span>git status
+<span class="go">        On branch test
+        Your branch is ahead of 'origin/test' by 1 commit.
+        (use "git push" to publish your local commits)
+
+
+        // test01.py에서 변경된 내용이 취소되었는지 확인해보겠습니다.
+        // 아무것도 없던 이전으로 돌아간 것을 확인할 수 있습니다!
+</span><span class="gp">        $</span><span class="w"> </span>vi test01.py
+<span class="go">
+        [test01.py]
+        ~
+        ~
+        ~
+        ~
+        ~
+        ~
+        ~
+        ~
+        test01.py [unix] (11:41 13/12/2021)                        0,0-1 모두
+        "test01.py" 0L, 0C
+
+</span></code></pre></div></div>
+:ET

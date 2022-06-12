@@ -1,0 +1,200 @@
+I"J9<h2 id="브랜치branch란"><strong>브랜치(branch)란?</strong></h2>
+
+<hr />
+
+<p>프로젝트를 진행할 때 개발자들은 동일한 소스코드를 같이 공유하고 작업하게 된다. 같이 작업을 하다보면 어떤 개발자는 새로운 기능을 추가하고 또 다른 개발자는 버그를 잡아내거나 합니다.
+이와 같이 동일한 소스코드를 공유하더라도 하는 업무는 다르기 때문에 각기 다른 버전의 코드가 만들어 질 수 밖에 없다.</p>
+
+<p>이럴 때 사용하는게 바로 <code class="language-plaintext highlighter-rouge">브랜치(branch)</code> 기능이다. <br />
+<code class="language-plaintext highlighter-rouge">브랜치(branch)</code>는 여러 개발자가 협업할 때 각기 다른 버전관리를 할 수 있도록 해준다. 각자 독립적인 작업 영역(저장소) 안에서 마음대로 소스코드를 생성 및 변경한다. 이렇게 분리된 여러 작업 내용들을 원래의 버전과 비교하여 <code class="language-plaintext highlighter-rouge">병합(merge)</code>하게 된다.</p>
+
+<p><br /></p>
+
+<h3 id="브랜치는-메인-브랜치를-복제한다"><strong>브랜치는 메인 브랜치를 복제한다.</strong></h3>
+
+<p>처음 저장소를 생성하면, Git은 <code class="language-plaintext highlighter-rouge">master</code>라는 이름의 브랜치를 만들어 준다. 이걸 메인 브랜치라고 부르며, 새로운 브랜치를 생성하게되면 메인브랜치의 최신 소스코드를 복제하여 가져오게 된다.</p>
+
+<p><img src="/assets/images/banners/branch.png" alt="Desktop View" style="width:1000px" />  <br />
+<a href="https://backlog.com/git-tutorial/kr/stepup/stepup1_1.html">이미지 출처</a></p>
+
+<p><br /></p>
+
+<h2 id="브랜치의-종류"><strong>브랜치의 종류</strong></h2>
+
+<hr />
+
+<p>프로젝트 버전관리를 효과적으로 하기 위해선, 협업하는 개발자들과 어떻게 브랜치를 생성할 것이며 어떻게 통합할 것인지 미리 정하고 작업한다.
+브랜치는 크게 2가지로 나누어 관리한다.</p>
+
+<p><br /></p>
+
+<h3 id="통합-브랜치integration-branch"><strong>통합 브랜치(Integration Branch)</strong></h3>
+
+<p>통합 브랜치는 언제든 배포할 수 있는 버전을 유지해야 하는 브랜치이다. 따라서, 미완성되거나 불안정한 상태의 소스코드가 있으면 안된다.
+다시 말해, 늘 <code class="language-plaintext highlighter-rouge">안정적인 상태</code>를 유지해야 한다는 것이다. 여기서 <code class="language-plaintext highlighter-rouge">안정적인 상태</code>란 애플리케이션의 모든 기능이 정상적으로 동작하는 상태를 말한다.</p>
+
+<p>따라서, 새로운 기능을 추가한다거나 버그를 수정할 때 통합 브랜치에서 작업하는 것이 아니라 <code class="language-plaintext highlighter-rouge">토픽 브랜치</code>를 따로 만들어서 작업을 해야 한다.</p>
+
+<p>일반적으로 저장소를 처음 생성할 때 <code class="language-plaintext highlighter-rouge">master</code>라는 이름의 브랜치가 생성되는데 이것을 통합 브랜치로 사용한다.</p>
+
+<p><br /></p>
+
+<h3 id="토픽-브랜치topic-branch"><strong>토픽 브랜치(Topic Branch)</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">토픽 브랜치</code>란 기능추가, 개선, 수정 등의 Task 작업을 진행할 때 사용하는 브랜치이다. 여러 개의 작업을 동시에 진행할 때에는, 그 수만큼 토픽 브랜치를 생성할 수 있다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">토픽 브랜치</code>는 <code class="language-plaintext highlighter-rouge">통합 브랜치</code>의 최신 소스코드를 복제하여 만들어진다. <code class="language-plaintext highlighter-rouge">토픽 브랜치</code>의 작업이 완료되면 <code class="language-plaintext highlighter-rouge">통합 브랜치</code>에 병합한다. 이러한 <code class="language-plaintext highlighter-rouge">토픽 브랜치</code> 방식을 <code class="language-plaintext highlighter-rouge">Feature Branch</code>라고도 부른다.</p>
+
+<p><img src="/assets/images/banners/topicbranch.png" alt="Desktop View" style="width:1000px" />
+<a href="https://backlog.com/git-tutorial/kr/stepup/stepup1_1.html">이미지 출처</a></p>
+
+<p><br /></p>
+
+<h2 id="브랜치-사용하기"><strong>브랜치 사용하기</strong></h2>
+
+<p>이론보다는 실습이 이해가 빠르므로 간단한 예제를 통해 브랜치 생성부터 병합까지 진행해보자.</p>
+
+<p>일단 저장소 하나를 생성하자.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/151470177-db134678-dadb-4311-8644-82d9f6a93ab2.png" alt="image" /></p>
+
+<p><br /></p>
+
+<p>로컬 작업 디렉토리를 하나 생성하고 원격 저장소랑 <code class="language-plaintext highlighter-rouge">연동</code>한다.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">  $</span><span class="w"> </span><span class="nb">echo</span> <span class="s2">"# branch_test"</span> <span class="o">&gt;&gt;</span> README.md
+<span class="gp">  $</span><span class="w"> </span>git init
+<span class="gp">  $</span><span class="w"> </span>git add README.md
+<span class="gp">  $</span><span class="w"> </span>git commit <span class="nt">-m</span> <span class="s2">"first commit"</span>
+<span class="gp">  $</span><span class="w"> </span>git remote add origin https://github.com/s-seongsik/branch_test.git
+<span class="gp">  $</span><span class="w"> </span>git push <span class="nt">-u</span> origin master
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/151471008-04f6f800-cd04-45d0-b436-c4f6c94e1f8f.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h3 id="브랜치-생성하기"><strong>브랜치 생성하기</strong></h3>
+
+<p>해당 명령어로 로컬 브랜치를 하나 생성할 수 있다.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>git branch &lt;branchname&gt;
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">add_branch</code>의 이름으로 만들어보자.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git branch add_branch
+
+$ git branch -v
+  add_branch a9f3bae first commit
+* master     a9f3bae first commit
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="브랜치-전환하기"><strong>브랜치 전환하기</strong></h3>
+
+<p>생성한 <code class="language-plaintext highlighter-rouge">add_branch</code> 브랜치에서 작업하기 위해서는 해당 브랜치로 전환해야한다.<br />
+전환하게 되면 브랜치 안에 있는 마지막 커밋 내용이 작업 트리에 펼쳐진다. 
+브랜치가 전환되고 이 후의 커밋내용은 전환된 브랜치에 추가된다.<br />
+브랜치를 전환할 때 사용하는 명령어는 <code class="language-plaintext highlighter-rouge">checkout</code> 이다.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>git checkout  add_branch
+<span class="go">Switched to branch 'add_branch'
+</span></code></pre></div></div>
+
+<p>Tip) 브랜치 생성과 동시에 전환을 하고 싶다면 <code class="language-plaintext highlighter-rouge">-b</code> 옵션을 넣으면 된다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git checkout -b add_branch
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="토픽-브랜치에서-작업하기"><strong>토픽 브랜치에서 작업하기</strong></h3>
+
+<p>add_branch의 내용을 담고있는 <code class="language-plaintext highlighter-rouge">add_file.py</code>파일을 하나 생성한다. 그리고 해당 로컬 브랜치에 커밋한다.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span><span class="nb">echo</span> <span class="s2">"# add_branch"</span> <span class="o">&gt;&gt;</span> add_file.py
+<span class="gp">$</span><span class="w"> </span>ll
+<span class="go">total 2
+-rw-r--r-- 1 seong 197610 13  1월 28 10:49 add_file.py
+-rw-r--r-- 1 seong 197610 14  1월 28 10:26 README.md
+
+</span><span class="gp">$</span><span class="w"> </span>git add add_file.py
+<span class="gp">$</span><span class="w"> </span>git commit <span class="nt">-m</span> <span class="s2">"add_file"</span>
+<span class="go">[add_branch ce2241e] add_file
+ 1 file changed, 1 insertion(+)
+ create mode 100644 add_file.py
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="로컬-토픽-브랜치를-원격-저장소에-푸시하기"><strong>로컬 토픽 브랜치를 원격 저장소에 푸시하기</strong></h3>
+
+<p>새로 만든 토픽 브랜치에 어려번 커밋을 하게 되더라도 결국 로컬에만 저장된다. 원격 저장소에 <code class="language-plaintext highlighter-rouge">백업</code> 및 <code class="language-plaintext highlighter-rouge">팀 구성원들이 작업 내용과 진도</code>를 확일할 수 있도록 <code class="language-plaintext highlighter-rouge">push</code>한다.
+원격 저장소에는 <code class="language-plaintext highlighter-rouge">add_branch</code> 브랜치가 없기 때문에 <code class="language-plaintext highlighter-rouge">git push -u origin &lt;branchname&gt;</code>으로 <code class="language-plaintext highlighter-rouge">push</code>한다.
+여기서 <code class="language-plaintext highlighter-rouge">-u (--set-upstream)</code> 옵션은 로컬 기능 개발 브랜치와 원격 저장소와 같은 이름의 브랜치를 연결하는 역할을 한다. 
+쉽게말해, 로컬 브랜치를 원격 저장소에 똑같은 이름으로 동기화 하겠다는 말이다. 한 번 연결한 브랜치는 이후 <code class="language-plaintext highlighter-rouge">git push</code>로 푸시할 수 있다.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>git push <span class="nt">-u</span> origin add_branch
+<span class="go">Enumerating objects: 4, done.
+Counting objects: 100% (4/4), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 289 bytes | 289.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+remote: 
+remote: Create a pull request for 'add_branch' on GitHub by visiting:
+remote:      https://github.com/s-seongsik/branch_test/pull/new/add_branch
+remote:
+To https://github.com/s-seongsik/branch_test.git
+</span><span class="gp"> * [new branch]      add_branch -&gt;</span><span class="w"> </span>add_branch
+<span class="go">Branch 'add_branch' set up to track remote branch 'add_branch' from 'origin'.
+</span></code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/151476818-335039b2-0450-4434-9dd7-b75acd170187.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h3 id="풀-리퀘스트-검토-및-통합-브랜치에-병합하기"><strong>풀 리퀘스트 검토 및 통합 브랜치에 병합하기</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">add_branch</code> 브랜치의 변경 사항을 바로 <code class="language-plaintext highlighter-rouge">merge</code>하기 보다는 변경사항이 무엇인지 검토하고 관리자가 <code class="language-plaintext highlighter-rouge">통합 브랜치</code>에 병합하는게 좋다.(병합 작업은 누구든 할 수 있다.)<br />
+일단 로컬의 <code class="language-plaintext highlighter-rouge">master</code> 브랜치가 최신버전이라고 가정한다.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">github</code>에서 풀 리퀘스트 내용을 확인해서 병합할 것인지 검토한다.(UI를 제공하므로 깃허브에서 확인하길 바람)</li>
+  <li><code class="language-plaintext highlighter-rouge">master</code> 브랜치로 전환</li>
+  <li><code class="language-plaintext highlighter-rouge">add_branch</code> 브랜치의 내용을 가져온다.(fetch는 원격 저장소의 변경 내용을 먼저 로컬 저장소로 가져오는 명령어)</li>
+  <li><code class="language-plaintext highlighter-rouge">add_branch</code> 브랜치의 내용을 로컬 <code class="language-plaintext highlighter-rouge">master</code> 브랜치와 병합한다.</li>
+  <li>로컬 <code class="language-plaintext highlighter-rouge">master</code> 브랜치의 내용을 원격 저장소에 <code class="language-plaintext highlighter-rouge">커밋</code>한다.</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">  $</span><span class="w"> </span>git checkout master
+<span class="gp">  $</span><span class="w"> </span>git fetch origin add_branch
+<span class="gp">  $</span><span class="w"> </span>git merge origin/add_branch
+<span class="gp">  $</span><span class="w"> </span>git push origin master
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/151477996-a55adcba-7b2a-4ed1-8065-104419fc232f.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h3 id="브랜치-삭제하기"><strong>브랜치 삭제하기</strong></h3>
+
+<p>이제 통합 브랜치에 통합되었기 때문에 더이상 <code class="language-plaintext highlighter-rouge">add_branch</code> 브랜치는 필요가 없다. 
+따라서 브랜치를 삭제하면된다.</p>
+
+<p>참고) 삭제할 브랜치에서 다른 브랜치로 전환해야 삭제가 가능하므로 참고바란다.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">seong@DESKTOP-O5CIEJV MINGW64 /e/study/branch_test (add_branch)
+</span><span class="gp">$</span><span class="w"> </span>git branch <span class="nt">-d</span> add_branch
+<span class="go">error: Cannot delete branch 'add_branch' checked out at 'E:/study/branch_test'
+</span></code></pre></div></div>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>git checkout master
+<span class="gp">$</span><span class="w"> </span>git branch <span class="nt">-d</span> add_branch
+<span class="gp">$</span><span class="w"> </span>git branch
+<span class="go">* master
+</span></code></pre></div></div>
+
+:ET

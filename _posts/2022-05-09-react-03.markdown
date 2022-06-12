@@ -1,0 +1,193 @@
+---
+layout: post
+title: "[React] 엘리먼트, 컴포넌트, 인스턴스 개념"
+tags: [React, Gatsby, Next.js, Node.js, Typescirpt, Javascript, ES6]
+categories: [React]
+banner:
+  image: /assets/images/banners/react.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## 시작으로 
+
+해당 포스터는 
+
+* [리액트 컴포넌트, 엘리먼트, 인스턴스](https://velog.io/@yejineee/%EB%A6%AC%EC%95%A1%ED%8A%B8-%EB%A6%AC%EC%95%A1%ED%8A%B8-%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8-%EC%97%98%EB%A6%AC%EB%A8%BC%ED%8A%B8-%EC%9D%B8%EC%8A%A4%ED%84%B4%EC%8A%A4#%EC%97%98%EB%A6%AC%EB%A8%BC%ED%8A%B8%EA%B0%80-%ED%8A%B8%EB%A6%AC%EB%A5%BC-%ED%91%9C%ED%98%84%ED%95%98%EB%8B%A4) 
+* [IT 엘도라도](https://it-eldorado.tistory.com/82?category=832493)
+
+블로그를 참조하여 정리하였습니다.
+
+<br>
+
+## 엘리먼트(Element)
+* 화면에 렌더링 할 DOM 노드들의 정보를 React에 알려주기 위한 수단으로 React에서 가장 작은 단위이다.  
+* 브라우저 DOM 엘리먼트와 달리 React 엘리먼트는 일반 객체이며(plain object) 쉽게 생성할 수 있다. React DOM은 React 엘리먼트와 일치하도록 DOM을 업데이트한다.
+* type(문자열 혹은 컴포넌트 함수/클래스)과 props(객체)로 표현된다.
+* 하나 이상의 자식 엘레먼트는 props의 children 필드로 표현된다. 이를 통해 엘리먼트들이 중첩될 수 있다.
+* children에는 텍스트에 해당하는 문자열, 엘리먼트, 엘리먼트들의 배열 등이 저장될 수 있다.
+* 일반적으로 JavaScript의 React.createElement() 함수 또는 JSX의 태그 문법으로 작성한다.
+* 엘리먼트들로 이루어진 트리를 엘리먼트 트리라 부르며, 이것은 메모리 상에만 존재하는 가상 DOM이다.
+
+<br>
+
+## DOM 엘리먼트
+
+* 엘리먼트의 `type`이 태그 이름에 해당하는 문자열인 경우를 말한다(ex. 'div', 'p', 'button')
+* 해당 태그를 가진 DOM 노드를 표현하며, props 정보를 통해 해당 노드의 속성을 표현한다.
+* React가 실제로 화면에 렌더링 하는 대상에 해당한다.
+* type이 string이면 태그 이름으로 DOM node를 나타낸 것이다. props는 그 속성에 해당하는 것이다.
+
+```
+{
+  type: 'button',
+  props: {
+    className: 'button-class',
+    children: {
+      type: 'div',
+      props: {
+        children: 'text'
+      }
+    }
+  }
+}
+```
+
+```JS
+<button class='button-class'>
+  <div>
+    text
+  </div>
+</button>
+```
+
+여기서 각 엘리먼트들이 어떻게 중첩되어있는지 집중해야한다.
+하나 이상의 자식 엘리먼트를 만들 때 부모 엘리먼트의 children prop으로 명시하게 된다.
+
+중요한 건 자식과 부모 엘리먼트 모두, 그저 description일 뿐이지 실제 인스턴스가 아니라는 것이다.
+스크린에서는 엘리먼트를 만들 때 어떠한 것도 참조하지 않는다.
+
+리액트 엘리먼트는 순회하기 쉬우며, 파싱할 필요도 없다. 리액트 엘리먼트는 객체이기 때문에 실제 DOM 엘리먼트보다 훨씬 가볍다.
+(객체이기 때문에 바로 접근이 가능하고, 순회가 쉬우며 파싱할 필요가 없으므로)
+
+<br>
+
+## 컴포넌트 엘리먼트
+* 엘레먼트의 type이 문자열이 아니라, 리액트 컴포넌트에 해당하는 클래스나 함수인 경우를 말한다.
+* 사용자가 직접 정의한 컴포넌트를 표현하며, `입력으로 props를 받으면 렌더링 할 엘리먼트 트리를 반환한다.`
+* 클래스형 컴포넌트는 지역 상태를 가질수 있으며, DOM노드의 생명 주기(생성, 수정, 삭제)를 제어할 수 있다.
+* 함수형 컴포넌트는 render() 함수만 가지는 클래스형 컴포넌트와 동일하며, 지역 상태를 가질 수 없지만 구현이 단순하다.
+
+```
+{
+  type: Button,
+  props: {
+    className: 'button-class',
+    children: {
+      type: 'div',
+      props: {
+        children: 'text'
+      }
+    }
+  }
+}
+```
+
+컴포넌트를 표현하는 엘리먼트도 엘리먼트이다.
+
+아래의 컴포넌트는 Button 타입의 DangerButton을 정의할 수 있게 한다.
+
+```js
+const DangerButton = ({ children }) => ({
+  type: Button,
+  props: {
+    color: 'red',
+    children: children
+  }
+});
+```
+
+이제 위의 만들었던 DangerButton 컴포넌트를 하나의 엘리먼트 트리 안에 사용할 수 있다.
+
+```js
+const DeleteAccount = () => ({
+  type: 'div',
+  props: {
+    children: [{
+      type: 'p',
+      props: {
+        children: 'Are you sure?'
+      }
+    }, {
+      type: DangerButton,
+      props: {
+        children: 'Yep'
+      }
+    }, {
+      type: Button,
+      props: {
+        color: 'blue',
+        children: 'Cancel'
+      }
+   }]
+  }
+});
+```
+
+위의 객체를 JSX로 표현하면 아래와 같다.
+
+```js
+const DeleteAccount = () => (
+  <div>
+    <p>Are you sure?</p>
+    <DangerButton>Yep</DangerButton>
+    <Button color='blue'>Cancel</Button>
+  </div>
+);
+```
+
+<br>
+
+## Component Encapsulate Element Trees
+
+리액트는 함수나 클래스 타입의 엘리먼트를 만나면, 해당하는 props에 관하여 그 컴포넌트가 어떤 엘리먼트를 렌더링할 것인지 물어본다.
+
+만약 리액트가 아래와 같은 엘리먼트를 만난다면 
+```js
+{
+  type: Button,
+  props: {
+    color: 'blue',
+    children: 'OK!'
+  }
+}
+```
+
+Button 컴포넌트에게 무엇을 렌더링할 것인지를 물어본다. 그 Button 컴포넌트는 다음의 엘리먼트를 반환한다.
+
+```js
+{
+  type: 'button',
+  props: {
+    className: 'button button-blue',
+    children: {
+      type: 'b',
+      props: {
+        children: 'OK!'
+      }
+    }
+  }
+}
+```
+
+리액트는 이 과정을 페이지의 모든 컴포넌트에게 그 아래에 있는 DOM 태그 엘리먼트를 알 때까지 반복한다.
+
+리액트 컴포넌트에서 props는 Input이며, element tree가 output이 된다.
+
+반환된 element tree는 DOM node를 설명하는 엘리먼트와 다른 컴포넌트를 설명하는 엘리먼트가 포함될 수 있다. 이는 그 내부의 DOM 구조에 기대지 않고, 독립적인 UI를 구성할 수 있게 해준다.
+
+리액트가 instance를 생성하고, 업데이트하고, 없앤다. 우리는 그 인스턴스를 컴포넌트로부터 반환한 엘리먼트들로 표현하며, 리액트는 그 인스턴스를 관리한다.

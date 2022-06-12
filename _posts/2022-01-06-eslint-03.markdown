@@ -1,0 +1,182 @@
+---
+layout: post
+title: "[ESLint] 포맷팅에 특화된 프리티어(Prettier)"
+tags: [Webpack, Babel, Node.js, Javascript]
+categories: [ESLint]
+banner:
+  image: /assets/images/banners/eslint.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## **Prettier**
+{: id="a"}
+
+***
+
+`ESLint`는 포맷팅과 코드 품질에 도움을 주는 도구라면 `프리티어(Prettier)`는 포맷팅에만 특화된 도구이다.
+`ESLint`에 없는 기능들을 `프리티어(Prettier)`가 해결해준다.
+
+<br>
+
+### **install**
+{: id="a-1"}
+
+```console
+    npm install -D prettier
+```
+
+<br>
+
+```javascript
+    var x = 'asd';;;
+
+    console.log('########################################### 80자 넘음 #######################################################');
+```
+{: file="app.js"}
+
+<br>
+
+```javascript
+    module.exports = {
+        "env": {
+            "browser": true,
+            "es2021": true,
+        },
+        "extends": ["eslint:recommended","google"],
+        "parserOptions": {
+            "ecmaVersion": 13,
+            "sourceType": "module"
+        },
+        "rules": {
+        }
+    };
+```
+{: file=".eslintrc.js"}
+
+<br>
+
+`app.js`의 코드를 `ESLint`는 어떻게 처리하는지 확인해보자.
+
+```console
+    $ npx eslint app.js --fix
+
+    E:\study\frontend\eslint_sample\app.js
+        1:7  error  'x' is assigned a value but never used                no-unused-vars
+        3:1  error  This line has a length of 122. Maximum allowed is 80  max-len
+
+    ✖ 2 problems (2 errors, 0 warnings)
+```
+
+```javascript 
+    const x = 'asd';
+
+    console.log('########################################### 80자 넘음 #######################################################');
+```
+{: file="app.js"}
+
+* `var` 키워드를 `const` 키워드로 수정
+* 세미클론 중복을 수정
+
+그 외에는 `console`에 에러 메시지로 출력해준다.
+
+
+### **Use**
+{: id="a-2"}
+
+`프리티어(Prettier)`를 사용하면 `ESLint`에는 없는 포맷팅 기능을 처리해준다.
+
+```console
+    $ npx prettier app.js --write
+```
+
+`--write` 옵션은 파일을 재작성해준다. 넣지않으면 터미널에 출력한다.
+
+```javascript
+    var x = "asd";
+
+    console.log(
+      "########################################### 80자 넘음 #######################################################"
+    );
+```
+{: file="app.js"}
+
+* 작은 따옴표를 큰 따옴표로 수정
+* `max-len`규칙을 어떻게 수정해야하는지 알고 있기 때문에 다시 작성
+
+<br>
+
+### **ESLint와 통합하기**
+{: id="a-3"}
+
+[Integrating with Linters](https://prettier.io/docs/en/integrating-with-linters.html)
+
+매번 `ESLint`와 `프리티어(Prettier)`를 개별적으로 사용하면 얼마나 불편할까? `프리티어(Prettier)`의 모든 규칙을 `ESLint`의 규칙으로 설정하는 방법을 설명한다.
+
+* 프리티어가 ESLint에 없는 포맷팅 기능을 제공한다고는 하지만, 서로 겹치는 기능도 존재한다.
+* `eslint-config-prettier`는 프리티어와 ESLint와 겹치는 규칙을 제외시키는 기능을 제공한다.
+
+```console
+    npm i -D eslint-config-prettier
+```
+
+`extends`에 `"eslint-config-prettier"`를 추가해준다.
+```javascript
+    module.exports = {
+        ...
+        "extends": [
+            "eslint:recommended",
+            "eslint-config-prettier"
+        ]
+    };
+```
+{: file=".eslintrc.js"}
+
+<br>
+
+* `eslint-plugin-prettier`는 프리티어의 모든 규칙을 ESLint 규칙으로 추가하는 플러그인이다.
+* `eslint-plugin-prettier`를 사용하면 ESLint만 실행해도 프리티어를 같이 사용할 수 있다.
+
+```console
+    npm i -D eslint-config-prettier
+```
+
+아래 객체를 추가한다.
+
+```javascript
+    module.exports = {
+        ...
+        plugins: [
+            "prettier"
+        ],
+        rules: {
+            "prettier/prettier": "error"
+        },
+    };
+```
+{: file=".eslintrc.js"}
+
+<br>
+
+이제 ESLint만 실행해도 프리티어가 적용되어 포맷팅이 될 것이다.
+```console
+    $ npx eslint app.js --fix
+```
+
+### Recommended Configuration
+{: id="a-4"}
+
+* `eslint-plugin-prettier` 플러그인과 `eslint-config-prettier` config를 한번에 모두 설정하는 방법
+* `extends`에 `"plugin:prettier/recommended"` 추가
+
+```javascript
+    module.exports = {
+        ...
+        extends: ["plugin:prettier/recommended"]
+    };
+```
+{: file=".eslintrc.js"}

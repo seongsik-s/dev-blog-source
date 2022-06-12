@@ -1,0 +1,241 @@
+I"�Y<h2 id="인터페이스란">인터페이스란?</h2>
+
+<p>인터페이스는 상호 간에 정의한 약속 혹은 규칙을 의미한다. 인터페이스는 보통 다음과 같은 범주에 대해서 약속을 정의할 수 있다.</p>
+
+<ul>
+  <li>객체의 스펙(속성과 속성의 타입)</li>
+  <li>함수의 파라미터</li>
+  <li>함수의 스펙(파라미터, 반환 타입 등)</li>
+  <li>배열과 객체를 접근하는 방식</li>
+  <li>클래스</li>
+</ul>
+
+<h2 id="인터페이스-예제">인터페이스 예제</h2>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">user</span> <span class="o">=</span> <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">seongsik</span><span class="dl">'</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">20</span> <span class="p">};</span>
+
+<span class="kd">function</span> <span class="nx">who</span><span class="p">(</span> <span class="nx">obj</span><span class="p">:</span> <span class="p">{</span> <span class="nl">name</span><span class="p">:</span> <span class="nx">string</span><span class="p">,</span> <span class="nx">age</span><span class="p">:</span> <span class="nx">number</span> <span class="p">})</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span> <span class="c1">// seongsik</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">age</span><span class="p">);</span> <span class="c1">// 20</span>
+<span class="p">}</span>
+
+<span class="nx">who</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>위의 <code class="language-plaintext highlighter-rouge">who</code> 함수는 name과 age 속성을 갖는 객체를 인자로 받는다. 이렇게 인자를 받을 때 단순히 타입 뿐만 아니라 객체의 속성 타입까지 정의할 수 있다.
+아래와 같이 인터페이스를 적용해보자.</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">whoType</span> <span class="p">{</span>
+  <span class="nl">name</span><span class="p">:</span> <span class="kr">string</span><span class="p">;</span>
+  <span class="nl">age</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="kd">let</span> <span class="nx">user</span> <span class="o">=</span> <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">seongsik</span><span class="dl">'</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">20</span> <span class="p">};</span>
+
+<span class="kd">function</span> <span class="nx">who</span><span class="p">(</span> <span class="nx">obj</span><span class="p">:</span> <span class="nx">whoType</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">age</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">who</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>인터페이스를 사용하면 코드를 명시적으로 바뀔 수 있다. 
+이제 <code class="language-plaintext highlighter-rouge">who()</code> 함수는 <code class="language-plaintext highlighter-rouge">whoType</code>라는 타입만 가져야 한다.</p>
+
+<p><br /></p>
+
+<h2 id="인터페이스-옵션-속성">인터페이스 옵션 속성</h2>
+<p>인터페이스에 명시되어 있는 속성타입을 모두 다 사용할 필요는 없다. 이를 가능하게 하는 것이 <code class="language-plaintext highlighter-rouge">옵션 속성</code>이다.</p>
+
+<p>아래의 예제 코드를 보자.</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">인터페이스이름</span> <span class="p">{</span>
+  <span class="nl">속성1</span><span class="p">:</span> <span class="kr">string</span><span class="p">;</span>
+  <span class="nl">속성2</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span>
+  <span class="nl">속성3</span><span class="p">?:</span> <span class="kr">number</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>이처럼 <code class="language-plaintext highlighter-rouge">?</code> 물음표를 속성 끝에 붙이면 해당 속성을 꼭 사용하지 않아도 된다.</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">whoType</span> <span class="p">{</span>
+  <span class="nl">name</span><span class="p">:</span> <span class="kr">string</span><span class="p">;</span>
+  <span class="nl">age</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span>
+  <span class="nl">address</span><span class="p">?:</span> <span class="kr">string</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">who</span><span class="p">(</span> <span class="nx">obj</span><span class="p">:</span> <span class="nx">whoType</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">age</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">let</span> <span class="nx">user</span> <span class="o">=</span> <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">seongsik</span><span class="dl">'</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">20</span> <span class="p">};</span>
+
+<span class="nx">who</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>인자로 넘긴 user객체에 <code class="language-plaintext highlighter-rouge">address</code> 속성이 없어도 에러가 발생하지 않는다.
+<code class="language-plaintext highlighter-rouge">whoType</code>타입에 address 인자에 <code class="language-plaintext highlighter-rouge">?</code> 붙여 옵션 속성을 사용했기 때문이다.</p>
+
+<p><br /></p>
+
+<h2 id="인터페이스-읽기-전용-속성">인터페이스 읽기 전용 속성</h2>
+
+<p>읽기 전용 속성은 인터페이스로 객체를 처음 생성할 때 값을 할당하고, 그 이후에는 변경할 수 없는 속성을 말한다.</p>
+
+<p>아래의 코드와 같이 <code class="language-plaintext highlighter-rouge">readonly</code> 속성을 사용하면 오직 읽기만 가능하기 때문에 선언이후 수정하려고 하면 아래와 같이 오류가 발생한다.</p>
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">userType</span> <span class="p">{</span>
+ <span class="k">readonly</span> <span class="nx">name</span><span class="p">:</span> <span class="kr">string</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">let</span> <span class="nx">user</span><span class="p">:</span> <span class="nx">userType</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">seongsik</span><span class="dl">'</span>
+<span class="p">};</span>
+
+<span class="nx">user</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">siksik</span><span class="dl">'</span><span class="p">;</span> <span class="c1">// 읽기 전용 속성이므로 'name'에 할당할 수 없습니다.</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="인터페이스-읽기-전용-배열">인터페이스 읽기 전용 배열</h2>
+<p>배열의 읽기전용 속성은 <code class="language-plaintext highlighter-rouge">ReadonlyArray&lt;T&gt;</code> 타입속성을 사용하면 읽기 전용 배열을 생성할 수 있다.</p>
+
+<p>만약 배열을 수정하려고 하면 아래와 같이 오류가 발생한다.</p>
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">arr</span><span class="p">:</span> <span class="nx">ReadonlyArray</span><span class="o">&lt;</span><span class="kr">number</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">];</span>
+
+<span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mi">100</span><span class="p">;</span> <span class="c1">// 'readonly number[]' 형식의 인덱스 시그니처는 읽기만 허용됩니다.</span>
+<span class="nx">arr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span> <span class="c1">// 'readonly number[]' 형식에 'push' 속성이 없습니다.</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="객체-선언과-관련된-타입-체킹">객체 선언과 관련된 타입 체킹</h2>
+<p>타입스크립트는 인터페이스를 통해 객체를 선언할 때 좀더 엄밀한 속성 검사를 진행한다.</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">userTpye</span> <span class="p">{</span>
+  <span class="nl">name</span><span class="p">?:</span> <span class="kr">string</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="kd">function</span> <span class="nx">user</span><span class="p">(</span><span class="nx">user</span><span class="p">:</span> <span class="nx">userTpye</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">user</span><span class="p">({</span><span class="na">nam</span><span class="p">:</span><span class="dl">'</span><span class="s1">seongsik</span><span class="dl">'</span><span class="p">})</span> <span class="c1">// '{ nam: string; }' 형식의 인수는 'userTpye' 형식의 매개 변수에 할당될 수 없습니다. 개체 리터럴은 알려진 속성만 지정할 수 있지만 'userTpye' 형식에 'nam'이(가) 없습니다. 'name'을(를) 쓰려고 했습니까?</span>
+</code></pre></div></div>
+
+<p>인터페이스에서는 <code class="language-plaintext highlighter-rouge">name</code>으로 선언했지만 함수에 인자로 넘기는 객체는 <code class="language-plaintext highlighter-rouge">nam</code>로 선언되어 있기 때문에 오류가 발생한다.</p>
+
+<p>만약 이런 타입 추론을 무시하고 싶으면 아래와 같이 선언한다.</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">myName</span> <span class="o">=</span> <span class="p">{</span><span class="na">nam</span><span class="p">:</span><span class="dl">'</span><span class="s1">seongsik</span><span class="dl">'</span><span class="p">}</span>
+<span class="nx">user</span><span class="p">(</span><span class="nx">myName</span> <span class="k">as</span> <span class="nx">userTpye</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>또한, 인터페이스에 정의하지 않는 속성들을 추가로 사용하고 싶다면 아래와 같이 작성한다.</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">userTpye</span> <span class="p">{</span>
+  <span class="nl">name</span><span class="p">?:</span> <span class="kr">string</span><span class="p">;</span>
+  <span class="p">[</span><span class="nx">propName</span><span class="p">:</span> <span class="kr">string</span><span class="p">]:</span> <span class="kr">any</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="인터페이스-함수-타입">인터페이스 함수 타입</h2>
+<p>인터페이스는 함수의 타입도 정의할 수 있다.</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">fnType</span> <span class="p">{</span>
+  <span class="p">(</span><span class="nx">name</span><span class="p">:</span><span class="kr">string</span><span class="p">,</span> <span class="nx">age</span><span class="p">:</span><span class="kr">string</span><span class="p">):</span> <span class="kr">string</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">let</span> <span class="nx">fn</span><span class="p">:</span> <span class="nx">fnType</span>
+<span class="nx">fn</span> <span class="o">=</span> <span class="p">(</span><span class="nx">name</span><span class="p">:</span><span class="kr">string</span><span class="p">,</span> <span class="nx">age</span><span class="p">:</span><span class="kr">string</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span> <span class="c1">// seongsik</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">age</span><span class="p">);</span>  <span class="c1">// 20</span>
+  <span class="k">return</span> <span class="s2">`이름은 </span><span class="p">${</span><span class="nx">name</span><span class="p">}</span><span class="s2">, 나이는 </span><span class="p">${</span><span class="nx">age</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fn</span><span class="p">(</span><span class="dl">'</span><span class="s1">seongsik</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">20</span><span class="dl">'</span><span class="p">));</span> <span class="c1">// 이름은 seongsik, 나이는 20</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="인터페이스-클래스-타입">인터페이스 클래스 타입</h2>
+<p>자바와 같은 클래스도 타입 규칙을 적용할 수 있다.</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">userTpye</span> <span class="p">{</span>
+  <span class="nl">name</span><span class="p">:</span> <span class="kr">string</span><span class="p">;</span>
+  <span class="nx">fnUser</span><span class="p">(</span><span class="nx">user</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="kd">class</span> <span class="nx">User</span> <span class="k">implements</span> <span class="nx">userTpye</span> <span class="p">{</span>
+  <span class="nl">name</span> <span class="p">:</span> <span class="kr">string</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">seongsik</span><span class="dl">'</span><span class="p">;</span>
+  <span class="nx">fnUser</span><span class="p">(</span><span class="nx">user</span><span class="p">:</span> <span class="kr">string</span><span class="p">){</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">user</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="kd">constructor</span><span class="p">()</span> <span class="p">{}</span>
+<span class="p">}</span>
+
+
+<span class="kd">let</span> <span class="nx">test</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">User</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">test</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="c1">// seongsik</span>
+<span class="nx">test</span><span class="p">.</span><span class="nx">fnUser</span><span class="p">(</span><span class="dl">'</span><span class="s1">siksik</span><span class="dl">'</span><span class="p">)</span> 
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">test</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="c1">// siksik</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="인터페이스-확장">인터페이스 확장</h2>
+
+<p>인터페이스도 클래스처럼 확장할 수 있다.</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">User</span> <span class="p">{</span>
+  <span class="nl">name</span><span class="p">:</span> <span class="kr">string</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kr">interface</span> <span class="nx">Job</span> <span class="kd">extends</span> <span class="nx">User</span> <span class="p">{</span>
+  <span class="nl">position</span><span class="p">:</span> <span class="kr">string</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">let</span> <span class="nx">Who</span> <span class="p">:</span> <span class="nx">Job</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">seongsik</span><span class="dl">'</span><span class="p">,</span>
+  <span class="na">position</span><span class="p">:</span> <span class="dl">'</span><span class="s1">developer</span><span class="dl">'</span>
+<span class="p">}</span>
+
+<span class="c1">// 혹은</span>
+
+<span class="kd">let</span> <span class="nx">who2</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">as</span> <span class="nx">Job</span><span class="p">;</span>
+<span class="nx">who2</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">seongsik</span><span class="dl">'</span><span class="p">;</span>
+<span class="nx">who2</span><span class="p">.</span><span class="nx">position</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">developer</span><span class="dl">'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="인터페이스-하이브리드-타입">인터페이스 하이브리드 타입</h2>
+<p>자바스크립트의 유연하고 동적인 타입 특성을 고려해 인터페이스도 여러 가지 타입을 조합해 사용할 수 있도록 되어있다.
+예를 들어, 함수 타입이면서 객체 타입을 정의할 수 있는 인터페이가 있다.</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">UserType</span> <span class="p">{</span>
+  <span class="p">(</span><span class="nx">name</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="kr">string</span><span class="p">;</span>
+  <span class="nl">position</span><span class="p">:</span> <span class="kr">string</span><span class="p">;</span>
+  <span class="nx">brew</span><span class="p">():</span> <span class="k">void</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">User</span><span class="p">():</span> <span class="nx">UserType</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">who</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">:</span> <span class="kr">string</span><span class="p">)</span> <span class="p">{})</span> <span class="k">as</span> <span class="nx">UserType</span><span class="p">;</span>
+  <span class="nx">who</span><span class="p">.</span><span class="nx">position</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">developer</span><span class="dl">'</span><span class="p">;</span>
+  <span class="nx">who</span><span class="p">.</span><span class="nx">brew</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
+  <span class="k">return</span> <span class="nx">who</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">let</span> <span class="nx">Who</span> <span class="o">=</span> <span class="nx">User</span><span class="p">();</span>
+<span class="nx">Who</span><span class="p">(</span><span class="dl">'</span><span class="s1">seongsik</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">Who</span><span class="p">.</span><span class="nx">position</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">HR</span><span class="dl">'</span><span class="p">;</span>
+<span class="nx">Who</span><span class="p">.</span><span class="nx">brew</span><span class="p">();</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Who</span><span class="p">);</span>
+</code></pre></div></div>
+:ET

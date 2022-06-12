@@ -1,0 +1,280 @@
+I"�^<h2 id="표준-모듈-시스템의-등장-배경"><strong>표준 모듈 시스템의 등장 배경</strong></h2>
+
+<hr />
+
+<p>모듈 시스템이 없었던 자바스크립트 환경은 html 헤더에 script 태그를 명시하여 js를 <code class="language-plaintext highlighter-rouge">순서대로</code> 불러오는 방법을 사용했습니다. 
+이러한 방식은 여러가지 문제점을 발생시켰습니다. 그 중 가장 문제점은 전역 스코프가 충돌 된다는 것입니다.</p>
+
+<p>그 이유는, <code class="language-plaintext highlighter-rouge">script</code>로 태그된 <code class="language-plaintext highlighter-rouge">js</code>파일들을 로드할 때 함수와 변수가 전역 공간에 노출되기 때문입니다.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">math.js</code>에 sum이라는 함수를 만들고, <code class="language-plaintext highlighter-rouge">app.js</code>에서 console.log로 찍어보겠습니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">html</code>에서는 <code class="language-plaintext highlighter-rouge">math.js</code> -&gt; <code class="language-plaintext highlighter-rouge">app.js</code> 순서대로 불러오겠습니다.</li>
+  <li>웹서버를 하나 띄어서 개발자 도구로 <code class="language-plaintext highlighter-rouge">log</code>가 찍히는지 확인해보겠습니다.</li>
+</ul>
+
+<div file="index.html" class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cp">&lt;!DOCTYPE html&gt;</span>
+    <span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"X-UA-Compatible"</span> <span class="na">content=</span><span class="s">"IE=edge"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;title&gt;</span>Document<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"src/math.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+        <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"src/app.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+    <span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<div file="math.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">function</span> <span class="nx">sum</span><span class="p">(</span><span class="nx">input1</span><span class="p">,</span> <span class="nx">input2</span><span class="p">){</span>
+        <span class="k">return</span> <span class="nx">input1</span><span class="o">+</span><span class="nx">input2</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<div file="app.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">math</span><span class="p">.</span><span class="nx">sum</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">));</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">결과</code> : console log에 30이 찍힌 것을 확인할 수 있습니다. 또한 sum 함수를 전역함수로 사용할 수 있습니다.
+<img src="https://user-images.githubusercontent.com/52439201/145338702-6df3abbd-2461-46fd-b795-700ff055aae6.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h2 id="모듈-시스템-이전의-문제점"><strong>모듈 시스템 이전의 문제점</strong></h2>
+
+<hr />
+
+<h3 id="문제1--설계-및-개발-완료-후-테스트를-진행하므로-잘못된-설계-및-개발코드의-재수정-필요">문제1 : 설계 및 개발 완료 후 테스트를 진행하므로, 잘못된 설계 및 개발코드의 재수정 필요</h3>
+
+<ul>
+  <li>app.js와 math.js 태그 순서를 바꿔본다.</li>
+</ul>
+
+<div file="index.html" class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cp">&lt;!DOCTYPE html&gt;</span>
+    <span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"X-UA-Compatible"</span> <span class="na">content=</span><span class="s">"IE=edge"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;title&gt;</span>Document<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"src/app.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+        <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"src/math.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+    <span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">결과</code> : app.js을 먼저 로드할 때 app.js 입장에서는 sum이라는 함수가 정의되어 있지 않기 사용할 수 없습니다.
+<img src="https://user-images.githubusercontent.com/52439201/145339683-682f4f07-73f5-490e-9944-8c4294e974c4.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h3 id="문제2--전역-스코프-충돌">문제2 : 전역 스코프 충돌</h3>
+
+<ul>
+  <li>app.js 에 sum 함수를 정의해 줍니다.</li>
+</ul>
+
+<div file="math.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">function</span> <span class="nx">sum</span><span class="p">(</span><span class="nx">input1</span><span class="p">,</span> <span class="nx">input2</span><span class="p">){</span>
+        <span class="k">return</span> <span class="nx">input1</span><span class="o">+</span><span class="nx">input2</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<div file="app.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">sum</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">input1</span><span class="p">,</span><span class="nx">input2</span><span class="p">){</span>
+        <span class="k">return</span> <span class="nx">input1</span> <span class="o">-</span> <span class="nx">input2</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">sum</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">));</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">결과</code> : math.js에서 선언한 sum 함수가, 나중에 호출된 app.js sum 함수로 재정의 되어 실행된 것을 확인할 수 있습니다.
+<img src="https://user-images.githubusercontent.com/52439201/145342810-2793e88d-a7f7-4745-b9ad-d760cd1bfa4c.png" alt="image" /></p>
+
+<p>이렇듯, js가 로드되는 순서와 변수와 함수가 전역 공간에 노출되기 때문에 같은 각기 다른 js에서 동일한 이름으로 선언한다면 충돌이 발생하게 된다.
+이런 문제들을 해결하고자 모듈화 방법들이 나오게 되었다.</p>
+
+<p><br /></p>
+
+<h2 id="es2015es6-표준-모듈-시스템"><strong>ES2015(ES6) 표준 모듈 시스템</strong></h2>
+
+<hr />
+
+<p>대표적인 명세인 AMD와 CommonJS가 있지만, 서로 다른 스펙을 제안하기 때문에 이를 통합하고자 <code class="language-plaintext highlighter-rouge">ES2015(ES6) 표준 모듈 시스템</code>이 등장하게 되었다.</p>
+
+<p><br /></p>
+
+<h2 id="export"><strong>export</strong></h2>
+
+<hr />
+
+<p><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Statements/export">참고자료</a></p>
+
+<ul>
+  <li>javascript 모듈에서 함수, 객체, 원시 값을 내보낼 때 사용합니다.</li>
+  <li>export된 값은 다른 프로그램에서 import로 사용할 수 있습니다.</li>
+  <li>내보내는 모듈은 “use strict”의 존재 유무와 상관없이 무조건 엄격 모드입니다.</li>
+  <li>HTML 안에 작성된 스크립트에서는 사용할 수 없습니다.</li>
+  <li>내보내기 방법은 <strong>named</strong>, <strong>default</strong> 내보내기가 있습니다.</li>
+  <li>모듈 하나에서 <strong>named</strong> 내보내기는 여러 개 존재할 수 있지만, <strong>default</strong> 내보내기는 하나만 가능합니다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="export-named"><strong>export named</strong></h3>
+<div file="index.html" class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cp">&lt;!DOCTYPE html&gt;</span>
+    <span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"X-UA-Compatible"</span> <span class="na">content=</span><span class="s">"IE=edge"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;title&gt;</span>Document<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"module"</span> <span class="na">src=</span><span class="s">"src/import.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+    <span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>내보낼 식별자 이름을 명시해서 내보냅니다.</li>
+  <li>export { cube, foo, graph }</li>
+</ul>
+
+<div file="export.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">function</span> <span class="nx">cube</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">x</span> <span class="o">*</span> <span class="nx">x</span> <span class="o">*</span> <span class="nx">x</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">const</span> <span class="nx">foo</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">SQRT2</span><span class="p">;</span>
+
+    <span class="kd">var</span> <span class="nx">graph</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">options</span><span class="p">:</span> <span class="p">{</span>
+            <span class="na">color</span><span class="p">:</span><span class="dl">'</span><span class="s1">white</span><span class="dl">'</span><span class="p">,</span>
+            <span class="na">thickness</span><span class="p">:</span><span class="dl">'</span><span class="s1">2px</span><span class="dl">'</span>
+        <span class="p">},</span>
+        <span class="na">draw</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">From graph draw function</span><span class="dl">'</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1">// 내보낼 식별자 이름을 사용하여 export 합니다.</span>
+    <span class="k">export</span> <span class="p">{</span> <span class="nx">cube</span><span class="p">,</span> <span class="nx">foo</span><span class="p">,</span> <span class="nx">graph</span> <span class="p">};</span>
+</code></pre></div></div>
+
+<div file="import.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">import</span> <span class="p">{</span> <span class="nx">cube</span><span class="p">,</span> <span class="nx">foo</span><span class="p">,</span> <span class="nx">graph</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./export.js</span><span class="dl">'</span><span class="p">;</span>
+
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">graph</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span> <span class="c1">// {color:'white', thickness:'2px'}</span>
+
+    <span class="nx">graph</span><span class="p">.</span><span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">color</span><span class="p">:</span><span class="dl">'</span><span class="s1">blue</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">thickness</span><span class="p">:</span><span class="dl">'</span><span class="s1">3px</span><span class="dl">'</span>
+    <span class="p">};</span>
+
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">graph</span><span class="p">.</span><span class="nx">options</span><span class="p">);</span> <span class="c1">// {color:'blue', thickness:'3px'}</span>
+    <span class="nx">graph</span><span class="p">.</span><span class="nx">draw</span><span class="p">();</span> <span class="c1">// From graph draw function</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">cube</span><span class="p">(</span><span class="mi">3</span><span class="p">));</span> <span class="c1">// 27</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">foo</span><span class="p">);</span>    <span class="c1">// 4.555806215962888</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">결과 :</code> <br />
+<img src="https://user-images.githubusercontent.com/52439201/145350820-6a36165b-0193-41ba-a31d-a1d49532bfca.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h3 id="export-default"><strong>export default</strong></h3>
+<ul>
+  <li>export default에서 var, let, const는 사용할 수 없습니다.</li>
+</ul>
+
+<div file="index.html" class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cp">&lt;!DOCTYPE html&gt;</span>
+    <span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"X-UA-Compatible"</span> <span class="na">content=</span><span class="s">"IE=edge"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;title&gt;</span>Document<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"module"</span> <span class="na">src=</span><span class="s">"src/import.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+    <span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<div file="export.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">export</span> <span class="k">default</span> <span class="kd">function</span> <span class="nx">cube</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">x</span> <span class="o">*</span> <span class="nx">x</span> <span class="o">*</span> <span class="nx">x</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<div file="import.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">import</span> <span class="nx">cube</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./export.js</span><span class="dl">'</span><span class="p">;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">cube</span><span class="p">(</span><span class="mi">3</span><span class="p">));</span> <span class="c1">// 27</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">결과 :</code> <br />
+<img src="https://user-images.githubusercontent.com/52439201/145351355-773bd31f-516a-4f9d-82fb-184c16092adb.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h2 id="import"><strong>import</strong></h2>
+
+<hr />
+
+<p><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Statements/import">참고자료</a></p>
+
+<ul>
+  <li>다른 모듈에서 내보낸 바인딩을 가져올 때 사용합니다.</li>
+  <li>내보내는 모듈은 “use strict”의 존재 유무와 상관없이 무조건 엄격 모드입니다.</li>
+  <li>HTML 안에 작성한 스크립트에서는 import를 사용할 수 없습니다.</li>
+  <li>함수형 구문을 가진 동적 import()도 있으며, type=”module”를 필요로 하지않습니다.</li>
+  <li>동적 가져오기는 모듈을 <strong>조건적, 필요할 때</strong>에 유용합니다.</li>
+  <li>초기 의존성을 불러올 때엔 정적 가져오기가 더 좋습니다.</li>
+</ul>
+
+<h3 id="export-named---import"><strong>export named -&gt; import</strong></h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="c1">// export한 모든 것들은 myModule로 바인딩 되어 들어갑니다. 별칭으로 이해하는게 쉽겠네요.</span>
+   <span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">myModule</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">my-module.js</span><span class="dl">"</span><span class="p">;</span>
+
+   <span class="c1">// export한 모듈에서 하나의 멤버만 가져옵니다.</span>
+   <span class="k">import</span> <span class="p">{</span><span class="nx">myMember</span><span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">my-module.js</span><span class="dl">"</span><span class="p">;</span>
+
+   <span class="c1">// export한 모듈에서 여러 개의 멤버를 가져옵니다.</span>
+   <span class="k">import</span> <span class="p">{</span><span class="nx">foo</span><span class="p">,</span> <span class="nx">bar</span><span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">my-module.js</span><span class="dl">"</span><span class="p">;</span>
+
+   <span class="c1">// export한 모듈에서 멤버를 가져오고, 별칭을 사용하여 좀더 편리한 name으로 사용합니다.</span>
+   <span class="k">import</span> <span class="p">{</span><span class="nx">reallyReallyLongModuleMemberName</span> <span class="k">as</span> <span class="nx">shortName</span><span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">my-module.js</span><span class="dl">"</span><span class="p">;</span>
+
+   <span class="c1">// export한 모듈에서 여러 개의 멤버를 가져오고, 별칭을 사용하여 좀더 편리한 name으로 사용합니다.</span>
+   <span class="k">import</span> <span class="p">{</span><span class="nx">reallyReallyLongModuleMemberName</span> <span class="k">as</span> <span class="nx">shortName</span><span class="p">,</span> <span class="nx">anotherLongModuleName</span> <span class="k">as</span> <span class="nx">short</span><span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">my-module.js</span><span class="dl">"</span><span class="p">;</span>
+
+   <span class="c1">// 어떠한 바인딩 없이 모듈 전체를 가져옵니다.</span>
+   <span class="k">import</span> <span class="dl">"</span><span class="s2">my-module.js</span><span class="dl">"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="default-export---import"><strong>default export -&gt; import</strong></h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="c1">// default를 가져오는 가장 간단한 방법입니다.</span>
+   <span class="k">import</span> <span class="nx">myModule</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">my-module.js</span><span class="dl">"</span><span class="p">;</span>
+
+   <span class="c1">// default와 named를 함께 사용할 수 있습니다. 단, default를 먼저 선언해야 합니다.</span>
+   <span class="c1">// myModule used as a namespace</span>
+   <span class="k">import</span> <span class="nx">myDefault</span><span class="p">,</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">myModule</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">my-module.js</span><span class="dl">"</span><span class="p">;</span> 
+
+   <span class="k">import</span> <span class="nx">myDefault</span><span class="p">,</span> <span class="p">{</span><span class="nx">foo</span><span class="p">,</span> <span class="nx">bar</span><span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">my-module.js</span><span class="dl">"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="브라우저-호환성"><strong>브라우저 호환성</strong></h2>
+
+<h3 id="export-1"><strong>export</strong></h3>
+<p><img src="https://user-images.githubusercontent.com/52439201/145359723-b39157e0-190d-48f8-9688-740502823aa5.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h3 id="import-1"><strong>import</strong></h3>
+<p><img src="https://user-images.githubusercontent.com/52439201/145359836-cc531723-8aa0-44f9-99f4-fe61f4897bda.png" alt="image" /></p>
+:ET

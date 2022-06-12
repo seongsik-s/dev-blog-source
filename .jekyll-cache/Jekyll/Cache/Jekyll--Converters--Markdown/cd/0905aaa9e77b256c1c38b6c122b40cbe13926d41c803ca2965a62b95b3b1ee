@@ -1,0 +1,214 @@
+I"z[<h2 id="시작으로"><strong>시작으로</strong></h2>
+
+<hr />
+
+<p>Javascript에서 함수의 <code class="language-plaintext highlighter-rouge">this</code> 키워드는 다른 언어들과 다르게 동작한다. 이는 Java와 같은 익숙한 언어의 개념과 달라 개발자들에게 혼동을 준다.
+대부분의 경우 <code class="language-plaintext highlighter-rouge">this</code>의 값은 함수를 호출한 방법에 의해 결정된다. 실행중에는 할당으로 설정할 수 없고 함수를 호출할 때 마다 다를 수 있다.</p>
+
+<p>Java에서의 this는 인스턴스 자신을 가르키는 참조변수이다. this가 객체 자신에 대한 참조 값을 가지고 있다는 뜻이다. 주로 매개변수와 객체 자신이 가지고 있는 멤버변수명이 같은 경우 이를 구분하기 위해 사용된다.
+하지만, <code class="language-plaintext highlighter-rouge">Javascript</code>의 경우 <code class="language-plaintext highlighter-rouge">Java</code>와 같이 <code class="language-plaintext highlighter-rouge">this</code>에 바인딩되는 객체는 한가지가 아니라 해당 <code class="language-plaintext highlighter-rouge">함수 호출 방식</code>에 따라 <code class="language-plaintext highlighter-rouge">this</code>에 바인딩되는 객체가 달라진다.</p>
+
+<p><br /></p>
+
+<h2 id="함수의-4가지-호출-방식"><strong>함수의 4가지 호출 방식</strong></h2>
+
+<hr />
+
+<ul>
+  <li>함수 호출</li>
+  <li>메서드 호출</li>
+  <li>생성자 함수 호출</li>
+  <li>Call, Apply, Bind 호출</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="함수-호출"><strong>함수 호출</strong></h3>
+
+<p>기본적으로 <code class="language-plaintext highlighter-rouge">this</code>는 <code class="language-plaintext highlighter-rouge">전역객체(Global object)</code>에 바인딩된다. 전역함수는 물론이고 내부함수의 경우에도 <code class="language-plaintext highlighter-rouge">this</code>는 외부함수가 아닌 전역객체에 바인딩된다.</p>
+
+<p>여기서 <code class="language-plaintext highlighter-rouge">전역객체(Global object)</code>란 모든 객체의 유일한 최상위 객체를 말한다. 일반적으로 B<code class="language-plaintext highlighter-rouge">rowser-side</code>에서는 <code class="language-plaintext highlighter-rouge">window</code>, <code class="language-plaintext highlighter-rouge">Server-side(Node.js)</code>에서는 <code class="language-plaintext highlighter-rouge">global</code> 객체를 의미한다.
+전역객체는 전역 스코프(Global Scope)를 갖는 전역변수(Global variable)를 프로퍼티로 소유한다. 글로벌 영역에 선언한 함수는 전역객체의 프로퍼티로 접근할 수 있는 전역 변수의 메소드이다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">global</span><span class="dl">'</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span> <span class="c1">// global</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">x</span><span class="p">);</span> <span class="c1">// global</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">x</span><span class="p">);</span> <span class="c1">// global</span>
+
+<span class="kd">function</span> <span class="nx">global_fn</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">global function</span><span class="dl">'</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nb">window</span><span class="p">.</span><span class="nx">global_fn</span><span class="p">();</span> <span class="c1">// global function</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">global_fn</span><span class="p">();</span> <span class="c1">// global function</span>
+</code></pre></div></div>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">// browser console
+this===window // true
+
+// node terminal
+this===global // true
+</span></code></pre></div></div>
+
+<p>브라우저 콘솔과 Node.js 터미널에 <code class="language-plaintext highlighter-rouge">this</code>를 입력해보면 아래와 같은 객체가 출력된다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/152727272-7991a6bf-6156-436b-9854-f8ac21fcd510.png" alt="image" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/152727333-89429376-8080-43d9-8eba-9b6ba79a4795.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h3 id="메서드-호출"><strong>메서드 호출</strong></h3>
+
+<p>함수가 객체의 프로퍼티 값이면 <code class="language-plaintext highlighter-rouge">메소드</code>로서 호출된다. 이때 메소드 내부의 <code class="language-plaintext highlighter-rouge">this</code>는 해당 메소드를 소유한 객체, 즉 해당 메소드를 호출한 객체에 바인딩된다.
+이를, <code class="language-plaintext highlighter-rouge">암시적 바인딩</code>이라 한다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">object</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">value</span> <span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="na">obj_fn</span> <span class="p">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">object2</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">value</span> <span class="p">:</span> <span class="mi">200</span>
+<span class="p">};</span>
+
+<span class="nx">object</span><span class="p">.</span><span class="nx">obj_fn</span><span class="p">();</span> <span class="c1">// 100</span>
+<span class="nx">object2</span><span class="p">.</span><span class="nx">obj_fn</span><span class="p">();</span> <span class="c1">// 200</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="생성자-함수-호출"><strong>생성자 함수 호출</strong></h3>
+
+<p>생성자 함수란 객체를 생성하는 역할을 한다. 함수를 <code class="language-plaintext highlighter-rouge">new</code> 키워드와 함께 생성자로 호출하면 생성자 함수로 동작한다. <br />
+생성자 함수가 아닌 일반 함수에 <code class="language-plaintext highlighter-rouge">new</code> 키워드를 붙여 호출하면 생성자 함수처럼 동작할 수 있다. 일반적으로 생성자 함수명은 첫문자를 대문자로 기술하여 혼란을 방지하려 노력한다.</p>
+
+<p>주의해야할 사항으로는  <code class="language-plaintext highlighter-rouge">new</code> 키워드와 함께 생성자 함수를 호출하지 않으면 생성자 함수로 동작하지 않는다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">Create_fn</span><span class="p">(</span><span class="nx">name</span><span class="p">){</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">men</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Create_fn</span><span class="p">(</span><span class="dl">'</span><span class="s1">Men</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">men</span><span class="p">);</span> <span class="c1">// Create_fn {name: 'Men'}</span>
+
+
+<span class="c1">// new 키워드와 함께 생성자 함수를 호출하지 않으면 생성자 함수로 동작하지 않는다.</span>
+<span class="kd">var</span> <span class="nx">female</span> <span class="o">=</span> <span class="nx">Create_fn</span><span class="p">(</span><span class="dl">'</span><span class="s1">Female</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">female</span> <span class="p">);</span> <span class="c1">// undefined</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p>그럼 <code class="language-plaintext highlighter-rouge">new</code> 키워드는 클래스의 인스턴스화인가? 결론부터 말해면 <code class="language-plaintext highlighter-rouge">No!</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">new</code> 키워드 바인딩 동작순서를 쪼개서 실험해보면 아래와 같다.</p>
+
+<ol>
+  <li>새 객체를 생성한다.</li>
+  <li>생성된 객체의 Prototype 체인이 호출 함수의 프로토타입과 연결된다.</li>
+  <li>생성된 객체를 context 객체로 사용(명시적)하여 함수가 실행된다.</li>
+  <li>이 함수가 객체를 반환하지 않는 한 생성된 객체가 반환된다.</li>
+</ol>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">Person</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">age</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">per</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">(</span><span class="dl">'</span><span class="s1">seongsik</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">per</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span> <span class="c1">// seongsik</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">per</span><span class="p">.</span><span class="nx">age</span><span class="p">);</span> <span class="c1">// 20</span>
+
+<span class="c1">// 위와 똑같은 과정을 쪼개보자.</span>
+<span class="c1">// 1. 새 객체를 생성한다.</span>
+<span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{};</span>
+
+<span class="c1">// 2. 생성된 객체의 Prototype 체인이 호출 함수의 프로토타입과 연결된다.</span>
+<span class="nb">Object</span><span class="p">.</span><span class="nx">setPrototypeOf</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">Person</span><span class="p">.</span><span class="nx">prototype</span><span class="p">);</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">obj</span> <span class="c1">// Person {} </span>
+
+<span class="c1">// 3. 생성된 객체를 context 객체로 사용(명시적)하여 함수가 실행된다.</span>
+<span class="nx">Person</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span><span class="dl">'</span><span class="s1">seongsik222</span><span class="dl">'</span><span class="p">);</span>
+
+<span class="c1">// 4. 이 함수가 객체를 반환하지 않는 한 생성된 객체가 반환된다.</span>
+<span class="kd">var</span> <span class="nx">per2</span> <span class="o">=</span> <span class="nx">obj</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">per2</span> <span class="p">.</span><span class="nx">name</span><span class="p">);</span> <span class="c1">// 2</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">per2</span> <span class="p">.</span><span class="nx">age</span><span class="p">);</span> <span class="c1">// 20</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="c1">// Person {name: 'seongsik222', age: 20}</span>
+</code></pre></div></div>
+
+<p>이렇듯 위의 과정이 발생한다는 것! <br />
+그리고, <code class="language-plaintext highlighter-rouge">new</code> 키워드는 그저 함수를 실행 시켜주는 것이다. 아래의 결과를 보면 순차적으로 함수내부를 실행시켜주는 것을 확인할 수 있다.
+그리고 우리가 알고 있던 클래스와 다르게 <code class="language-plaintext highlighter-rouge">return</code>에 객체를 반환된다.<br />
+즉, <code class="language-plaintext highlighter-rouge">Javascript</code>의 <code class="language-plaintext highlighter-rouge">new</code> 키워드는 클래스의 인스턴스화가 아닌 단순히 함수를 실행시켜주는 것이다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">Person</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">age</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">function 실행!!</span><span class="dl">'</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="p">{</span><span class="na">address</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">주소</span><span class="dl">'</span><span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">per</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">(</span><span class="dl">'</span><span class="s1">seongsik</span><span class="dl">'</span><span class="p">);</span> <span class="c1">// function 실행!!</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">per</span><span class="p">);</span> <span class="c1">// {address : '주소'}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="call-apply-bind-호출"><strong>Call, Apply, Bind 호출</strong></h3>
+
+<p>함수 객체는 Call, Apply, Bind 메소드를 가지고 있는데, 첫 번째 인자로 넘겨주는 것이 this context 객체가 된다. 이를 <code class="language-plaintext highlighter-rouge">명시적 바인딩</code>이라 한다.
+<code class="language-plaintext highlighter-rouge">this</code>의 값을 한 문맥에서 다른 문맥으로 넘기려면  <code class="language-plaintext highlighter-rouge">call()</code>이나 <code class="language-plaintext highlighter-rouge">apply()</code>를 사용해야 한다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// call 또는 apply의 첫 번째 인자로 객체가 전달될 수 있으며 this가 그 객체에 묶임</span>
+<span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span><span class="na">a</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Custom</span><span class="dl">'</span><span class="p">};</span>
+
+<span class="c1">// 변수를 선언하고 변수에 프로퍼티로 전역 window를 할당</span>
+<span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">Global</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">whatsThis</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">a</span><span class="p">;</span>  <span class="c1">// 함수 호출 방식에 따라 값이 달라짐</span>
+<span class="p">}</span>
+
+<span class="nx">whatsThis</span><span class="p">();</span>          <span class="c1">// this는 'Global'. 함수 내에서 설정되지 않았으므로 global/window 객체로 초기값을 설정한다.</span>
+<span class="nx">whatsThis</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>  <span class="c1">// this는 'Custom'. 함수 내에서 obj로 설정한다.</span>
+<span class="nx">whatsThis</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span> <span class="c1">// this는 'Custom'. 함수 내에서 obj로 설정한다.</span>
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">add</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">a</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">b</span> <span class="o">+</span> <span class="nx">c</span> <span class="o">+</span> <span class="nx">d</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="p">{</span><span class="na">a</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="na">b</span><span class="p">:</span> <span class="mi">3</span><span class="p">};</span>
+
+<span class="c1">// 첫 번째 인자는 'this'로 사용할 객체이고,</span>
+<span class="c1">// 이어지는 인자들은 함수 호출에서 인수로 전달된다.</span>
+<span class="nx">add</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">);</span> <span class="c1">// 16</span>
+
+<span class="c1">// 첫 번째 인자는 'this'로 사용할 객체이고,</span>
+<span class="c1">// 두 번째 인자는 함수 호출에서 인수로 사용될 멤버들이 위치한 배열이다.</span>
+<span class="nx">add</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]);</span> <span class="c1">// 34</span>
+</code></pre></div></div>
+
+<p>ES5에 추가된 <code class="language-plaintext highlighter-rouge">Function.prototype.bind</code>를 사용하는 방법도 가능하다. <code class="language-plaintext highlighter-rouge">Function.prototype.bind</code>는 함수에 인자로 전달한 this가 바인딩된 새로운 함수를 리턴한다.<br />
+즉, <code class="language-plaintext highlighter-rouge">Function.prototype.bind</code>는 Function.prototype.apply, Function.prototype.call 메소드와 같이 함수를 실행하지 않기 때문에 명시적으로 함수를 호출할 필요가 있다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">f</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">a</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">g</span> <span class="o">=</span> <span class="nx">f</span><span class="p">.</span><span class="nx">bind</span><span class="p">({</span><span class="na">a</span><span class="p">:</span> <span class="dl">'</span><span class="s1">azerty</span><span class="dl">'</span><span class="p">});</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">g</span><span class="p">());</span> <span class="c1">// azerty</span>
+
+<span class="kd">var</span> <span class="nx">h</span> <span class="o">=</span> <span class="nx">g</span><span class="p">.</span><span class="nx">bind</span><span class="p">({</span><span class="na">a</span><span class="p">:</span> <span class="dl">'</span><span class="s1">yoo</span><span class="dl">'</span><span class="p">});</span> <span class="c1">// bind는 한 번만 동작함!</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">h</span><span class="p">());</span> <span class="c1">// azerty</span>
+
+<span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="p">{</span><span class="na">a</span><span class="p">:</span> <span class="mi">37</span><span class="p">,</span> <span class="na">f</span><span class="p">:</span> <span class="nx">f</span><span class="p">,</span> <span class="na">g</span><span class="p">:</span> <span class="nx">g</span><span class="p">,</span> <span class="na">h</span><span class="p">:</span> <span class="nx">h</span><span class="p">};</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">a</span><span class="p">,</span> <span class="nx">o</span><span class="p">.</span><span class="nx">f</span><span class="p">(),</span> <span class="nx">o</span><span class="p">.</span><span class="nx">g</span><span class="p">(),</span> <span class="nx">o</span><span class="p">.</span><span class="nx">h</span><span class="p">());</span> <span class="c1">// 37, 37, azerty, azerty</span>
+</code></pre></div></div>
+:ET

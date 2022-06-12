@@ -1,0 +1,68 @@
+---
+layout: post
+title: "[Vue.js] 사전 필수요소"
+tags: [Webpack, Babel, Node.js, Javascript]
+categories: [Vue.js]
+banner:
+  image: /assets/images/banners/vue.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## 필수 요소
+{: id="a"}
+
+***
+
+# [Crome 설치](https://www.google.co.kr/intl/ko/chrome/)
+{: id="a-1"}
+
+Vue는 ECMAScript 5 기능을 사용하기 때문에 IE8 이하 버전을 지원하지 않습니다. 하지만 모든 ECMAScript5 호환 브라우저를 지원합니다.
+
+
+![image](https://user-images.githubusercontent.com/52439201/148712700-c081a2d2-f7d9-4c49-91c3-e9640e1d1920.png)
+
+
+<br>
+
+
+
+
+## [Node.js 설치](https://nodejs.org/ko/)
+{: id="a-2"}
+
+LTS 버전을 다운로드 합니다. 
+
+[[Node.js] 시작하기](/posts/Node.js-02/)를 참고.
+
+<br>
+
+
+## [Vue Devtools(개발자 도구) 설치](https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
+{: id="a-3"}
+
+일반적으로 프론트엔드 개발시 크롬 개발자 도구로 디버깅을 했다면, Vue는 자체적으로 제공하는 개발자 도구를 사용합니다.
+
+
+설치가 완료되었다면, 크롬 브라우저 오른쪽 설정에서
+
+`도구 더보기` > `확장 프로그램` 클릭
+
+![image](https://user-images.githubusercontent.com/52439201/148717589-d3d0450d-13cc-43b0-8ff8-2a4db4063a3d.png)
+
+
+`vue.js devtools` > `세부정보` 클릭 > `사이트 엑세스` > `모든 사이트에서`로 변경
+
+![image](https://user-images.githubusercontent.com/52439201/148717718-e2078c9c-168f-4158-8909-d1a72a47300d.png)
+
+
+<br>
+
+## [VScode 설치](https://code.visualstudio.com/)
+{: id="a-4"}
+
+무료 IDE 점유율 1위로 가장 많이 쓰이는 툴입니다. 

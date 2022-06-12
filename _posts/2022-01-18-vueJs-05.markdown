@@ -1,0 +1,376 @@
+---
+layout: post
+title: "[Vue.js] Vue의 핵심 기능인 컴포넌트는 무엇이고 어떻게 사용할까?"
+tags: [Webpack, Babel, Node.js, Javascript]
+categories: [Vue.js]
+banner:
+  image: /assets/images/banners/vue.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## **컴포넌트가 무엇인가?**
+
+***
+
+[컴포넌트](https://kr.vuejs.org/v2/guide/components.html#%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8%EA%B0%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80%EC%9A%94)는 `Vue`의 핵심 기능 중 하나이다.
+컴포넌트를 어떻게 구성하고 생성하냐에 따라 어플리케이션의 개발속도와 코드 가독성, 그리고 효율성`(ex. 재사용성)`이 차이가 난다.
+
+`Vue`에서 컴포넌트는 기본 HTML 엘리먼트를 확장하여 재사용 가능한 코드를 `모듈화` 혹은 `캡슐화`한 것을 의미한다. 상위 수준에서 컴포넌트는 `Vue`의 컴파일러에 의해 동작이 추가된 사용자 지정 엘리먼트이다. 경우에 따라 특별한 `is` 속성으로 확장 된 원시 HTML 엘리먼트로 나타날 수도 있다.
+
+`Vue` 컴포넌트는 `Vue` 인스턴스이기도 하다. 그러므로 모든 옵션 객체를 사용할 수 있다. (루트에만 사용하는 옵션은 제외) 그리고 같은 라이프사이클 훅을 사용할 수 있다.
+
+정리해서, `컴포넌트`는 어플리케이션을 만들기 위한 작고 독립적인 `블록`이며 재사용이 가능하다. 이것들을 잘 조합해서 효율적인 개발을 할 수 있다. 
+
+![Desktop View](/assets/images/banners/components.jpg)  
+
+<br>
+
+## **컴포넌트 사용방법**
+
+***
+
+컴포넌트를 등록하는 방법은 `전역등록(Global Registration)`과 `지역등록(Local Registration)`이 있다.  
+`Vue-cli` 4버전으로 프로젝트를 생성 후 예제를 진행하였다.   
+해당 내용을 모른다면 [[Vue.js] Vue CLI로 프로젝트 생성하기](/posts/vueJs-02/)를 참고하기 바란다.  
+프로젝트는 Vue 2버전으로 진행했다. 프로젝트를 생성하면 아래와 같은 구조를 갖게된다.  
+  
+![image](https://user-images.githubusercontent.com/52439201/150068652-cd26c1b5-0705-48ac-979b-fb3d8b06fd0a.png)
+
+
+<br>
+
+### **전역등록**
+
+`전역등록`이란 전역변수처럼 전역에서 컴포넌트를 사용하기 위한 것이다.  
+`components` 디렉토리에 `GlobalComponents.vue` 파일을 생성한다.
+
+```vue
+{% raw %}
+  <template>
+    <div> {{ text }}</div>
+  </template>
+
+  <script>
+  export default {
+      name:"GlobalComponents",
+      data: () => {
+          return {
+              text : "전역등록된 컴포넌트 입니다."
+          }
+      }
+  }
+  </script>
+
+  <style>
+
+  </style>
+{% endraw %}
+```
+{: file="GlobalComponents.vue"}
+
+<br>
+
+이제 `main.js`에 `GlobalComponents.vue`를 `import`하여 `vue`에 등록만 해주면 된다.   
+왜 `main.js`에서 등록을 하는지는 `webpack`에 대해 알아야 된다.   
+간단하게 말하면 `webpack`은 `js`, `html`, `css`를 하나로 모아서 빌드할 수 있게 도와주는 도구이다.  
+그렇기 때문에 모든 리소스는 `main.js`에서 한번에 모아서 빌드하게 된다. (여기서 `main.js`는 `webpack`에서 `entry` 포인트이다.)  
+
+따라서, 모든 컴포넌트들을 `main.js`에 `import`시킨 다음 `Vue` 인스턴스에 한번에 바인딩 시켜 렌더링하는 것이다.
+
+추가로 App.vue는 최상위 컴포넌트라고 보면된다.
+
+```javascript
+import Vue from 'vue'
+import App from './App.vue'
+
+Vue.config.productionTip = false
+
+import GlobalComponents from './components/GlobalComponents.vue'; // GlobalComponents.vue를 import
+
+Vue.component(GlobalComponents.name, GlobalComponents) // 전역등록
+
+new Vue({
+  render: h => h(App),
+}).$mount('#app')
+```
+{: file="main.js"}
+
+**전역 컴포넌트를 등록하는 방법:**
+```javascript
+  Vue.component('tagName', {
+    // 옵션
+  })
+```
+
+<br>
+
+이제 `GlobalComponents.vue`를 전역에서 사용이 가능하다. 최상위 컴포넌트인 `App.vue`에서 사용해보자. 컴포넌트를 등록하면 `태그` 형식으로 사용할 수 있다. 
+
+`Vue`에서는 컴포넌트 태그명을 파스칼로 작성하는 것을 권장한다. 그리고 태그를 사용할 때는 소문자로 작성하고 파스칼 구분을 `-`를 넣어 작성하면 된다.  
+`파스칼 : HelloWorld` -> `태그 작성 : <hello-world></hello-world>`  
+
+태그명 그대로 작성해도 상관없다.
+
+```vue
+<template>
+  <div id="app">
+    <test></test>
+    <global-components></global-components>
+    <!--  or <GlobalComponents></GlobalComponents> -->
+  </div>
+</template>
+
+export default {
+  name: 'app'
+}
+</script>
+```
+{: file="App.vue"}
+
+이제 `npm run serve`로 서버를 실행시켜 `localhost:8080/`를 확인해보면  
+성공적으로 전역등록이 완료된 것을 확인할 수 있다.
+
+![image](https://user-images.githubusercontent.com/52439201/150072117-16398961-f283-46c7-9ef7-08db207b158a.png)
+
+<br>
+
+### **지역등록**
+
+`Vue` 어플리케이션을 개발할 때는 `지역등록`보다는 `전역등록`을 사용하는게 보편적이다. 그 이유는 `Webpack`같은 빌드 시스템을 사용하면 `전역등록`된 사용하지 않는 모든 컴포넌트가 `build`에 포함되기 때문이다.
+
+`components` 디렉토리에 `LocalComponents.vue` 파일을 생성한다.
+
+```vue
+<template>
+  <div> {{ text }}</div>
+</template>
+
+<script>
+export default {
+    name:"LocalComponents",
+    data: () => {
+        return {
+            text : "지역등록된 컴포넌트 입니다."
+        }
+    }
+}
+</script>
+
+<style>
+
+</style>
+```
+{: file="LocalComponents.vue"}
+
+<br>
+
+`전역등록`은 `Vue` 인스턴스에 직접 추가하여 사용했지만, `지역등록은` 사용될 곳에 `import`하여 사용한다.
+
+```vue
+<template>
+  <div id="app">
+    <local-component></local-component>
+  </div>
+</template>
+
+<script>
+  import LocalComponent from './components/local-component'
+
+  export default {
+    name: 'app',
+    components:{
+      LocalComponents
+  }
+  }
+</script>
+```
+{: file="App.vue"}
+
+![image](https://user-images.githubusercontent.com/52439201/150076163-2ec2684a-f386-4f70-b89e-5a02fe1f5f48.png)
+
+<br>
+
+### **data는 반드시 함수**
+
+컴포넌트에서 사용하는 `data`는 반드시 함수여야 한다. 
+
+아래의 그림을보면, `data`는 반드시 함수여야 한다고 경고합니다.
+![image](https://user-images.githubusercontent.com/52439201/150078235-1b10ea88-1b5a-40fa-a78f-48585d403cbe.png)
+
+<br>
+
+이런 규칙이 `왜` 존재하는지 `그 이유`에 대해 `이해`하는 것이 중요하다. 
+`LocalComponents.vue`와 `App.vue`를 아래와 같이 작성해서 실행시킨다.
+
+```vue
+{% raw %}
+<template>
+  <button v-on:click="count += 1">{{ count }}</button>
+</template>
+
+<script>
+
+var data = {count : 0};
+
+export default {
+    name:"LocalComponents",
+    data: function () {
+    return data
+  }
+}
+</script>
+
+<style>
+
+</style>
+{% endraw %}
+```
+{: file="LocalComponents.vue"}
+
+```vue
+<template>
+  <div id="app">
+    <local-component></local-component>
+    <local-component></local-component>
+    <local-component></local-component>
+  </div>
+</template>
+
+<script>
+  import LocalComponent from './components/local-component'
+
+  export default {
+    name: 'app',
+    components:{
+      LocalComponents
+  }
+  }
+</script>
+```
+{: file="App.vue"}
+
+
+<br>
+
+3개의 컴포넌트가 모두 같은 `data` 객체를 공유하기 때문에 하나의 `count`를 증가시키면 모두 증가하게 된다.
+
+![image](https://user-images.githubusercontent.com/52439201/150079187-1efefa99-6f4d-405f-9ad3-ade682851403.png)
+
+<br>
+
+아래와 같이 수정하면 새로운 데이터 객체를 반환하여 독립적으로 사용할 수 있다.  
+```javascript
+data: function () {
+  return {
+    count: 0
+  }
+}  
+```
+
+![image](https://user-images.githubusercontent.com/52439201/150080158-ccf1f36f-f9e5-4468-8ed9-b7b3742c0ec6.png)
+
+<br>
+
+### **컴포넌트 작성 방법**
+
+`Vue.js`에서 말하는 컴포넌트는 부모-자식 관계에서 가장 일반적으로 함께 사용하기 위한 것이라고 되어있다.  
+말 그대로 `tree`형식으로 사용할 수 있다는 말이다. 이들은 서로 데이터를 주고 받기 위해 `props`, `events($emit)`를 사용한다.
+
+`Vue.js`에서 부모-자식 관계는 아래와 같다. 
+
+* 부모가 자식에게 데이터를 전달할 때 => `props` 
+* 자식이 부모에게 데이터를 전달할 때 => `events($emit)`
+
+![Desktop View](/assets/images/banners/props-events.png){: style="width:500px; height:400px"}
+
+<br>
+
+여기서 `LocalComponent.vue`은 자식컴포넌트고 `App.vue`가 부모 컴포넌트이다
+
+
+
+```vue
+<template>
+  <div id="app">
+    <local-components :message="parent_msg" @child-event="check"></local-components>
+    <p>{{ chile_msg }}</p>
+  </div>
+</template>
+
+<script>
+  import LocalComponent from './components/local-component'
+
+  export default {
+    name: 'app',
+    components:{
+      LocalComponents
+    },
+    data () {
+      return {
+        parent_msg: '부모컴포넌트에서 보낸 데이터.',
+        chile_msg: ''
+      }
+    },
+    methods: {
+      check(text) {
+        this.chile_msg = text;
+      },
+    }
+  }
+</script>
+```
+{: file="App.vue"}
+
+
+<br>
+
+
+```vue
+{% raw %}
+<template>
+  <div>
+    {{ message  }} 
+
+    <br><br>
+
+    <input type="buttom" @click="siksik" placeholder="자식컴포넌트 데이트 받기">
+</div>
+</template>
+
+<script>
+  export default {
+    name: 'LocalComponents',
+    props: ['message'],
+    methods : {
+    siksik : function () {
+      let text = '자식컴포넌트에서 전달한 데이터';
+      this.$emit("child-event", text);
+    },
+  }
+  }
+</script>
+{% endraw %}
+```
+{: file="LocalComponents.vue"}
+
+<br>
+
+**부모 => 자식**  
+* [App.vue] : 자식 컴포넌트로 보낼 `message` 데이터 객체를 자식 컴포넌트 속성에 추가한다.
+* [LocalComponent.vue] : 부모 컴포넌트에서 받을 `message` 데이터 객체를 props에 정의한다. 
+* [LocalComponent.vue] : 전달받은 message 객체를 `이중 중괄호`에 바인딩한다.
+
+**자식 => 부모** 
+* [LocalComponent.vue] : 부모에게 전달할 이벤트 `$emit`을 작성한다. `this.$emit("child-event", text);`
+* [LocalComponent.vue] : 버튼 클릭시 `child-event`라는 메서드 이름으로 `text` 값을 전달한다.
+* [App.vue] : <local-components :message="parent_msg" @child-event="check"></local-components> 에서 자식이 보낸 `child-event` 이벤트 속성을 추가하고 전달받을 이벤트 `check`를 명시한다.
+* [App.vue] : `check` 이벤트는 자식에게 전달받은 데이터를 `chile_msg`에 바인딩하여 화면에 보여준다.
+
+![image](https://user-images.githubusercontent.com/52439201/150096303-02707b96-879b-42d0-aaaf-c843bc049cbc.png)
+
+![image](https://user-images.githubusercontent.com/52439201/150096239-ca7287b3-46a0-42af-aa5f-521b60e8d51b.png)

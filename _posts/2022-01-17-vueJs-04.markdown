@@ -1,0 +1,527 @@
+---
+layout: post
+title: "[Vue.js] Vue.js 문법 총정리"
+tags: [Webpack, Babel, Node.js, Javascript]
+categories: [Vue.js]
+banner:
+  image: /assets/images/banners/vue.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## **Vue 인스턴스**
+
+***
+
+[Vue 인스턴스](https://kr.vuejs.org/v2/guide/instance.html)에서 보면 알듯이 모든 `Vue` 앱은 `Vue 인스턴스`를 만드는 것부터 시작한다.  
+인스턴스 안에 `options 객체`를 전달해야하는데 [전체 옵션 목록](https://kr.vuejs.org/v2/api/#propsData)을 참고하자.
+
+```javascript
+var vm = new Vue({
+    el: "#app",
+    data: {
+        text: 'hello world'
+    },
+
+    //...옵션들
+})
+```
+
+<br>
+<br>
+
+
+## **데이터 바인딩**
+
+***
+
+### **이중 중괄호**
+
+`이중 중괄호`를 사용한 텍스트 보간이다. data 객체의 `msg`속성 값으로 대체된다. `msg`의 속성 값이 변경될 때 마다 갱신된다.
+보간법은 속성값을 `텍스트`로 출력한다.
+
+```vue
+{% raw %}
+<template>
+  <div>
+      <p>> 메시지: {{ msg }} </p>
+  </div>
+</template>
+
+<script>
+export default {
+    name: "test",
+    data: () => {
+        return {
+            msg: "이것은 보간법!, 선언적 렌더링입니다."
+        }
+    }
+}
+</script>
+{% endraw %}
+```
+
+![image](https://user-images.githubusercontent.com/52439201/149687683-b0b3a609-c8b8-4ee9-999b-a2cee4aef8c8.png)
+
+
+<br>
+
+### **v-text 디렉티브**
+
+디렉티브는 `v-` 접두사가 있는 특수 속성이다. 디렉티브 속성 값은 `단일 javascript` 표현식이 된다. (`v-for`는 예외)
+디렉티브의 역할은 표현식의 값이 변경될 때 사이드이펙트를 반응적으로 DOM에 적용한다는 것이다.
+
+`v-text` 속성은 데이터 객체의 속성값을 `텍스트`로 출력한다.
+
+```vue
+{% raw %}
+<template>
+  <div>
+      <p v-text="msg"> </p>
+      <p v-text="html_msg"> </p>
+  </div>
+</template>
+
+<script>
+export default {
+    name: "test",
+    data: () => {
+        return {
+            msg: "이것은 디렉티브!, v-text 속성을 이용했습니다.",
+            html_msg: "<div>이것은 디렉티브!, v-text 속성을 이용했습니다.</div>"
+        }
+    }
+}
+</script>
+{% endraw %}
+```
+
+![image](https://user-images.githubusercontent.com/52439201/149688240-2df427c1-7677-4ccd-81b8-914f4c494dbc.png)
+
+<br>
+
+### **v-html 디렉티브**
+
+`v-text`가 텍스트로 출력한다면, `v-html`는 속성 값을 `HTML`로 표현된다. 
+즉, 실제 HTML을 출력하고 싶다면 `v-html` 디렉티브를 사용해야 한다.
+
+```vue
+{% raw %}
+<template>
+  <div>
+      <p v-text="msg"> </p>
+      <p v-html="html_msg"> </p>
+  </div>
+</template>
+
+<script>
+export default {
+    name: "test",
+    data: () => {
+        return {
+            msg: "<div>이것은 디렉티브!, v-text 속성을 이용했습니다.</div>",
+            html_msg: "<div>이것은 디렉티브!, v-text 속성을 이용했습니다.</div>"
+        }
+    }
+}
+</script>
+{% endraw %}
+```
+
+![image](https://user-images.githubusercontent.com/52439201/149689594-1c45dcb3-6deb-43ef-afd9-7b6f8de257de.png)
+
+<br>
+
+
+### **v-bind 디렉티브**
+
+위 속성들과 달리 `HTML` 태그의 속성을 바인딩하기 위해 사용한다.
+
+`class`, `id`, `href` 속성을 예로 작성.
+
+```vue
+{% raw %}
+<template>
+  <div>
+      <a v-bind:href="Url">href 속성입니다.</a>
+      <p v-bind:class="Class">class 속성입니다.</p>
+      <p v-bind:id="Id">id 속성입니다.</p>
+  </div>
+</template>
+
+<script>
+export default {
+    name: "test",
+    data: () => {
+        return {
+            Url: "https://www.google.com/",
+            Class: "test-class",
+            Id: "test-id",
+        }
+    }
+}
+</script>
+{% endraw %}
+```
+
+개발자 도구로 확인해보면 `class`, `id`, `href` 속성들이 바인딩 된 것을 확인.
+
+![image](https://user-images.githubusercontent.com/52439201/149694675-a057d011-8261-4266-8c07-27f5f917775e.png)
+
+<br>
+
+### **v-model 디렉티브**
+
+* `v-model` 속성은 입력 Form 요소를 개발할 때 사용하는 속성이다. 
+* `v-model` 속성은 `v-bind`와 `v-on`의 기능의 조합으로 동작한다.
+* `v-model` 속성은 입력요소와 구성 요소에 양방향 바인딩을 만든다.
+* `v-model` 속성은 `<input>`, `<select>`, `<textarea>`, `components`에 제한되어 사용한다.
+
+```vue
+{% raw %}
+<template>
+  <div>
+      <input v-model="model1">
+      <p>model1 : {{model1}}</p>
+
+      <textarea v-model="model2"></textarea>
+      <p>model2 : {{model2}}</p>
+
+      <select v-model="model3">
+        <option>test1</option>
+        <option>test2</option>
+      </select>
+      <p>model3 : {{model3}}</p>
+  </div>
+</template>
+
+<script>
+export default {
+    name: "test",
+    data: () => {
+        return {
+            model1: "",
+            model2: "",
+            model3: "",
+        }
+    }
+}
+</script>
+{% endraw %}
+```
+
+사용자가 입력한 Form의 데이터가 `v-model`의 속성 값으로 연결된다. 따라서, HTML 요소와 뷰 인스턴스의 데이터 속성이 양방향으로 바인딩 될 수 있는 것!
+
+![image](https://user-images.githubusercontent.com/52439201/149706780-396a1153-b68c-465e-ac96-8b6b430dbf73.png)
+
+<br>
+<br>
+
+
+## **이벤트 핸들링**
+
+***
+
+### **v-on 디렉티브**
+
+`v-on` 속성은 요소에 이벤트 리스너를 연결할 때 사용한다. 
+
+```vue
+{% raw %}
+<template>
+  <div>
+      <button v-on:click="countUp">count 1증가</button>
+      <p>{{ count }}</p>
+  </div>
+</template>
+
+<script>
+export default {
+    name: "test",
+    data: () => {
+        return {
+            count:0
+        }
+    },
+    methods: {
+        countUp(){
+            this.count++;
+        }
+    }
+}
+</script>
+
+{% endraw %}
+```
+
+`v-on` 약어 참고! 
+```vue
+<!-- 전체 문법 -->
+<a v-on:click="doSomething"> ... </a>
+
+<!-- 약어 -->
+<a @click="doSomething"> ... </a>
+
+<!-- shorthand with dynamic argument (2.6.0+) -->
+<a @[event]="doSomething"> ... </a>
+```
+
+실제로 4회 누른 결과이다.
+
+![image](https://user-images.githubusercontent.com/52439201/149708316-082deb4c-4186-4637-9a7a-b19021439c13.png)
+
+<br>
+<br>
+
+
+## **조건 렌더링**
+
+***
+
+### **v-if 디렉티브**
+
+`v-if` 속성은 조건에 따라 블록을 렌더링하기 위해 사용한다.  
+블록은 속성의 표현식이 `true`값을 반환할 때만 렌더링한다.
+`vue1` 속성 값이 `ture` 이므로 렌더링되어 화면에 표시었고, `vue2` 속성 값은 `false`이므로 렌더링되지 않는다.
+
+```vue
+{% raw %}
+<template>
+  <div>
+      <p v-if="vue1">vue1가 {{ vue1 }}입니다.</p>
+      <p v-if="vue2">vue2가 {{ vue2 }}입니다.</p>
+  </div>
+</template>
+
+<script>
+export default {
+    name: "test",
+    data: ()=>{
+        return {
+            vue1: true,
+            vue2: false
+        }
+    }
+}
+</script>
+{% endraw %}
+```
+
+![image](https://user-images.githubusercontent.com/52439201/149709203-e67a62b4-daf6-4639-8f0f-76b70a6d196a.png)
+
+<br>
+
+### **v-else 디렉티브**
+
+`v-else` 속성은 `v-if`에 대한 `else 블록`을 나타낼 수 있다.
+
+```vue
+{% raw %}
+<template>
+  <div>
+      <p v-if="vue1">vue1가 {{ vue1 }}입니다.</p>
+
+      <p v-if="vue2">vue2가 {{ vue2 }}입니다.</p>
+      <p v-else>vue2가 {{ vue2 }}입니다.</p>
+  </div>
+</template>
+
+<script>
+export default {
+    name: "test",
+    data: ()=>{
+        return {
+            vue1: true,
+            vue2: false
+        }
+    }
+}
+</script>
+{% endraw %}
+```
+
+![image](https://user-images.githubusercontent.com/52439201/149709443-1c4bc1fe-2a2d-4473-91b0-a86dc56c5d8e.png)
+
+<br>
+
+### **v-else-if 디렉티브**
+
+`v-else-if` 속성은 `v-if`에 대한 `else if 블록`역할을 한다. 즉, 다른 조건문을 추가한다.
+
+```vue
+{% raw %}
+<template>
+  <div>
+      <p v-if="type === 'A'">type : {{ type }}</p>
+      <p v-else-if="type === 'B'">type : {{ type }}</p>
+      <p v-else>type : {{ type }}</p>
+  </div>
+</template>
+
+<script>
+export default {
+    name: "test",
+    data: ()=>{
+        return {
+            type: 'B',
+        }
+    }
+}
+</script>
+{% endraw %}
+```
+
+![image](https://user-images.githubusercontent.com/52439201/149709857-f5bbdbad-cbcb-47bf-948b-c76081019aea.png)
+
+<br>
+
+### **재사용 가능한 key 속성**
+
+`Vue`는 효율적으로 엘리먼트를 렌더링하기 위해 처음부터 렌더링을 하지않고 재사용한다. 하지만 이는 독립적인 엘리먼트를 사용할 때는 유용하지않다.
+밑의 예제를 보면 `loginType`을 변경해도 사용자가 입력한 값은 초기화되지 않는다. 그 이유는 두 조건 모두 같은 요소를 사용하기 때문에 `<input>`은 대체되지않고 `placeholder`만 변경된다.
+
+```vue
+{% raw %}
+<template>
+    <div>
+        <div v-if="loginType === 'username'">
+            <label>사용자 이름</label>
+            <input placeholder="사용자 이름을 입력하세요">
+        </div>
+        <div v-else>
+            <label>이메일</label>
+            <input placeholder="이메일 주소를 입력하세요">
+            
+        </div>
+        <button v-on:click="change">유형 변경 버튼</button>
+    </div>
+</template>
+
+<script>
+export default {
+    name: "test",
+    data: ()=>{
+        return {
+            loginType: "username",
+        }
+    },
+    methods:{
+        change(){
+            if(this.loginType==="username"){
+                this.loginType = "email";
+            }else{
+                this.loginType = "username";
+            }
+        }
+    }
+}
+</script>
+{% endraw %}
+```
+
+![image](https://user-images.githubusercontent.com/52439201/149712151-bbd8acb1-2904-4517-8bc0-f42bcaacacf5.png)
+
+![image](https://user-images.githubusercontent.com/52439201/149712167-ab7e986d-074e-49c7-9334-6b69c9edad92.png)
+
+<br>
+
+따라서, 독립적인 엘리먼트로 사용하기 위해서 `key` 속성을 사용해야 한다. `key` 속성은 임의로 유일한 값을 넣어주면된다.
+
+```vue
+{% raw %}
+<template>
+    <div>
+        <div v-if="loginType === 'username'">
+            <label>사용자 이름</label>
+            <input placeholder="사용자 이름을 입력하세요" key="user">
+        </div>
+        <div v-else>
+            <label>이메일</label>
+            <input placeholder="이메일 주소를 입력하세요" key="email">
+            
+        </div>
+        <button v-on:click="change">유형 변경 버튼</button>
+    </div>
+</template>
+
+<script>
+export default {
+    name: "test",
+    data: ()=>{
+        return {
+            loginType: "username",
+        }
+    },
+    methods:{
+        change(){
+            if(this.loginType==="username"){
+                this.loginType = "email";
+            }else{
+                this.loginType = "username";
+            }
+        }
+    }
+}
+</script>
+{% endraw %}
+```
+
+`유형 버튼 클릭`시 입력한 input값이 초기화된다.
+
+![image](https://user-images.githubusercontent.com/52439201/149712409-7140f15c-6edb-4345-b20d-bca0649f4e48.png)
+
+![image](https://user-images.githubusercontent.com/52439201/149712437-8a1252f1-40a9-4395-b138-e6bbfa5fe27f.png)
+
+<br>
+<br>
+
+## **반복 렌더링**
+
+***
+
+### **v-for 디렉티브**
+
+* `v-for`는 배열을 기반으로 리스트를 렌더링할 때 사용한다. 
+* `v-for`는 `item in items` 형태의 문법을 사용한다.
+* 여기서 `items`는 원본 데이터 배열이고 `item`은 반복되는 배열 엘리먼트의 별칭이다.
+* Vue에서 개별 DOM 노드들을 추적하고 기존 엘리먼트를 재사용, 재정렬하기 위해서 `v-for`의 각 항목들에 고유한 `key` 속성을 제공해야 한다.
+* `key`에 대한 이상적인 값은 각 항목을 식별할 수 있는 고유한 ID이다.
+* `v-bind`를 사용하여 동적 값에 바인딩 해야한다.
+* 반복되는 DOM 내용이 단순한 경우나 의도적인 성능 향상을 위해 기본 동작에 의존하지 않는 경우를 제외하면, 가능하면 언제나 `v-for`에 `key`를 추가하는 것이 좋다.
+
+```vue
+{% raw %}
+<template>
+    <ul>
+        <li v-for="(value, index) in items" v-bind:key="index">
+            {{ value }}
+        </li>
+
+        <br>
+        
+        <li v-for="(value, key) in object" v-bind:key="key">
+            {{key}} : {{ value }}
+        </li>
+    </ul>
+</template>
+
+<script>
+export default {
+    name: "test",
+    data: ()=>{
+        return {
+            items : ["바보", "멍청이", "똥개"],
+            object : {"name":"서성식","age" : "30", "sex" : "male"},
+            
+        }
+    },
+}
+</script>
+{% endraw %}
+```
+
+![image](https://user-images.githubusercontent.com/52439201/149714639-0982d061-57e0-4238-a32f-cbd951ddd50b.png)

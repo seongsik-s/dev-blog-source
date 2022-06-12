@@ -1,0 +1,295 @@
+---
+layout: post
+title: "[Javascript] ES6의 map, filter, reduce 사용"
+tags: [Javascript, ES6]
+categories: [Javascript]
+banner:
+  image: /assets/images/banners/es6.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## ES6에서의 map, filter, reduce
+자바스크립트 ES6에서 `map`, `filter`, `reducer` 메소드는 Array 객체에서 제공하는 메서드이다.
+
+```js
+const prod = [
+    {name:'과자', price:2500},
+    {name:'소시지', price:2000},
+    {name:'맥주', price:5000},
+    {name:'음료수', price:1500},
+    {name:'껌', price:1000},
+]
+
+const str = ['name', 'old', 'address'];
+```
+
+### map()
+`map()` 메서드는 배열 내의 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환한다.
+
+#### 매개변수
+* `callback` : 새로운 배열 요소를 생성하는 함수. 다음 세 가지 인수값을 갖는다
+    * `currentValue` : 처리할 현재 요소
+    * `index` : 처리할 현재 요소의 인덱스
+    * `array` : `map()`을 호출한 배열
+* `thisArg` : `callback`을 실행할 때 `this`로 사용되는 값
+
+#### 반환 값
+* 배열의 각 요소에 대해 실행한 `callback`의 결과를 모은 새로운 배열
+
+```js
+prod.map(p=>p.name)
+// (5) ['과자', '소시지', '맥주', '음료수', '껌']
+
+prod.map(p=>p.price)
+// (5) [2500, 2000, 5000, 1500, 1000]
+
+str.map(p=>p.length)
+// (3) [4, 3, 7]
+```
+
+### filter()
+filter() 메서드는 주어진 함수의 조건을 만족하는 모든 요소를 모아 새로운 배열로 반환한다.
+
+#### 매개변수
+* `callback` : 새로운 배열 요소를 생성하는 함수. 다음 세 가지 인수값을 갖는다
+    * `element` : 처리할 현재 요소
+    * `index` : 처리할 현재 요소의 인덱스
+    * `array` : filter를 호출한 배열
+* `thisArg` : callback을 실행할 때 this로 사용되는 값
+
+#### 반환 값
+* 조건을 만족하는 요소로 이루어진 새로운 배열. 어떤 요소도 조건을 만족하지 못했으면 빈 배열을 반환한다.
+
+```js
+console.log(
+    ...prod.filter(p=>p.price>2000)
+)
+// {name: '과자', price: 2500} {name: '맥주', price: 5000}
+
+prod.filter(p=>p.price>5000)
+// 어떠한 요소도 만족하지 못하므로 빈 배열을 반환한다.
+// []
+
+str.filter(s=>s.length>3)
+// (2) ['name', 'address']
+```
+
+
+### reduce()
+reduce() 메서드는 배열의 각 요소에 대해 주어진 리듀서(reducer) 함수를 실행하고, 하나의 결과값을 반환한다.
+
+#### 매개변수
+* `callback` : 배열의 각 요소에 대해 실행할 함수. 다음 네 가지 인수를 받는다.
+    * `accumulator` : 누산기는 콜백의 반환값을 누적한다. 콜백의 이전 반환값 또는, 콜백의 첫 번째 호출이면서 initialValue를 제공한 경우에는 initialValue의 값입니다.
+    * `currentValue` : 처리할 현재 요소
+    * `currentIndex ` : 처리할 현재 요소의 인덱스, initialValue를 제공한 경우 0, 아니면 1부터 시작합니다.
+    * `array` : reduce를 호출한 배열
+* `initialValue ` : callback의 최초 호출에서 첫 번째 인수에 제공하는 값. 초기값을 제공하지 않으면 배열의 첫 번째 요소를 사용한다. 빈 배열에서 초기값 없이 reduce()를 호출하면 오류가 발생합니다.
+
+#### 반환 값
+* 누적 계산의 결과 값.
+
+```js
+// Array.prototype.reduce()
+arr.reduce(callback[, initialValue])
+```
+
+```js
+// 상품의 가격만 따로 모아 배열로 담는다.
+const price = prod.map(p=>p.price); 
+
+price.reduce(
+  (accumulator, currentValue, currentIndex, array) => {
+    console.log(`${currentIndex} 번째 ==================`);
+    console.log('accumulator', accumulator) // output: 10 11 13 16
+    console.log('currentValue', currentValue) // output: 1 2 3 4
+    console.log('currentIndex', currentIndex) // output: 0 1 2 3
+    console.log('array', array) // output: [1, 2, 3, 4]
+    return accumulator + currentValue
+  })
+/*
+1 번째 ==================
+accumulator 2500
+currentValue 2000
+currentIndex 1
+array (5) [2500, 2000, 5000, 1500, 1000]
+2 번째 ==================
+accumulator 4500
+currentValue 5000
+currentIndex 2
+array (5) [2500, 2000, 5000, 1500, 1000]
+3 번째 ==================
+accumulator 9500
+currentValue 1500
+currentIndex 3
+array (5) [2500, 2000, 5000, 1500, 1000]
+4 번째 ==================
+accumulator 11000
+currentValue 1000
+currentIndex 4
+array (5) [2500, 2000, 5000, 1500, 1000]
+12000
+*/
+```
+
+만약 `initialValue`가 있을 경우 `accumulator`는 `initialValue`을 갖는다. 또한 인덱스는 0부터 시작.
+
+```js
+const initialValue = 10000;
+
+price.reduce(
+  (accumulator, currentValue, currentIndex, array) => {
+    console.log(`${currentIndex} 번째 ==================`);
+    console.log('accumulator', accumulator) // output: 10 11 13 16
+    console.log('currentValue', currentValue) // output: 1 2 3 4
+    console.log('currentIndex', currentIndex) // output: 0 1 2 3
+    console.log('array', array) // output: [1, 2, 3, 4]
+    return accumulator + currentValue
+  },initialValue)
+
+/*
+0 번째 ==================
+accumulator 10000
+currentValue 2500
+currentIndex 0
+array (5) [2500, 2000, 5000, 1500, 1000]
+1 번째 ==================
+accumulator 12500
+currentValue 2000
+currentIndex 1
+array (5) [2500, 2000, 5000, 1500, 1000]
+2 번째 ==================
+accumulator 14500
+currentValue 5000
+currentIndex 2
+array (5) [2500, 2000, 5000, 1500, 1000]
+3 번째 ==================
+accumulator 19500
+currentValue 1500
+currentIndex 3
+array (5) [2500, 2000, 5000, 1500, 1000]
+4 번째 ==================
+accumulator 21000
+currentValue 1000
+currentIndex 4
+array (5) [2500, 2000, 5000, 1500, 1000]
+22000
+*/
+```
+
+<br>
+
+## 직접 구현해보기
+map, filter, reduce는 Array.prototype에서 구현되어있는 함수들이다. 따라서, Set이나, map과 같은 다른 객체에서는 사용할 수 없다. 
+
+따라서, `이터러블/이터레이터 프로토콜`을 따르는 모든 객체에서도 사용할 수 있도록 구현해보자.
+
+* map
+
+```js
+const map = (f, iter) => {
+    let result = [];
+
+    for(const a of iter){
+        result.push(f(a));
+    }
+    return result
+}
+```
+
+* filter
+
+```js
+const filter = (f, iter) => {
+    let result = [];
+    for(const a of iter) {
+        if(f(a)){
+            result.push(a);
+        }
+    }
+    return result;
+}
+```
+
+* reduce
+
+```js
+const reduce = (f, acc, iter) => {
+    if(!iter) {
+        iter = acc[Symbol.iterator]();
+        acc = iter.next().value;
+    }
+
+    for(const a of iter){
+        acc = f(acc,a);
+    }
+    return acc;
+}
+```
+
+<br>
+
+* map 예제
+
+```js
+/* Set */
+const set = new Set(prod);
+console.log(map(p=>p.price, set)) // (5) [2500, 2000, 5000, 1500, 1000]
+
+
+/* Map */
+const map2 = new Map([['a',1],['b',2],['c',3]])
+console.log(map((v)=>v[1], map2)) // (3) [1, 2, 3]
+
+/* NodeList */
+const dom = document.querySelectorAll('*');
+console.log(map(e=>e.tagName, dom)) // ['HTML', 'HEAD', 'META', 'META', 'META', 'TITLE', 'BODY', 'SCRIPT', 'SCRIPT', 'SCRIPT', 'SCRIPT', 'SCRIPT', 'SCRIPT', 'SCRIPT']
+```
+
+* filter 예제
+
+```js
+/* Set */
+const set2 = new Set(prod);
+console.log(filter(p=>p>2000, map(p=>p.price, set2))) // (2) [2500, 5000]
+
+/* Map */
+const map2 = new Map([['a',1],['b',2],['c',3]])
+console.log(filter(v=>v>2, map(v=>v[1], map2))) // [3]
+
+/* NodeList */
+const dom = document.querySelectorAll('*');
+console.log(filter(n=>n==='HTML', map(e=>e.tagName, dom))) // ['HTML']
+```
+
+* reduce 예제
+
+```js
+/* Set */
+const set2 = new Set(prod);
+const add = (a,b) => a+b;
+console.log(
+    reduce(add, 
+        filter(
+            p=>p>2000, 
+            map(p=>p.price, set2)
+        )
+    )
+) // 7500
+
+/* Map */
+const map2 = new Map([['a',1],['b',2],['c',3]])
+console.log(
+    reduce(add, 
+        filter(
+            v=>v>1, 
+            map(v=>v[1], map2)
+        )
+    )
+) // 5
+```

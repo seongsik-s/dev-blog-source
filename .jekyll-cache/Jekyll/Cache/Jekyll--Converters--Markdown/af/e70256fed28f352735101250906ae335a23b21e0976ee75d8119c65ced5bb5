@@ -1,0 +1,192 @@
+I"�1<p>webpack의 번들링 작업을 실행하는 방법은 2가지가 있습니다.</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">콘솔 실행</code></li>
+  <li><code class="language-plaintext highlighter-rouge">./webpack.config.js</code> 파일로 실행</li>
+</ol>
+
+<p>2가지 실행 방법과 결과에 대해 알아보겠습니다.</p>
+
+<p><br /></p>
+
+<h2 id="a"><strong>프로젝트 구조 확인</strong></h2>
+
+<hr />
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    webpack-demo
+        |- /moda_modules
+        |- package.json
+        |- package-lock.json
+        |- index.html
+        |- /src
+            |- app.js
+            |- math.js
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<ul>
+  <li>번들링 결과의 예상 경로로 script 태그를 수정합니다.</li>
+</ul>
+
+<div file="index.html" class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cp">&lt;!DOCTYPE html&gt;</span>
+    <span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"X-UA-Compatible"</span> <span class="na">content=</span><span class="s">"IE=edge"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;title&gt;</span>Document<span class="nt">&lt;/title&gt;</span>
+        <span class="c">&lt;!-- type=modules 삭제, script 경로 수정 --&gt;</span>
+        <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"./dist/main.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+    <span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<div file="app.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">math</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./math.js</span><span class="dl">'</span>
+
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">math</span><span class="p">.</span><span class="nx">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">));</span>
+</code></pre></div></div>
+
+<div file="math.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">export</span> <span class="kd">function</span> <span class="nx">sum</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">){</span>
+        <span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="b"><strong>콘솔 실행</strong></h2>
+
+<hr />
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">entry</code> : 번들링할 파일을 <code class="language-plaintext highlighter-rouge">"./src/app.js"</code> 로 설정</li>
+  <li><code class="language-plaintext highlighter-rouge">output</code> : 결과가 저장될 경로를 <code class="language-plaintext highlighter-rouge">"./dist/"</code> 로 설정, default는 <code class="language-plaintext highlighter-rouge">"main.js"</code>로 생성됩니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">mode</code> : 개발모드로 진행할 것이기 때문에 <code class="language-plaintext highlighter-rouge">"development"</code> 로 설정</li>
+  <li><code class="language-plaintext highlighter-rouge">명령어</code> : <code class="language-plaintext highlighter-rouge">".\node_modules\.bin\webpack --mode development --entry ./src/app.js --output-path ./dist/"</code></li>
+</ul>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span>.<span class="se">\n</span>ode_modules<span class="se">\.</span>bin<span class="se">\w</span>ebpack <span class="nt">--mode</span> development <span class="nt">--entry</span> ./src/app.js <span class="nt">--output-path</span> ./dist/ 
+<span class="go">    asset main.js 4.08 KiB [emitted] (name: main)
+    runtime modules 670 bytes 3 modules
+    cacheable modules 110 bytes
+    ./src/app.js 64 bytes [built] [code generated]
+    ./src/math.js 46 bytes [built] [code generated]
+    webpack 5.65.0 compiled successfully in 162 ms
+</span></code></pre></div></div>
+
+<ul>
+  <li>결과물이 ./dist/main.js 경로에 생성된 것을 확인할 수 있습니다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146138808-46043268-9734-4264-ae7d-7f983d084c8f.png" alt="image" /></p>
+
+<p><br /></p>
+
+<ul>
+  <li>주의해야 할점! 4버전에서는 <code class="language-plaintext highlighter-rouge">"--output ./dist/main.js"</code> -&gt; 경로/파일명.js 로 생성됐지만 5버전부터는 경로로 인식하는 것 같습니다.</li>
+  <li>따라서 <code class="language-plaintext highlighter-rouge">"./dist/main.js"</code>라고 입력하면</li>
+  <li><code class="language-plaintext highlighter-rouge">"./dist/main.js(폴더)/main.js(js)"</code> 로 결과물이 생성됩니다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146133333-ebdfa683-746d-4f57-907d-13f9160e9180.png" alt="image" /></p>
+
+<p><br /></p>
+
+<p><strong>결과 :</strong></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146139767-698b54b4-f62c-4aaf-a59c-3327d2cb9b38.png" alt="image" /></p>
+
+<p><br />
+<br /></p>
+
+<h2 id="c"><strong>webpack.config.js 파일로 실행</strong></h2>
+
+<hr />
+
+<ul file="webpack.config.js">
+  <li>기본적으로 webpack은 <code class="language-plaintext highlighter-rouge">./webpack.config.js</code> 설정 파일이 있는지 찾고 있으면 파일을 읽습니다.
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">const</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">path</span><span class="dl">'</span><span class="p">);</span>
+
+  <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">mode</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">development</span><span class="dl">'</span><span class="p">,</span>
+      <span class="na">entry</span> <span class="p">:</span> <span class="p">{</span>
+          <span class="na">main</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">./src/app.js</span><span class="dl">'</span>
+      <span class="p">},</span>
+      <span class="na">output</span> <span class="p">:</span> <span class="p">{</span>
+          <span class="na">path</span> <span class="p">:</span> <span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="dl">'</span><span class="s1">./dist</span><span class="dl">'</span><span class="p">),</span>
+          <span class="na">filename</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">[name].js</span><span class="dl">'</span>
+      <span class="p">}</span>
+  <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul file="package.json">
+  <li>scripts에 <code class="language-plaintext highlighter-rouge">build</code>라는 명령어를 등록합니다. <code class="language-plaintext highlighter-rouge">build</code> 명령어는 webpack을 실행시킵니다.
+    <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w">  </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"webpack-demo"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0.0"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"main"</span><span class="p">:</span><span class="w"> </span><span class="s2">"index.js"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"test"</span><span class="p">:</span><span class="w"> </span><span class="s2">"echo </span><span class="se">\"</span><span class="s2">Error: no test specified</span><span class="se">\"</span><span class="s2"> &amp;&amp; exit 1"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"build"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"webpack"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"author"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"license"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ISC"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"devDependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"webpack"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^4.41.5"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"webpack-cli"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^3.3.10"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">"npm run build"</code>로 webpack 실행</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span>npm run build
+<span class="go">
+</span><span class="gp">    &gt;</span><span class="w"> </span>webpack-demo@1.0.0 build
+<span class="gp">    &gt;</span><span class="w"> </span>webpack
+<span class="go">
+    asset main.js 4.09 KiB [emitted] (name: main)
+    runtime modules 670 bytes 3 modules
+    cacheable modules 113 bytes
+    ./src/app.js 65 bytes [built] [code generated]
+    ./src/math.js 48 bytes [built] [code generated]
+    webpack 5.65.0 compiled successfully in 203 ms
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">".\node_modules\.bin\webpack"</code> 파일을 실행해도 결과는 같습니다.</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    &gt;</span>.<span class="se">\n</span>ode_modules<span class="se">\.</span>bin<span class="se">\w</span>ebpack
+<span class="go">
+    asset main.js 4.09 KiB [emitted] (name: main)
+    runtime modules 670 bytes 3 modules
+    cacheable modules 113 bytes
+    ./src/app.js 65 bytes [built] [code generated]
+    ./src/math.js 48 bytes [built] [code generated]
+    webpack 5.65.0 compiled successfully in 150 ms
+</span></code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146143478-f2976672-a0d1-49a8-b41a-5a4ed933d890.png" alt="image" /></p>
+
+<p><br /></p>
+
+<p><strong>결과 :</strong></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146290942-b00d0b23-8233-4049-ba5b-8038f1e6bf03.png" alt="image" /></p>
+:ET

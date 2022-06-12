@@ -1,0 +1,173 @@
+---
+layout: post
+title: "[Git] .gitignore로 필요한 것만 관리하자"
+tags: [Git, Github]
+categories: [Git]
+banner:
+  image: /assets/images/banners/git.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## **.gitignore**
+
+***
+
+Git, Github로 버전관리를 하다보면 `git add .` 으로 한번에 처리하는 경우가 많다. 그런데 npm 기반 프로젝트를 하다보니 `node_modules`같은 파일들은 추가할 필요가 없다. `npm install` 로 종속성 설치를 하면 끝이기 때문이다. 이럴 때 사용하는게 `.gitignore` 파일이다.
+
+`.gitignore` 언제 사용하면 되는가? 
+* 보안상 노출되면 안되는 파일이 있는 경우
+* 프로젝트와 관련없는 파일이 있는 경우
+* 용량이 너무 크거나 제외시키고 싶은 경우
+
+결국엔, `git add`에 포함시키지 않는 경우  `.gitignore`을 사용한다고 보면된다.
+
+<br>
+
+## **.gitignore 작성하기**
+
+***
+
+그냥 `git init`한 프로젝트에 `.gitignore`이름으로 파일을 생성하면 된다.
+
+그리고 제외하고 싶은 파일들을 한줄 씩 추가하면 끝이다.
+
+그러면 `git add`할 때 알아서 `.gitignore`의 목록들을 제외시킨다.
+
+<br>
+
+### **특정 파일 fileName 제외**
+```
+fileName.js
+```
+
+### **현재 경로에 있는 fileName_1 만 제외하기. (다른경로 fileName_1 말고)**
+```
+/fileName.js
+```
+
+### **특정 폴더 node_module 안의 파일 다 제외하기**
+```
+node_module/
+```
+
+### **특정 경로의 특정 파일 제외하기**
+```
+folder/my.txt
+```
+
+### **특정 경로 아래의 모든 fileName_2 제외하기**
+```
+folder/**/fileName_2.txt
+```
+
+### **특정 확장자 파일 다 제외하기**
+```
+*.txt
+```
+
+### **예외 만들기**
+```
+!fileName.txt
+```
+
+<br>
+
+## **.gitignore 주의사항**
+
+***
+
+git에서 한번 추적하기 시작한 파일은 `.gitignore`에 추가해도 제외되지 않는다는 점이다.
+다시말해, 한 번이라도 커밋했던 파일은 `.gitignore`에서 제외되지 않는다. 그렇기 때문에 로컬저장소를 생성하고나서 제외해야할 파일들은 처음부터 `.gitignore`에 추가해야한다. 
+
+
+`gitignore_test` 라는 디렉토리를 생성하고 `git init`으로 로컬 저장소를 생성해보자.
+
+```console
+$ mkdir gitignore_test
+$ cd gitignore_test
+$ git init
+Initialized empty Git repository in E:/gitignore_test/.git/
+```
+
+<br>
+
+test라는 텍스트가 담긴 `test.txt`라는 파일을 하나 생성하고 커밋을 한다.
+```console
+$ echo "test" >> test.txt
+$ git add test.txt
+$ git commit -m "test"
+
+$ git log
+commit 44f68a808d2783604c9338c9112d0e8710625ac9 (HEAD -> master)
+Author: s-seongsik <sungsik9831@gmail.com>
+Date:   Thu Feb 10 10:10:45 2022 +0900
+
+    test
+```
+
+<br>
+
+`.gitignore` 파일을 생성하고 `test.txt`을 추가한다. 그리고 커밋
+```console
+$ echo "test.txt" >> .gitignore
+$ cat .gitignore
+test.txt
+
+$ git add .gitignore
+$ git commit -m "gitignore test.txt"
+[master 8a96d5e] gitignore test.txt
+ 1 file changed, 1 insertion(+)
+ create mode 100644 .gitignore
+```
+
+<br>
+
+`test.txt`파일 내용을 수정해보자. 그리고 상태를 확인해보면 `.gitignore`에 추가 했음에도 불구하고 추적이 되고있다.
+```
+$ echo "haha" >> test.txt  
+$ cat test.txt
+test
+haha
+
+$ git status
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   test.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+<br>
+
+## **이미 추적한 파일 처리**
+
+***
+
+Git이 이미 추적을 시작했다면, 방법은 추적을 멈추고 싶은 파일들을 `삭제`하고 커밋을 해줘야한다.
+
+
+이어서, `test.txt` 파일의 추적을 멈추고 싶다면 파일을 삭제후 커밋한다. 
+```
+$ rm test.txt
+$ git add .
+$ git commit -m "test delete"
+```
+<br>
+
+그리고 다시 `test.txt` 생성하고 상태를 확인해보면 .gitignore에 명시에되어 있는 파일들을 인식못하는 것을 알 수 있다.
+```
+$ echo "re" >> test.txt
+$ cat test.txt
+re
+
+$ git status
+On branch master
+nothing to commit, working tree clean
+```

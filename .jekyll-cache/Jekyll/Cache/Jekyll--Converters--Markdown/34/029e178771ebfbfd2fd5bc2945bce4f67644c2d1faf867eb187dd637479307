@@ -1,0 +1,266 @@
+I"�,<p>깃허브 원격저장소와 로컬저장소 연동을 머리속에서만 알고있었고, git 관련 명령어도 필요할 때마다 구글링으로 찾아서 처리했었는데…</p>
+
+<p>날잡고 정리해서 내것으로 만들어야지 생각만하다가 오늘 정리하기로 맘먹었다.</p>
+
+<p>오늘은! <kbd>로컬 저장소(workspace)를 깃허브 원격저장소에 연동하는 방법에 대해 포스팅 해보겠습니다.</kbd></p>
+
+<p>참고로, git이 설치가 안되신분들은 git을 설치하고 오시기 바랍니다.</p>
+
+<p><br /></p>
+
+<h2 id="로컬-저장소-생성"><strong>로컬 저장소 생성</strong></h2>
+
+<hr />
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Git Bash</code> 실행</li>
+  <li>본인이 작업할 로컬 <code class="language-plaintext highlighter-rouge">workspace(폴더)</code>를 생성합니다.</li>
+  <li>생성할 위치 이동 + git_test라는 이름의 폴더 생성합니다.
+    <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  seong@DESKTOP-O5CIEJV MINGW64 ~
+</span><span class="gp">  $</span><span class="w"> </span><span class="nb">cd </span>E:/project <span class="o">&amp;&amp;</span> <span class="nb">mkdir </span>git_test
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li>생성한 <code class="language-plaintext highlighter-rouge">workspace(폴더)</code> git_test에서 git 저장소를 생성합니다.
+    <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  seong@DESKTOP-O5CIEJV MINGW64 /e/project
+</span><span class="gp">  $</span><span class="w"> </span><span class="nb">cd </span>git_test/
+<span class="go">
+  seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test
+</span><span class="gp">  $</span><span class="w"> </span>git init
+<span class="go">  Initialized empty Git repository in E:/project/git_test/.git/
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li>파일 생성
+    <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+</span><span class="gp">  $</span><span class="w"> </span>vi test.py
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">git status</code>로 상태를 확인해보면 생성된 test.py 파일을 git에 추가할 수 있다고 나옵니다.
+    <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+</span><span class="gp">  $</span><span class="w"> </span>git status
+<span class="go">  On branch master
+
+  No commits yet
+
+  Untracked files:
+</span><span class="gp">  (use "git add &lt;file&gt;</span>...<span class="s2">" to include in what will be committed)
+</span><span class="go">          test.py
+
+  nothing added to commit but untracked files present (use "git add" to track)
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li>git 저장소에 추가</li>
+  <li><code class="language-plaintext highlighter-rouge">No commits yet :</code> 아직 커밋을 하지 않다고 나옵니다.
+    <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+</span><span class="gp">  $</span><span class="w"> </span>git add test.py
+<span class="go">
+  seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+</span><span class="gp">  $</span><span class="w"> </span>git status
+<span class="go">  On branch master
+
+  No commits yet
+
+  Changes to be committed:
+</span><span class="gp">  (use "git rm --cached &lt;file&gt;</span>...<span class="s2">" to unstage)
+</span><span class="go">          new file:   test.py
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">git commit</code></li>
+  <li><code class="language-plaintext highlighter-rouge">-m "test commit add test.py"</code> &lt;- commit message
+    <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+</span><span class="gp">  $</span><span class="w"> </span>git commit <span class="nt">-m</span> <span class="s2">"test commit add test.py"</span>
+<span class="go">  [master (root-commit) fc4e43a] test commit add test.py
+  1 file changed, 0 insertions(+), 0 deletions(-)
+  create mode 100644 test.py
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br />
+<br /></p>
+
+<h2 id="원격-저장소-생성-및-연동"><strong>원격 저장소 생성 및 연동</strong></h2>
+
+<hr />
+
+<ul>
+  <li>
+    <p>github <code class="language-plaintext highlighter-rouge">repository</code> 생성합니다.</p>
+
+    <p><img src="https://user-images.githubusercontent.com/52439201/144543851-6fa2303a-b099-4444-b383-121becb17a24.png" alt="image" /></p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li>
+    <p>code -&gt; HTTPS 누르시면 URL이 나오는데 <code class="language-plaintext highlighter-rouge">COPY</code>합니다.</p>
+
+    <p><img src="https://user-images.githubusercontent.com/52439201/144544065-531f5087-ddd0-4324-bd8e-6ead1235287b.png" alt="image" /></p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">git remote</code>, 로컬 저장소와 원격 저장소를 연동합니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">git remote add [원격저장소별칭] [원격저장소URL]</code>
+    <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+</span><span class="gp">  $</span><span class="w"> </span>git remote add origin https://github.com/s-seongsik/github_test.git
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">remote</code> 연결을 확인합니다.
+    <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+</span><span class="gp">  $</span><span class="w"> </span>git remote
+<span class="go">  origin
+
+</span><span class="gp">  $</span><span class="w"> </span>git remote <span class="nt">-v</span>
+<span class="go">  origin    https://github.com/s-seongsik/github_test.git (fetch)
+  origin    https://github.com/s-seongsik/github_test.git (push)
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">git push [원격저장소별칭] [로컬브랜치이름]</code></li>
+  <li><code class="language-plaintext highlighter-rouge">--all</code> 을 붙이면 로컬의 모든 브랜치를 push 합니다.<br />
+```console
+  # 로컬브랜치 확인
+  seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+  $ git branch
+    <ul>
+      <li>master</li>
+    </ul>
+
+    <p># push
+  seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+  $ git push origin master
+  Enumerating objects: 3, done.
+  Counting objects: 100% (3/3), done.
+  Writing objects: 100% (3/3), 230 bytes | 230.00 KiB/s, done.
+  Total 3 (delta 0), reused 0 (delta 0)
+  remote:
+  remote: Create a pull request for ‘master’ on GitHub by visiting:
+  remote:      https://github.com/s-seongsik/github_test/pull/new/master
+  remote:
+  To https://github.com/s-seongsik/github_test.git</p>
+    <ul>
+      <li>[new branch]      master -&gt; master
+```</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li>
+    <p>원격저장소를 보면 연동된 master 로컬브랜치에 test.py가 생성된것을 볼 수 있습니다.</p>
+
+    <p><img src="https://user-images.githubusercontent.com/52439201/144550460-f17049fa-e360-402a-90cc-b617269d4a27.png" alt="image" /></p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="파일-수정해보기"><strong>파일 수정해보기</strong></h2>
+
+<hr />
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">test.py</code>를 수정합니다.</p>
+
+    <p><img src="https://user-images.githubusercontent.com/52439201/144551103-b38dd43d-0993-4835-9812-0f82d9927666.png" alt="image" /></p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">git status</code>로 상태확인</li>
+  <li><code class="language-plaintext highlighter-rouge">modified : test.py</code> &lt;-라는 문구에서 변경 확인이 가능합니다.
+    <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+</span><span class="gp">  $</span><span class="w"> </span>git status
+<span class="go">  On branch master
+  Changes to be committed:
+</span><span class="gp">  (use "git restore --staged &lt;file&gt;</span>...<span class="s2">" to unstage)
+</span><span class="go">          modified:   test.py
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li>위에서 배운대로 <code class="language-plaintext highlighter-rouge">git add</code> -&gt; <code class="language-plaintext highlighter-rouge">git commit</code> -&gt; <code class="language-plaintext highlighter-rouge">git push</code> 를 진행합니다.</li>
+  <li>tip) git add . 을 하시면 변경된 모든 것을 add 합니다.
+    <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+</span><span class="gp">  $</span><span class="w"> </span>git add test.py
+<span class="go">
+  seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+</span><span class="gp">  $</span><span class="w"> </span>git commit <span class="nt">-m</span> <span class="s2">"modify test.py"</span>
+<span class="go">  [master 5a43c8b] modify test.py
+  1 file changed, 2 insertions(+)
+
+  seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+</span><span class="gp">  $</span><span class="w"> </span>git push origin master
+<span class="go">  Enumerating objects: 5, done.
+  Counting objects: 100% (5/5), done.
+  Writing objects: 100% (3/3), 272 bytes | 272.00 KiB/s, done.
+  Total 3 (delta 0), reused 0 (delta 0)
+  To https://github.com/s-seongsik/github_test
+</span><span class="gp">  c81e115..5a43c8b  master -&gt;</span><span class="w"> </span>master
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li>test.py 내용이 변경된 것을 확인할 수 있습니다.<br />
+<img src="https://user-images.githubusercontent.com/52439201/144551729-7af61588-7526-455d-9f79-c67064c12d53.png" alt="image" /></li>
+</ul>
+
+<p><br />
+<br /></p>
+
+<hr />
+
+<h2 id="끝으로"><strong>끝으로</strong></h2>
+<p>로컬저장소와 원격저장소 연동하는 과정을 정리하면서 좀더 github와 git를 깊게 공부하고 싶은 욕심이 생겼습니다.
+기회가 되면 <strong>git으로 협업하는 방법</strong>과 <strong>git의 원리 및 용어정리</strong> 대해 포스팅 해보겠습니다. 
+감사합니다.</p>
+:ET

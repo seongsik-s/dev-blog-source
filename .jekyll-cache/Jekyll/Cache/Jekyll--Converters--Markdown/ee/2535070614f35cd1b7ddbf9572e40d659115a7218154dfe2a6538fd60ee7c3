@@ -1,0 +1,301 @@
+I"�s<h2 id="es6에서의-map-filter-reduce">ES6에서의 map, filter, reduce</h2>
+<p>자바스크립트 ES6에서 <code class="language-plaintext highlighter-rouge">map</code>, <code class="language-plaintext highlighter-rouge">filter</code>, <code class="language-plaintext highlighter-rouge">reducer</code> 메소드는 Array 객체에서 제공하는 메서드이다.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">prod</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="na">name</span><span class="p">:</span><span class="dl">'</span><span class="s1">과자</span><span class="dl">'</span><span class="p">,</span> <span class="na">price</span><span class="p">:</span><span class="mi">2500</span><span class="p">},</span>
+    <span class="p">{</span><span class="na">name</span><span class="p">:</span><span class="dl">'</span><span class="s1">소시지</span><span class="dl">'</span><span class="p">,</span> <span class="na">price</span><span class="p">:</span><span class="mi">2000</span><span class="p">},</span>
+    <span class="p">{</span><span class="na">name</span><span class="p">:</span><span class="dl">'</span><span class="s1">맥주</span><span class="dl">'</span><span class="p">,</span> <span class="na">price</span><span class="p">:</span><span class="mi">5000</span><span class="p">},</span>
+    <span class="p">{</span><span class="na">name</span><span class="p">:</span><span class="dl">'</span><span class="s1">음료수</span><span class="dl">'</span><span class="p">,</span> <span class="na">price</span><span class="p">:</span><span class="mi">1500</span><span class="p">},</span>
+    <span class="p">{</span><span class="na">name</span><span class="p">:</span><span class="dl">'</span><span class="s1">껌</span><span class="dl">'</span><span class="p">,</span> <span class="na">price</span><span class="p">:</span><span class="mi">1000</span><span class="p">},</span>
+<span class="p">]</span>
+
+<span class="kd">const</span> <span class="nx">str</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">name</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">old</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">address</span><span class="dl">'</span><span class="p">];</span>
+</code></pre></div></div>
+
+<h3 id="map">map()</h3>
+<p><code class="language-plaintext highlighter-rouge">map()</code> 메서드는 배열 내의 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환한다.</p>
+
+<h4 id="매개변수">매개변수</h4>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">callback</code> : 새로운 배열 요소를 생성하는 함수. 다음 세 가지 인수값을 갖는다
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">currentValue</code> : 처리할 현재 요소</li>
+      <li><code class="language-plaintext highlighter-rouge">index</code> : 처리할 현재 요소의 인덱스</li>
+      <li><code class="language-plaintext highlighter-rouge">array</code> : <code class="language-plaintext highlighter-rouge">map()</code>을 호출한 배열</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">thisArg</code> : <code class="language-plaintext highlighter-rouge">callback</code>을 실행할 때 <code class="language-plaintext highlighter-rouge">this</code>로 사용되는 값</li>
+</ul>
+
+<h4 id="반환-값">반환 값</h4>
+<ul>
+  <li>배열의 각 요소에 대해 실행한 <code class="language-plaintext highlighter-rouge">callback</code>의 결과를 모은 새로운 배열</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">prod</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">p</span><span class="o">=&gt;</span><span class="nx">p</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span>
+<span class="c1">// (5) ['과자', '소시지', '맥주', '음료수', '껌']</span>
+
+<span class="nx">prod</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">p</span><span class="o">=&gt;</span><span class="nx">p</span><span class="p">.</span><span class="nx">price</span><span class="p">)</span>
+<span class="c1">// (5) [2500, 2000, 5000, 1500, 1000]</span>
+
+<span class="nx">str</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">p</span><span class="o">=&gt;</span><span class="nx">p</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span>
+<span class="c1">// (3) [4, 3, 7]</span>
+</code></pre></div></div>
+
+<h3 id="filter">filter()</h3>
+<p>filter() 메서드는 주어진 함수의 조건을 만족하는 모든 요소를 모아 새로운 배열로 반환한다.</p>
+
+<h4 id="매개변수-1">매개변수</h4>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">callback</code> : 새로운 배열 요소를 생성하는 함수. 다음 세 가지 인수값을 갖는다
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">element</code> : 처리할 현재 요소</li>
+      <li><code class="language-plaintext highlighter-rouge">index</code> : 처리할 현재 요소의 인덱스</li>
+      <li><code class="language-plaintext highlighter-rouge">array</code> : filter를 호출한 배열</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">thisArg</code> : callback을 실행할 때 this로 사용되는 값</li>
+</ul>
+
+<h4 id="반환-값-1">반환 값</h4>
+<ul>
+  <li>조건을 만족하는 요소로 이루어진 새로운 배열. 어떤 요소도 조건을 만족하지 못했으면 빈 배열을 반환한다.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
+    <span class="p">...</span><span class="nx">prod</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">p</span><span class="o">=&gt;</span><span class="nx">p</span><span class="p">.</span><span class="nx">price</span><span class="o">&gt;</span><span class="mi">2000</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="c1">// {name: '과자', price: 2500} {name: '맥주', price: 5000}</span>
+
+<span class="nx">prod</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">p</span><span class="o">=&gt;</span><span class="nx">p</span><span class="p">.</span><span class="nx">price</span><span class="o">&gt;</span><span class="mi">5000</span><span class="p">)</span>
+<span class="c1">// 어떠한 요소도 만족하지 못하므로 빈 배열을 반환한다.</span>
+<span class="c1">// []</span>
+
+<span class="nx">str</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">s</span><span class="o">=&gt;</span><span class="nx">s</span><span class="p">.</span><span class="nx">length</span><span class="o">&gt;</span><span class="mi">3</span><span class="p">)</span>
+<span class="c1">// (2) ['name', 'address']</span>
+</code></pre></div></div>
+
+<h3 id="reduce">reduce()</h3>
+<p>reduce() 메서드는 배열의 각 요소에 대해 주어진 리듀서(reducer) 함수를 실행하고, 하나의 결과값을 반환한다.</p>
+
+<h4 id="매개변수-2">매개변수</h4>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">callback</code> : 배열의 각 요소에 대해 실행할 함수. 다음 네 가지 인수를 받는다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">accumulator</code> : 누산기는 콜백의 반환값을 누적한다. 콜백의 이전 반환값 또는, 콜백의 첫 번째 호출이면서 initialValue를 제공한 경우에는 initialValue의 값입니다.</li>
+      <li><code class="language-plaintext highlighter-rouge">currentValue</code> : 처리할 현재 요소</li>
+      <li><code class="language-plaintext highlighter-rouge">currentIndex </code> : 처리할 현재 요소의 인덱스, initialValue를 제공한 경우 0, 아니면 1부터 시작합니다.</li>
+      <li><code class="language-plaintext highlighter-rouge">array</code> : reduce를 호출한 배열</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">initialValue </code> : callback의 최초 호출에서 첫 번째 인수에 제공하는 값. 초기값을 제공하지 않으면 배열의 첫 번째 요소를 사용한다. 빈 배열에서 초기값 없이 reduce()를 호출하면 오류가 발생합니다.</li>
+</ul>
+
+<h4 id="반환-값-2">반환 값</h4>
+<ul>
+  <li>누적 계산의 결과 값.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Array.prototype.reduce()</span>
+<span class="nx">arr</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="nx">callback</span><span class="p">[,</span> <span class="nx">initialValue</span><span class="p">])</span>
+</code></pre></div></div>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 상품의 가격만 따로 모아 배열로 담는다.</span>
+<span class="kd">const</span> <span class="nx">price</span> <span class="o">=</span> <span class="nx">prod</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">p</span><span class="o">=&gt;</span><span class="nx">p</span><span class="p">.</span><span class="nx">price</span><span class="p">);</span> 
+
+<span class="nx">price</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span>
+  <span class="p">(</span><span class="nx">accumulator</span><span class="p">,</span> <span class="nx">currentValue</span><span class="p">,</span> <span class="nx">currentIndex</span><span class="p">,</span> <span class="nx">array</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">currentIndex</span><span class="p">}</span><span class="s2"> 번째 ==================`</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">accumulator</span><span class="dl">'</span><span class="p">,</span> <span class="nx">accumulator</span><span class="p">)</span> <span class="c1">// output: 10 11 13 16</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">currentValue</span><span class="dl">'</span><span class="p">,</span> <span class="nx">currentValue</span><span class="p">)</span> <span class="c1">// output: 1 2 3 4</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">currentIndex</span><span class="dl">'</span><span class="p">,</span> <span class="nx">currentIndex</span><span class="p">)</span> <span class="c1">// output: 0 1 2 3</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">array</span><span class="dl">'</span><span class="p">,</span> <span class="nx">array</span><span class="p">)</span> <span class="c1">// output: [1, 2, 3, 4]</span>
+    <span class="k">return</span> <span class="nx">accumulator</span> <span class="o">+</span> <span class="nx">currentValue</span>
+  <span class="p">})</span>
+<span class="cm">/*
+1 번째 ==================
+accumulator 2500
+currentValue 2000
+currentIndex 1
+array (5) [2500, 2000, 5000, 1500, 1000]
+2 번째 ==================
+accumulator 4500
+currentValue 5000
+currentIndex 2
+array (5) [2500, 2000, 5000, 1500, 1000]
+3 번째 ==================
+accumulator 9500
+currentValue 1500
+currentIndex 3
+array (5) [2500, 2000, 5000, 1500, 1000]
+4 번째 ==================
+accumulator 11000
+currentValue 1000
+currentIndex 4
+array (5) [2500, 2000, 5000, 1500, 1000]
+12000
+*/</span>
+</code></pre></div></div>
+
+<p>만약 <code class="language-plaintext highlighter-rouge">initialValue</code>가 있을 경우 <code class="language-plaintext highlighter-rouge">accumulator</code>는 <code class="language-plaintext highlighter-rouge">initialValue</code>을 갖는다. 또한 인덱스는 0부터 시작.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">initialValue</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">;</span>
+
+<span class="nx">price</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span>
+  <span class="p">(</span><span class="nx">accumulator</span><span class="p">,</span> <span class="nx">currentValue</span><span class="p">,</span> <span class="nx">currentIndex</span><span class="p">,</span> <span class="nx">array</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">currentIndex</span><span class="p">}</span><span class="s2"> 번째 ==================`</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">accumulator</span><span class="dl">'</span><span class="p">,</span> <span class="nx">accumulator</span><span class="p">)</span> <span class="c1">// output: 10 11 13 16</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">currentValue</span><span class="dl">'</span><span class="p">,</span> <span class="nx">currentValue</span><span class="p">)</span> <span class="c1">// output: 1 2 3 4</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">currentIndex</span><span class="dl">'</span><span class="p">,</span> <span class="nx">currentIndex</span><span class="p">)</span> <span class="c1">// output: 0 1 2 3</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">array</span><span class="dl">'</span><span class="p">,</span> <span class="nx">array</span><span class="p">)</span> <span class="c1">// output: [1, 2, 3, 4]</span>
+    <span class="k">return</span> <span class="nx">accumulator</span> <span class="o">+</span> <span class="nx">currentValue</span>
+  <span class="p">},</span><span class="nx">initialValue</span><span class="p">)</span>
+
+<span class="cm">/*
+0 번째 ==================
+accumulator 10000
+currentValue 2500
+currentIndex 0
+array (5) [2500, 2000, 5000, 1500, 1000]
+1 번째 ==================
+accumulator 12500
+currentValue 2000
+currentIndex 1
+array (5) [2500, 2000, 5000, 1500, 1000]
+2 번째 ==================
+accumulator 14500
+currentValue 5000
+currentIndex 2
+array (5) [2500, 2000, 5000, 1500, 1000]
+3 번째 ==================
+accumulator 19500
+currentValue 1500
+currentIndex 3
+array (5) [2500, 2000, 5000, 1500, 1000]
+4 번째 ==================
+accumulator 21000
+currentValue 1000
+currentIndex 4
+array (5) [2500, 2000, 5000, 1500, 1000]
+22000
+*/</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="직접-구현해보기">직접 구현해보기</h2>
+<p>map, filter, reduce는 Array.prototype에서 구현되어있는 함수들이다. 따라서, Set이나, map과 같은 다른 객체에서는 사용할 수 없다.</p>
+
+<p>따라서, <code class="language-plaintext highlighter-rouge">이터러블/이터레이터 프로토콜</code>을 따르는 모든 객체에서도 사용할 수 있도록 구현해보자.</p>
+
+<ul>
+  <li>map</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">map</span> <span class="o">=</span> <span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="nx">iter</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">[];</span>
+
+    <span class="k">for</span><span class="p">(</span><span class="kd">const</span> <span class="nx">a</span> <span class="k">of</span> <span class="nx">iter</span><span class="p">){</span>
+        <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">f</span><span class="p">(</span><span class="nx">a</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">result</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>filter</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">filter</span> <span class="o">=</span> <span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="nx">iter</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">for</span><span class="p">(</span><span class="kd">const</span> <span class="nx">a</span> <span class="k">of</span> <span class="nx">iter</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">f</span><span class="p">(</span><span class="nx">a</span><span class="p">)){</span>
+            <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>reduce</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">reduce</span> <span class="o">=</span> <span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="nx">acc</span><span class="p">,</span> <span class="nx">iter</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">iter</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">iter</span> <span class="o">=</span> <span class="nx">acc</span><span class="p">[</span><span class="nb">Symbol</span><span class="p">.</span><span class="nx">iterator</span><span class="p">]();</span>
+        <span class="nx">acc</span> <span class="o">=</span> <span class="nx">iter</span><span class="p">.</span><span class="nx">next</span><span class="p">().</span><span class="nx">value</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span><span class="p">(</span><span class="kd">const</span> <span class="nx">a</span> <span class="k">of</span> <span class="nx">iter</span><span class="p">){</span>
+        <span class="nx">acc</span> <span class="o">=</span> <span class="nx">f</span><span class="p">(</span><span class="nx">acc</span><span class="p">,</span><span class="nx">a</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">acc</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<ul>
+  <li>map 예제</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* Set */</span>
+<span class="kd">const</span> <span class="kd">set</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="p">(</span><span class="nx">prod</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">map</span><span class="p">(</span><span class="nx">p</span><span class="o">=&gt;</span><span class="nx">p</span><span class="p">.</span><span class="nx">price</span><span class="p">,</span> <span class="kd">set</span><span class="p">))</span> <span class="c1">// (5) [2500, 2000, 5000, 1500, 1000]</span>
+
+
+<span class="cm">/* Map */</span>
+<span class="kd">const</span> <span class="nx">map2</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Map</span><span class="p">([[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="dl">'</span><span class="s1">c</span><span class="dl">'</span><span class="p">,</span><span class="mi">3</span><span class="p">]])</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">map</span><span class="p">((</span><span class="nx">v</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nx">map2</span><span class="p">))</span> <span class="c1">// (3) [1, 2, 3]</span>
+
+<span class="cm">/* NodeList */</span>
+<span class="kd">const</span> <span class="nx">dom</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="dl">'</span><span class="s1">*</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">map</span><span class="p">(</span><span class="nx">e</span><span class="o">=&gt;</span><span class="nx">e</span><span class="p">.</span><span class="nx">tagName</span><span class="p">,</span> <span class="nx">dom</span><span class="p">))</span> <span class="c1">// ['HTML', 'HEAD', 'META', 'META', 'META', 'TITLE', 'BODY', 'SCRIPT', 'SCRIPT', 'SCRIPT', 'SCRIPT', 'SCRIPT', 'SCRIPT', 'SCRIPT']</span>
+</code></pre></div></div>
+
+<ul>
+  <li>filter 예제</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* Set */</span>
+<span class="kd">const</span> <span class="nx">set2</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="p">(</span><span class="nx">prod</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">filter</span><span class="p">(</span><span class="nx">p</span><span class="o">=&gt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="mi">2000</span><span class="p">,</span> <span class="nx">map</span><span class="p">(</span><span class="nx">p</span><span class="o">=&gt;</span><span class="nx">p</span><span class="p">.</span><span class="nx">price</span><span class="p">,</span> <span class="nx">set2</span><span class="p">)))</span> <span class="c1">// (2) [2500, 5000]</span>
+
+<span class="cm">/* Map */</span>
+<span class="kd">const</span> <span class="nx">map2</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Map</span><span class="p">([[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="dl">'</span><span class="s1">c</span><span class="dl">'</span><span class="p">,</span><span class="mi">3</span><span class="p">]])</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">filter</span><span class="p">(</span><span class="nx">v</span><span class="o">=&gt;</span><span class="nx">v</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">,</span> <span class="nx">map</span><span class="p">(</span><span class="nx">v</span><span class="o">=&gt;</span><span class="nx">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nx">map2</span><span class="p">)))</span> <span class="c1">// [3]</span>
+
+<span class="cm">/* NodeList */</span>
+<span class="kd">const</span> <span class="nx">dom</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="dl">'</span><span class="s1">*</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">filter</span><span class="p">(</span><span class="nx">n</span><span class="o">=&gt;</span><span class="nx">n</span><span class="o">===</span><span class="dl">'</span><span class="s1">HTML</span><span class="dl">'</span><span class="p">,</span> <span class="nx">map</span><span class="p">(</span><span class="nx">e</span><span class="o">=&gt;</span><span class="nx">e</span><span class="p">.</span><span class="nx">tagName</span><span class="p">,</span> <span class="nx">dom</span><span class="p">)))</span> <span class="c1">// ['HTML']</span>
+</code></pre></div></div>
+
+<ul>
+  <li>reduce 예제</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* Set */</span>
+<span class="kd">const</span> <span class="nx">set2</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="p">(</span><span class="nx">prod</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">add</span> <span class="o">=</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">a</span><span class="o">+</span><span class="nx">b</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
+    <span class="nx">reduce</span><span class="p">(</span><span class="nx">add</span><span class="p">,</span> 
+        <span class="nx">filter</span><span class="p">(</span>
+            <span class="nx">p</span><span class="o">=&gt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="mi">2000</span><span class="p">,</span> 
+            <span class="nx">map</span><span class="p">(</span><span class="nx">p</span><span class="o">=&gt;</span><span class="nx">p</span><span class="p">.</span><span class="nx">price</span><span class="p">,</span> <span class="nx">set2</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span> <span class="c1">// 7500</span>
+
+<span class="cm">/* Map */</span>
+<span class="kd">const</span> <span class="nx">map2</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Map</span><span class="p">([[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="dl">'</span><span class="s1">c</span><span class="dl">'</span><span class="p">,</span><span class="mi">3</span><span class="p">]])</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
+    <span class="nx">reduce</span><span class="p">(</span><span class="nx">add</span><span class="p">,</span> 
+        <span class="nx">filter</span><span class="p">(</span>
+            <span class="nx">v</span><span class="o">=&gt;</span><span class="nx">v</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">,</span> 
+            <span class="nx">map</span><span class="p">(</span><span class="nx">v</span><span class="o">=&gt;</span><span class="nx">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nx">map2</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span> <span class="c1">// 5</span>
+</code></pre></div></div>
+:ET

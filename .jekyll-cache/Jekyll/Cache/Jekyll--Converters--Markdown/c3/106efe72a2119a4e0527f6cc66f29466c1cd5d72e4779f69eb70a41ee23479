@@ -1,0 +1,122 @@
+I"�$<p>프론트엔드 개발자라면 JS의 async/await를 들어봤거나, 구현해본 경험이 있을 겁니다.</p>
+
+<p>python 3.5에서도 async/await 문법이 생기면서, 별도의 라이브러리 사용없이 비동기 프로그래밍이 가능해졌습니다.</p>
+
+<p>최근에 FastAPI로 REST-API 서버를 구축하는 업무를 맡게되면서 서비스로직을 비동기로 처리해야 할 상황이 생겼습니다.</p>
+
+<p>먼저 동기/비동기가 무엇인지, python에서 어떻게 사용하는지 알아보며 더 나아가 고수준의 API를 제공하는 concurrent.futures 모듈에 대해서 다뤄보도록 하겠습니다.</p>
+
+<p><br /></p>
+
+<h2 id="동기synchronous-프로그래밍"><strong>동기(synchronous) 프로그래밍</strong></h2>
+
+<hr />
+
+<p>동시에 일어난다는 뜻으로, 요청과 결과가 동시에 일어난다는 의미입니다. 요청이 들어오면 시간이 얼마나 걸리던 결과를 return을 해주어야 합니다.
+동기 프로그래밍은 요청에 따른 결과를 반드시 return 해줘야할 때 사용합니다.</p>
+
+<p>기본적으로 python에서 사용하는 함수는 모두 동기프로그래밍입니다.</p>
+
+<p>아래 request_func() 함수는 synchronous_programming() 함수를 호출하여 리턴값을 받게 되는데 이는 호출과 동시에 함수에서 리턴해주는 결과 ‘return value’를 꼭 받아야지만 아래 print(result)가 실행됩니다. 만약 synchronous_programming() 에서 리턴을 1시간 후에 한다면, 요청한 client는 1시간을 기다려야 됩니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">def</span> <span class="nf">synchronous_programming</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s">'return value'</span>
+
+
+  <span class="k">def</span> <span class="nf">request_func</span><span class="p">():</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">synchronous_programming</span><span class="p">()</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="비동기asynchronous-프로그래밍"><strong>비동기(Asynchronous) 프로그래밍</strong></h2>
+
+<hr />
+
+<p>꼭 요청에 대한 결과를 기다려서 받아야 합니까? 그것을 해결해주는 것이 바로 비동기 프로그래밍입니다.</p>
+
+<p>동기 프로그램과 반대로, 요청과 결과가 동시에 일어나지 않아도 됩니다. 결과가 얼마나 걸리든 그 시간동안 다른 작업을 할 수 있으므로 자원을 효율적으로 사용할 수 있는 장점이 있습니다.</p>
+
+<p>python에서 사용하는 방법은 def 문법앞에 async를 붙이면 비동기 함수로 작동하게 됩니다.</p>
+
+<p>파이썬에서는 async가 붙은 함수를 코루틴(coroutine)라고도 부르는데, 동기 함수와 동일하게 호출하면 코루틴(coroutine) 객체로 리턴됩니다.</p>
+
+<p>따라서, async def 함수는 async로 선언된 다른 비동기 함수에 await를 붙여 사용합니다. js에서 async/await 호출 방식과 비슷한 원리입니다.(안다는 가정하에 넘어가겠습니다.)</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">async_func1</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'== async_func1 started =='</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'== async_func1 end =='</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="s">'async_func1'</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">async_func2</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'== async_func2 started =='</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'== async_func2 end =='</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="s">'async_func2'</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">async_func3</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'== async_func3 started =='</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'== async_func3 end =='</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="s">'async_func3'</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">root</span><span class="p">():</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span><span class="n">async_func1</span><span class="p">(),</span> <span class="n">async_func2</span><span class="p">(),</span> <span class="n">async_func3</span><span class="p">()]</span>
+    <span class="n">res1</span><span class="p">,</span> <span class="n">res2</span><span class="p">,</span> <span class="n">res3</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">futures</span><span class="p">)</span>
+    
+    <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'비동기 처리 시간 : {}'</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">end</span><span class="o">-</span><span class="n">start</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s">"res1"</span><span class="p">:</span><span class="n">res1</span><span class="p">,</span> <span class="s">"res2"</span><span class="p">:</span><span class="n">res2</span><span class="p">,</span> <span class="s">"res3"</span><span class="p">:</span><span class="n">res3</span><span class="p">}</span>
+
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">root</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p>실행결과를 보면 실행순서는<br />
+<code class="language-plaintext highlighter-rouge">async_func1() -&gt; async_func2() -&gt; async_func3()</code></p>
+
+<p>종료순서는 실행순서와 반대로 끝나는 것을 확인할 수 있다.<br />
+<code class="language-plaintext highlighter-rouge">async_func3() -&gt; async_func2() -&gt; async_func1()</code></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">== async_func1 started ==
+== async_func2 started ==
+== async_func3 started ==
+== async_func3 end ==
+== async_func2 end ==
+== async_func1 end ==
+비동기 처리 시간 : 5
+{'res1': 'async_func1', 'res2': 'async_func2', 'res3': 'async_func3'}
+</span></code></pre></div></div>
+
+<p>코드 순서를 자세히 살펴보면</p>
+<ol>
+  <li>최초 root() 함수를 run(실행)</li>
+  <li>root() -&gt; 시작은 async_func1(), async_func2(), async_func3() 순서대로 비동기로 실행</li>
+  <li>async_func3() 함수는 1초후 종료</li>
+  <li>async_func2() 함수는 3초후 종료</li>
+  <li>async_func1() 함수는 5초후 종료</li>
+  <li>모든 비동기 함수가 종료되는 시간은 5초</li>
+</ol>
+
+<p>동기프로그래밍으로 작성하게 되면</p>
+
+<p><kbd>async_func1() 5초 후 종료</kbd> -&gt; <kbd>async_func2() 3초 후 종료</kbd> -&gt; <kbd>async_func3() 1초 후 종료</kbd></p>
+
+<p><code class="language-plaintext highlighter-rouge">= 총 소요시간 : 9초</code></p>
+
+<p>간단한 예제를 통해 파이썬에서 제공하는 async/await 문법을 사용해서 비동기프로그래밍을 테스트해봤습니다.</p>
+
+<p>여기서 알 수 있듯이, 병렬적으로 자원을 사용하기 때문에 동기프로그래밍보다 효율적인 장점이 있습니다.</p>
+:ET

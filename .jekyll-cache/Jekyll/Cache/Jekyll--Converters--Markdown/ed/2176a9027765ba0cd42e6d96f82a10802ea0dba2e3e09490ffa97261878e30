@@ -1,0 +1,131 @@
+I"�-<h2 id="시작으로"><strong>시작으로</strong></h2>
+
+<hr />
+
+<p><code class="language-plaintext highlighter-rouge">Vue.js</code> 프로젝트 개발을 진행하면서 비동기 처리에 따른 상태관리 및 DOM 처리 때문에 하루종일 애를 먹었다.<br />
+해결하고나니 간단한 문제였는데 당시에는 <code class="language-plaintext highlighter-rouge">왜?</code> 생각하지 못했는지 생각해봤다.</p>
+
+<ul>
+  <li>비동기 처리에 대한 이해 부족</li>
+  <li>라이프사이클 훅에 대한 이해 부족</li>
+  <li>디자인 패턴 이해 부족</li>
+</ul>
+
+<p>실무에서 나름 많이 사용했기에 익숙하다고(?) 자신했었지만 응용을 하니 확실히 깨달았다.</p>
+
+<p>조금 안다고 <code class="language-plaintext highlighter-rouge">자만하지말자.</code></p>
+
+<p>그래서, 오늘은 <code class="language-plaintext highlighter-rouge">비동기 처리</code>에 대해 정리하려고 한다.</p>
+
+<p><br /></p>
+
+<h2 id="비동기-처리란-무엇인가"><strong>비동기 처리란 무엇인가?</strong></h2>
+
+<hr />
+
+<p><a href="/posts/javascript-06/">[Javascript] 자바스크립트의 동작원리</a> 포스팅을 참고하면 비동기 처리에 대한 이해를 도울 수 있다.</p>
+
+<p>간단하게 말하면, 특정 명령을 끝날 때까지 기다리지 않고 다음 코드를 먼저 실행할 수 있도록 하는 자바스크립트의 특성이다.</p>
+
+<p>이러한 자바스크립트의 비동기 처리로 인해 <code class="language-plaintext highlighter-rouge">병렬처리</code>를 한다고 오해하는 사람들이 있다. <code class="language-plaintext highlighter-rouge">절 대</code> 아니므로 위의 포스터를 참고하길 바란다.</p>
+
+<p><br /></p>
+
+<h2 id="비동기-처리의-이해"><strong>비동기 처리의 이해</strong></h2>
+
+<hr />
+
+<h3 id="ajax-호출"><strong>Ajax 호출</strong></h3>
+
+<p>가장 대표적인 비동기 처리는 <code class="language-plaintext highlighter-rouge">Ajax</code>와 <code class="language-plaintext highlighter-rouge">setTimeout()</code> 이다. 
+예제를 통해 어떤 문제가 있는지 살펴보자.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// ajax get 요청을 통해 데이터를 응답받는다. 그 응답받은 데이터를 `res_data`에 담고 return한다. </span>
+<span class="kd">function</span> <span class="nx">asycFn</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">res_data</span><span class="p">;</span>
+	<span class="nx">$</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">URL</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">res_data</span> <span class="o">=</span> <span class="nx">res</span><span class="p">;</span>
+	<span class="p">});</span>
+	<span class="k">return</span> <span class="nx">res_data</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">시작</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">asycFn</span><span class="p">());</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">끝</span><span class="dl">'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>위의 코드를 실행해보면</p>
+
+<p><code class="language-plaintext highlighter-rouge">시작</code> -&gt; <code class="language-plaintext highlighter-rouge">끝</code> -&gt; <code class="language-plaintext highlighter-rouge">undefined</code> 로 출력이 될 것이다.<br />
+자바스크립트 동작원리를 간단하게 설명하자면 비동기처리로 호출되는 함수들은 <code class="language-plaintext highlighter-rouge">Call Stack</code>으로 쌓아서 하나하나씩 처리하지 않고 
+<code class="language-plaintext highlighter-rouge">Callback Queue</code>라는 곳에 보내진다. 그리고 비동기처리가 완료 되었더라도 <code class="language-plaintext highlighter-rouge">Call Stack</code>이 비어있을 때까지 대기했다가 비어 있으면 이벤트 루프를 돌려 콜백함수를 콜스택에 <code class="language-plaintext highlighter-rouge">Call Stack</code>에 넣는다.</p>
+
+<p>음.. 실행순서가 <code class="language-plaintext highlighter-rouge">시작</code> -&gt; <code class="language-plaintext highlighter-rouge">끝</code> 까지는 이해했는데 왜 <code class="language-plaintext highlighter-rouge">asycFn()</code>함수의 값이 <code class="language-plaintext highlighter-rouge">undefined</code>으로 출력되지?</p>
+
+<p>여기서 이상한 것을 감지했다면 <code class="language-plaintext highlighter-rouge">당신은 고수</code></p>
+
+<p>비동기로 호출한 함수는 마지막에 <code class="language-plaintext highlighter-rouge">콜백함수</code>를 <code class="language-plaintext highlighter-rouge">Call Stack</code>에 넣는다. 이게 가장 중요하다.</p>
+
+<p>아까 설명했다시피 <code class="language-plaintext highlighter-rouge">$.get()</code>으로 데이터를 요청하고 받아올 때까지 기다리지 않고 다음 코드로 넘어간다.<br />
+여기서 <code class="language-plaintext highlighter-rouge">return res_data;</code>을 실행하기 때문에 <code class="language-plaintext highlighter-rouge">res_data</code>의 값은 <code class="language-plaintext highlighter-rouge">undefined</code>인 것이다.</p>
+
+<p><br /></p>
+
+<h3 id="settimeout-호출"><strong>setTimeout() 호출</strong></h3>
+
+<hr />
+
+<p>자바스크립트의 비동기처리는 <code class="language-plaintext highlighter-rouge">Callback Queue</code>라는 곳에 보내진다고 했다. 이것은 코드 호출 순서를 이해하는데 중요하다.</p>
+
+<p>Web API 중 하나인 <code class="language-plaintext highlighter-rouge">setTimeout()</code>을 예제로 실행해보자.</p>
+
+<p>당연히 지정한 시간만큼 기다렸다가 실행되기 때문에 <code class="language-plaintext highlighter-rouge">1</code> -&gt; <code class="language-plaintext highlighter-rouge">3</code> -&gt; <code class="language-plaintext highlighter-rouge">2</code> 순서로 출력되는 것을 예상할 수 있다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">1</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">2</span><span class="dl">'</span><span class="p">);</span>
+<span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">3</span><span class="dl">'</span><span class="p">);</span>
+</code></pre></div></div>
+<p><img src="https://user-images.githubusercontent.com/52439201/155655145-3f9d1820-1b91-4212-a212-c73b79ec5a64.png" alt="image" /></p>
+
+<p><br /></p>
+
+<p>그렇다면 지정한 시간을 <code class="language-plaintext highlighter-rouge">0</code>초로 하면 어떻게 출력될까?</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">1</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">2</span><span class="dl">'</span><span class="p">);</span>
+<span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">3</span><span class="dl">'</span><span class="p">);</span>
+</code></pre></div></div>
+<p><img src="https://user-images.githubusercontent.com/52439201/155655648-fb21e967-1b78-413e-961b-ffd3fa1ea850.png" alt="image" /></p>
+
+<p>위의 실행순서와 마찬가지로 <code class="language-plaintext highlighter-rouge">1</code> -&gt; <code class="language-plaintext highlighter-rouge">3</code> -&gt; <code class="language-plaintext highlighter-rouge">2</code> 순서로 출력되고 있다.
+아까 설명했듯이 자바스크립트의 비동기처리는 처리시간과 관계없이 무조건 <code class="language-plaintext highlighter-rouge">Callback Queue</code>으로 보내진다. 
+그리고 <code class="language-plaintext highlighter-rouge">Call Stack</code>이 비어있으면 스택에 올려 처리한다.</p>
+
+<p>이러한 자바스크립트의 동작원리를 이해하는 것은 정말 중요하다.</p>
+
+<p><br /></p>
+
+<h2 id="callback-함수로-비동기처리의-문제-해결하기"><strong>Callback 함수로 비동기처리의 문제 해결하기</strong></h2>
+
+<hr />
+
+<p>앞의 <code class="language-plaintext highlighter-rouge">Ajax</code>의 예제를 보면 서버에서 받아온 데이터로 후속 작업을 하고싶을 때 콜백(callback) 함수를 사용한다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">콜백(callback)</code>를 사용하면 특정 로직이 끝났을 때 원하는 동작을 실행시킬 수 있다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">asycFn</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">res_data</span><span class="p">;</span>
+	<span class="nx">$</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">URL</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">callback</span><span class="p">(</span><span class="nx">res</span><span class="p">);</span>
+	<span class="p">});</span>
+<span class="p">}</span>
+
+<span class="nx">asycFn</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span> <span class="c1">// // $.get()의 결과값이 data에 전달됨</span>
+<span class="p">})</span>
+</code></pre></div></div>
+:ET

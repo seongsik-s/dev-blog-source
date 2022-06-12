@@ -1,0 +1,268 @@
+I"<<p>Git과 Github를 활용하여 버전관리를 하는거에 익숙하지만, Git의 원리에 대해 묻는다면 정확하게 답변할 수 없습니다.</p>
+
+<p>이번 포스팅은 Git의 배경과 원리를 이해하여 정리해보는 시간을 갖게 되었습니다.</p>
+
+<p>목차는 아래와 같이 진행합니다.</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">버전 관리란?</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Git의 배경</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Git의 원리</code></li>
+</ol>
+
+<p><br /></p>
+
+<h2 id="버전-관리란"><strong>버전 관리란?</strong></h2>
+
+<hr />
+
+<p>버전 관리 시스템이란? 파일 변화를 시간에 따라 기록했다가 나중에 특정 시점의 버전을 다시 꺼내올 수 있는 시스템입니다. 버전 관리 방법은 크게 3가지로 나뉩니다.</p>
+
+<h3 id="로컬-버전-관리"><strong>로컬 버전 관리</strong></h3>
+<ul>
+  <li>디렉토리로 파일을 복사하는 방법</li>
+  <li>이 방법은 가장 간단하므로, 많은 사람들이 사용한다.</li>
+  <li>하지만, 작업 디렉토리를 삭제하거나, 실수로 인한 수정 및 복사가 발생할 수 있다는 단점이 있다.</li>
+</ul>
+
+<h3 id="중앙집중식-버전-관리cvcs"><strong>중앙집중식 버전 관리(CVCS)</strong></h3>
+<ul>
+  <li>CVCS는 파일을 관리하는 중앙서버가 별도로 있고, 클라이언트가 중앙 서버에서 파일을 받아서 사용(Checkout)합니다.</li>
+  <li>CVCS는 모두 누가 무엇을 하고 있는지 알 수 있다는 장점이 있습니다.</li>
+  <li>치명적인 결점은, 중앙 서버에 문제가 발생했을 때 그 시간동안 아무도 다른 사람과 협업할 수 없으며 사람들이 하는 일을 백업할 방법도 없습니다.</li>
+  <li>그리고, 중앙 데이터베이스가 있는 하드디스크에 문제가 생기면 프로젝트의 모든 히스토리를 잃습니다.</li>
+  <li>즉, 중앙서버가 문제가 생기면 모든 것을 잃습니다.</li>
+  <li>대표적으로 SVN이 있습니다.</li>
+</ul>
+
+<h3 id="분산-버전-관리-시스템dvcs"><strong>분산 버전 관리 시스템(DVCS)</strong></h3>
+<ul>
+  <li>Git이 DVCS에 속하며, DVCS에서의 클라이언트는 단순히 파일의 마지막 스냅샷을 Checkout하지 않습니다.</li>
+  <li>그냥 저장소를 히스토리와 더불어 전부 복제합니다.</li>
+  <li>서버에 문제가 생겨도 이 복제물로 다시 작업을 할 수 있습니다.</li>
+  <li>클라이언트 중에서 아무거나 골라도 서버를 복원할 수 있습니다.</li>
+  <li>clone은 모든 데이터를 가진 진정한 백업입니다.</li>
+  <li>DVCS 환경에서는 리모트 저장소가 존재합니다. 리모트 저장소는 많을 수도 있습니다. 따라서 동시에 다양한 그룹과 다양한 방법으로 협업이 가능합니다.</li>
+</ul>
+
+<p><br />
+<br /></p>
+
+<h2 id="git의-배경"><strong>Git의 배경</strong></h2>
+
+<hr />
+
+<p>Linux 커널은 굉장히 규모가 큰 오픈소스 프로젝트다. Linux 커널의 삶 대부분은(1991–2002) Patch와 단순 압축 파일로만 관리했다. 
+2002년에 드디어 Linux 커널은 BitKeeper라고 불리는 상용 DVCS를 사용하기 시작했다. 
+2005년에 커뮤니티가 만드는 Linux 커널과 이익을 추구하는 회사가 개발한 BitKeeper의 관계는 틀어졌다. 
+BitKeeper의 무료 사용이 재고된 것이다. 이 사건은 Linux 개발 커뮤니티(특히 Linux 창시자 Linus Torvalds)가 자체 도구를 만드는 계기가 됐다. 
+Git은 BitKeeper를 사용하면서 배운 교훈을 기초로 아래와 같은 목표를 세웠다.</p>
+
+<ul>
+  <li>빠른 속도</li>
+  <li>단순한 구조</li>
+  <li>비선형적인 개발(수천 개의 동시 다발적인 브랜치)</li>
+  <li>완벽한 분산</li>
+  <li>Linux 커널 같은 대형 프로젝트에도 유용할 것(속도나 데이터 크기 면에서)</li>
+</ul>
+
+<p><br />
+<br /></p>
+
+<h2 id="git의-원리"><strong>Git의 원리</strong></h2>
+
+<p>Git을 사용하기 전에 Git의 원리를 먼저 이해하는 것이 중요할 것 같다. 기존의 VCS, CVCS와의 차이점은 무엇인지 알아보자.</p>
+
+<hr />
+
+<h3 id="스냅샷"><strong>스냅샷</strong></h3>
+<p>Git이 다른 버전 관리 도구와 다른 점은 <code class="language-plaintext highlighter-rouge">스냅샷(snapshot)</code> 방식을 이용한다는 것입니다. CVS, Subversion, Perforce, Bazaar 등의 시스템들은 각 파일의 변화를 시간순으로 관리하면서 파일들의 집합을 관리합니다. 쉽게 말해 이전에 파일을 복사하여 관리합니다. 파일을 복사하는 방식으로 수정본을 관리하게 되면 같은 내용을 반복 저장하기 때문에 용량을 많이 차지합니다. 또 수정된 부분들을 일일이 찾아야 하므로 검색할 때 불편합니다.</p>
+
+<p>Git은 이러한 시스템적인 단점을 보완하고자 변경된 파일 전체를 저장하지 않고, <code class="language-plaintext highlighter-rouge">파일에서 변경된 부분만 찾아 수정된 내용만 저장</code>합니다. 마치 변화된 부분만 찾아 사진을 찍는 것과 같다고 해서 스냅샷 방식이라고 말합니다.</p>
+
+<p>스냅샷 방식은 커밋을 기반으로 사진을 찍습니다. 커밋은 파일 변화를 깃 저장소에 영구적으로 기록합니다. 또한, 빠르게 버전의 차이점을 처리하고, 용량을 적게 사용합니다.</p>
+
+<p><br /></p>
+
+<h3 id="거의-모든-명령은-로컬에서-실행"><strong>거의 모든 명령은 로컬에서 실행</strong></h3>
+<p>거의 모든 명령이 로컬의 파일과 데이터만 사용하기 때문에 네트워크에 영향을 받지 않습니다. 이는 네트워크 속도에 영향을 받는 CVCS보다 월등히 높은 속도를 자랑합니다.
+Git은 프로젝트의 모든 히스토리가 로컬 디스크에 있기 때문에 모든 명령이 순식간에 실행됩니다.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Git은 프로젝트의 히스토리를 서버없이 조회합니다. 그냥 로컬 데이터베이스에서 읽기 때문에 속도가 빠릅니다.</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Git은 현재버전과 예전버전 상태를 비교할 때 로컬에서 찾기 때문에 리모트에 있는 서버에 접근할 필요가 없습니다. </code></li>
+</ul>
+
+<p>즉, 오프라인 상태거나, VPN이 없어거나, 네트워크가 안되도 막힘 없이 일 할 수 있는 장점을 가지고 있습니다.</p>
+
+<p><br /></p>
+
+<h3 id="무결성"><strong>무결성</strong></h3>
+<p>Git은 데이터를 저장하기 전에 항상 체크섬을 구하고 그 체그섬으로 데이터를 관리합니다. <code class="language-plaintext highlighter-rouge">체크섬이란 Git에서 사용하는 가장 기본적인 데이터 단위이자 Git의 기본 철학</code>입니다.
+Git 없이는 체크섬을 다룰 수 없어서 파일의 상태도 알 수 없고, 데이터를 잃어버릴 수도 없습니다.</p>
+
+<p>Git은 <code class="language-plaintext highlighter-rouge">SHA-1 해시</code>를 사용하여 체크섬을 생성합니다. 생성한 체크섬은 40자 길이의 16진수 문자열입니다. 
+파일의 내용이나, 디렉토리 구조를 이용하여 체크섬을 생성합니다.</p>
+
+<p>(체크섬 예시 : 24b9da6552252987aa493b52f8696cd6d3b00373)</p>
+
+<p>Git은 <code class="language-plaintext highlighter-rouge">모든 것을 해시로 식별</code>합니다. 그렇기 때문에 Git은 파일을 이름으로 저장하지 않고 <code class="language-plaintext highlighter-rouge">해시로 저장</code>합니다.</p>
+
+<p><br /></p>
+
+<h3 id="git은-데이터를-추가할-뿐이다"><strong>Git은 데이터를 추가할 뿐이다</strong></h3>
+<p>Git은 어떤 작업을 하던 <code class="language-plaintext highlighter-rouge">Git 로컬 데이터베이스에 데이터를 추가</code>합니다. 하지만, 되돌리거나 삭제할 방법이 없습니다. 또한 커밋하지 않으면 변경사항을 잃어버릴 수 있습니다.
+하지만, 스냅샷을 커밋하고 나면 데이터를 잃어버리기 어렵습니다.</p>
+
+<p><br /></p>
+
+<h3 id="git의-3가지-상태"><strong>Git의 3가지 상태</strong></h3>
+<p>Git은 파일을 Committed, Modified, Staged 이렇게 3가지 상태로만 관리합니다.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Committed</code>는 데이터가 로컬 데이터베이스에 안전하게 저장됐다는 것을 말합니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">Modified</code>는 수정한 파일을 아직 로컬 데이터베이스에 커밋하지 않은 것을 말합니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">Staged</code>는 현재 수정한 파일을 곧 커밋할 것이라고 표시한 상태를 의미합니다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="git-프로젝트의-3가지-단계"><strong>Git 프로젝트의 3가지 단계</strong></h3>
+
+<p>Git 프로젝트는 아래와 같은 3가지 단계로 나뉩니다.</p>
+
+<ol>
+  <li>Git 디렉토리
+    <ul>
+      <li>Git 디렉토리가 Git의 핵심입니다. 다른 컴퓨터에 있는 저장소를 clone할 때 Git 디렉토리가 생성됩니다.</li>
+      <li>Git 디렉토리는 프로젝트의 메타데이터와 객체 데이터베이스를 저장하는 곳을 말합니다.</li>
+      <li>Git 디렉토리는 현재 작업하는 디스크에 있으며, 그 디렉토리 안에 압축된 데이터베이스에서 파일을 가져와 Working 디렉토리를 생성합니다.</li>
+    </ul>
+  </li>
+  <li>working 디렉토리
+    <ul>
+      <li>Working 디렉토리는 특정 버전을 Checkout한 것입니다.</li>
+      <li>Git 디렉토리에서 생성됩니다.</li>
+    </ul>
+  </li>
+  <li>Staging Area
+    <ul>
+      <li>Staging Area는 Git 디렉토리 안에 있습니다.</li>
+      <li>Working 디렉토리에서 파일을 수정하면 Staging Area로 추가됩니다.</li>
+      <li>단순한 파일이며, 곧 커밋할 파일에 대한 정보를 저장합니다.</li>
+    </ul>
+  </li>
+</ol>
+
+<ul>
+  <li>Git 디렉토리에 있는 파일들은 <code class="language-plaintext highlighter-rouge">Committed</code>된 상태입니다.</li>
+  <li>파일을 수정하고 Staging Area에 추가했으면, <code class="language-plaintext highlighter-rouge">Staged</code> 상태입니다.</li>
+  <li>Checkout 하고 수정했지만, 아직 Staging Area에 추가하지 않으면 <code class="language-plaintext highlighter-rouge">Modified</code> 상태입니다.</li>
+</ul>
+
+<p><br />
+<br /></p>
+
+<h2 id="git의-3가지-상태-실습해보기"><strong>Git의 3가지 상태 실습해보기</strong></h2>
+
+<hr />
+
+<ul>
+  <li>
+    <p>test branch에 <code class="language-plaintext highlighter-rouge">test.py</code>라는 파일이 있습니다.</p>
+
+    <p><img src="https://user-images.githubusercontent.com/52439201/145543337-495ebead-b35c-454d-b054-d14f4230dc78.png" alt="image" /></p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">test.py</code>을 수정합니다.</p>
+
+    <p><img src="https://user-images.githubusercontent.com/52439201/145543649-728ba336-4116-428d-8dc7-205ddefd1e45.png" alt="image" /></p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Git 상태</code> 확인
+    <ul>
+      <li>Changes not staged for commit: 에 있다고 합니다. 즉, 아직 staged 상태가 아니라는 것입니다.</li>
+      <li><code class="language-plaintext highlighter-rouge">modified: test.py</code> 라고 되어있는 것을 확인할 수 있습니다.</li>
+    </ul>
+
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="nv">$ </span>git status
+        On branch <span class="nb">test
+        </span>Your branch is up to <span class="nb">date </span>with <span class="s1">'origin/test'</span><span class="nb">.</span>
+
+        Changes not staged <span class="k">for </span>commit:
+        <span class="o">(</span>use <span class="s2">"git add &lt;file&gt;..."</span> to update what will be committed<span class="o">)</span>
+        <span class="o">(</span>use <span class="s2">"git restore &lt;file&gt;..."</span> to discard changes <span class="k">in </span>working directory<span class="o">)</span>
+                modified:   test.py
+
+        Untracked files:
+        <span class="o">(</span>use <span class="s2">"git add &lt;file&gt;..."</span> to include <span class="k">in </span>what will be committed<span class="o">)</span>
+                sample_01/
+
+        no changes added to commit <span class="o">(</span>use <span class="s2">"git add"</span> and/or <span class="s2">"git commit -a"</span><span class="o">)</span>
+</code></pre></div>    </div>
+
+    <p><img src="https://user-images.githubusercontent.com/52439201/145543919-7cc98f61-a10a-4ef8-81dc-68176860afbc.png" alt="image" /></p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Staging Area</code>에 추가하기
+    <ul>
+      <li>staged 상태로 추가하기 위해서는 git add로 Staging Area에 추가해줘야 합니다.</li>
+      <li>git add test.py를 해주고 git status로 상태를 확인해 보니, <code class="language-plaintext highlighter-rouge">Changes to be committed:</code> 라고 되어있습니다.</li>
+      <li>즉, Staged 상태로 변경되었습니다.</li>
+    </ul>
+
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nv">$ </span>git add test.py
+
+    <span class="nv">$ </span>git status
+    On branch <span class="nb">test
+    </span>Your branch is up to <span class="nb">date </span>with <span class="s1">'origin/test'</span><span class="nb">.</span>
+
+    Changes to be committed:
+    <span class="o">(</span>use <span class="s2">"git restore --staged &lt;file&gt;..."</span> to unstage<span class="o">)</span>
+            modified:   test.py
+
+    Untracked files:
+    <span class="o">(</span>use <span class="s2">"git add &lt;file&gt;..."</span> to include <span class="k">in </span>what will be committed<span class="o">)</span>
+            sample_01/
+</code></pre></div>    </div>
+
+    <p><img src="https://user-images.githubusercontent.com/52439201/145545329-5099a56d-cfd8-49e4-8022-b6152c41a37d.png" alt="image" /></p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">commit</code> 하기
+    <ul>
+      <li>git commit -m “test.py” 으로 커밋을 실행합니다.</li>
+      <li>git status에 없는 것을 확인할 수 있습니다.</li>
+    </ul>
+
+    <p><img src="https://user-images.githubusercontent.com/52439201/145546099-357ac8f7-dddb-4032-a0ac-4858f12ce52a.png" alt="image" /></p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">git log</code>를 통해 commit history를 확인할 수 있습니다.</p>
+
+    <p><img src="https://user-images.githubusercontent.com/52439201/145546588-135b35b5-4ab8-46e0-a4a1-42ca184c84fc.png" alt="image" /></p>
+  </li>
+</ul>
+:ET

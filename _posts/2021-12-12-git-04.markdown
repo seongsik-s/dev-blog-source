@@ -1,0 +1,194 @@
+---
+layout: post
+title: "[Git] Git 되돌리기(undo)"
+tags: [Git, Github]
+categories: [Git]
+banner:
+  image: /assets/images/banners/git.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+개발을 하다보면 이전으로 되돌려야 하는 상황이 오기 마련입니다.
+
+Git에서도 `undo`의 기능을 제공합니다.
+
+<br>
+
+## **commit 재작성**
+
+***
+
+* 방금 commit하고 나서, 너무 일찍 commit 했거나 파일을 뺴먹었거나 commit 메시지를 잘못 입력했을 경우 사용합니다.
+* `--amend` 옵션을 사용하여 커밋을 재작성 할 수 있습니다.
+* 다시 commit을 하고 싶으면, `[파일을 수정후]` -> `[Staging Area에 추가]` -> `[git commit --amend]` -> `[재작성 후 저장하면 끝]`
+* `--amend` 옵션으로 커밋을 고치는 작업은, 추가로 작업한 일이 작다고 하더라도 이전의 커밋을 완전히 새로 고쳐서 새 커밋으로 변경합니다. 
+* 따라서, 이전의 커밋을 일어나지 않은 일이 되고 당연히 히스토리에도 남지 않습니다.
+* `--amend` 옵션의 장점은 아주 작게 뭔가를 빠드리거나, 변경한 것을 새 커밋으로 분리하지 않고 하나의 커밋으로 처리하는 것입니다. 
+
+```console
+        // test01.py 파일 생성
+        $ vi test01.py
+
+        // test02.py 파일 생성
+        $ vi test01.py
+
+        // test01.py만 Staging Area에 추가후 commit 진행
+        $ git add test01.py
+
+        $ git status
+        On branch test
+        Your branch is up to date with 'origin/test'.
+
+        Changes to be committed:
+        (use "git restore --staged <file>..." to unstage)
+                new file:   test01.py
+
+
+        $ git commit -m "new test01.py"
+        [test 17156f0] new test01.py
+        1 file changed, 0 insertions(+), 0 deletions(-)
+        create mode 100644 test01.py
+
+        // 엇?! test02.py 파일도 같이 commit 해야 하므로 --amend 옵션 사용
+        // 먼저 test02.py 파일을 Staging Area에 추가
+        $ git add test02.py
+        $ git commit --amend
+        
+        // git commit --amend를 하게 되면 바로 이전 commit 을 재작성할 수 있습니다.
+        // commit 메시지를 "new test01.py" -> "new test01.py test02.py" 로 변경 후 저장
+
+        new test01.py test02.py
+
+        # Please enter the commit message for your changes. Lines starting
+        # with '#' will be ignored, and an empty message aborts the commit.
+        #
+        # Date:      Mon Dec 13 11:09:51 2021 +0900
+        #
+        # On branch test
+        # Your branch is ahead of 'origin/test' by 1 commit.
+        #   (use "git push" to publish your local commits)
+        #
+        # Changes to be committed:
+        #       new file:   test01.py
+        #       new file:   test02.py
+        #
+        # Untracked files:
+        #       sample_01/
+        
+        // 히스토리를 확인해보면 변경된 것을 확인할 수 있습니다!
+        $ git log
+        commit 4893401cd6b8723d49bfad2d6ae906d85f674c36 (HEAD -> test)
+        Author: s-seongsik <52439201+s-seongsik@users.noreply.github.com>
+        Date:   Mon Dec 13 11:09:51 2021 +0900
+
+        new test01.py test02.py
+
+```      
+
+<br>
+
+## **Unstage로 변경하기**
+
+***
+
+* `Working 디렉토리` <-> `Staging Area` 사이를 넘나드는 방법입니다.
+* `Working 디렉토리` ->  `Staging Area`에 추가하는 방법은 `"git add [filename]"` 으로 알고 있습니다.
+* 반대로 `Unstage` 상태로 되돌리기 위해서는 `"git restore --staged [filename]"`을 사용합니다.
+```console
+        // git test01.py을 수정한뒤 상태를 확인
+        $ git status
+        On branch test
+        Your branch is ahead of 'origin/test' by 1 commit.
+        (use "git push" to publish your local commits)
+
+        Changes not staged for commit:
+        (use "git add <file>..." to update what will be committed)
+        (use "git restore <file>..." to discard changes in working directory)
+                modified:   test01.py
+
+        // Staging Area에 추가
+        // 상태를 확인해보면 Staging Area에 추가된 것을 확인할 수 있습니다.
+        $ git add test01.py
+        $ git status
+        On branch test
+        Your branch is ahead of 'origin/test' by 1 commit.
+        (use "git push" to publish your local commits)
+
+        Changes to be committed:
+        (use "git restore --staged <file>..." to unstage)
+                modified:   test01.py
+
+        // 다시 Unstage 상태로 되돌리기
+        // 상태를 확인해보면 Unstage 상태로 돌아간 것을 확인할 수 있습니다.
+        $ git restore --staged test01.py
+        
+        $ git status
+        On branch test
+        Your branch is ahead of 'origin/test' by 1 commit.
+        (use "git push" to publish your local commits)
+
+        Changes not staged for commit:
+        (use "git add <file>..." to update what will be committed)
+        (use "git restore <file>..." to discard changes in working directory)
+                modified:   test01.py
+```      
+
+<br>
+
+## **변경사항 취소하기**
+
+***
+
+* `modified`된 파일을 취소하는 방법입니다.
+* `"git restore [filename]"`
+* 해당 명령어는 변경된 사항을 취소하여 이전으로 되돌립니다.
+
+
+```console
+        // 위에 Unstage로 변경된 test01.py의 상태를 확인해보시면
+        // (use "git restore <file>..." to discard changes in working directory) 라는 문구를 확인할 수 있습니다.
+        // 해당 명령어로 Working 디렉토리에서 변경사항을 취소할 수 있다고 되어있습니다.
+        // 한번 실행해 보겠습니다.
+
+        $ git status
+        On branch test
+        Your branch is ahead of 'origin/test' by 1 commit.
+        (use "git push" to publish your local commits)
+
+        Changes not staged for commit:
+        (use "git add <file>..." to update what will be committed)
+        (use "git restore <file>..." to discard changes in working directory)
+                modified:   test01.py
+
+        // 참고로 test01.py 파일에는 x=10이라는 코드가 들어있습니다.
+        // 상태에서는 사라진 것을 확인할 수 있습니다.
+        $ git restore test01.py
+
+        $ git status
+        On branch test
+        Your branch is ahead of 'origin/test' by 1 commit.
+        (use "git push" to publish your local commits)
+
+
+        // test01.py에서 변경된 내용이 취소되었는지 확인해보겠습니다.
+        // 아무것도 없던 이전으로 돌아간 것을 확인할 수 있습니다!
+        $ vi test01.py
+
+        [test01.py]
+        ~
+        ~
+        ~
+        ~
+        ~
+        ~
+        ~
+        ~
+        test01.py [unix] (11:41 13/12/2021)                        0,0-1 모두
+        "test01.py" 0L, 0C
+
+``` 

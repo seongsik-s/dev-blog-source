@@ -1,0 +1,241 @@
+---
+layout: post
+title: "[Vue.js] Vuetify 그리드 시스템 (1) - 레이아웃"
+tags: [Nuxt.js, Vue.js, Webpack, Babel, Node.js, Javascript]
+categories: [Nuxt.js]
+banner:
+  image: /assets/images/banners/vue.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## **시작하기**
+
+***
+
+최근에 `Nuxt.js`와 `Vuetify`로 만든 정적 웹 사이트를 만들었다.
+
+지인들에게 어떤지 보여줬는데 반응이...
+
+`왈1`: 모바일에선 화면이 깨지는거같네?  
+`왈2`: 테블릿에선 좀 다르게 보이네? 
+
+PC기준으로 만들었기 때문에 다양한 디바이스를 전혀~~고려하지 못했다.
+
+따라서, `Vuetify`에서 제공하는 그리드 시스템을 활용하여 디바이스별로 어떻게 배치하고 나뉘는지 정리해봤다.
+
+기본적으로 vuetify`(2.x)`버전에서 제공하는 5가지 유형의 Display Breakpoints로 진행했다.
+
+<br>
+
+## Vuetify 그리드 시스템
+
+Vuetify는 flexbox를 사용하여 12포인트 그리드 시스템과 함께 제공된다.  
+특정 화면 크기 또는 방향(xs, sm, md, lg, xl)을 타겟팅하는 데 사용되는 5가지 유형의 미디어 중단점이 포함된다.
+
+| Device | code |Type | Range | 
+| :------|:---- |:--- | :---- |
+| Extra small | xs | Small to large phone | `<` 600px |
+| Small | sm | Small to medium tablet | 600px `> <` 960px |
+| Medium | md | Large tablet to laptop | 960px `> <` 1264px* |
+| Large | lg | Desktop | 1264px `> <` 1904px* |
+| Extra large | xl |4k and ultra-wide | `>` 1904px* |
+
+
+## 구성요소 
+`1.x` 버전에서는 `v-container`, `v-layout`, `v-flex`의 구성요소로 사용되었지만 `2.x`버전 부터는 이를 대체 할 요소들이 등장했다.
+`2.x` 이상 부터는 위의 구성요소는 사용하지 않으므로 참고해야한다.
+
+각 요소별 prop는 [#Grid system](https://vuetifyjs.com/en/components/grids/)에서 참고.
+
+### v-container
+* `v-container` 사이트 콘텐츠를 중앙에 놓고 수평으로 채우는 기능을 제공한다. 
+* `fluid` 속성을 사용하여 모든 viewport 및 디바이스 크기에 대해 완전히 확장할 수 있다.
+
+### v-col
+* `v-col`는 `v-row`의 직계 자식이어야 하는 컨텐츠이다.
+* `v-col`는 2.x 버전으로 1.x 버전의 `v-flex`를 대체한다.
+
+
+### v-row
+* `v-row`는 `v-col`을 위한 wrapper 컴포넌트이다. 즉 포장지 역할을 한다고 생각하면된다.
+* 내부 열의 레이아웃과 흐름을 제어하기 위해 `flex` 속성을 사용한다.
+* `v-row`는 2.x 버전으로 1.x 버전의 `v-layout`를 대체한다.
+
+### v-spacer
+컴포넌트 사이에 빈 공간을 생성하고 싶을때 사용한다.
+
+<br>
+
+## 기본 레이아웃
+
+* 1.x 버전 
+
+```vue
+<template>
+  <v-containerd>
+    <v-layout>
+      <v-flex>
+        <v-card>
+          내용...
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
+</template>
+```
+
+* 2.x 버전
+
+```vue
+<template>
+  <v-row >
+    <v-col>
+      <v-card >
+        내용...
+      </v-card>
+    </v-col>
+  </v-row>
+
+  <v-row >
+    <v-col>
+      <v-card >
+        내용...
+      </v-card>
+    </v-col>
+  </v-row>
+</template>
+```
+
+<br>
+
+## 12 포인트 Grid 시스템 
+
+* Vuetify는 부트스트랩과 동일하게 12 포인트의 그리드 시스템을 제공한다. 
+* 즉 1개의 row(행)은 12개의 col(열)로 구성되어 있다고 보면된다.
+* col는 특정 화면 코드와 크기`(xs, sm, md, lg, xl)`에 따라 적용된다.
+
+```vue
+<template>
+  <v-container>
+  <v-row dense>
+    <v-col cols="12" md="12">
+      <v-card color="red" style="text-align:center;" >
+        12
+      </v-card>
+    </v-col>
+    <v-col cols="6" md="6">
+      <v-card color="blue" style="text-align:center;" >
+        6
+      </v-card>
+    </v-col>
+    <v-col cols="6" md="6">
+      <v-card color="blue" style="text-align:center;" >
+        6
+      </v-card>
+    </v-col>
+    <!-- 생략... -->
+  </v-row>
+</v-container>
+</template>
+```
+
+![image](https://user-images.githubusercontent.com/52439201/160543213-18324632-1816-4366-bdc3-bb1d2cfc0db9.png)
+
+<br>
+
+### 반응형으로 적용
+
+* 1.x버전에는 `xs` prop을 제공했지만 2.x 부터는 `xs` prop를 제공하지 않는다.
+* `col`은 미리 차지해야하는 너비를 지정하지 않으면 부모 컨테이너 내에서 사용 가능한 전체 공간을 자동으로 차지한다.
+* 따라서 `cols`라는 속성을 줘서 모든 뷰포트에 적용시킨다. 그렇게 되면 sm, md, lg, xl이 적용되고 나머지는 cols 속성이 적용되므로 xs효과를 대신한다.
+* 단 `cols`는 모든 뷰포트에 적용되므로 명시되지 않은 속성은 전부 적용된다.
+
+```vue
+<template>
+  <v-container >
+  <v-row dense>
+    <v-col cols="12" sm="3" md="4" lg="6" xl="12">
+      <v-card color="red" style="text-align:center;" >
+        BOX
+      </v-card>
+    </v-col>
+    <v-col cols="12" sm="3" md="4" lg="6" xl="12">
+      <v-card color="blue" style="text-align:center;" >
+        BOX
+      </v-card>
+    </v-col>
+    <v-col cols="12" sm="3" md="4" lg="6" xl="12">
+      <v-card color="red" style="text-align:center;" >
+        BOX
+      </v-card>
+    </v-col>
+    <v-col cols="12" sm="3" md="4" lg="6" xl="12">
+      <v-card color="blue" style="text-align:center;" >
+        BOX
+      </v-card>
+    </v-col>
+    <v-col cols="12" sm="3" md="4" lg="6" xl="12">
+      <v-card color="red" style="text-align:center;" >
+        BOX
+      </v-card>
+    </v-col>
+    <v-col cols="12" sm="3" md="4" lg="6" xl="12">
+      <v-card color="blue" style="text-align:center;" >
+        BOX
+      </v-card>
+    </v-col>
+    <v-col cols="12" sm="3" md="4" lg="6" xl="12">
+      <v-card color="red" style="text-align:center;" >
+        BOX
+      </v-card>
+    </v-col>
+    <v-col cols="12" sm="3" md="4" lg="6" xl="12">
+      <v-card color="blue" style="text-align:center;" >
+        BOX
+      </v-card>
+    </v-col>
+    <v-col cols="12" sm="3" md="4" lg="6" xl="12">
+      <v-card color="red" style="text-align:center;" >
+        BOX
+      </v-card>
+    </v-col>
+  </v-row>
+</v-container>
+</template>
+```
+
+<br>
+
+* 모바일 (< 600px) 화면
+
+![image](https://user-images.githubusercontent.com/52439201/160551304-de61af4c-5f2b-4488-bcf4-5ad1f9cee30e.png)
+
+<br>
+
+* 테블릿 (600px > < 960px) 화면
+
+![image](https://user-images.githubusercontent.com/52439201/160551506-18ea584d-6403-4a14-8b0a-f2e6053ff405.png)
+
+<br>
+
+* 랩탑 (960px > < 1264px*) 화면
+
+![image](https://user-images.githubusercontent.com/52439201/160551781-a16ee2d3-b595-4d23-979c-fb26488cd588.png)
+
+
+<br>
+
+* 데스크탑 (1264px > < 1904px*) 화면
+
+![image](https://user-images.githubusercontent.com/52439201/160551867-1cfb0fe6-5915-4d54-be4a-384ad71121be.png)
+
+<br>
+
+* 4k and ultra-wide (> 1904px*) 화면
+
+![image](https://user-images.githubusercontent.com/52439201/160551999-35994a7a-4d65-4564-b052-c8eadde0fee0.png)

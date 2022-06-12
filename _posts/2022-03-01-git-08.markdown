@@ -1,0 +1,249 @@
+---
+layout: post
+title: "[Git] 요새 누가 GitBook없이 문서 만들어?"
+tags: [Git, Github, GitBook]
+categories: [Git]
+banner:
+  image: /assets/images/banners/gitbook.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## **시작으로**
+
+***
+
+블로그를 운영한다거나, 기술을 챕터별로 문서화하고싶다거나, 팀내 지식을 문서화하여 공유한다거나, 교육자료를 만들어야 한다거나 등. 
+문서화 작업은 필수로 다뤄야하는 영역이다. 
+
+이제까지 `PDF`, `워드`, `엑셀` 등과 같은 프로그램을 사용하여 문서화 작업을 했었는데 파일로 관리하다보니 여러모로 신경쓸 것이 많았다. (`수정`, `배포`, `버전관리` 등)
+
+따라서, eBook을 작성할 수 있는 `GitBook`을 공부하려고 한다.
+
+`GitBook`은 Markdown 언어로 집필이 가능하므로 기술 블로그를 운영한 경험이 있는 개발자라면 어렵지 않게 개발할 수 있다.
+
+또한, `Github` 저장소와 연동이 가능하여 서버 호스팅에 정적웹을 배포하여 사용할 수 있다.
+
+<br>
+
+## **설치**
+
+***
+
+설치는 윈도우 기반으로 진행하였다.
+
+`GitBook`을 설치하려면 `Node.js`가 설치되어있어야 한다.
+
+여기서 중요한건 다른 블로그나 GitBook에서도 `npm install -g gitbook-cli`으로 설치하라고 설명되어있지만 
+현재(`2022-03-01`) 기준으로 설치하게되면 버전이 `2.3.2 이다.`
+
+```console
+$ npm install -g gitbook-cli
+
+$ gitbook --version
+CLI version: 2.3.2
+GitBook version: 3.2.3
+```
+
+가장 최신버전으로 설치하게되면 cli로 init, serve, build가 작동하지 않는다.
+
+몇 시간을 삽질한 결과, 
+
+`gitbook-cli` 버전을 `2.3.0`으로 설치해야 모든 플랫폼에서 적상적으로 작동한다. 기존 버전을 삭제하고 `2.3.0`을 설치한다.
+
+```console
+$ npm install -g gitbook-cli@2.3.1
+
+$ gitbook --version
+CLI version: 2.3.0
+GitBook version: 3.2.3
+```
+
+<br>
+
+## **프로젝트 생성**
+
+***
+
+작업 디렉토리가 이미 생성되어 있다면 해당 디렉토리 안에서 `gitbook init`을 실행한다.
+
+```console
+$ mkdir my_gitbook
+$ cd my_gitbook
+$ gitbook init
+```
+
+`gitbook init ./my_gitbook`을 실행하면 my_gitbook 디렉토리가 자동으로 생성되고 그 안에 gitbook 관련된 파일들이 생성된다.
+```console
+$ gitbook init ./my_gitbook
+```
+
+프로젝트 안에는 `README.md`파일이 생성되어 있다. 
+
+
+<br>
+
+## **프로젝트 실행**
+
+***
+
+```console
+$ cd my_gitbook
+$ gitbook serve
+```
+
+gitbook 웹 서버를 실행하면 브라우저에서 확인 할 수 있다.
+
+![image](https://user-images.githubusercontent.com/52439201/156173321-bd6f45bf-124c-47c5-a491-852fc8d31587.png)
+
+<br>
+
+## **목차 및 컨텐츠 작성하기**
+
+***
+
+GitBook은 `SUMMARY.md`파일을 사용하여 책의 챕터와 하위 챕터의 구조를 정의한다. `SUMMARY.md`파일은 책의 `목차`를 생성하는 데 사용된다.
+
+`SUMMARY.md`링크 목록일 뿐이며 링크의 대상은 해당 장의 파일에 대한 경로이다.
+
+상위 챕터에 중첩 목록을 추가하면 하위 챕터가 생성된다.
+
+### **SUMMARY.md 작성 예시**
+
+```markdown
+# Summary
+
+* [Part I](part1/README.md)
+    * [Writing is nice](part1/writing.md)
+    * [GitBook is nice](part1/gitbook.md)
+* [Part II](part2/README.md)
+    * [We love feedback](part2/feedback_please.md)
+    * [Better tools for authors](part2/better_tools.md)
+```
+
+* `SUMMARY.md`은 프로젝트 루트에 생성하여 작성한다.
+* part1/README.md 생성
+* part1/writing.md 생성
+* part1/gitbook.md 생성
+* part2/README.md 생성
+* part2/writing.md 생성
+* part2/gitbook.md 생성
+
+
+<br>
+
+그리고 나서 서버를 실행하면 아래와 같이 목차와 컨텐츠가 나온다. 
+링크에 연결된 `markdown` 파일의 내용이 출력되는 것이다.
+```
+$ gitbook serve
+```
+
+![image](https://user-images.githubusercontent.com/52439201/156176630-eb53d689-ba8b-48ab-8199-71a02db75207.png)
+
+<br>
+
+## **Configuration**
+
+***
+
+GitBook은 Configuration을 제공하여 책을 사용자 정의할 수 있도록 한다. 루트에서 `book.json`을 기본구성 파일로 지정하여 사용한다. package.json과 같이  `JSON` 구문으로 작성한다.
+
+### **일반 설정**
+
+| Variable | Description |   
+| :------ |:--- |  
+| root | book.json를 제외한 모든 책의 파일이 포함된 루트 폴더의 경로|  
+| structure | 추가 정보, 요약, 용어집 등의 경로를 지정| 
+| title | 책 제목을 지정한다. 기본값은 README에서 추출된다.|  
+| description | 책에 대한 설명을 정의한다. 기본값은 README에서 추출된다.|
+| styles | css를 지정할 수 있다.|    
+| isbn | 책의 ISBN|  
+| language | 책 언어의 ISO 코드, 기본값은 `en`|  
+| direction | 텍스트의 방향. rtl 또는 ltr, 기본값은 language에 따라 다르다.|  
+| gitbook | 사용해야 하는 GitBook의 버전| 
+
+
+### **플러그인**
+
+플러그인 및 해당 구성은 `book.json`에 지정된다.  
+`버전 3.0.0`부터 `GitBook`은 테마를 사용할 수 있다.
+
+| Variable | Description |   
+| :------ |:--- |  
+| plugins | 로드할 플러그인 목록|  
+| pluginsConfig | 플러그인 구성| 
+
+### **structure**
+
+`root`외에도 `Readme`, `Summary`, `Glossary`, `Languages`와 같은 기본 이름을 대신 사용할 파일을 지정할 수 있다.
+
+| Variable | Description |   
+| :------ |:--- |  
+| structure.readme | README 파일 이름(기본값은 README.md)|  
+| structure.summary | 요약 파일 이름(기본값은 SUMMARY.md)| 
+| structure.glossary | 용어집 파일 이름(기본값은 GLOSSARY.md)| 
+| structure.languages | 언어 파일 이름(기본값은 LANGS.md)| 
+
+<br>
+
+## **book.json으로 커스텀하기**
+
+***
+
+간단한 커스텀으로 책을 만들어보자.
+
+* plugins 리스트에 사용할 플러그인들을 설치하려면 `gitbook install`을 실행해야한다.
+* styles에는 website, ebook, pdf, mobi, epub 의 css를 지정할 수 있다. 
+* structure.readme를 `INTRO.md`라는 폴더로 지정한다. 보통 루트 디렉토리에 있는 README.md은 깃허브에서도 같이 사용하기 때문에 분리하여 사용하고 싶을 때 사용한다.
+
+### **추천 플러그인**
+
+* "toggle-chapters" : 목록의 리스트를 토글형식으로 보여주는 기능
+* "expandable-chapters-small" : 아이콘 추가되어 아이콘을 클릭하면 확장 축소되는 기능
+* "theme-darkblue" : 다크 블루 테마를 제공한다.,
+* "highlight-1" : 코드 하이라이트를 제공한다.
+
+
+```json
+{
+    "title": "서성식의 eBook",
+    "author": "서성식",
+    "styles": {
+      "website": "styles/website.css",
+      "ebook": "styles/ebook.css",
+      "pdf": "styles/pdf.css",
+      "mobi": "styles/mobi.css",
+      "epub": "styles/epub.css"
+    },
+    "plugins": [
+      "expandable-chapters-small",
+      "theme-darkblue",
+      "highlight-1"
+    ],
+    "pluginsConfig": {
+    },
+    "structure": {
+      "readme": "INTRO.md"
+    },
+    "language": "ko"
+  }
+```
+
+### **디렉토리 구조**
+
+![image](https://user-images.githubusercontent.com/52439201/156183506-c8ffac7a-c81a-41a4-afd9-02ee8f7f89c6.png)
+
+<br>
+
+
+### **실행결과**
+```console
+& gitbook install
+$ gitbook serve
+```  
+
+![image](https://user-images.githubusercontent.com/52439201/156183047-13469a34-06e7-459f-86f6-c759931fc739.png)

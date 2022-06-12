@@ -1,0 +1,146 @@
+I"�"<h2 id="gitignore"><strong>.gitignore</strong></h2>
+
+<hr />
+
+<p>Git, Github로 버전관리를 하다보면 <code class="language-plaintext highlighter-rouge">git add .</code> 으로 한번에 처리하는 경우가 많다. 그런데 npm 기반 프로젝트를 하다보니 <code class="language-plaintext highlighter-rouge">node_modules</code>같은 파일들은 추가할 필요가 없다. <code class="language-plaintext highlighter-rouge">npm install</code> 로 종속성 설치를 하면 끝이기 때문이다. 이럴 때 사용하는게 <code class="language-plaintext highlighter-rouge">.gitignore</code> 파일이다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">.gitignore</code> 언제 사용하면 되는가?</p>
+<ul>
+  <li>보안상 노출되면 안되는 파일이 있는 경우</li>
+  <li>프로젝트와 관련없는 파일이 있는 경우</li>
+  <li>용량이 너무 크거나 제외시키고 싶은 경우</li>
+</ul>
+
+<p>결국엔, <code class="language-plaintext highlighter-rouge">git add</code>에 포함시키지 않는 경우  <code class="language-plaintext highlighter-rouge">.gitignore</code>을 사용한다고 보면된다.</p>
+
+<p><br /></p>
+
+<h2 id="gitignore-작성하기"><strong>.gitignore 작성하기</strong></h2>
+
+<hr />
+
+<p>그냥 <code class="language-plaintext highlighter-rouge">git init</code>한 프로젝트에 <code class="language-plaintext highlighter-rouge">.gitignore</code>이름으로 파일을 생성하면 된다.</p>
+
+<p>그리고 제외하고 싶은 파일들을 한줄 씩 추가하면 끝이다.</p>
+
+<p>그러면 <code class="language-plaintext highlighter-rouge">git add</code>할 때 알아서 <code class="language-plaintext highlighter-rouge">.gitignore</code>의 목록들을 제외시킨다.</p>
+
+<p><br /></p>
+
+<h3 id="특정-파일-filename-제외"><strong>특정 파일 fileName 제외</strong></h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fileName.js
+</code></pre></div></div>
+
+<h3 id="현재-경로에-있는-filename_1-만-제외하기-다른경로-filename_1-말고"><strong>현재 경로에 있는 fileName_1 만 제외하기. (다른경로 fileName_1 말고)</strong></h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/fileName.js
+</code></pre></div></div>
+
+<h3 id="특정-폴더-node_module-안의-파일-다-제외하기"><strong>특정 폴더 node_module 안의 파일 다 제외하기</strong></h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node_module/
+</code></pre></div></div>
+
+<h3 id="특정-경로의-특정-파일-제외하기"><strong>특정 경로의 특정 파일 제외하기</strong></h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>folder/my.txt
+</code></pre></div></div>
+
+<h3 id="특정-경로-아래의-모든-filename_2-제외하기"><strong>특정 경로 아래의 모든 fileName_2 제외하기</strong></h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>folder/**/fileName_2.txt
+</code></pre></div></div>
+
+<h3 id="특정-확장자-파일-다-제외하기"><strong>특정 확장자 파일 다 제외하기</strong></h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>*.txt
+</code></pre></div></div>
+
+<h3 id="예외-만들기"><strong>예외 만들기</strong></h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>!fileName.txt
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="gitignore-주의사항"><strong>.gitignore 주의사항</strong></h2>
+
+<hr />
+
+<p>git에서 한번 추적하기 시작한 파일은 <code class="language-plaintext highlighter-rouge">.gitignore</code>에 추가해도 제외되지 않는다는 점이다.
+다시말해, 한 번이라도 커밋했던 파일은 <code class="language-plaintext highlighter-rouge">.gitignore</code>에서 제외되지 않는다. 그렇기 때문에 로컬저장소를 생성하고나서 제외해야할 파일들은 처음부터 <code class="language-plaintext highlighter-rouge">.gitignore</code>에 추가해야한다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">gitignore_test</code> 라는 디렉토리를 생성하고 <code class="language-plaintext highlighter-rouge">git init</code>으로 로컬 저장소를 생성해보자.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span><span class="nb">mkdir </span>gitignore_test
+<span class="gp">$</span><span class="w"> </span><span class="nb">cd </span>gitignore_test
+<span class="gp">$</span><span class="w"> </span>git init
+<span class="go">Initialized empty Git repository in E:/gitignore_test/.git/
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<p>test라는 텍스트가 담긴 <code class="language-plaintext highlighter-rouge">test.txt</code>라는 파일을 하나 생성하고 커밋을 한다.</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span><span class="nb">echo</span> <span class="s2">"test"</span> <span class="o">&gt;&gt;</span> test.txt
+<span class="gp">$</span><span class="w"> </span>git add test.txt
+<span class="gp">$</span><span class="w"> </span>git commit <span class="nt">-m</span> <span class="s2">"test"</span>
+<span class="go">
+</span><span class="gp">$</span><span class="w"> </span>git log
+<span class="gp">commit 44f68a808d2783604c9338c9112d0e8710625ac9 (HEAD -&gt;</span><span class="w"> </span>master<span class="o">)</span>
+<span class="gp">Author: s-seongsik &lt;sungsik9831@gmail.com&gt;</span><span class="w">
+</span><span class="go">Date:   Thu Feb 10 10:10:45 2022 +0900
+
+    test
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">.gitignore</code> 파일을 생성하고 <code class="language-plaintext highlighter-rouge">test.txt</code>을 추가한다. 그리고 커밋</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span><span class="nb">echo</span> <span class="s2">"test.txt"</span> <span class="o">&gt;&gt;</span> .gitignore
+<span class="gp">$</span><span class="w"> </span><span class="nb">cat</span> .gitignore
+<span class="go">test.txt
+
+</span><span class="gp">$</span><span class="w"> </span>git add .gitignore
+<span class="gp">$</span><span class="w"> </span>git commit <span class="nt">-m</span> <span class="s2">"gitignore test.txt"</span>
+<span class="go">[master 8a96d5e] gitignore test.txt
+ 1 file changed, 1 insertion(+)
+ create mode 100644 .gitignore
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">test.txt</code>파일 내용을 수정해보자. 그리고 상태를 확인해보면 <code class="language-plaintext highlighter-rouge">.gitignore</code>에 추가 했음에도 불구하고 추적이 되고있다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ echo "haha" &gt;&gt; test.txt  
+$ cat test.txt
+test
+haha
+
+$ git status
+On branch master
+Changes not staged for commit:
+  (use "git add &lt;file&gt;..." to update what will be committed)
+  (use "git restore &lt;file&gt;..." to discard changes in working directory)
+        modified:   test.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="이미-추적한-파일-처리"><strong>이미 추적한 파일 처리</strong></h2>
+
+<hr />
+
+<p>Git이 이미 추적을 시작했다면, 방법은 추적을 멈추고 싶은 파일들을 <code class="language-plaintext highlighter-rouge">삭제</code>하고 커밋을 해줘야한다.</p>
+
+<p>이어서, <code class="language-plaintext highlighter-rouge">test.txt</code> 파일의 추적을 멈추고 싶다면 파일을 삭제후 커밋한다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ rm test.txt
+$ git add .
+$ git commit -m "test delete"
+</code></pre></div></div>
+<p><br /></p>
+
+<p>그리고 다시 <code class="language-plaintext highlighter-rouge">test.txt</code> 생성하고 상태를 확인해보면 .gitignore에 명시에되어 있는 파일들을 인식못하는 것을 알 수 있다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ echo "re" &gt;&gt; test.txt
+$ cat test.txt
+re
+
+$ git status
+On branch master
+nothing to commit, working tree clean
+</code></pre></div></div>
+:ET

@@ -1,0 +1,214 @@
+I"H,<h2 id="vue-cli"><strong>Vue-CLI</strong></h2>
+
+<hr />
+
+<p><code class="language-plaintext highlighter-rouge">Vue-CLI</code>는 신속하게 Vue.js 개발환경을 설정할 수 있도록 도와주는 도구이다.<br />
+기본적으로 초기 프로젝트 세팅을 생성해주기 때문에 프로젝트 구조, Lint, webpack, babel과 같은 도구들의 설정 고민을 덜 수 있다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">CLI</code>란</p>
+<ul>
+  <li>명령 줄 인터페이스(CLI, Command line interface) 또는 명령어 인터페이스는 텍스트 터미널을 통해 사용자와 컴퓨터가 상호 작용하는 방식을 뜻한다.</li>
+  <li>즉, 작업 명령은 사용자가 컴퓨터 키보드 등을 통해 문자열의 형태로 입력하며, 컴퓨터로부터의 출력 역시 문자열의 형태로 주어진다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="설치"><strong>설치</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">Node 버전 요구 사항</code></p>
+<ul>
+  <li>Vue CLI 4.x에는 Node.js 버전 8.9 이상이 필요. (v10+ 권장)</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">이전 버전에 대한 경고</code></p>
+<ul>
+  <li>패키지 이름이 <code class="language-plaintext highlighter-rouge">vue-cli</code>에서 <code class="language-plaintext highlighter-rouge">@vue/cli</code>으로 변경.</li>
+  <li>만약 <code class="language-plaintext highlighter-rouge">이전 버전(vue-cli)</code>을 사용하고 있다면, 이전 버전을 먼저 <code class="language-plaintext highlighter-rouge">제거(uninstall)</code>하고 <code class="language-plaintext highlighter-rouge">새 버전(@vue/cli)</code>을 설치.</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  npm install -g @vue/cli
+</span><span class="gp">  #</span><span class="w"> </span>OR
+<span class="go">  yarn global add @vue/cli
+</span></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">vue --version</code> 명령어를 입력했을 때 vue의 version이 나온다면 정상적으로 설치</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  vue --version
+
+  @vue/cli 4.5.15
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="프로젝트-생성"><strong>프로젝트 생성</strong></h3>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  // vue create [프로젝트명]
+
+  vue create sample-vue
+</span></code></pre></div></div>
+
+<p>대화형으로 프로젝트 구성을 선택할 수 있다. <code class="language-plaintext highlighter-rouge">Manually select features</code> 선택한다. <code class="language-plaintext highlighter-rouge">select</code>형식으로 프로젝트를 구성할 수 있다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/148722920-4515c644-81d7-43f1-b990-92f847fc779f.png" alt="image" /></p>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">3) Check the features needed for your project:</code></p>
+
+<p>[x] Choose Vue version<br />
+[x] Babel<br />
+[x] TypeScript<br />
+[ ] Progressive Web App (PWA) Support<br />
+[x] Router 
+[x] Vuex<br />
+[x] CSS Pre-processors<br />
+[x] Linter / Formatter<br />
+[ ] Unit Testing<br />
+[ ] E2E Testing</p>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">4) Choose a version of Vue.js that you want to start the project with</code></p>
+
+<p>[x] 2.x<br />
+[ ] 3.x (Preview)</p>
+
+<p>사용할 Vue.js 버전 선택</p>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">5) Use class-style component syntax? (y/N)</code></p>
+
+<p>N</p>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">6) Use Babel alongside TypeScript (required for modern mode, auto-detected polyfills, transpiling JSX)? (Y/n)</code></p>
+
+<p>N (TypeScript에 Babel을 같이 사용 여부)</p>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">7) Use history mode for router? (Requires proper server setup for index fallback in production) (Y/n)</code></p>
+
+<p>Y</p>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">8) Pick a CSS pre-processor (PostCSS, Autoprefixer and CSS Modules are supported by default):</code></p>
+
+<p>[x] Sass/SCSS (with dart-sass)<br />
+[ ] Sass/SCSS (with node-sass)<br />
+[ ] Less<br />
+[ ] Stylus</p>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">9) Pick a linter / formatter config: (Use arrow keys)</code></p>
+
+<p>[ ] ESLint with error prevention only<br />
+[ ] ESLint + Airbnb config<br />
+[ ] ESLint + Standard config<br />
+[x] ESLint + Prettier<br />
+[ ] TSLint (deprecated)</p>
+
+<p>(ESLint와 포맷터를 어떻게 구성할 것인지 물어보는 것)</p>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">10) Pick additional lint features:</code></p>
+
+<p>[x] Lint on save            // 저장 시 lint 검사<br />
+[x] Lint and fix on commit  // commit 시 lint 검사</p>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">11) Where do you prefer placing config for Babel, ESLint, etc.?</code></p>
+
+<p>[x] In dedicated config files<br />
+[ ] In package.json</p>
+
+<p>Babel, ESLint, etc. 들을 따로 config 파일을 생성해서 관리할 것인가? 아니면 package.json에 같이 관리할 것인가?<br />
+관리측면에서 개별적으로 관리하는 것이 좋아보인다.</p>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">12) Save this as a preset for future projects? (y/N)</code></p>
+
+<p>N</p>
+
+<p><br /></p>
+
+<p>생성된 프로젝트로 들어가서 <code class="language-plaintext highlighter-rouge">npm run serve</code>로 dev 서버를 실행한다.</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  // cd [프로젝트명]
+
+</span><span class="gp">  E:\study&gt;</span><span class="nb">cd </span>sample-vue
+<span class="go">
+</span><span class="gp">  E:\study\sample-vue&gt;</span>npm run serve
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">serve</code>라는 명령어는 <code class="language-plaintext highlighter-rouge">Vue-CLI</code>에서 제공하는 명령어가 아니라 <code class="language-plaintext highlighter-rouge">package.json</code> 스크립트에 명령어를 설정하여 <code class="language-plaintext highlighter-rouge">npm run [명령어]</code>로 구동하는 것입니다.</p>
+
+<div file="package.json" class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w">  </span><span class="nl">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"serve"</span><span class="p">:</span><span class="w"> </span><span class="s2">"vue-cli-service serve"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"build"</span><span class="p">:</span><span class="w"> </span><span class="s2">"vue-cli-service build"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"lint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"vue-cli-service lint"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>npx를 사용하여 직접 서버를 구동시킬 수도 있다.</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">  npx vue-cli-service serve
+</span></code></pre></div></div>
+
+<p>서버구동이 완료되고 <code class="language-plaintext highlighter-rouge">http://localhost:8080/</code>로 접속하여 아래와 같은 화면이 나온다면 성공이다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/148723880-da116c96-4e23-405e-8ade-a7f3d2ced550.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h3 id="프로젝트-구조"><strong>프로젝트 구조</strong></h3>
+
+<p>vue-CLI로 프로젝트를 생성하게 되면 아래와 같은 구조를 갖게 된다. (CLI 버전 3이상)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>프로젝트
+  ├─ node_modules/
+  ├─ public
+  ├─ src/
+  ├─ package.json
+  └─ src
+    ├─ asstes/
+    ├─ components/
+    ├─ router/
+    ├─ store/
+    ├─ views/
+    ├─ App.vue
+    └─ main.js
+  ├─ .browserslistrc
+  ├─ .eslintrc.js
+  ├─ .gitignore
+  ├─ babel.config.js
+  ├─ package-lock.json
+  ├─ package.json
+  └─ README.md
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">node_modules</code>: npm 라이브러리들이 있는 폴더(package.json에 종속되어있는 라이브러리)</li>
+  <li><code class="language-plaintext highlighter-rouge">public</code>: 빌드시 웹팩 처리를 받지 않고 퍼블리싱되는 정적 자산을 포함하는 폴더이다(static assets)</li>
+  <li><code class="language-plaintext highlighter-rouge">src</code>: 애플리케이션 디렉토리</li>
+  <li><code class="language-plaintext highlighter-rouge">src/assets</code>: css, images 등의 정적 assets을 저장하는 폴더</li>
+  <li><code class="language-plaintext highlighter-rouge">src/components</code>: 컴포넌트를 담는 폴더</li>
+  <li><code class="language-plaintext highlighter-rouge">src/router</code>: Vue Router 관련 폴더</li>
+  <li><code class="language-plaintext highlighter-rouge">src/store</code>: Vuex 관련 폴더</li>
+  <li><code class="language-plaintext highlighter-rouge">src/views</code>: 라우터 페이지 관련 폴더</li>
+  <li><code class="language-plaintext highlighter-rouge">src/APP.vue</code>: 프로젝트 최상위 컴포넌트 파일</li>
+  <li><code class="language-plaintext highlighter-rouge">src/main.js</code>: 프로젝트 entry .js 파일</li>
+  <li><code class="language-plaintext highlighter-rouge">.eslintrc.js</code>: ESLint 설정 파일</li>
+  <li><code class="language-plaintext highlighter-rouge">babel.config.js</code>: babel 설정 파일</li>
+  <li><code class="language-plaintext highlighter-rouge">package.json</code>: 프로젝트 패키지관리 파일</li>
+  <li><code class="language-plaintext highlighter-rouge">package-lock.json</code>: 프로젝트 의존성 트리에 대한 정보를 담은 파일</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">Vue CLI</code> 도구를 사용하여 프로젝트를 생성 및 기본적인 구조에 대해서 알아봤다. 
+하지만, 프로젝트의 깊은 이해를 바탕으로 개발을 하기위해서는…<code class="language-plaintext highlighter-rouge">Vue</code>의 핵심 구성요소를 알아야겠다 
+다음 포스팅은 <code class="language-plaintext highlighter-rouge">Vue</code>의 3대 필수 구성인 <code class="language-plaintext highlighter-rouge">Vuex</code>와 <code class="language-plaintext highlighter-rouge">Vue CLI</code>, 그리고 <code class="language-plaintext highlighter-rouge">Vue Router</code>에 대해 자세히 공부해서 포스팅해야겠다.</p>
+:ET

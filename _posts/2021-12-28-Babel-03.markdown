@@ -1,0 +1,130 @@
+---
+layout: post
+title: "[Babel] Webpack에 통합하여 사용하기"
+tags: [Webpack, Node.js, Javascript]
+categories: [Babel]
+banner:
+  image: /assets/images/banners/babel.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## **babel-loader**
+
+***
+
+* 바벨을 직접사용하여 변환하는 것보다는 `Webpack`과 통합여 사용하는 것이 일반적입니다.
+* 바벨 로더를 사용하면 `Babel` 및 `Webpack`을 사용하여 `Javascript` 파일을 변환할 수 있습니다.
+
+<br>
+
+**install :**
+```console
+    npm install -D babel-loader
+```
+
+<br>
+
+**./src/app.js :**
+```javascript
+    const a = 30;
+    let b = 20;
+
+    const alert_func = msg => window.alert(msg);
+    alert_func(a+b);
+
+    const aa = new Promise();
+```
+
+
+<br>
+
+**webpack.config.js :**  
+
+* `babel-loader`는 `.js` 확장자로 끝나는 파일들을 모두 처리합니다.
+* `babel.config.js`에서 프리셋 설정을 `options` 객체에 `babel.config.js`의 내용을 넣어서 사용하면 됩니다.
+* 만약, `babel.config.js` 설정파일을 사용하고 싶으면  `babel-loader`만 로드시키십시오. 그러면 바벨로더가 빌드시 자동으로 `babel.config.js` 설정파일을 읽습니다.
+* 바벨로더는 프로젝트안에서 `.js` 확장자를 모두 처리하기 때문에 `exclude`에 `node_modules`를 설정하여 `node_modules`안에 있는 라이브러리까지 처리 하지 않게 제외시킬 수 있습니다.
+* `exclude`에 `node_modules`을 제외시키면 `core-js`를 설치 해야합니다. 그 이유는, 폴리필 설정 시
+* `require("core-js/modules/es6.promise")`
+* `require("core-js/modules/es6.object.to-string")`
+* 위 코드를 바벨이 생성 하게 되는데, `node_modules`을 제외시켰기 때문에 `core-js`를 찾을 수 없습니다. 따라서 별도의 `core-js`를 설치해야 합니다.
+
+**install :**
+```console
+    npm install core-js@3 --save
+
+    ## or
+
+    npm install core-js@2 --save
+```
+
+<br>
+
+```console
+    module.exports = {
+        module: {
+            rules: [
+                {
+                    test: /\.m?js$/,
+                    exclude: /(node_modules|bower_components)/,
+                    use: {
+                        loader: 'babel-loader',
+                        options: {
+                            presets: [
+                                [
+                                "@babel/preset-env",
+                                {
+                                    targets: {
+                                        chrome: "79", 
+                                        ie: "10"
+                                    },
+                                    useBuiltIns: "usage",
+                                    corejs: {
+                                        version: 2,
+                                    },
+                                },
+                                ],
+                            ],
+                        }
+                    }
+                },
+            ],
+        },
+    }
+```
+
+<br>
+
+**build 결과 :**
+```console
+    > npm run build
+```
+
+**build된 output인 ./dist/main.js를 살펴보면 babel이 적용된 것을 확인할 수 있습니다.**
+```console
+    > npm run build
+```
+
+* `core-js` 패키지로부터 `promise` 모듈을 가져오는 임포트 구문이 추가되었습니다. 
+
+![image](https://user-images.githubusercontent.com/52439201/147547817-823a62d9-2c08-40e5-9746-87359a954cdf.png)  
+
+![image](https://user-images.githubusercontent.com/52439201/147547880-888dfa9b-6831-4dda-968a-9d4b19d4499e.png)
+
+<br>
+
+* `arrow function`인 `alert_func` 함수가 일반 함수로 바뀌었고, `const -> var`로 변경되었습니다.
+
+![image](https://user-images.githubusercontent.com/52439201/147547976-56db565b-7e51-4fe4-8683-0d733f3b3968.png)
+
+<br>
+
+* const a = 30; -> var a = 30;
+* let b = 20; -> var b = 20; 으로 변경되었습니다.
+
+![image](https://user-images.githubusercontent.com/52439201/147548073-1648616b-2fb9-4b0f-bb94-93ec7485a192.png)

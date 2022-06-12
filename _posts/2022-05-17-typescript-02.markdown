@@ -1,0 +1,269 @@
+---
+layout: post
+title: "[TypeScript] 인터페이스 이해하기"
+tags: [Typescirpt, Javascript, ES6]
+categories: [Typescirpt]
+banner:
+  image: /assets/images/banners/typescript.jpeg
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## 인터페이스란?
+
+인터페이스는 상호 간에 정의한 약속 혹은 규칙을 의미한다. 인터페이스는 보통 다음과 같은 범주에 대해서 약속을 정의할 수 있다.
+
+* 객체의 스펙(속성과 속성의 타입)
+* 함수의 파라미터
+* 함수의 스펙(파라미터, 반환 타입 등)
+* 배열과 객체를 접근하는 방식
+* 클래스
+
+
+## 인터페이스 예제
+
+```js
+let user = { name: 'seongsik', age: 20 };
+
+function who( obj: { name: string, age: number }) {
+  console.log(obj.name); // seongsik
+  console.log(obj.age); // 20
+}
+
+who(user);
+```
+
+위의 `who` 함수는 name과 age 속성을 갖는 객체를 인자로 받는다. 이렇게 인자를 받을 때 단순히 타입 뿐만 아니라 객체의 속성 타입까지 정의할 수 있다.
+아래와 같이 인터페이스를 적용해보자.
+
+```ts
+interface whoType {
+  name: string;
+  age: number;
+}
+
+
+let user = { name: 'seongsik', age: 20 };
+
+function who( obj: whoType) {
+  console.log(obj.name);
+  console.log(obj.age);
+}
+
+who(user);
+```
+
+인터페이스를 사용하면 코드를 명시적으로 바뀔 수 있다. 
+이제 `who()` 함수는 `whoType`라는 타입만 가져야 한다. 
+
+<br>
+
+## 인터페이스 옵션 속성
+인터페이스에 명시되어 있는 속성타입을 모두 다 사용할 필요는 없다. 이를 가능하게 하는 것이 `옵션 속성`이다.
+
+아래의 예제 코드를 보자.
+
+```ts
+interface 인터페이스이름 {
+  속성1: string;
+  속성2: number;
+  속성3?: number;
+}
+```
+
+이처럼 `?` 물음표를 속성 끝에 붙이면 해당 속성을 꼭 사용하지 않아도 된다.
+
+```ts
+interface whoType {
+  name: string;
+  age: number;
+  address?: string;
+}
+
+function who( obj: whoType) {
+  console.log(obj.name);
+  console.log(obj.age);
+}
+
+let user = { name: 'seongsik', age: 20 };
+
+who(user);
+```
+
+인자로 넘긴 user객체에 `address` 속성이 없어도 에러가 발생하지 않는다.
+`whoType`타입에 address 인자에 `?` 붙여 옵션 속성을 사용했기 때문이다.
+
+
+<br>
+
+## 인터페이스 읽기 전용 속성
+
+읽기 전용 속성은 인터페이스로 객체를 처음 생성할 때 값을 할당하고, 그 이후에는 변경할 수 없는 속성을 말한다.
+
+아래의 코드와 같이 `readonly` 속성을 사용하면 오직 읽기만 가능하기 때문에 선언이후 수정하려고 하면 아래와 같이 오류가 발생한다.
+```ts
+interface userType {
+ readonly name: string;
+}
+
+let user: userType = {
+  name: 'seongsik'
+};
+
+user.name = 'siksik'; // 읽기 전용 속성이므로 'name'에 할당할 수 없습니다.
+```
+
+<br>
+
+## 인터페이스 읽기 전용 배열
+배열의 읽기전용 속성은 `ReadonlyArray<T>` 타입속성을 사용하면 읽기 전용 배열을 생성할 수 있다.
+
+만약 배열을 수정하려고 하면 아래와 같이 오류가 발생한다.
+```ts
+let arr: ReadonlyArray<number> = [1,2,3,4];
+
+arr[0]=100; // 'readonly number[]' 형식의 인덱스 시그니처는 읽기만 허용됩니다.
+arr.push(5); // 'readonly number[]' 형식에 'push' 속성이 없습니다.
+```
+
+<br>
+
+## 객체 선언과 관련된 타입 체킹
+타입스크립트는 인터페이스를 통해 객체를 선언할 때 좀더 엄밀한 속성 검사를 진행한다.
+
+```ts
+interface userTpye {
+  name?: string;
+}
+
+
+function user(user: userTpye) {
+  console.log(user);
+}
+
+user({nam:'seongsik'}) // '{ nam: string; }' 형식의 인수는 'userTpye' 형식의 매개 변수에 할당될 수 없습니다. 개체 리터럴은 알려진 속성만 지정할 수 있지만 'userTpye' 형식에 'nam'이(가) 없습니다. 'name'을(를) 쓰려고 했습니까?
+```
+
+인터페이스에서는 `name`으로 선언했지만 함수에 인자로 넘기는 객체는 `nam`로 선언되어 있기 때문에 오류가 발생한다.
+
+만약 이런 타입 추론을 무시하고 싶으면 아래와 같이 선언한다.
+
+```ts
+let myName = {nam:'seongsik'}
+user(myName as userTpye)
+```
+
+또한, 인터페이스에 정의하지 않는 속성들을 추가로 사용하고 싶다면 아래와 같이 작성한다.
+
+```ts
+interface userTpye {
+  name?: string;
+  [propName: string]: any;
+}
+```
+
+
+<br>
+
+## 인터페이스 함수 타입
+인터페이스는 함수의 타입도 정의할 수 있다.
+
+```ts
+interface fnType {
+  (name:string, age:string): string;
+}
+let fn: fnType
+fn = (name:string, age:string) => {
+  console.log(name); // seongsik
+  console.log(age);  // 20
+  return `이름은 ${name}, 나이는 ${age}`;
+}
+
+console.log(fn('seongsik', '20')); // 이름은 seongsik, 나이는 20
+```
+
+<br>
+
+## 인터페이스 클래스 타입
+자바와 같은 클래스도 타입 규칙을 적용할 수 있다.
+
+```ts
+interface userTpye {
+  name: string;
+  fnUser(user: string): void;
+}
+
+
+class User implements userTpye {
+  name : string = 'seongsik';
+  fnUser(user: string){
+    this.name = user;
+  }
+  constructor() {}
+}
+
+
+let test = new User;
+console.log(test.name) // seongsik
+test.fnUser('siksik') 
+console.log(test.name) // siksik
+```
+
+<br>
+
+## 인터페이스 확장
+
+인터페이스도 클래스처럼 확장할 수 있다.
+
+```ts
+interface User {
+  name: string;
+}
+
+interface Job extends User {
+  position: string;
+}
+
+let Who : Job = {
+  name: 'seongsik',
+  position: 'developer'
+}
+
+// 혹은
+
+let who2 = {} as Job;
+who2.name = 'seongsik';
+who2.position = 'developer';
+```
+
+<br>
+
+## 인터페이스 하이브리드 타입
+자바스크립트의 유연하고 동적인 타입 특성을 고려해 인터페이스도 여러 가지 타입을 조합해 사용할 수 있도록 되어있다.
+예를 들어, 함수 타입이면서 객체 타입을 정의할 수 있는 인터페이가 있다.
+
+```ts
+interface UserType {
+  (name: string): string;
+  position: string;
+  brew(): void;
+}
+
+function User(): UserType {
+  let who = (function(name: string) {}) as UserType;
+  who.position = 'developer';
+  who.brew = function() {};
+  return who;
+}
+
+let Who = User();
+Who('seongsik');
+Who.position = 'HR';
+Who.brew();
+
+console.log(Who);
+```

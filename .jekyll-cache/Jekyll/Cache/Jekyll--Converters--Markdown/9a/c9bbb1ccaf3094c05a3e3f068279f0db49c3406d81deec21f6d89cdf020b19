@@ -1,0 +1,61 @@
+I"�<h2 id="문제발생">문제발생</h2>
+
+<p>Vue 파일명을 첫 글자를 소문자로 되어있던 것을 대문자로 변경했다. 그리고 이것저것 수정하고 commit 했는데
+젠킨스에서 오류가 발생하는 것이다…</p>
+
+<p>로그를 확인해보니 라우터에서 바뀐 파일명을 참조하지 못하는 것이다… 이런</p>
+
+<p>결론은 Git은 변경내용을 체크하는데 기본적으로 파일명/폴더명 대소문자를 구분하지 않는다는 것이다.</p>
+
+<p>예를들어 <code class="language-plaintext highlighter-rouge">user.vue</code>라는 파일명을 <code class="language-plaintext highlighter-rouge">User.vue</code>로 첫 글자만 대문자로 변경해도 git은 알지 못한다.</p>
+
+<h2 id="해결방안">해결방안</h2>
+
+<p>깃 설정을 변경해주면 깔끔하게 해결할 수 있다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git config core.ignorecase <span class="nb">false</span>
+</code></pre></div></div>
+
+<p>위의 설정을 변경했는데도 해결되지 않는다면 캐시를 지워보자.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git <span class="nb">rm</span> <span class="nt">-r</span> <span class="nt">--cached</span> <span class="nb">.</span>
+</code></pre></div></div>
+
+<h2 id="확인">확인</h2>
+
+<ul>
+  <li>ReportsManage.vue와 ReportsSummary.vue 파일의 첫 글자를 소문자로 변경해보자.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/166403356-5cfcaf74-f1ae-4673-bbbd-1bdf21f8f63e.png" alt="image" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/166403722-daeb2d75-830d-4be5-be32-41561dd4c429.png" alt="image" /></p>
+
+<ul>
+  <li>Git 변경상태 확인을 해봐도 변경된게 없다고 나온다.</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git status
+On branch dev
+nothing to commit, working tree clean
+</code></pre></div></div>
+
+<ul>
+  <li>깃 설정 변경</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git config core.ignorecase <span class="nb">false</span>
+</code></pre></div></div>
+
+<p>아래와 같이 변경내용을 추척한다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git status
+On branch dev
+Untracked files:
+  <span class="o">(</span>use <span class="s2">"git add &lt;file&gt;..."</span> to include <span class="k">in </span>what will be committed<span class="o">)</span>
+        src/views/pages/reports/reportsManage.vue
+        src/views/pages/reports/reportsSummary.vue
+
+nothing added to commit but untracked files present <span class="o">(</span>use <span class="s2">"git add"</span> to track<span class="o">)</span>
+</code></pre></div></div>
+:ET

@@ -1,0 +1,275 @@
+---
+layout: post
+title: "[Webpack] 시작하기"
+tags: [Webpack, Babel, Node.js, Javascript]
+categories: [Webpack]
+banner:
+  image: /assets/images/banners/webpack.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+`webpack`을 다루기전에
+
+1. 모듈 시스템에 대한 이해가 수반되어야 합니다.
+2. Node.js과 npm을 알아야 합니다.
+
+모듈 시스템을 모르신다면, 아래의 포스트를 먼저 보고 오시는 것을 추천드립니다.
+
+[[Javascript] ES2015(ES6) 표준 모듈 시스템 (export, import)](/javascript/2021/12/08/javascript-02/)
+
+***
+
+<br>
+
+## **webpack이란**
+{: id="a" }
+
+***
+
+`Webpack`은 오픈 소스 자바스크립트 모듈 번들러이다. 웹 어플리케이션 개발에 필요한 다양한 요소(HTML, CSS, Javascript, Images, Font 등 ...)들을 하나의 파일로(혹은 여러개의 파일로) 병합 및 압축을 해주는 역할을 한다. 주요한 요소로는 Entry, Output, Loaders, Plugins, Mode, Browser Compatibility가 있다.
+
+
+<br>
+
+## **웹팩의 필요성**
+{: id="b" } 
+
+***
+
+### **모듈 시스템은 모든 브라우저가 지원하지 않는다**
+{: id="b-1" } 
+
+[[Javascript] ES2015(ES6) 표준 모듈 시스템 (export, import)](/javascript/2021/12/08/javascript-02/) 내용에서 알 수 있듯이, 모듈 시스템은 모든 브라우저에서 지원하지 않습니다.
+`Webpack`은 브라우저와 무관하게 모듈을 사용할 수 있습니다.
+
+<br>
+
+### **웹 애플리케이션의 로딩 속도와 성능 개선**
+{: id="b-2" } 
+
+사용자들은 웹브라우저를 통해 애플리케이션을 접속할 수 있는데, 많은 리소스(`js`, `images`, `css` 등)들을 서버에 `http` 방식으로 요청하게 됩니다. 리소스들이 많을 수록 요청 수도 늘어나기 때문에
+속도와 성능이 저하될 수 밖에 없습니다. `Webpack`은 이런 문제들을 해결합니다.
+
+<br>
+
+### **번들러 도구**
+{: id="b-3" }
+
+자바스크립트 개발에서는 `JS`, `CSS`, `IMAGES`, `ES6`와 이전 버전과의 호환을 해주는 트랜스 파일, 모듈 라이브러리 등 많은 로드 작업이 필요합니다. 이런 작업을 한 번에 해주는 번들러 도구가 `Webpack`입니다.
+
+<br>
+
+## **npm 프로젝트 생성**
+{: id="c" } 
+
+***
+
+### **npm init**
+{: id="c-1" }  
+
+`npm init`은 `node.js`에서 사용하는 모듈들을 패키지로 관리하기 위해 `package.json`을 생성하여 Node 패키지에 관리 정보와 의존중인 버전에 관한 정보로 `node.js`에서 사용하는 모듈들을 패키지로 만들어서 관리하기 위해 사용하는 것입니다.
+
+* `Working 디렉토리`를 먼저 생성합니다.
+* `"npm init"` 로 프로젝트를 시작하게 되면, package name 부터 license 까지 입력할 수 있습니다. enter시 default값이 들어갑니다.
+* 처음부터 default로 시작하고 싶으시면, `"npm init -y"` 로 생성합니다. -y는 yes의 약자로 default 패키지를 생성할 때 사용하는 옵션입니다.
+
+```console
+    mkdir webpack-demo
+    cd webpack-demo
+    npm init
+```
+
+![image](https://user-images.githubusercontent.com/52439201/145957186-a1808cbb-6a60-4064-8d70-6b72fe947259.png)
+
+<br>
+
+* `npm`을 통해 `webpack`과 `webpack-cli`을 설치합니다.
+* `webpack` 패키지는 `webpack`의 핵심 패키지이며, `webpack-cli` 패키지는 터미널에서 `webpack` 명령어를 실행할 수 있게 해주는 커맨드라인 도구입니다.
+* 개발환경에서 필요한 의존성이므로 -D 옵션을 붙여 설치합니다.
+* `package.json`는 `npm init`으로 생기는 패키지입니다.
+* 기본적으로 node package를 설치하게 되면 `"path/node_modules/"` 하단에 설치됩니다. 따라서, 최초 npm install시에 생성되며 그 이후로는 node_modules 하위에 패키지들이 설치됩니다.
+* `package-lock.json`은 node_modules 트리나 package.json 파일을 수정하게 되면 자동으로 생성됩니다. 이 파일은 파일이 생성되는 시점의 의존성 트리에 대한 정확한 정보를 가지고 있습니다.
+
+```console
+    seong@DESKTOP-O5CIEJV MINGW64 /e/study/frontend/webpack-demo (test)
+    $ ll
+    total 105
+    drwxr-xr-x 1 seong 197610     0 12월 14 17:05 node_modules/
+    -rw-r--r-- 1 seong 197610   290 12월 14 17:05 package.json
+    -rw-r--r-- 1 seong 197610 89604 12월 14 17:05 package-lock.json
+```
+
+<br>
+
+## **package.json 구조 파악하기**  
+{: id="d" } 
+
+***
+
+```json
+    {
+        "name": "webpack-demo",
+        "version": "1.0.0",
+        "description": "",
+        "main": "index.js",
+        "scripts": {
+            "test": "echo \"Error: no test specified\" && exit 1"
+        },
+        "author": "",
+        "license": "ISC",
+        "devDependencies": {
+            "webpack": "^5.65.0",
+            "webpack-cli": "^4.9.1"
+        }
+    }
+```
+
+**devDependencies :**  
+* 설치된 npm 패키지들은 devDependencies 항목에서 관리됩니다. 
+
+**scripts :**  
+* scripts 항목에 다양한 명령어들을 설정하여 콘솔에서 사용할 수 있습니다.
+* 보통 `npm run [명령어`]로 스크립트 명령어를 실행합니다.
+* test, start는 `npm test`, `npm start`로 실행합니다.
+
+<br>
+<br>
+
+## **디렉토리 구조 생성**
+{: id="e" } 
+
+* 현재는 모듈 시스템 기반으로 script를 로드합니다.
+
+***
+
+```console
+    webpack-demo
+        |- /moda_modules
+        |- package.json
+        |- package-lock.json
+     +  |- index.html
+     +  |- /src
+     +      |- app.js
+     +      |- math.js
+```
+
+ ```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <script type="module" src="./src/app.js"></script>
+    </body>
+    </html>
+```
+{: file="index.html"}
+
+ ```javascript
+    import * as math from './math.js'
+
+    console.log(math.sum(100,200));
+```
+{: file="app.js"}
+
+ ```javascript
+    export function sum(a, b){
+        return a+b;
+    }
+```
+{: file="math.js"}
+
+
+<br>
+
+## **webpack의 주요 요소**
+{: id="f" } 
+
+***
+
+* `--help` 옵션을 통해 webpack 사용 방법을 확인해봅시다.
+* `"node_modules\.bin\webpack --help"` 입력
+* --mode, --entry, --output-path(-o) 옵션을 사용해서 웹팩으로 번들링 작업을 수행할 수 있습니다.
+
+```console
+    E:\study\frontend\webpack-demo>.\node_modules\.bin\webpack --help
+    
+    Usage: webpack [entries...] [options]
+    Alternative usage to run commands: webpack [command] [options]
+
+    The build tool for modern web applications.
+
+    Options:
+    -c, --config <value...>                Provide path to a webpack configuration file e.g. ./webpack.config.js.
+    --config-name <value...>               Name of the configuration to use.
+    -m, --merge                            Merge two or more configurations using 'webpack-merge'.
+    --env <value...>                       Environment passed to the configuration when it is a function.        
+    --node-env <value>                     Sets process.env.NODE_ENV to the specified value.
+    --progress [value]                     Print compilation progress during build.
+    -j, --json [value]                     Prints result as JSON or store it in a file.
+    -d, --devtool <value>                  Determine source maps to use.
+    --no-devtool                           Do not generate source maps.
+    --entry <value...>                     The entry point(s) of your application e.g. ./src/main.js.
+    --mode <value>                         Defines the mode to pass to webpack.
+    --name <value>                         Name of the configuration. Used when loading multiple configurations. 
+    -o, --output-path <value>              Output location of the file generated by webpack e.g. ./dist/.        
+    --stats [value]                        It instructs webpack on how to treat the stats e.g. verbose.
+    --no-stats                             Disable stats output.
+    -t, --target <value...>                Sets the build target e.g. node.
+    --no-target                            Negative 'target' option.
+    -w, --watch                            Watch for files changes.
+    --no-watch                             Do not watch for file changes.
+    --watch-options-stdin                  Stop watching when stdin stream has ended.
+    --no-watch-options-stdin               Do not stop watching when stdin stream has ended.
+
+    ... (생략)
+```
+
+<br>
+
+### **webpack.config.js**
+{: id="f-1" }
+
+* webpack의 기본 설정파일입니다. `--help` 옵션에서 알 수 있듯이 `./webpack.config.js` 로 만들어서 사용합니다.
+
+### **mode**
+{: id="f-2" }
+
+* webpack의 실행 모드를 설정합니다.
+* `production` : 운영모드
+* `development` : 개발모드
+* `none` : 기본 최적화 모드
+
+### **entry**
+{: id="f-3" }
+
+* `webpack` 번들링의 시작점입니다. 쉽게 말해 `webpack` 번들링 하고 싶은 자바스크립트 파일 경로들을 선언합니다. 
+* `webpack`은 `entry` 속성을 기준으로 번들링하기 때문에 웹 어플리케이션의 전반적인 구조와 내용이 있어야 합니다. 
+* 그 이유는, `entry`에 선언된 자바스크립트 파일을 기준으로 웹 어플리케이션에서 사용되는 모듈들의 연관 관계를 이해하고 분석하기 때문입니다.
+
+### **output**
+{: id="f-4" }
+
+* `webpack` 번들링의 결과물이 저장되는 경로를 선언합니다.
+
+### **loader**
+{: id="f-5" }
+
+* `webpack`은 자바스크립트 파일뿐만 아니라 모든 파일을 모듈로 바라볼 수 있습니다. 
+* `CSS`, `HTML`, `FONT`, `IMAGES` 등 전부 모듈로 보기 때문에 `import` 구문을 사용하여 자바스크립트 코드안으로 가져올 수 있습니다. 이게 가능한 이유가 `loader` 때문입니다.
+
+### **plugin**
+{: id="f-6" }
+
+* `loader`는 파일 단위로 처리하지만 `plugin`은 번들된 결과물을 처리합니다. 
+* 보통 번들된 자바스크립트를 난독화(읽기 어렵게) 한다거나 텍스트를 추출하는 용도로 사용됩니다.
+

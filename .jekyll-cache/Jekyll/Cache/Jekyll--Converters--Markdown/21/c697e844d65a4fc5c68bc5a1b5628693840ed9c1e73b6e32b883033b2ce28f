@@ -1,0 +1,182 @@
+I"�9<h2 id="시작하기"><strong>시작하기</strong></h2>
+
+<hr />
+
+<p>포트폴리오 사이트용으로 오픈소스 및 템플릿을 사용하려다 맘에 드는게 없어 직접 <code class="language-plaintext highlighter-rouge">Nuxt.js</code> + <code class="language-plaintext highlighter-rouge">vuetify</code>로 포트폴리오 정적 사이트를 만들었다.
+정적 사이트를 빌드 및 배포하는 방법을 빠르게 공유하고자 한다.</p>
+
+<p><a href="https://nuxtjs.org/deployments/github-pages#command-line-deployment">Nuxt 공식문서</a>를 들어가면 아주 자세히 설명되어 있으니 하나씩 따라해도 금방 이해가 될 것이다.</p>
+
+<p><br /></p>
+
+<h2 id="nuxtconfigjs-설정"><strong>nuxt.config.js 설정</strong></h2>
+
+<hr />
+
+<p>일단, 3가지만 설정하면 된다.</p>
+
+<ul>
+  <li>target : 배포 대상을 명시하는 프로퍼티이다. 정적 사이트는 <code class="language-plaintext highlighter-rouge">static</code>을 추가해야하며 기본값은 <code class="language-plaintext highlighter-rouge">server</code>이다.</li>
+  <li>router : <code class="language-plaintext highlighter-rouge">base</code>를 추가하지 않고 폴더를 배포한 경우 배포된 사이트를 방문하면 자산 누락으로 사이트가 작동하지 않을 수 있다. 이는 웹사이트가 루트가 아니라는 가정으로 넣어줘야한다. 나의 github repository가 <code class="language-plaintext highlighter-rouge">'nuxt-test'</code>이면 <code class="language-plaintext highlighter-rouge">'nuxt-test'</code>를 넣으면 된다.</li>
+  <li>env : <code class="language-plaintext highlighter-rouge">baseUrl</code>는 기본으로 사용될 Url을 기입한다. 즉 개발은 <code class="language-plaintext highlighter-rouge">http://localhost:port</code>에서 했어도 배포시 github repository의 이름이 경로에 추가되기 때문에 <code class="language-plaintext highlighter-rouge">src</code>경로들의 추적이 안될 수 있다.</li>
+</ul>
+
+<p>추가적으로, 하나의 특정 리포지토리에 대한 GitHub 페이지를 생성하고 사용자 지정 도메인이 없는 경우 페이지의 URL은 다음 형식이 된다.
+<code class="language-plaintext highlighter-rouge">http://&lt;username&gt;.github.io/&lt;repository-name&gt;.</code></p>
+
+<div file="nuxt.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
+  <span class="na">target</span><span class="p">:</span> <span class="dl">'</span><span class="s1">static</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// 정적 웹사이트임을 명시 default is 'server'</span>
+  <span class="na">router</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">base</span><span class="p">:</span> <span class="dl">'</span><span class="s1">/&lt;repository-name&gt;/</span><span class="dl">'</span> <span class="c1">// github repository name</span>
+  <span class="p">},</span>
+  <span class="na">env</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">baseUrl</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">BASE_URL</span> <span class="o">||</span> <span class="dl">'</span><span class="s1">http://domain/&lt;repository-name&gt;/</span><span class="dl">'</span>
+  <span class="p">},</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p>나의 <code class="language-plaintext highlighter-rouge">repository</code> 이름은 <code class="language-plaintext highlighter-rouge">nuxt-test</code>로 생성할 것이므로 아래와 같이 작성한다.</p>
+
+<div file="nuxt.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
+  <span class="na">target</span><span class="p">:</span> <span class="dl">'</span><span class="s1">static</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// 정적 웹사이트임을 명시 default is 'server'</span>
+  <span class="na">router</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">base</span><span class="p">:</span> <span class="dl">'</span><span class="s1">/nuxt-test/</span><span class="dl">'</span> <span class="c1">// github repository name</span>
+  <span class="p">},</span>
+  <span class="na">env</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">baseUrl</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">BASE_URL</span> <span class="o">||</span> <span class="dl">'</span><span class="s1">http://domain/nuxt-test/</span><span class="dl">'</span>
+  <span class="p">},</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="소스코드-빌드-및-배포준비"><strong>소스코드 빌드 및 배포준비</strong></h2>
+
+<hr />
+
+<p><code class="language-plaintext highlighter-rouge">Nuxt.js</code>로 프로젝트를 생성하여 개발을 완료했다면, 이를 정적호스팅에 사용 될 소스코드로 <code class="language-plaintext highlighter-rouge">build</code> 해줘야 한다.
+<code class="language-plaintext highlighter-rouge">Nuxt.js</code>는 static용 build를 기능을 제공한다. 이 기능은 모든 경로의 <code class="language-plaintext highlighter-rouge">.vue</code>파일을 <code class="language-plaintext highlighter-rouge">HTML</code> 파일로 생성하고 정적으로 <code class="language-plaintext highlighter-rouge">dist/</code> 디렉토리에 내보내준다.
+<code class="language-plaintext highlighter-rouge">dist/</code>에 생성된 코드들을 깃허브 페이지같은 정적호스팅에 배포하면 끝이다.</p>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">package.json</code>의 scripts의 <code class="language-plaintext highlighter-rouge">generate</code> 명령어가 정적페이지로 build 해주는 명령어이다.</p>
+
+<div file="package.json" class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"dev"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nuxt"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"build"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nuxt build"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"start"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nuxt start"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"generate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nuxt generate"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"deploy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"push-dir --dir=dist --branch=gh-pages --cleanup"</span><span class="w">
+  </span><span class="p">}</span><span class="err">,</span><span class="w">
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="정적-웹-배포-파일-생성"><strong>정적 웹 배포 파일 생성</strong></h3>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>npm run generate
+</code></pre></div></div>
+
+<p>빌드 완료시 <code class="language-plaintext highlighter-rouge">dist/</code> 폴더가 생성되고 하위에 배포 할 정적파일들이 생성된다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/151983943-df58453c-b71f-499b-a8db-7b2d66068fcf.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h3 id="github-배포-패키지"><strong>github 배포 패키지</strong></h3>
+
+<p><a href="https://github.com/L33T-KR3W/push-dir">push-dir</a>은 디렉토리의 내용을 원격 브랜치로 푸시해주는 패키지이다.</p>
+
+<ul>
+  <li>디렉토리를 커밋할 필요가없다.</li>
+  <li><code class="language-plaintext highlighter-rouge">dist/</code>로 빌드된 디렉토리를 <code class="language-plaintext highlighter-rouge">gh-pages</code> 브랜치로 push해준다.</li>
+</ul>
+
+<p>여기서 가장 중요한건 <code class="language-plaintext highlighter-rouge">gh-pages</code>의 이름으로 <code class="language-plaintext highlighter-rouge">로컬브랜치</code>를 생성해야 된다는 점이다.
+그리고 나서 <code class="language-plaintext highlighter-rouge">master(main)</code>로 브랜치를 이동하고 명령어를 실행해야한다.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">npm install push-dir --save-dev
+</span></code></pre></div></div>
+
+<p>설치가 완료되면 <code class="language-plaintext highlighter-rouge">package.json</code>에 <code class="language-plaintext highlighter-rouge">deploy script</code>를 추가한다.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="nl">"dev"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nuxt"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"generate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nuxt generate"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"start"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nuxt start"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"deploy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"push-dir --dir=dist --branch=gh-pages --cleanup"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>여기까지 완료했다면 배포준비는 끝났다. 실습을 통해 배포해보자</p>
+
+<p><br /></p>
+
+<h2 id="배포-진행하기"><strong>배포 진행하기</strong></h2>
+
+<hr />
+
+<h3 id="github-repository-생성하기">github repository 생성하기</h3>
+
+<p>github repository 이름을 <code class="language-plaintext highlighter-rouge">nuxt-test</code>으로 생성한다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/151987396-8505f338-ab69-4e90-bfda-437799ae33c8.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h3 id="로컬-저장소-및-gh-pages-브랜치-생성"><strong>로컬 저장소 및 gh-pages 브랜치 생성</strong></h3>
+
+<p>로컬 저장소를 생성한다. 그리고 <code class="language-plaintext highlighter-rouge">master</code> 브랜치에 최초로 커밋을 해야 <code class="language-plaintext highlighter-rouge">gh-pages</code> 브랜치를 생성할 수 있다.<br />
+<code class="language-plaintext highlighter-rouge">add .</code>로 프로젝트 전체를 추가 및 커밋해준다.</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>git init
+<span class="gp">$</span><span class="w"> </span>git add <span class="nb">.</span>
+<span class="gp">$</span><span class="w"> </span>git commit <span class="nt">-m</span> <span class="s2">"first commit"</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">gh-pages</code> 브랜치를 생성한다. <code class="language-plaintext highlighter-rouge">master</code> 브랜치를 바라보고 있어야 명령어가 수행되므로 <code class="language-plaintext highlighter-rouge">gh-pages</code>을 바라보고 있다면 <code class="language-plaintext highlighter-rouge">master</code> 브랜치로 <code class="language-plaintext highlighter-rouge">checkout</code>한다.</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>git branch gh-pages
+<span class="gp">$</span><span class="w"> </span>git branch <span class="nt">-v</span>
+<span class="go">  gh-pages 9945a81 first commit
+* master   9945a81 first commit
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="원격-리모트-연결"><strong>원격 리모트 연결</strong></h3>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>git remote add origin https://github.com/s-seongsik/nuxt-test.git
+<span class="gp">$</span><span class="w"> </span>git remote <span class="nt">-v</span>
+<span class="go">origin  https://github.com/s-seongsik/nuxt-test.git (fetch)
+origin  https://github.com/s-seongsik/nuxt-test.git (push)
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="배포deploy하기"><strong>배포(deploy)하기</strong></h3>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">npm run deploy
+</span></code></pre></div></div>
+<p>배포가 완료되면 <code class="language-plaintext highlighter-rouge">github</code> 원격 저장소에 <code class="language-plaintext highlighter-rouge">gh-pages</code> 브랜치가 생성되고 그 안에 빌드한 <code class="language-plaintext highlighter-rouge">dist</code> 하위 파일들이 배포된다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/151992639-ef7b4cba-1caa-4dff-9807-16fa85694f49.png" alt="image" /></p>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">github</code> 저장소에서 Settings - Pages 메뉴를 들어가면 github pages에 배포되어 접속이 가능한 것을 확인할 수 있다.
+여기서 중요한건, Source가 바라보는 브랜치는 <code class="language-plaintext highlighter-rouge">gh-pages</code>여야 한다는 점이다. 그래야 도메인으로 올라간다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/151993686-72120b57-0520-4abf-bde2-4bee33556657.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h3 id="접속하기"><strong>접속하기</strong></h3>
+
+<p>GitHub Pages에서 제공하는 호스팅에 접속하면 아래와 같이 잘 배포된 것을 확인할 수 있다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/151994465-728fe5cb-9e33-49d7-97ea-e1d064fff7fd.png" alt="image" /></p>
+:ET

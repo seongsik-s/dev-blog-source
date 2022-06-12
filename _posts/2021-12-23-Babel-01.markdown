@@ -1,0 +1,307 @@
+---
+layout: post
+title: "[Babel] 바벨의 이해와 동작원리 파악하기"
+tags: [Webpack, Node.js, Javascript]
+categories: [Babel]
+banner:
+  image: /assets/images/banners/babel.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## **Babel의 등장 배경**
+{: id="a" } 
+
+***
+
+* 브라우저마다 사용하는 언어가 다르다.
+* `ECMAScript2015+` 이후의 `Javascript` 언어를 특정 브라우저 및 버전에 따라 사용할 수 없는 문제
+* 예를 들어, 크롬 79버전 기준으로 개발했으나, `IE`에서는 작동이 안되는 크로스브라우징이 발생한다.
+* `Babel`은 이러한 크로스브라우징 이슈를 해결해준다. `ECMAScript2015+` 로 작성한 코드를 모든 브라우저에 호환할 수 있도록 코드를 변환해준다.
+
+<br>
+
+## **Babel의 동작원리**
+{: id="b" } 
+
+***
+교육자료 : [프론트엔드 개발환경의 이해: Babel](https://jeonghwan-kim.github.io/series/2019/12/22/frontend-dev-env-babel.html)  
+참고자료 : [Babel 공식사이트](https://babeljs.io/docs/en/)  
+참고자료 : [Babel Plugin Handbook](https://github.com/jamiebuilds/babel-handbook/blob/master/translations/ko/plugin-handbook.md)  
+
+
+### **기본 동작**
+{: id="b-1" }
+
+1. 파싱(Parsing) - 코드를 토큰별로 분해
+2. 변환(Transforming) - 파싱한 코드를 ES5로 변환한다.(플러그인 담당) 
+3. 출력(Printing) - 변환된 결과물을 출력하여 작업을 완료
+
+`ECMAScript2015+` 문법을 사용한 `.js`파일을 생성하고 이 파일을 `IE`에서도 읽을 수 있도록 변환해 보는 작업을 진행해 봅시다.
+
+**install :**
+```console
+    > npm install --save-dev @babel/core @babel/cli
+```
+
+<br>
+
+```javascript
+    // Babel Input: ES2015 arrow function
+    [1, 2, 3].map(data => data + 1);
+
+    // Babel Input: ES2015 const, let 스코프
+    const test = 3;
+    let test2 = 5;
+```
+{: file="./app.js"}
+
+<br>
+
+* 일단 path.node.name의 값들은 무엇인지 살펴보자.
+
+```javascript
+    module.exports = function myBabelPlugin() {
+        return {
+        visitor: {
+            Identifier(path) {
+            const name = path.node.name;
+            
+            console.log("Identifier() name:", name)
+
+            // reverse the name: JavaScript -> tpircSavaJ
+            // path.node.name = name
+            //    .split("")
+            //    .reverse()
+            //    .join("");
+            },
+        },
+        };
+    }
+```
+{: file="./myBabelPlugin.js"}
+
+<br>
+
+**babel build :**  
+
+* `path.node.name`의 값들을 확인할 수 있습니다.
+
+```console
+
+    > npx babel app.js --plugins ./myBabelPlugin.js
+
+    Identifier() name: map
+    Identifier() name: data
+    Identifier() name: data
+    Identifier() name: test
+    Identifier() name: test2
+
+    ...
+
+```
+
+<br>
+
+* 플로그인은 `visitor` 객체를 반환해야 합니다. 이 객체는 바벨이 파싱하여 만든 `추상 구문 트리(AST)`에 접근할 수 있는 메소드를 제공합니다.
+* 그 중 `Identifier()` 메소드의 동작을 알아보면 `Identifier()`에 들어온 인자 `path`에 접근하면 파싱된 코드들을 뒤집어서 집어 넣는 예제입니다.
+* 실제로 `./app.js`의 코드들이 뒤집혀 출력되는지 확인해봅시다.
+
+```javascript
+    module.exports = function myBabelPlugin() {
+        return {
+        visitor: {
+            Identifier(path) {
+            const name = path.node.name;
+            // reverse the name: JavaScript -> tpircSavaJ
+            path.node.name = name
+                .split("")
+                .reverse()
+                .join("");
+            },
+        },
+        };
+    }
+```
+{: file="./myBabelPlugin.js"}
+
+<br>
+
+직접만든 `babel` 플로그인을 사용해서 `./app.js` 변환 :
+
+* path.node.name : map, data, data, test, test2 들이 뒤집혀서 출력
+
+```console
+    // npx babel [변환할.js] --plugins [적용할 plugin]
+    > npx babel app.js --plugins ./myBabelPlugin.js
+
+    // Babel Input: ES2015 arrow function, const/let 스코프
+    [1, 2, 3].pam(atad => atad + 1);
+    const tset = 3;
+    let 2tset = 5;
+```
+
+<br>
+
+### **VariableDeclaration를 사용하여 const, let 스코프를 var로 변환해주는 코드 작성해보기**
+{: id="b-2" } 
+
+`VariableDeclaration()` 메소드는 이름 그대로 변수가 어떤 스코프로 선언되었는지 참조할 수 있습니다.
+
+AST Node VariableDeclaration shape:
+* kind: "var" | "let" | "const" (required)
+* declarations: Array<VariableDeclarator> (required)
+* declare: boolean (default: null, excluded from builder function)
+
+<br>
+
+app.js에서 변수선언의 종류를 `console.log`로 확인
+```javascript
+    module.exports = function myBabelPlugin() {
+        return {
+        visitor: {
+            VariableDeclaration(path) {
+                console.log("VariableDeclaration() kind:", path.node.kind) // const
+                
+            },
+        },
+        };
+    }
+```
+{: file="myBabelPlugin.js"}
+
+<br>
+
+**build 결과 :**
+
+const, let이 출력
+```console
+    > npx babel app.js --plugins=./myBabelPlugin.js
+
+    VariableDeclaration() kind: const
+    VariableDeclaration() kind: let
+```
+
+<br> 
+
+const, let -> var로 변경
+```javascript
+    module.exports = function myBabelPlugin() {
+        return {
+        visitor: {
+            VariableDeclaration(path) {
+                console.log("VariableDeclaration() kind:", path.node.kind)
+                
+                // const, let -> var 로 변환
+                if (path.node.kind === "const" || path.node.kind === "let") {
+                    path.node.kind = "var"
+                }
+            },
+        },
+        };
+    }
+```
+{: file="myBabelPlugin.js"}
+
+<br> 
+
+**build 결과 :**
+```console
+    > npx babel app.js --plugins=./myBabelPlugin.js
+
+    // Babel Input: ES2015 arrow function, const/let 스코프
+    [1, 2, 3].map(data => data + 1);
+    var test = 3;
+    var test2 = 5;
+```
+
+<br>
+<br>
+
+## **플러그인 사용**
+{: id="c" } 
+
+***
+`babel`에서 제공하는 플러그인들을 사용해서 변환해보겠습니다.
+
+### **@babel/plugin-transform-block-scoping**
+* `block scoping`을 따르는 `const`, `let`을 함수 스코핑인 `const`, `let` 처럼 블록 스코핑을 따르는 예약어를 함수 스코핑을 사용하는 `var`로 변경해 준다.
+
+<br>
+
+### **@babel/plugin-transform-arrow-functions**
+* `arrow function`을 일반 함수로 변경해 준다.
+
+<br>
+
+### **@babel/plugin-transform-strict-mode**
+* `strict 모드`는 ES5(ECMA Script 5)에 추가된 키워드입니다. 
+* 자바스크립트가 묵인했던 에러들의 에러 메세지를 발생시킵니다. 즉, 엄격하게 문법검사를 하겠다로 이해하면 됩니다. 
+* 스크립트 시작부분에 `"use strict"`를 선언하면 strict 모드로 코드를 작성할 수 있습니다.
+
+**install :**
+```console
+    > npm install --save-dev @babel/plugin-transform-block-scoping @babel/plugin-transform-arrow-functions @babel/plugin-transform-strict-mode
+```
+
+<br>
+
+package.json devDependencies 에 추가된 것을 확인할 수 있습니다.
+
+![image](https://user-images.githubusercontent.com/52439201/147197000-b1faaf65-3690-4d53-b158-8257257e45a8.png)
+
+<br>
+
+**build 결과 :**  
+```console
+    > npx babel app.js --plugins=@babel/plugin-transform-block-scoping --plugins=@babel/plugin-transform-arrow-functions --plugins=@babel/plugin-transform-strict-mode
+
+    "use strict";
+
+    // Babel Input: ES2015 arrow function, const/let 스코프
+    [1, 2, 3].map(function (data) {
+    return data + 1;
+    });
+    var test = 3;
+    var test2 = 5;
+```
+
+<br>
+
+## **babel.config.js(기본 설정파일) 사용하기**
+{: id="d" } 
+
+***
+
+사용하려는 `babel` 플러그인이 많아지면 많아질수록 커맨드 명령어도 길어지기 때문에 `webpack.config.js` 처럼 설정파일로 분리하여 사용하는 것이 좋습니다. 이 역할을 `babel.config.js`가 합니다. `babel`은 `babel.config.js` 파일이 있으면 자동으로 처리합니다.
+
+```javascript
+    module.exports = {
+        plugins: [
+            "@babel/plugin-transform-block-scoping",
+            "@babel/plugin-transform-arrow-functions",
+            "@babel/plugin-transform-strict-mode",
+        ]
+    }
+```
+{: file="./babel.config.js"}
+
+<br>
+
+**build 결과 :**
+```console
+    > npx babel app.js
+
+    "use strict";
+
+    // Babel Input: ES2015 arrow function, const/let 스코프
+    [1, 2, 3].map(function (data) {
+    return data + 1;
+    });
+    var test = 3;
+    var test2 = 5;
+```

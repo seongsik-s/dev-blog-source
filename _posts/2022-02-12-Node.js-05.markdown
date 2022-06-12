@@ -1,0 +1,281 @@
+---
+layout: post
+title: "[Node.js] Express API 서버 구축 - 라우팅 및 모듈화" 
+tags: [Node.js, Javascript]
+categories: [Node.js]
+banner:
+  image: /assets/images/banners/node_js.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## **시작으로**
+
+***
+
+`라우팅(Routing)`이란 애플리케이션 엔드 포인트(URI)의 정의 및 특정한 `HTTP` 요청 방식(`GET`, `POST` 등)에 대한 클라이언트의 요청에 따라 응답하는 방법을 결정하는 것이다.
+각 라우트는 하나 이상의 핸들러 함수를 가질 수 있으며, 이러한 함수는 라우트가 일치할 경우 실행된다.
+
+만약 다수의 핸들러 함수를 지정하려면 함수 로직 끝에 `next()`를 붙여야 한다. 그래야 다음 함수로 넘어가기 때문이다.
+
+<br>
+
+## **HTTP 요청 방식**
+
+***
+
+다양한 요청 방식이 존재하지만 보통 REST API를 구현할 때 4가지만 알아도 충분하다.  
+보통 개발할 때 CRUD기준으로 메소드를 사용한다. 
+* GET (READ)
+* POST (CREATE)
+* PUT (UPDATE)
+* DELETE (DELETE)
+
+`HTTP` 메소드는 동사 역할을한다. 그리고 동사에 대한 목적어가 바로 `엔드 포인트(URI)`이다. 
+
+간단한 예시: 
+
+* `(GET)` localhost:port/users - 유저정보를 조회를 요청
+* `(POST)` localhost:port/users - 유저정보를 생성을 요청
+* `(PUT)` localhost:port/users/:user_id - user_id 유저의 정보 수정을 요청
+* `(DELETE)` localhost:port/users/:user_id - user_id 유저의 정보 삭제를 요청
+
+<br>
+
+## **라우팅 정의**
+
+***
+
+기본적인 라우트 정의 구조는 아래와 같다.
+
+`app.METHOD(PATH, HANDLER)`
+
+
+아래 코드는 아주 기본적인 라우트의 예시이다. 
+
+```javascript
+var express = require('express');
+var app = express();
+
+
+app.get('/', function(req, res) {
+  res.send('GET');
+});
+```
+
+###  **라우트 메소드**
+
+여기서 app은 Express의 인스턴스를 담은 변수이다. Express는 HTTP 메소드를 가지고 있다. 
+
+* GET : app.get()
+* POST : app.post()
+* PUT : app.put()
+* DELETE : app.delete()
+
+Express는 다음과 같은 라우팅 메소드를 제공한다.
+ > get, post, put, head, delete, options, trace, copy, lock, mkcol, move, purge, propfind, proppatch, unlock, report, mkactivity, checkout, merge, m-search, notify, subscribe, unsubscribe, patch, search 및 connect.
+
+<br>
+
+## **라우트 경로**
+
+***
+
+라우트 경로는, 요청 메소드와 조합을 통해 요청이 이루어질 수 있는 `엔드포인트(URI)`를 정의한다. 라우트 경로는 문자열, 문자열 패턴 또는 정규식으로 작성할 수 있다.
+
+**문자열을 기반으로 작성한 라우트 경로 예시 :**  
+```javascript
+// 라우트 경로 /
+app.get('/', function (req, res) {
+  res.send('root');
+});
+```
+```javascript
+// 라우트 경로 /users
+app.get('/users', function (req, res) {
+  res.send('users');
+});
+```
+```javascript
+// 라우트 경로 /random.text
+app.get('/random.text', function (req, res) {
+  res.send('random.text');
+});
+```
+
+<br>
+
+**문자열 패턴을 기반으로 작성한 라우트 경로 예시 :**  
+```javascript
+// 라우트 경로 /acd 및 /abcd
+app.get('/ab?cd', function(req, res) {
+  res.send('ab?cd');
+});
+```
+```javascript
+// 라우트 경로 /abcd, /abbcd 및 /abbbcd 
+app.get('/ab+cd', function(req, res) {
+  res.send('ab+cd');
+});
+```
+```javascript
+// 라우트 경로 /abcd, /abxcd, /abRABDOMcd 및 /ab123cd 
+app.get('/ab*cd', function(req, res) {
+  res.send('ab*cd');
+});
+```
+```javascript
+// 라우트 경로 /abe 및 /abcde
+app.get('/ab(cd)?e', function(req, res) {
+ res.send('ab(cd)?e');
+});
+```
+
+<br>
+
+**정규식을 기반으로 작성한 라우트 경로 예시 :**  
+```javascript
+// 라우트 이름에 “a”가 포함된 모든 항목
+app.get(/a/, function(req, res) {
+  res.send('/a/');
+});
+```
+```javascript
+// 라우트 경로는 butterfly 및 dragonfly와 일치하지만
+// butterflyman 및 dragonfly man 등과 일치하지 않는다.
+app.get(/.*fly$/, function(req, res) {
+  res.send('/.*fly$/');
+});
+```
+
+<br>
+
+## **응답 메소드**
+
+***
+
+밑의 표에 표시된 응답 오브젝트에 대한 메소드(res)는 응답을 클라이언트로 전송하고 요청-응답 주기를 종료할 수 있다.  
+만약 라우트 핸드러부터 다음 메소드 중 어느 하나도 호출되지 않는 경우, 클라이언트 요청은 정지된 채로 방치된다.
+
+그 이유는 HTTP 방식은 동기 방식이므로 요청이 있으면 응답이 반드시 있어야 하기 때문이다.
+
+[공식 문서](https://expressjs.com/ko/4x/api.html#res.download)에 자세히 설명되어 있으니 참고하자.
+
+| 메소드 | 설명 |
+| :------------- |:----------------------------------- |
+| res.download() | 파일이 다운로드되도록 프롬프트 한다. |
+| res.end()      | 응답 프로세스를 종료한다. |
+| res.json()     | JSON 응답을 전송한다. |
+| res.jsonp()    | JSONP 지원을 통해 JSON 응답을 전송합니다. |
+| res.redirect() | 요청의 경로를 재지정합니다.|
+| res.render()	 | 보기 템플리트를 렌더링합니다.|
+| res.send()	   | 다양한 유형의 응답을 전송합니다.|
+| res.sendFile()	| 파일을 옥텟 스트림의 형태로 전송합니다.|
+| res.sendStatus()|	응답 상태 코드를 설정한 후 해당 코드를 문자열로 표현한 내용을 응답 본문으로서 전송합니다.|
+
+<br>
+
+## **app.route()**
+
+***
+
+`app.route()`을 이용하면 라우트 경로에 대하여 체인 가능한 라우트 핸드러를 작성할 수 있다.  
+경로는 한 곳에 지정되어 있으므로 모듈식 라우트를 작성하면 중복성과 오타가 감소하여 도움이 된다.  
+
+```javascript
+app.route('/book')
+  .get(function(req, res) {
+    res.send('Get a random book');
+  })
+  .post(function(req, res) {
+    res.send('Add a book');
+  })
+  .put(function(req, res) {
+    res.send('Update the book');
+  });
+```
+
+<br>
+
+## **라우팅 모듈화**
+
+***
+
+라우트 정의가 몇개 없다면 상관없지만, 서비스 및 기능별로 제공하는 라우트가 많다면 한 곳에 관리하기 어렵다.
+또한, 중복되는 자원들이 많다면 어떨까? 그럴 땐 모듈화로 나누어 관리하는 것이 좋다.
+
+`express.Router` 클래스를 사용하면 모듈식 마운팅이 가능한 핸들러를 작성할 수 있다. Router 인스턴스는 인스턴스는 완전한 미들웨어이자 라우팅 시스템이다.
+이것을 `"미니 앱(mini-app)"` 이라고도 불린다.
+
+자 밑의 라우트 정의들이 있다고 가정해보자.
+
+```javascript
+var express = require('express');
+var app = express();
+
+app.get('/users', function (req, res, next) {
+    res.send('get users');
+});
+
+app.get('/users/:id', function (req, res, next) {
+    res.send('get a user');
+});
+
+app.post('/users', function (req, res, next) {
+   res.send('post user');
+});
+
+app.put('/users/:id', function (req, res, next) {
+    res.send('put a user');
+});
+
+app.delete('/users/:id', function (req, res, next) {
+    res.send('delete a user');
+});
+```
+
+중복되는 `users` 경로를 모두 명시할 필요 없이 `/users`로 모듈화를 해보자.
+
+1. `/route`폴더에 `users` 폴더를 생성하고 안에 `index.js`를 생성한다.
+2. 그리고 아래와 같이 작성하면 express는 `/route폴더` 밑에 생성한 `users`를 공통 라우터로 사용할 수 있다.
+
+```javascript
+var express = require("express")
+var router = express.Router()
+
+router.get('/', function (req, res, next) {
+    res.send('get users');
+});
+
+router.get('/:id', function (req, res, next) {
+    res.send('get a user');
+});
+
+router.post('/', function (req, res, next) {
+   res.send('post user');
+});
+
+router.put('/:id', function (req, res, next) {
+    res.send('put a user');
+});
+
+router.delete('/:id', function (req, res, next) {
+    res.send('delete a user');
+
+module.exports = router
+```
+
+3. 모듈화된 라우터를 app.js에 import하여 `app.use()`에 등록만하면 된다.
+
+```javascript
+// app.js
+var express = require('express');
+var app = express();
+var usersRouter = require('./router/users');
+
+app.use('/users', usersRouter);
+```

@@ -1,0 +1,316 @@
+---
+layout: post
+title: "[Babel] 바벨의 프레셋(Presets) 사용"
+tags: [Webpack, Node.js, Javascript]
+categories: [Babel]
+banner:
+  image: /assets/images/banners/babel.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## **프레셋(Presets)이란?**
+{: id="a" }
+
+***
+
+플러그인으로 코드 변환을 하기 위해서는 필요한 플러그인을 각각 설정해야 했습니다.
+
+```javascript
+    module.exports = {
+        plugins: [
+            "@babel/plugin-transform-block-scoping",
+            "@babel/plugin-transform-arrow-functions",
+            "@babel/plugin-transform-strict-mode",
+        ]
+    }
+```
+{: file="babel.config.js"}
+
+혹은
+
+**build :**
+```console
+    > npx app.js --plugins=@babel/plugin-transform-block-scoping --plugins=@babel/plugin-transform-arrow-functions --plugins=@babel/plugin-transform-strict-mode
+```
+
+바벨은 필요한 플러그인들을 모아 만든 `프레셋(Presets)`이라는 기능을 제공합니다.
+
+이제는 하나하나 세팅할 필요가 없습니다.
+
+<br>
+
+## **프레셋(Presets) 만들기**
+{: id="b" }
+
+***
+
+기존의 세개의 플러그인을 하나의 `프리셋`으로 만들어 보겠습니다.
+
+```javascript
+    module.exports = function custompreset(){
+        return {
+            plugins: [
+                "@babel/plugin-transform-block-scoping",
+                "@babel/plugin-transform-arrow-functions",
+                "@babel/plugin-transform-strict-mode",
+            ]
+        };
+    }
+```
+{: file="customPreset.js"}
+
+<br>
+
+```javascript
+    module.exports = {
+        presets:['./customPreset.js']
+    }
+```
+{: file="babel.config.js"}
+
+<br>
+
+**build 결과 :**
+```console
+    > npx babel app.js
+    "use strict";
+
+    // Babel Input: ES2015 arrow function, const/let 스코프
+    [1, 2, 3].map(function (data) {
+    return data + 1;
+    });
+    var test = 3;
+    var test2 = 5;
+```
+
+플러그인을 하나의 프리셋으로 묶어 `babel.config.js` 기본설정 파일 `presets` 배열에 추가만 해주면 됩니다. 
+
+<br>
+<br>
+
+## **바벨의 프레셋(Presets) 사용하기**
+{: id="c" }
+
+***
+
+[바벨 곰식홈페이지](https://babeljs.io/docs/en/babel-preset-env)에 들어가면 바벨은 목적에 맞는 프리셋을 제공합니다. 
+
+실제로 실무에서는 플로그인이나 커스텀 프리셋을 만들지 않고 바벨이 제공하는 프리셋을 사용합니다.
+
+
+![image](https://user-images.githubusercontent.com/52439201/147522388-cff9cfca-c604-468d-b1e5-f686efcd91e3.png)
+
+<br>
+
+`preset-react`는 리액트를 `preset-typescript`는 타입스크립트를 `preset-flow`는 `flow`을 변환해주는 프리셋입니다. 
+이번 포스트는 `ES6` 문법으로 진행할 것이기 때문에 `preset-env`에 대해서만 알아보도록 하겠습니다.
+
+<br>
+<br>
+
+### **preset-env** 
+{: id="d" }
+
+***
+
+`preset-env`은 대상 환경에 필요한 변환을 세세하게 관리할 필요 없이, 최신 ES2015+ Javascript를 사용할 수 있는 환경을 제공합니다. 이전에는 연도별로 프리셋을 제공했지만
+(babel-reset-es2015, babel-reset-es2016, babel-reset-es2017, babel-reset-latest ...) 이제는 `preset-env`로 통합하여 제공합니다.
+
+**install :**
+```console
+    npm install --save-dev @babel/preset-env
+```
+
+<br>
+
+```javascript
+    module.exports = {
+        presets: [
+            "@babel/preset-env"
+        ]
+    }
+```
+{: file="babel.config.js"}
+
+<br>
+
+**build 결과 :**
+```console
+    > npx babel app.js
+    "use strict";
+
+    // Babel Input: ES2015 arrow function, const/let 스코프
+    [1, 2, 3].map(function (data) {
+    return data + 1;
+    });
+    var test = 3;
+    var test2 = 5;
+```
+
+<br>
+
+### **Options** 
+{: id="e" }
+
+***
+
+#### **targets**
+{: id="f" }
+
+* 브라우저의 최소 환경 버전을 지정하여 타겟 브라우저 환경에 맞는 플러그인들을 찾아 변환해 줍니다.
+* `targets`에 아무것도 지정하지 않으면 최상위 옵션이 설정됩니다.
+* `targets`에 브라우저를 여러개 지정하면, 바벨은 알아서 최소 환경 기준으로 변환 합니다.
+
+<br>
+
+**브라우저 호환성 체크**
+* [can i use 에서 확인](https://caniuse.com/)
+* 크롬 58 버전은 `arrow function`, `const`, `let`을 모두 제공하지만 `IE10`은 제공하지 않습니다. 최저 환경인 `IE10` 기준으로 변환 되는지 확인해보겠습니다.
+
+![image](https://user-images.githubusercontent.com/52439201/147529461-ec5a1e72-5114-4ec2-967b-7eb186f55ed7.png)  
+
+![image](https://user-images.githubusercontent.com/52439201/147529475-9f1fe972-2a01-491a-bd11-557c0dd50e5e.png)  
+
+![image](https://user-images.githubusercontent.com/52439201/147529497-94a448bd-f08e-4755-827c-0a0e647738d6.png)  
+
+<br>
+
+```javascript
+    module.exports = {
+        presets: [
+        [
+            "@babel/preset-env",
+            {
+            targets: {
+                chrome: "58", 
+                ie: "10"
+            }
+            }
+        ]
+        ]
+    }
+```
+{: file="babel.config.js"}
+
+<br>
+
+**build 결과 :**  
+
+```console
+    > npx babel app.js
+    "use strict";
+
+    // Babel Input: ES2015 arrow function, const/let 스코프
+    [1, 2, 3].map(function (data) {
+    return data + 1;
+    });
+    var test = 3;
+    var test2 = 5;
+```
+
+<br>
+
+#### **폴리필(polyfills)**
+{: id="g" }
+
+* `useBuiltIns` 옵션을 다루기전에 폴리필이라는 개념을 먼저 알아야합니다. 예제를 보시면 `app.js`에 ES6 문법인 `new Promise()` 사용했습니다.
+* 하지만 `build` 결과는 변함이 없습니다. 바벨은 ES6에서 ES5로 변환할 수 있는 것만 빌드합니다. 
+* 그렇지 못한 것들은 `폴리필(polyfills)`이라고 부르는 코드조각을 추가하여 해결합니다.
+* 정리하여 `Promise()`는 `ES5`로 변환할 수 없기 때문에, 폴리필을 사용하여 `ES5` 버전에서 구동될 수 있도록 구현합니다.
+
+```javascript
+    // Babel Input: ES2015 Promise
+    new Promise()
+```
+{: file="app.js"}
+
+<br>
+
+```javascript
+    module.exports = {
+        presets: [
+        [
+            "@babel/preset-env",
+            {
+            targets: {
+                chrome: "58", 
+                ie: "10"
+            }
+            }
+        ]
+        ]
+    }
+```
+{: file="babel.config.js"}
+
+<br>
+
+**build 결과 :**
+```console
+    > npx babel app.js
+    "use strict";
+
+    // Babel Input: ES2015 Promise
+    new Promise();
+```
+
+분명 `preset-env` 프리셋을 적용했는대도 ES5로 변환이 안됩니다. 그 
+
+<br>
+<br>
+
+#### **useBuiltIns**  
+{: id="h" }
+
+* `useBuiltIns`은 폴리필을 처리하는 방법을 구성합니다.
+* `"usage"`, `"entry"`, `false` 3가지 중 하나를 선택, default는 false
+* `"usage"`, `"entry"` 옵션을 선택하면 `core-js`을 모듈로 가져와서 사용합니다.
+* `@babel/polyfill`은 7.4.0버전부터는 사용되지 않습니다. 따라서 직접 추가하는 것을 추천하고 있습니다.
+
+**install :**
+```console
+    npm install core-js@3 --save
+
+    ## or
+
+    npm install core-js@2 --save
+```
+
+corejs의 기본값은 "2" 버전입니다. 
+
+```javascript
+    module.exports = {
+    presets: [
+        [
+        "@babel/preset-env",
+        {
+            useBuiltIns: "usage",
+            corejs: {
+            version: 2,
+            },
+        },
+        ],
+    ],
+    }
+```
+{: file="babel.config.js"}
+
+**build 결과 :**  
+* `corejs`의 기본값은 "2" 버전입니다. `build` 결과를 보면 `corejs`에서 `Promise` 모듈을 `import`하는 구문이 상단에 추가된 것을 확인할 수 있습니다.
+* `corejs`를 `install`해서 직접 `import` 구문을 추가하는 방법을 사용해도 무관합니다.
+
+```console
+    > npx babel app.js   
+    "use strict";
+
+    require("core-js/modules/es6.object.to-string.js");
+    require("core-js/modules/es6.promise.js");
+
+    // Babel Input: ES2015 Promise
+    new Promise();
+```

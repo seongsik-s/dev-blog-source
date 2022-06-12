@@ -1,0 +1,69 @@
+I"<h2 id="javascript란"><strong>Javascript란?</strong></h2>
+
+<hr />
+
+<p><code class="language-plaintext highlighter-rouge">JavaScript</code>는 1995년 넷스케이프(Netscape) 웹 브라우져에서 웹페이지에 동적인 요소를 구현하기 위해서 발명 되었다. 
+그 후 많은 다른 웹 브라우져들 또한 이 언어를 탑재하기 시작했고, 그 결과로 현대의 웹 어플리케이션의 구현을 가능하게 만든 언어이다. 
+이 언어로 인해 웹 어플리케이션에서 더 이상 사용자가 페이지 새로고침 또는 페이지를 새로 불러오지 않고도 웹과 직접적인 연결이 가능하게 되었다.<br />
+예를들어 웹페이지에서 click 이벤트와 같은 동적 요소들이 javascript이며, html css를 정적인 요소라 할 수 있다.</p>
+
+<p><br /></p>
+
+<h2 id="esmascript란"><strong>ESMAScript란?</strong></h2>
+
+<hr />
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">JavaScript</code>는 1995년 Brendan Eich에 의해 발명되었으며 1997년 ECMA 표준이 되었습니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">ECMAScript</code>는 언어의 공식 이름입니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">ECMAScript</code> 버전은 ES1, ES2, ES3, ES5 및 ES6으로 축약되었습니다.</li>
+  <li>2016년부터 새 버전의 이름은 연도별로 지정됩니다(ECMAScript 2016/2017/2018). 즉, 자바스크립트 <code class="language-plaintext highlighter-rouge">언어 표준</code>을 말합니다. (파이썬 2.x, 3.x 과 같은 버전으로 이해하면 될 것 같습니다.)</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="esmascript-editions"><strong>ESMAScript Editions</strong></h2>
+
+<hr />
+
+<p><a href="https://www.w3schools.com/js/js_versions.asp">참고자료 : https://www.w3schools.com/js/js_versions.asp</a></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/144976225-10f49a55-c4c7-4889-aba2-833586750d0a.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h2 id="브라우저-지원"><strong>브라우저 지원</strong></h2>
+
+<hr />
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">ES6</code>부터는 Internet Explorer를 아예 지원 안한다고 되어있습니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">ES5</code>는 Internet Explorer 9를 지원하지 않으며, ES6부터는 Internet Explorer를 지원하지 않습니다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/144978326-cb649804-abe7-43e6-82f1-9ab0064ec9f7.png" alt="image" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/144976524-b002ce7c-c0da-4753-b12d-2fe886b16995.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h2 id="esmascript-표준을-알아야-하는-이유"><strong>ESMAScript 표준을 알아야 하는 이유</strong></h2>
+
+<hr />
+
+<p>모든 언어가 그렇듯, release 버전을 이해하는 것은 굉장히 중요합니다. python을 예로 들자면 버전별로 지원하는 라이브러리와 문법들이 다르기 때문에 한 번 python2.xx로 개발하게 되면 나중에 python3.xx에서 지원하는 라이브러리를 사용하고 싶어도 못쓰는 경우가 발생하게 됩니다. 따라서, 표준을 아는 것은 굉장히 중요하다 할 수 있습니다.</p>
+
+<p>다시 돌아와서 현재 가장 널리 쓰이는 표준은 ES5(2009)입니다. ES6(2015)은 이제 널리 사용되고 있는 현재진행형입니다. 아직까지도 ES5표준을 많이 사용하기 때문에 ES6를 선뜻 바꾸기가 어려울 수 있습니다.<br />
+이러한 괴리감을 해결하기 위해 나온 것이 <code class="language-plaintext highlighter-rouge">Babel</code> 과 같은 트랜스컴파일러 입니다. <code class="language-plaintext highlighter-rouge">Babel</code>은 <code class="language-plaintext highlighter-rouge">ECMAScript 2015+</code> 코드를 이전 <code class="language-plaintext highlighter-rouge">JavaScript</code> 엔진에서 실행할 수 있도록 변환해줍니다. <br />
+정확하게 얘기하면 ES6로 작성된 JavaScript 언어를 이전 버전의 JavaScript 언어로 변환해주는 것입니다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">Webpack</code>과 <code class="language-plaintext highlighter-rouge">Babel</code>과 같은 기술들을 무작정 습득하기 보다는 해당 기술들이 나온 배경들을 이해하는 것이 어쩌면 더 중요할 수 있습니다.<br />
+현재 Webpack과 Babel을 공부하고 있지만, 이게 왜 써야 되는지? 어떤 도움이 되는지 이해할 필요성을 느꼈기 때문에 ESMAScript에 대해 포스팅하게 되었습니다.</p>
+
+<p><br /></p>
+
+<h2 id="마무리"><strong>마무리</strong></h2>
+
+<hr />
+
+<p>다음에는 JavaScript의 Scope와, ES6 표준 문법에 대해 포스팅 해보도록 하겠습니다.</p>
+:ET

@@ -1,0 +1,235 @@
+---
+layout: post
+title: "[Git] Github 원격저장소와 로컬저장소 연동하기" 
+tags: [Git, Github]
+categories: [Git]
+banner:
+  image: /assets/images/banners/git.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+깃허브 원격저장소와 로컬저장소 연동을 머리속에서만 알고있었고, git 관련 명령어도 필요할 때마다 구글링으로 찾아서 처리했었는데...
+
+날잡고 정리해서 내것으로 만들어야지 생각만하다가 오늘 정리하기로 맘먹었다.
+
+오늘은! <kbd>로컬 저장소(workspace)를 깃허브 원격저장소에 연동하는 방법에 대해 포스팅 해보겠습니다.</kbd>
+
+참고로, git이 설치가 안되신분들은 git을 설치하고 오시기 바랍니다. 
+
+<br>
+
+## **로컬 저장소 생성**
+
+***
+
+* `Git Bash` 실행
+* 본인이 작업할 로컬 `workspace(폴더)`를 생성합니다. 
+* 생성할 위치 이동 + git_test라는 이름의 폴더 생성합니다.
+```console
+    seong@DESKTOP-O5CIEJV MINGW64 ~
+    $ cd E:/project && mkdir git_test
+```
+
+<br>
+
+* 생성한 `workspace(폴더)` git_test에서 git 저장소를 생성합니다.
+```console
+    seong@DESKTOP-O5CIEJV MINGW64 /e/project
+    $ cd git_test/
+
+    seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test
+    $ git init
+    Initialized empty Git repository in E:/project/git_test/.git/
+```
+
+<br>
+
+* 파일 생성
+```console
+    seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+    $ vi test.py
+```
+
+<br>
+
+* `git status`로 상태를 확인해보면 생성된 test.py 파일을 git에 추가할 수 있다고 나옵니다.
+```console
+    seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+    $ git status
+    On branch master
+
+    No commits yet
+
+    Untracked files:
+    (use "git add <file>..." to include in what will be committed)
+            test.py
+
+    nothing added to commit but untracked files present (use "git add" to track)
+```
+
+<br>
+
+* git 저장소에 추가
+* `No commits yet :` 아직 커밋을 하지 않다고 나옵니다. 
+```console
+    seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+    $ git add test.py
+
+    seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+    $ git status
+    On branch master
+
+    No commits yet
+
+    Changes to be committed:
+    (use "git rm --cached <file>..." to unstage)
+            new file:   test.py
+```
+
+<br>
+
+* `git commit`
+* `-m "test commit add test.py"` <- commit message 
+```console
+    seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+    $ git commit -m "test commit add test.py"
+    [master (root-commit) fc4e43a] test commit add test.py
+    1 file changed, 0 insertions(+), 0 deletions(-)
+    create mode 100644 test.py
+```
+
+<br>
+<br>
+
+## **원격 저장소 생성 및 연동**
+
+*** 
+
+* github `repository` 생성합니다.
+  
+  ![image](https://user-images.githubusercontent.com/52439201/144543851-6fa2303a-b099-4444-b383-121becb17a24.png)
+
+<br>
+
+* code -> HTTPS 누르시면 URL이 나오는데 `COPY`합니다.  
+
+  ![image](https://user-images.githubusercontent.com/52439201/144544065-531f5087-ddd0-4324-bd8e-6ead1235287b.png)
+
+<br>
+
+* `git remote`, 로컬 저장소와 원격 저장소를 연동합니다.
+* `git remote add [원격저장소별칭] [원격저장소URL]`
+```console
+    seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+    $ git remote add origin https://github.com/s-seongsik/github_test.git
+```
+
+<br>
+
+* `remote` 연결을 확인합니다. 
+```console
+    seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+    $ git remote
+    origin
+
+    $ git remote -v
+    origin    https://github.com/s-seongsik/github_test.git (fetch)
+    origin    https://github.com/s-seongsik/github_test.git (push)
+```
+
+<br>
+
+* `git push [원격저장소별칭] [로컬브랜치이름]`
+* `--all` 을 붙이면 로컬의 모든 브랜치를 push 합니다.  
+```console
+    # 로컬브랜치 확인
+    seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+    $ git branch
+    * master
+
+    # push
+    seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+    $ git push origin master
+    Enumerating objects: 3, done.
+    Counting objects: 100% (3/3), done.
+    Writing objects: 100% (3/3), 230 bytes | 230.00 KiB/s, done.
+    Total 3 (delta 0), reused 0 (delta 0)
+    remote:
+    remote: Create a pull request for 'master' on GitHub by visiting:
+    remote:      https://github.com/s-seongsik/github_test/pull/new/master
+    remote:
+    To https://github.com/s-seongsik/github_test.git
+    * [new branch]      master -> master
+```
+
+<br>
+
+* 원격저장소를 보면 연동된 master 로컬브랜치에 test.py가 생성된것을 볼 수 있습니다.
+
+  ![image](https://user-images.githubusercontent.com/52439201/144550460-f17049fa-e360-402a-90cc-b617269d4a27.png)
+
+<br>
+
+## **파일 수정해보기**
+
+*** 
+
+* `test.py`를 수정합니다. 
+
+  ![image](https://user-images.githubusercontent.com/52439201/144551103-b38dd43d-0993-4835-9812-0f82d9927666.png)
+
+<br>
+
+* `git status`로 상태확인
+* `modified : test.py` <-라는 문구에서 변경 확인이 가능합니다.
+```console
+    seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+    $ git status
+    On branch master
+    Changes to be committed:
+    (use "git restore --staged <file>..." to unstage)
+            modified:   test.py
+```
+
+<br>
+
+* 위에서 배운대로 `git add` -> `git commit` -> `git push` 를 진행합니다.
+* tip) git add . 을 하시면 변경된 모든 것을 add 합니다.
+```console
+    seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+    $ git add test.py
+
+    seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+    $ git commit -m "modify test.py"
+    [master 5a43c8b] modify test.py
+    1 file changed, 2 insertions(+)
+
+    seong@DESKTOP-O5CIEJV MINGW64 /e/project/git_test (master)
+    $ git push origin master
+    Enumerating objects: 5, done.
+    Counting objects: 100% (5/5), done.
+    Writing objects: 100% (3/3), 272 bytes | 272.00 KiB/s, done.
+    Total 3 (delta 0), reused 0 (delta 0)
+    To https://github.com/s-seongsik/github_test
+    c81e115..5a43c8b  master -> master
+```
+
+<br>
+
+* test.py 내용이 변경된 것을 확인할 수 있습니다.  
+![image](https://user-images.githubusercontent.com/52439201/144551729-7af61588-7526-455d-9f79-c67064c12d53.png)
+
+<br>
+<br>
+
+***
+
+## **끝으로**
+로컬저장소와 원격저장소 연동하는 과정을 정리하면서 좀더 github와 git를 깊게 공부하고 싶은 욕심이 생겼습니다.
+기회가 되면 **git으로 협업하는 방법**과 **git의 원리 및 용어정리** 대해 포스팅 해보겠습니다. 
+감사합니다.

@@ -1,0 +1,526 @@
+I"�<h2 id="a"><strong>plugin란?</strong></h2>
+
+<hr />
+
+<p>파일단위로 처리하는 <code class="language-plaintext highlighter-rouge">loader</code>와 다르게 플러그인은 번들링된 결과를 처리합니다. 번들링된 자바스크립트를 난독화하거나 텍스트를 추출하는 등의 용도로 사용합니다.
+플러그인을 빌드하는 것은 로더를 빌드하는 것보다 조금 더 고급입니다. 플러그인을 이해하려면 <code class="language-plaintext highlighter-rouge">webpack</code> 저수준 내부의 이해가 필요합니다.</p>
+
+<p>이해를 위해 플러그인을 직접 만들어보고 내부적으로 어떻게 작동하는지 알아보겠습니다!</p>
+
+<p><br />
+<br /></p>
+
+<h2 id="b"><strong>plugin 만들기</strong></h2>
+
+<hr />
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">plugin</code>은 <code class="language-plaintext highlighter-rouge">apply</code> 메소드가 있는 <code class="language-plaintext highlighter-rouge">javascript</code> 객체입니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">apply</code> 메서드는 웹팩 컴파일러에 의해 한 번 호출되어 전체 컴파일에 대한 엑서스를 제공합니다.</li>
+</ul>
+
+<p><br /></p>
+
+<div file="myplugin.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="kd">class</span> <span class="nx">HelloWorldPlugin</span> <span class="p">{</span>
+    <span class="nx">apply</span><span class="p">(</span><span class="nx">compiler</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">compiler</span><span class="p">.</span><span class="nx">hooks</span><span class="p">.</span><span class="nx">done</span><span class="p">.</span><span class="nx">tap</span><span class="p">(</span>
+        <span class="dl">'</span><span class="s1">Hello World Plugin</span><span class="dl">'</span><span class="p">,</span>
+        <span class="p">(</span>
+            <span class="nx">stats</span> <span class="cm">/* stats is passed as an argument when done hook is tapped.  */</span>
+        <span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Hello World!</span><span class="dl">'</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="p">);</span>
+    <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">HelloWorldPlugin</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div file="webpack.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">const</span> <span class="nx">MyPlugin</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">./myplugin</span><span class="dl">"</span><span class="p">)</span>
+
+
+    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">...</span>
+        <span class="na">plugins</span><span class="p">:</span> <span class="p">[</span><span class="k">new</span> <span class="nx">MyPlugin</span><span class="p">()],</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>build 결과 :</strong></p>
+<ul>
+  <li>맨위에 <code class="language-plaintext highlighter-rouge">Hellow World!</code> <code class="language-plaintext highlighter-rouge">log</code>가 찍힌 것을 확인할 수 있습니다.
+    <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">  &gt;</span><span class="w"> </span>npm run build
+<span class="go">
+</span><span class="gp">  &gt;</span><span class="w"> </span>webpack-demo@1.0.0 build
+<span class="gp">  &gt;</span><span class="w"> </span>webpack
+<span class="go">
+  Hello World!
+  asset images/bg.jpg 612 KiB [emitted] [from: src/bg.jpg] (auxiliary name: main)
+  asset main.js 33.8 KiB [emitted] (name: main)
+  runtime modules 2.39 KiB 7 modules
+  javascript modules 10.8 KiB
+  modules by path ./node_modules/ 8.66 KiB
+      modules by path ./node_modules/style-loader/dist/runtime/*.js 5.75 KiB 6 modules
+      modules by path ./node_modules/css-loader/dist/runtime/*.js 2.91 KiB 3 modules
+  modules by path ./src/ 2.19 KiB
+      modules by path ./src/*.js 323 bytes 2 modules
+      modules by path ./src/*.css 1.88 KiB
+      ./src/app.css 1.11 KiB [built] [code generated]
+      ./node_modules/css-loader/dist/cjs.js!./src/app.css 785 bytes [built] [code generated]
+  asset modules 5.17 KiB (javascript) 612 KiB (asset)
+  ./src/webpack.png 5.13 KiB [built] [code generated]
+  ./src/bg.jpg 42 bytes (javascript) 612 KiB (asset) [built] [code generated]
+  webpack 5.65.0 compiled successfully in 867 ms
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>여기서 중요한 건 <code class="language-plaintext highlighter-rouge">loader</code>는 파일 수 만큼 <code class="language-plaintext highlighter-rouge">log</code>가 찍혔다면 <code class="language-plaintext highlighter-rouge">plugin</code>은 한 번만 찍힌 것을 확인할 수 있습니다.<br />
+위에 설명대로 <code class="language-plaintext highlighter-rouge">plugin</code>은 하나로 번들링된 결과에 대해서 처리하기 때문입니다.</p>
+
+<p><br /></p>
+
+<h2 id="c"><strong>번들링된 결과(파일) 접근</strong></h2>
+
+<hr />
+
+<ul>
+  <li>비동기 이벤트 후크 : <code class="language-plaintext highlighter-rouge">tapAsync</code></li>
+  <li><code class="language-plaintext highlighter-rouge">tapAsync</code> 메소드를 사용하여 플로그인을 사용할 때는 함수의 마지막 인수로 제공되는 콜백 함수를 호출해야 합니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">compiler</code> 모듈은 <code class="language-plaintext highlighter-rouge">CLI</code> 또는 <code class="language-plaintext highlighter-rouge">Node API</code>를 통해 전달된 모든 옵션으로 컴파일 인스턴스를 생성하는 메인 엔진입니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">Compilation</code> 모듈은 <code class="language-plaintext highlighter-rouge">compiler</code>에서 새 컴파일 또는 빌드를 만드는데 사용합니다. <code class="language-plaintext highlighter-rouge">Compilation</code> 객체는는 모든 모듈과 디펜던시에 접근할 수 있습니다.</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">compiler</code>에 의해 번들링된 결과가 <code class="language-plaintext highlighter-rouge">compilation</code> 인자로 들어오면 <code class="language-plaintext highlighter-rouge">compilation</code> 객체로 청크를 복원하여 파일 소스를 콘솔에 찍습니다.</p>
+
+<div file="myplugin.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="kd">class</span> <span class="nx">MyPlugin</span> <span class="p">{</span>
+        <span class="nx">apply</span><span class="p">(</span><span class="nx">compiler</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">compiler</span><span class="p">.</span><span class="nx">hooks</span><span class="p">.</span><span class="nx">emit</span><span class="p">.</span><span class="nx">tapAsync</span><span class="p">(</span><span class="dl">'</span><span class="s1">MyPlugin</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">compilation</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="c1">// 각 청크를 탐색합니다.</span>
+            <span class="nx">compilation</span><span class="p">.</span><span class="nx">chunks</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">chunk</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+                <span class="c1">// 청크에 의해 생성된 각 asset 파일 이름을 탐색합니다.</span>
+                <span class="nx">chunk</span><span class="p">.</span><span class="nx">files</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">filename</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+                <span class="c1">// 청크에 의해 생성된 각 파일의 asset 소스를 가져옵니다.</span>
+                <span class="kd">var</span> <span class="nx">source</span> <span class="o">=</span> <span class="nx">compilation</span><span class="p">.</span><span class="nx">assets</span><span class="p">[</span><span class="dl">'</span><span class="s1">main.js</span><span class="dl">'</span><span class="p">].</span><span class="nx">source</span><span class="p">();</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">source</span><span class="p">);</span>
+                <span class="p">});</span>
+            <span class="p">});</span>
+
+            <span class="nx">callback</span><span class="p">();</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+  <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">MyPlugin</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong>build 결과 : log 상단의 주석과 번들링 결과인 main.js의 상단의 주석이 같은 것을 확인할 수 있습니다.</strong></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146717570-03fc40d1-46ef-4fe2-a74a-277ca721fa74.png" alt="image" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146717618-46741cb1-7205-4120-94c8-df42fa43ca7a.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h2 id="d"><strong><a href="https://webpack.kr/plugins/banner-plugin/">BannerPlugin</a></strong></h2>
+
+<hr />
+
+<ul>
+  <li>생성된 각 <code class="language-plaintext highlighter-rouge">chunk</code> 상단에 정보들을 추가 입력할 수 있게 도와주는 플러그인입니다.</li>
+  <li>예) 빌드 버전, 커밋 버전, 개발자명, 참여인원, 수정날짜 등</li>
+</ul>
+
+<h3 id="bannerplugin-"><strong>BannerPlugin :</strong></h3>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">const</span> <span class="nx">webpack</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">webpack</span><span class="dl">'</span><span class="p">);</span>
+
+    <span class="k">new</span> <span class="nx">webpack</span><span class="p">.</span><span class="nx">BannerPlugin</span><span class="p">(</span><span class="nx">banner</span><span class="p">);</span>
+    <span class="c1">// or</span>
+    <span class="k">new</span> <span class="nx">webpack</span><span class="p">.</span><span class="nx">BannerPlugin</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h3 id="options-"><strong>Options :</strong></h3>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="p">{</span>
+        <span class="nl">banner</span><span class="p">:</span> <span class="nx">string</span> <span class="o">|</span> <span class="kd">function</span><span class="p">,</span> <span class="c1">// the banner as string or function, it will be wrapped in a comment</span>
+        <span class="nx">raw</span><span class="p">:</span> <span class="nx">boolean</span><span class="p">,</span> <span class="c1">// if true, banner will not be wrapped in a comment</span>
+        <span class="nx">entryOnly</span><span class="p">:</span> <span class="nx">boolean</span><span class="p">,</span> <span class="c1">// if true, the banner will only be added to the entry chunks</span>
+        <span class="nx">test</span><span class="p">:</span> <span class="nx">string</span> <span class="o">|</span> <span class="nb">RegExp</span> <span class="o">|</span> <span class="p">[</span><span class="nx">string</span><span class="p">,</span> <span class="nb">RegExp</span><span class="p">],</span> <span class="c1">// Include all modules that pass test assertion.</span>
+        <span class="nx">include</span><span class="p">:</span> <span class="nx">string</span> <span class="o">|</span> <span class="nb">RegExp</span> <span class="o">|</span> <span class="p">[</span><span class="nx">string</span><span class="p">,</span> <span class="nb">RegExp</span><span class="p">],</span> <span class="c1">// Include all modules matching any of these conditions.</span>
+        <span class="nx">exclude</span><span class="p">:</span> <span class="nx">string</span> <span class="o">|</span> <span class="nb">RegExp</span> <span class="o">|</span> <span class="p">[</span><span class="nx">string</span><span class="p">,</span> <span class="nb">RegExp</span><span class="p">],</span> <span class="c1">// Exclude all modules matching any of these conditions.</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="사용방법-"><strong>사용방법 :</strong></h3>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">import</span> <span class="nx">webpack</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">webpack</span><span class="dl">'</span><span class="p">;</span>
+
+    <span class="c1">// string</span>
+    <span class="k">new</span> <span class="nx">webpack</span><span class="p">.</span><span class="nx">BannerPlugin</span><span class="p">({</span>
+        <span class="na">banner</span><span class="p">:</span> <span class="dl">'</span><span class="s1">hello world</span><span class="dl">'</span><span class="p">,</span>
+    <span class="p">});</span>
+
+    <span class="c1">// function</span>
+    <span class="k">new</span> <span class="nx">webpack</span><span class="p">.</span><span class="nx">BannerPlugin</span><span class="p">({</span>
+        <span class="na">banner</span><span class="p">:</span> <span class="p">(</span><span class="nx">yourVariable</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="s2">`yourVariable: </span><span class="p">${</span><span class="nx">yourVariable</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span>
+        <span class="p">},</span>
+    <span class="p">});</span>
+    <span class="nx">Place</span>
+</code></pre></div></div>
+
+<h3 id="배너-파일-생성-"><strong>배너 파일 생성 :</strong></h3>
+<ul>
+  <li>배너 정보가 많을 경우에는 파일을 따로 생성해서 적용할 수 있습니다.</li>
+</ul>
+
+<div file="webpack.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">const</span> <span class="nx">webpack</span>  <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">webpack</span><span class="dl">'</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">banner</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">./banner.js</span><span class="dl">'</span><span class="p">);</span>
+
+    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">...</span>
+        <span class="na">plugins</span> <span class="p">:</span> <span class="p">[</span><span class="k">new</span> <span class="nx">webpack</span><span class="p">.</span><span class="nx">BannerPlugin</span><span class="p">(</span><span class="nx">banner</span><span class="p">)],</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div file="banner.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">const</span> <span class="nx">childProcess</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">child_process</span><span class="dl">"</span><span class="p">);</span>
+
+    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">banner</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">user_name</span> <span class="o">=</span> <span class="nx">childProcess</span><span class="p">.</span><span class="nx">execSync</span><span class="p">(</span><span class="dl">"</span><span class="s2">git config user.name</span><span class="dl">"</span><span class="p">);</span>
+        <span class="kd">const</span> <span class="nx">date</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">toLocaleString</span><span class="p">();</span>
+        <span class="kd">const</span> <span class="nx">commit</span> <span class="o">=</span> <span class="nx">childProcess</span><span class="p">.</span><span class="nx">execSync</span><span class="p">(</span><span class="dl">"</span><span class="s2">git rev-parse --short HEAD</span><span class="dl">"</span><span class="p">)</span>
+        <span class="kd">const</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">childProcess</span><span class="p">.</span><span class="nx">execSync</span><span class="p">(</span><span class="dl">"</span><span class="s2">node --version</span><span class="dl">"</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="s2">`
+                user name : </span><span class="p">${</span><span class="nx">user_name</span><span class="p">}</span><span class="s2">
+            `</span><span class="o">+</span>
+            <span class="s2">`
+                Build date : </span><span class="p">${</span><span class="nx">date</span><span class="p">}</span><span class="s2">
+            `</span><span class="o">+</span>
+            <span class="s2">`
+                Commit version : </span><span class="p">${</span><span class="nx">commit</span><span class="p">}</span><span class="s2">
+            `</span><span class="o">+</span>
+            <span class="s2">`
+                node.js version : </span><span class="p">${</span><span class="nx">node</span><span class="p">}</span><span class="s2">
+            `</span>
+        <span class="p">)</span>
+        
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>build 결과 :</strong></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146729580-518bfbb5-3e83-481c-a23f-a72e1830a605.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h2 id="e"><strong><a href="https://webpack.kr/plugins/define-plugin/">DefinePlugin</a></strong></h2>
+
+<hr />
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">DefinePlugin</code>을 사용하면 컴파일 타임에 구성할 수 있는 전역 상수를 만들 수 있습니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">DefinePlugin</code>은 개발환경, 운영환경에 따라 다른 동작을 하고 싶을 때 사용합니다.</li>
+  <li>가령, 개발환경에서는 로깅을 수행하지만, 운영환경에서는 수행하지 않는 경우에 전역 상수를 사용하여 로깅의 수행여부를 결정할 수 있습니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">DefinePlugin</code>을 사용하여 개발 및 운영 빌드 환경을 잊어버리시면 됩니다.</li>
+  <li>참고로, <code class="language-plaintext highlighter-rouge">process.env.NODE_ENV</code> 는 노드 환경정보가 들어있는 변수이다. 처음 <code class="language-plaintext highlighter-rouge">webpack</code> 설정의 <code class="language-plaintext highlighter-rouge">mode</code>값이 들어가 있다.</li>
+</ul>
+
+<div file="webpack.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">const</span> <span class="nx">webpack</span>  <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">webpack</span><span class="dl">'</span><span class="p">);</span>
+
+    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">...</span>
+        <span class="na">plugins</span> <span class="p">:</span> <span class="p">[</span>
+            <span class="k">new</span> <span class="nx">webpack</span><span class="p">.</span><span class="nx">DefinePlugin</span><span class="p">({</span>
+                <span class="na">PRODUCTION</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="kc">true</span><span class="p">),</span>
+                <span class="na">VERSION</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="dl">'</span><span class="s1">5fa3b9</span><span class="dl">'</span><span class="p">),</span>
+                <span class="na">BROWSER_SUPPORTS_HTML5</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="na">TWO</span><span class="p">:</span> <span class="dl">'</span><span class="s1">1+1</span><span class="dl">'</span><span class="p">,</span>
+                <span class="dl">'</span><span class="s1">typeof window</span><span class="dl">'</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="dl">'</span><span class="s1">object</span><span class="dl">'</span><span class="p">)</span>
+            <span class="p">})</span>
+        <span class="p">],</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div file="app.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    
+    <span class="p">...</span>
+
+    <span class="c1">// DefinePlugin에서 구성한 전역 상수를 사용할 수 있다.</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">PRODUCTION</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">VERSION</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">BROWSER_SUPPORTS_HTML5</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">TWO</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">typeof</span> <span class="nb">window</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>build 결과 :</strong></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/146736575-7266cce1-eeb0-4409-95a2-e707dcaa6fc4.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h2 id="f"><strong><a href="https://www.npmjs.com/package/clean-webpack-plugin">CleanWebpackPlugin</a></strong></h2>
+
+<hr />
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">CleanWebpackPlugin</code>은 <code class="language-plaintext highlighter-rouge">build</code>된 폴더를 제거/정리하는 <code class="language-plaintext highlighter-rouge">webpack plugin</code> 입니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">Node v10+</code> 및 <code class="language-plaintext highlighter-rouge">webpack v4+</code> 에서 지원됩니다.</li>
+  <li>기본적으로 이 플러그인은 <code class="language-plaintext highlighter-rouge">output.path</code> 성공적인 재구축 후 <code class="language-plaintext highlighter-rouge">webpack</code> 디렉토리 내의 모든 파일과 사용되지 않는 <code class="language-plaintext highlighter-rouge">webpack</code> 자산들을 모두 제거합니다.</li>
+</ul>
+
+<p><strong>install :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    npm install --save-dev clean-webpack-plugin
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<div file="webpack.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// default export가 아니기 때문에 { name } 으로 불러옵니다.</span>
+    <span class="kd">const</span> <span class="p">{</span> <span class="nx">CleanWebpackPlugin</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">clean-webpack-plugin</span><span class="dl">'</span><span class="p">);</span>
+
+    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">...</span>
+        <span class="na">plugins</span> <span class="p">:</span> <span class="p">[</span>
+            <span class="k">new</span> <span class="nx">CleanWebpackPlugin</span><span class="p">(),</span>
+        <span class="p">],</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>dist 폴더에 test.js 추가 :</strong></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/147094133-81634633-f3fc-45d2-afa7-1acfed5c94c6.png" alt="image" /></p>
+
+<p><br /></p>
+
+<p><strong>build 결과 :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    npm run build
+
+</span><span class="gp">    &gt;</span><span class="w"> </span>webpack-demo@1.0.0 build
+<span class="gp">    &gt;</span><span class="w"> </span>webpack
+<span class="go">
+    asset images/bg.jpg 612 KiB [emitted] [from: src/bg.jpg] (auxiliary name: main)
+    asset main.js 34.1 KiB [emitted] (name: main)
+    runtime modules 2.39 KiB 7 modules
+    javascript modules 11 KiB
+    modules by path ./node_modules/ 8.66 KiB
+        modules by path ./node_modules/style-loader/dist/runtime/*.js 5.75 KiB 6 modules
+        modules by path ./node_modules/css-loader/dist/runtime/*.js 2.91 KiB 3 modules
+    modules by path ./src/ 2.36 KiB
+        modules by path ./src/*.js 494 bytes 2 modules
+        modules by path ./src/*.css 1.88 KiB
+        ./src/app.css 1.11 KiB [built] [code generated]
+        ./node_modules/css-loader/dist/cjs.js!./src/app.css 785 bytes [built] [code generated]
+    asset modules 5.17 KiB (javascript) 612 KiB (asset)
+    ./src/webpack.png 5.13 KiB [built] [code generated]
+    ./src/bg.jpg 42 bytes (javascript) 612 KiB (asset) [built] [code generated]
+    webpack 5.65.0 compiled successfully in 3267 ms
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<p>dist 디렉토리를 깔끔하게 지우고 다시 build된 것을 확인할 수 있습니다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/147094643-c68e75f6-44da-4dd9-92c1-17d212fb3a14.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h2 id="g"><strong><a href="https://webpack.kr/plugins/html-webpack-plugin/">HtmlWebpackPlugin</a></strong></h2>
+
+<hr />
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">HtmlWebpackPlugin</code>은 <code class="language-plaintext highlighter-rouge">HTML</code>파일 생성을 단순화합니다. 빌드 타임에 값을 넣거나 코드를 압축할 수 있습니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">webpack.config.js</code>에서 설정한 <code class="language-plaintext highlighter-rouge">output path</code>에 <code class="language-plaintext highlighter-rouge">dist/index.html</code> 파일이 생성됩니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">3rd party</code> 패키지입니다.</li>
+</ul>
+
+<p><strong>install :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">   npm install --save-dev html-webpack-plugin
+</span></code></pre></div></div>
+
+<p><strong>./index.html :</strong></p>
+<div file="./index.html" class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cp">&lt;!DOCTYPE html&gt;</span>
+    <span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"X-UA-Compatible"</span> <span class="na">content=</span><span class="s">"IE=edge"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;title&gt;</span>Document<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="c">&lt;!-- 스크립트 제거 --&gt;</span>
+        <span class="c">&lt;!-- &lt;script src="./dist/main.js"&gt;&lt;/script&gt; --&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+    <span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div file="webpack.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="kd">const</span> <span class="nx">HtmlWebpackPlugin</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">html-webpack-plugin</span><span class="dl">'</span><span class="p">);</span>
+
+   <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">...</span>
+        <span class="na">plugins</span> <span class="p">:</span> <span class="p">[</span>
+            <span class="k">new</span> <span class="nx">HtmlWebpackPlugin</span><span class="p">(),</span>
+        <span class="p">],</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>build 결과 :</strong></p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">dist/index.html</code> 파일이 생성되었고 <code class="language-plaintext highlighter-rouge">webpack</code>의 엔트리 포인트는 생성된 <code class="language-plaintext highlighter-rouge">HTML</code>에 모두 <code>&lt;script&gt;</code> 태그로 포함됩니다.</li>
+  <li>만약 <code class="language-plaintext highlighter-rouge">webpack</code> 출력에 <code class="language-plaintext highlighter-rouge">css asset</code>이 있다면((MiniCssExtractPlugin으로 추출된 <code class="language-plaintext highlighter-rouge">CSS</code>) 이들은 생성된 <code class="language-plaintext highlighter-rouge">HTML</code> 파일의 <code>&lt;head&gt;</code>요소 안에 <code>&lt;link&gt;</code> 태그로 포함됩니다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/147100685-deb96832-c010-40a4-9208-df4db1ca66f7.png" alt="image" /></p>
+
+<p><br /></p>
+
+<p>######## <strong>Options를 줘서 커스텀할 수 있습니다.</strong></p>
+<ul>
+  <li><a href="https://github.com/jantimon/html-webpack-plugin##options">HtmlWebpackPlugin Options 참고하기 (click)</a></li>
+  <li><code class="language-plaintext highlighter-rouge">./index.html</code> -&gt; <code class="language-plaintext highlighter-rouge">src/index.html</code>에 하나 복사합니다.</li>
+</ul>
+
+<div file="./src/index.html" class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cp">&lt;!DOCTYPE html&gt;</span>
+    <span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"X-UA-Compatible"</span> <span class="na">content=</span><span class="s">"IE=edge"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;title&gt;</span>webpack app <span class="nt">&lt;</span><span class="err">%=</span> <span class="na">env</span> <span class="err">%</span><span class="nt">&gt;&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="c">&lt;!-- &lt;script src="./dist/main.js"&gt;&lt;/script&gt; --&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+    <span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div file="webpack.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="kd">const</span> <span class="nx">HtmlWebpackPlugin</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">html-webpack-plugin</span><span class="dl">'</span><span class="p">);</span>
+
+   <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">...</span>
+        <span class="na">plugins</span> <span class="p">:</span> <span class="p">[</span>
+            <span class="k">new</span> <span class="nx">HtmlWebpackPlugin</span><span class="p">({</span>
+            <span class="na">title</span><span class="p">:</span> <span class="dl">'</span><span class="s1">siksik webpack</span><span class="dl">'</span><span class="p">,</span>        <span class="c1">// 생성된 HTML에 사용할 제목</span>
+            <span class="na">filename</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">siksik.html</span><span class="dl">'</span><span class="p">,</span>       <span class="c1">// 생성할 HTML 파일명, 기본값은 index.html</span>
+            <span class="na">template</span><span class="p">:</span> <span class="dl">'</span><span class="s1">./src/index.html</span><span class="dl">'</span><span class="p">,</span>   <span class="c1">// 템플릿 경로를 지정</span>
+            <span class="na">templateParameters</span><span class="p">:</span> <span class="p">{</span>           <span class="c1">// 템플릿에 사용된 매개변수를 덮어쓸 수 있습니다.</span>
+              <span class="na">env</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">development</span><span class="dl">'</span> <span class="p">?</span> <span class="dl">'</span><span class="s1">(development)</span><span class="dl">'</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">(product)</span><span class="dl">'</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">})</span>
+        <span class="p">],</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>NODE_ENV=production npm run build 결과 :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">   NODE_ENV=production npm run build
+</span></code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/147105393-146accb4-e78c-4fac-b1ad-c459f81dbc7f.png" alt="image" /></p>
+
+<p><br /></p>
+
+<p><strong>NODE_ENV=development npm run build 결과 :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">   NODE_ENV=development npm run build
+</span></code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/147105637-ae593f49-67d0-4526-a31f-4131fb6c28fc.png" alt="image" /></p>
+
+<p><br />
+<br /></p>
+
+<h2 id="h"><strong><a href="https://webpack.kr/plugins/mini-css-extract-plugin/">MiniCssExtractPlugin</a></strong></h2>
+
+<hr />
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">MiniCssExtractPlugin</code>은 <code class="language-plaintext highlighter-rouge">CSS</code>를 별도의 파일로 추출합니다. <code class="language-plaintext highlighter-rouge">CSS</code>가 포함된 JS파일별로 <code class="language-plaintext highlighter-rouge">CSS</code>파일을 생성합니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">CSS</code>가 많아 질수록 하나의 Js 결과물로 만드는 것이 부담될 수 있습니다. 번들된 결과에서 <code class="language-plaintext highlighter-rouge">CSS</code> 코드만 뽑아 별도의 <code class="language-plaintext highlighter-rouge">CSS</code> 파일로 만들어 파일을 분리하는게 유리할 수 있습니다. 브라우저에서 큰 파일을 하나 받는 것 보다, 여러 개의 작은 파일을 동시에 다운로드하는게 빠릅니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">css-loader</code>와 함께 사용합니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">production</code> 환경인 경우엔 <code class="language-plaintext highlighter-rouge">MiniCssExtractPlugin.loader</code>를 사용하고  <code class="language-plaintext highlighter-rouge">development</code> 환경인 경우엔 <code class="language-plaintext highlighter-rouge">style-loader</code>를 사용해보자</li>
+  <li><code class="language-plaintext highlighter-rouge">MiniCssExtractPlugin.loader</code>는 <code class="language-plaintext highlighter-rouge">MiniCssExtractPlugin</code>에서 제공하는 로더이다.</li>
+</ul>
+
+<p><strong>install :</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">   npm install --save-dev mini-css-extract-plugin
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<div file="webpack.config.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="kd">const</span> <span class="nx">MiniCssExtractPlugin</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">mini-css-extract-plugin</span><span class="dl">"</span><span class="p">);</span>
+
+   <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+       <span class="na">plugins</span><span class="p">:</span> <span class="p">[</span><span class="k">new</span> <span class="nx">MiniCssExtractPlugin</span><span class="p">()],</span>
+       <span class="na">module</span><span class="p">:</span> <span class="p">{</span>
+           <span class="na">rules</span><span class="p">:</span> <span class="p">[</span>
+               <span class="p">{</span>
+                   <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.</span><span class="sr">css$/i</span><span class="p">,</span>
+                   <span class="na">use</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">production</span><span class="dl">'</span>
+                        <span class="p">?</span> <span class="nx">MiniCssExtractPlugin</span><span class="p">.</span><span class="nx">loader</span>
+                        <span class="p">:</span> <span class="dl">'</span><span class="s1">style-loader</span><span class="dl">'</span><span class="p">,</span>
+                        <span class="dl">'</span><span class="s1">css-loader</span><span class="dl">'</span>
+                   <span class="p">]</span>
+               <span class="p">},</span>
+            <span class="p">],</span>
+        <span class="p">},</span>
+        <span class="na">plugins</span> <span class="p">:</span> <span class="p">[</span>
+            <span class="p">...(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">production</span><span class="dl">'</span>
+            <span class="p">?</span> <span class="p">[</span><span class="k">new</span> <span class="nx">MiniCssExtractPlugin</span><span class="p">({</span><span class="na">filename</span><span class="p">:</span> <span class="dl">'</span><span class="s1">[name].css</span><span class="dl">'</span><span class="p">})]</span>
+            <span class="p">:</span> <span class="p">[]</span>
+        <span class="p">],</span>
+    <span class="p">};</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">import</span> <span class="dl">'</span><span class="s1">./app.css</span><span class="dl">'</span><span class="p">;</span>
+    <span class="p">...</span>
+</code></pre></div></div>
+<p><br /></p>
+
+<p><strong>app.css :</strong></p>
+<div file="app.js" class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nt">body</span> <span class="p">{</span>
+        <span class="nl">background-image</span><span class="p">:</span> <span class="sx">url(bg.jpg)</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>NODE_ENV=production npm run build 결과 :</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">main.css</code> 파일이 dist 폴더에 생성된 것을 확인할 수 있습니다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/147108573-c929018b-c6e2-46c3-8f59-eab5fe98ea2a.png" alt="image" /></p>
+
+<p><br /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">HtmlWebpackPlugin</code>에 의해 생성된 <code class="language-plaintext highlighter-rouge">HTML</code>안에 <code class="language-plaintext highlighter-rouge">css asset(main.css)</code>이 <code>&lt;head&gt;</code> 요소 안에 <code>&lt;link&gt;</code> 태그로 포함된 것을 확인할 수 있습니다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/147108652-5e60ce99-1139-48e9-a615-c4e5681fdae9.png" alt="image" /></p>
+:ET

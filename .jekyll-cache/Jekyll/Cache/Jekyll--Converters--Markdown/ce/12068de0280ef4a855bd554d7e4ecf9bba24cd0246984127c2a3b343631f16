@@ -1,0 +1,260 @@
+I"�L<h2 id="라이프-사이클-메서드란">라이프 사이클 메서드란?</h2>
+
+<p><code class="language-plaintext highlighter-rouge">LifeCycle Method</code>란 한국말로 “생명주기”라고 한다. React, Vue, angular와 같은 프레임워크들은 MVC패턴에서 View에 해당하는 영역이다. 그렇기 때문에 각 컴포넌트들은 라이프 사이클이 존재한다.</p>
+
+<p>라이프 사이클은 컴포넌트가 브라우저에 생성되고, 업데이트되고, 제거될 때 호출되는 메서드이다. 또한 클래스형 컴포넌트에서만 사용 할 수 있다.</p>
+
+<p>만약, 함수형으로 컴포넌트를 구현한다면 <code class="language-plaintext highlighter-rouge">useEffect</code>를 사용하여 라이프사이클을 구현해야한다.
+일단, 라이프 사이클의 유형과 어떻게 사용하는지를 익히는 것에 집중해보자.</p>
+
+<p>그리고, 아래의 이미지는 리액트 라이프 사이클을 나타낸 <a href="https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/">이미지</a>이다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/164472072-39bf1eab-65b0-4bc0-ae09-d2c2e8881477.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h2 id="라이프-사이클-메서드-유형">라이프 사이클 메서드 유형</h2>
+
+<p>라이프 사이클은 크게 3가지 유형으로 나눌 수 있다.</p>
+
+<ol>
+  <li>컴포넌트가 브라우저에 생성될 때 =&gt; <code class="language-plaintext highlighter-rouge">Mount</code>
+    <ul>
+      <li>마운트는 DOM이 생성되고 웹 브라우저 상에 나타는 것을 말한다.</li>
+    </ul>
+  </li>
+  <li>컴포넌트가 업데이트 될 때 =&gt; <code class="language-plaintext highlighter-rouge">Update</code>
+    <ul>
+      <li>Props가 바뀔 때</li>
+      <li>State가 바뀔 때</li>
+      <li>부모 컴포넌트가 리렌더링 될 때</li>
+      <li>this.forceUpdate로 강제로 렌더링을 할 때이다.</li>
+    </ul>
+  </li>
+  <li>컴포넌트가 제거 될 때 =&gt; <code class="language-plaintext highlighter-rouge">Unmount</code>
+    <ul>
+      <li>Unmount는 DOM에서 제거되는 것을 말한다.</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="마운트">마운트</h3>
+
+<p>마운트될 때 발생하는 생명주기를 알아보자.</p>
+
+<ul>
+  <li>constructor</li>
+  <li>getDerivedStateFromProps</li>
+  <li>render</li>
+  <li>componentDidMount</li>
+</ul>
+
+<h4 id="constructor">constructor</h4>
+
+<p><code class="language-plaintext highlighter-rouge">constructor(생성자)</code>는 컴포넌트가 처음 생성될 때 실행되는 메서드이다. 이 메서드는 초기 state를 정의할 수 있다.</p>
+
+<p>클래스형 컴포넌트에서는 초기 state를 사용할 때 <code class="language-plaintext highlighter-rouge">constructor</code>를 사용해야 한다. 
+훅에서는 useState hook을 사용하여 초기 state를 설정할 수 있다.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//Class</span>
+<span class="kd">class</span> <span class="nx">LifeCycle</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span>  <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span> <span class="na">count</span><span class="p">:</span> <span class="mi">0</span> <span class="p">};</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">//Hooks</span>
+<span class="nx">Const</span> <span class="nx">LifeCycle</span> <span class="o">=</span><span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+	<span class="kd">const</span> <span class="p">[</span><span class="nx">count</span><span class="p">,</span> <span class="nx">setCount</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="getderivedstatefromprops">getDerivedStateFromProps</h4>
+<p>getDerivedStateFromProps는 props로 받아온 것을 state에 동기화 시키고 싶을 때 사용한다.
+컴포넌트가 마운트 될 때와 업데이트 될 때 호출된다. 자주 사용하진 않지만 가끔 사용하기 때문에 알아두면 좋을 것 같다.</p>
+
+<p>아래는 class에서의 사용법과 hooks에서의 사용법을 간단하게 작성한 예제이다.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Class</span>
+<span class="kd">class</span> <span class="nx">Example</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="kd">static</span> <span class="nx">getDerivedStateFromProps</span><span class="p">(</span><span class="nx">nextProps</span><span class="p">,</span> <span class="nx">prevState</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">nextProps</span><span class="p">.</span><span class="nx">value</span> <span class="o">!==</span> <span class="nx">prevState</span><span class="p">.</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="p">{</span> <span class="na">value</span><span class="p">:</span> <span class="nx">nextProps</span><span class="p">.</span><span class="nx">value</span> <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kc">null</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">//Hooks</span>
+<span class="kd">function</span> <span class="nx">ScrollView</span><span class="p">({</span><span class="nx">row</span><span class="p">})</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="p">[</span><span class="nx">isScrollingDown</span><span class="p">,</span> <span class="nx">setIsScrollingDown</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="p">[</span><span class="nx">prevRow</span><span class="p">,</span> <span class="nx">setPrevRow</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="nx">row</span> <span class="o">!==</span> <span class="nx">prevRow</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 마지막 렌더링 이후 행이 변경되었습니다. isScrollingDown을 업데이트합니다.</span>
+    <span class="nx">setIsScrollingDown</span><span class="p">(</span><span class="nx">prevRow</span> <span class="o">!==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">row</span> <span class="o">&gt;</span> <span class="nx">prevRow</span><span class="p">);</span>
+    <span class="nx">setPrevRow</span><span class="p">(</span><span class="nx">row</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="s2">`Scrolling down: </span><span class="p">${</span><span class="nx">isScrollingDown</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="render">render</h4>
+<p>컴포넌트를 렌더링하는 메서드이다. 가장 기초적인 메서드이면서 가장 중요한 메서드이다. 
+함수형 컴포넌트에서는 render 메서드를 사용하지 않고 컴포넌트를 렌더링할 수 있다.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//Class</span>
+<span class="kd">class</span> <span class="nx">LifeCycle</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span>  <span class="p">{</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">컴포넌트입니다</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">//Hooks</span>
+<span class="nx">Const</span> <span class="nx">LifeCycle</span> <span class="o">=</span><span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">컴포넌트입니다</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span><span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="componentdidmount">componentDidMount</h4>
+
+<p>componentDidMount는 컴포넌트의 첫 번째 렌더링이 끝나고 호출되는 메서드이다. 이 메서드가 호출되는 시점에는 우리가 만든 컴포넌트가 화면에 나타난 상태이다.
+여기선 보통 DOM을 사용해야하는 외부 라이브러리를 연동하거나, 해당 컴포넌트에서 필요한 데이터를 요청하기 위해 Axios, fetch 등 비동기 처리를 요청하거나 DOM의 속성을 읽거나 직접 변경하는 작업을 할 때 사용한다. 함수형 hooks에서는 <code class="language-plaintext highlighter-rouge">useEffect</code>를 활용하여 구현할 수 있다.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Class</span>
+<span class="kd">class</span> <span class="nx">LifeCycle</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+    <span class="nx">componentDidMount</span><span class="p">()</span> <span class="p">{</span>
+        <span class="p">...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Hooks</span>
+<span class="kd">const</span> <span class="nx">LifeCycle</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+     <span class="nx">useEffect</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="p">...</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>useEffect의 사용방법은 <a href="https://ko.reactjs.org/docs/hooks-effect.html">Using the Effect Hook</a>를 참고하자.</p>
+
+<p><br /></p>
+
+<h3 id="업데이트">업데이트</h3>
+
+<p>이번엔 컴포넌트가 업데이트 될 때 발생하는 생명주기를 알아보자.</p>
+
+<ul>
+  <li>getDerivedStateFromProps</li>
+  <li>shouldComponentUpdate</li>
+  <li>getSnapshotBeforeUpdate</li>
+  <li>componentDidUpdate</li>
+</ul>
+
+<h4 id="getderivedstatefromprops-1">getDerivedStateFromProps</h4>
+<p>마운트에서 다룬 내용과 동일하다. 컴포넌트의 <code class="language-plaintext highlighter-rouge">props</code> 나 <code class="language-plaintext highlighter-rouge">state</code> 가 바뀌었을때도 이 메서드가 호출되므로 잘 알아두자!</p>
+
+<h4 id="shouldcomponentupdate">shouldComponentUpdate</h4>
+<p>shouldComponentUpdate는 props나 state를 변경했을 때 리렌더링을 할지 말지 결정하는 메서드이다. 이 메서드는 반드시 <code class="language-plaintext highlighter-rouge">false</code>나 <code class="language-plaintext highlighter-rouge">true</code>를 반환해야 한다.
+이 메서드는 오직 성능 최적화만을 위한 것이며 렌더링 목적을 방지하는 목적으로 사용하게되면 버그로 이어질 수 있다.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Class</span>
+<span class="kd">class</span> <span class="nx">LifeCycle</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">shouldComponentUpdate</span><span class="p">(</span><span class="nx">nextProps</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">nextProps</span><span class="p">.</span><span class="nx">value</span> <span class="o">!==</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">value</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Hooks</span>
+<span class="kd">const</span> <span class="nx">LifeCycle</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">memo</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="p">...</span>
+  <span class="p">},</span>
+  <span class="p">(</span><span class="nx">prevProps</span><span class="p">,</span> <span class="nx">nextProps</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">nextProps</span><span class="p">.</span><span class="nx">value</span> <span class="o">===</span> <span class="nx">prevProps</span><span class="p">.</span><span class="nx">value</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre></div></div>
+<p>Hooks에서도 props는 React.memo, state는 useMemo를 활용하면 렌더링 성능을 개선할 수 있다고 한다.</p>
+
+<h4 id="getsnapshotbeforeupdate">getSnapshotBeforeUpdate</h4>
+<p>getSnapshotBeforeUpdate는 가장 마지막으로 렌더링된 결과가 DOM 등에 반영되기 전에 호출된다. <a href="https://ko.reactjs.org/docs/react-component.html#getsnapshotbeforeupdate">공식문서</a>에서도 사용하는 예는 흔치 않다고 말한다. 보통 채팅 화면처럼 스크롤 위치를 따로 처리하는 작업이 필요한 UI 등을 생각해볼 수 있다고 한다.</p>
+
+<p>스냅샷 값을 반환하거나 null을 반환한다.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">LifeCycle</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">getSnapshotBeforeUpdate</span><span class="p">(</span><span class="nx">prevProps</span><span class="p">,</span> <span class="nx">prevState</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">prevProps</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">list</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">listRef</span><span class="p">.</span><span class="nx">current</span>
+      <span class="k">return</span> <span class="nx">list</span><span class="p">.</span><span class="nx">scrollHeight</span> <span class="o">-</span> <span class="nx">list</span><span class="p">.</span><span class="nx">scrollTop</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kc">null</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>함수형에서는 아직 이 기능을 대체할만한 <code class="language-plaintext highlighter-rouge">hook</code>이 없다고 한다.</p>
+
+<h4 id="componentdidupdate">componentDidUpdate</h4>
+<p>componentDidUpdate는 <code class="language-plaintext highlighter-rouge">리렌더링</code>을 완료한 후 호출되는 메서드이다. 업데이트가 끝난 직후이므로, DOM관련 처리를 해도 무방하다.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Class</span>
+<span class="kd">class</span> <span class="nx">LifeCycle</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+    <span class="nx">componentDidUpdate</span><span class="p">(</span><span class="nx">prevProps</span><span class="p">,</span> <span class="nx">prevState</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Hooks</span>
+<span class="kd">const</span> <span class="nx">LifeCycle</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">useEffect</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="p">...</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="언마운트">언마운트</h3>
+
+<p>이번엔 컴포넌트가 제거 될 때 발생하는 생명주기를 알아보자.</p>
+
+<ul>
+  <li>componentWillUnmount</li>
+</ul>
+
+<h4 id="componentwillunmount">componentWillUnmount</h4>
+<p>componentWillUnmount는 컴포넌트를 DOM에서 제거할 때 호출되는 메서드이다. 여기서는 주로 DOM에 직접 등록했던 이벤트를 제거한다. 
+함수형 컴포넌트에서는 <code class="language-plaintext highlighter-rouge">useEffect CleanUp</code> 함수를 통해 해당 메서드를 구현할 수 있다.</p>
+
+<pre><code class="language-JS">// Class
+class LifeCycle extends React.Component {
+    coomponentWillUnmount() {
+        ...
+    }
+}
+
+// Hooks
+const LifeCycle = () =&gt; {
+    useEffect(() =&gt; {
+      function handleStatusChange(status) {
+        setIsOnline(status.isOnline);
+      }
+      ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange);
+      // effect 이후에 어떻게 정리(clean-up)할 것인지 표시합니다.
+      return function cleanup() {
+        ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange);
+      };
+    });
+}
+</code></pre>
+
+<p><br /></p>
+
+<h2 id="마치며">마치며</h2>
+
+<p>리액트에서 클래스형 컴포넌트로 구현하게 되는 일은 앞으로 많지 않을 것이므로, 대략적인 내용만 숙지하면 될 것 같다.</p>
+
+<p>중요한건, View에서 어떤식으로 라이프 사이클이 돌아가는지 이해하는 것이 중요하다. 가령, 마운트가 무엇이고 그의 생명주기와 관련된 hooks들과 사용방법을 이해하는 것이 중요한 것 같다.</p>
+
+<p>앞으로 더 많은 내용들을 공부해야 해야겠지만 리액트는 정말 매력있는 라이브러리같다.</p>
+:ET

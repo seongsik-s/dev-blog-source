@@ -1,0 +1,279 @@
+I"�F<h2 id="시작하기"><strong>시작하기</strong></h2>
+
+<hr />
+
+<p>최근에 <code class="language-plaintext highlighter-rouge">Nuxt.js</code>와 <code class="language-plaintext highlighter-rouge">Vuetify</code>로 만든 정적 웹 사이트를 만들었다.</p>
+
+<p>지인들에게 어떤지 보여줬는데 반응이…</p>
+
+<p><code class="language-plaintext highlighter-rouge">왈1</code>: 모바일에선 화면이 깨지는거같네?<br />
+<code class="language-plaintext highlighter-rouge">왈2</code>: 테블릿에선 좀 다르게 보이네?</p>
+
+<p>PC기준으로 만들었기 때문에 다양한 디바이스를 전혀~~고려하지 못했다.</p>
+
+<p>따라서, <code class="language-plaintext highlighter-rouge">Vuetify</code>에서 제공하는 그리드 시스템을 활용하여 디바이스별로 어떻게 배치하고 나뉘는지 정리해봤다.</p>
+
+<p>기본적으로 vuetify<code class="language-plaintext highlighter-rouge">(2.x)</code>버전에서 제공하는 5가지 유형의 Display Breakpoints로 진행했다.</p>
+
+<p><br /></p>
+
+<h2 id="vuetify-그리드-시스템">Vuetify 그리드 시스템</h2>
+
+<p>Vuetify는 flexbox를 사용하여 12포인트 그리드 시스템과 함께 제공된다.<br />
+특정 화면 크기 또는 방향(xs, sm, md, lg, xl)을 타겟팅하는 데 사용되는 5가지 유형의 미디어 중단점이 포함된다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Device</th>
+      <th style="text-align: left">code</th>
+      <th style="text-align: left">Type</th>
+      <th style="text-align: left">Range</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Extra small</td>
+      <td style="text-align: left">xs</td>
+      <td style="text-align: left">Small to large phone</td>
+      <td style="text-align: left"><code class="language-plaintext highlighter-rouge">&lt;</code> 600px</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Small</td>
+      <td style="text-align: left">sm</td>
+      <td style="text-align: left">Small to medium tablet</td>
+      <td style="text-align: left">600px <code class="language-plaintext highlighter-rouge">&gt; &lt;</code> 960px</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Medium</td>
+      <td style="text-align: left">md</td>
+      <td style="text-align: left">Large tablet to laptop</td>
+      <td style="text-align: left">960px <code class="language-plaintext highlighter-rouge">&gt; &lt;</code> 1264px*</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Large</td>
+      <td style="text-align: left">lg</td>
+      <td style="text-align: left">Desktop</td>
+      <td style="text-align: left">1264px <code class="language-plaintext highlighter-rouge">&gt; &lt;</code> 1904px*</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Extra large</td>
+      <td style="text-align: left">xl</td>
+      <td style="text-align: left">4k and ultra-wide</td>
+      <td style="text-align: left"><code class="language-plaintext highlighter-rouge">&gt;</code> 1904px*</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="구성요소">구성요소</h2>
+<p><code class="language-plaintext highlighter-rouge">1.x</code> 버전에서는 <code class="language-plaintext highlighter-rouge">v-container</code>, <code class="language-plaintext highlighter-rouge">v-layout</code>, <code class="language-plaintext highlighter-rouge">v-flex</code>의 구성요소로 사용되었지만 <code class="language-plaintext highlighter-rouge">2.x</code>버전 부터는 이를 대체 할 요소들이 등장했다.
+<code class="language-plaintext highlighter-rouge">2.x</code> 이상 부터는 위의 구성요소는 사용하지 않으므로 참고해야한다.</p>
+
+<p>각 요소별 prop는 <a href="https://vuetifyjs.com/en/components/grids/">#Grid system</a>에서 참고.</p>
+
+<h3 id="v-container">v-container</h3>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">v-container</code> 사이트 콘텐츠를 중앙에 놓고 수평으로 채우는 기능을 제공한다.</li>
+  <li><code class="language-plaintext highlighter-rouge">fluid</code> 속성을 사용하여 모든 viewport 및 디바이스 크기에 대해 완전히 확장할 수 있다.</li>
+</ul>
+
+<h3 id="v-col">v-col</h3>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">v-col</code>는 <code class="language-plaintext highlighter-rouge">v-row</code>의 직계 자식이어야 하는 컨텐츠이다.</li>
+  <li><code class="language-plaintext highlighter-rouge">v-col</code>는 2.x 버전으로 1.x 버전의 <code class="language-plaintext highlighter-rouge">v-flex</code>를 대체한다.</li>
+</ul>
+
+<h3 id="v-row">v-row</h3>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">v-row</code>는 <code class="language-plaintext highlighter-rouge">v-col</code>을 위한 wrapper 컴포넌트이다. 즉 포장지 역할을 한다고 생각하면된다.</li>
+  <li>내부 열의 레이아웃과 흐름을 제어하기 위해 <code class="language-plaintext highlighter-rouge">flex</code> 속성을 사용한다.</li>
+  <li><code class="language-plaintext highlighter-rouge">v-row</code>는 2.x 버전으로 1.x 버전의 <code class="language-plaintext highlighter-rouge">v-layout</code>를 대체한다.</li>
+</ul>
+
+<h3 id="v-spacer">v-spacer</h3>
+<p>컴포넌트 사이에 빈 공간을 생성하고 싶을때 사용한다.</p>
+
+<p><br /></p>
+
+<h2 id="기본-레이아웃">기본 레이아웃</h2>
+
+<ul>
+  <li>1.x 버전</li>
+</ul>
+
+<div class="language-vue highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;</span><span class="k">template</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;v-containerd&gt;</span>
+    <span class="nt">&lt;v-layout&gt;</span>
+      <span class="nt">&lt;v-flex&gt;</span>
+        <span class="nt">&lt;v-card&gt;</span>
+          내용...
+        <span class="nt">&lt;/v-card&gt;</span>
+      <span class="nt">&lt;/v-flex&gt;</span>
+    <span class="nt">&lt;/v-layout&gt;</span>
+  <span class="nt">&lt;/v-container&gt;</span>
+<span class="nt">&lt;/</span><span class="k">template</span><span class="nt">&gt;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>2.x 버전</li>
+</ul>
+
+<div class="language-vue highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;</span><span class="k">template</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;v-row</span> <span class="nt">&gt;</span>
+    <span class="nt">&lt;v-col&gt;</span>
+      <span class="nt">&lt;v-card</span> <span class="nt">&gt;</span>
+        내용...
+      <span class="nt">&lt;/v-card&gt;</span>
+    <span class="nt">&lt;/v-col&gt;</span>
+  <span class="nt">&lt;/v-row&gt;</span>
+
+  <span class="nt">&lt;v-row</span> <span class="nt">&gt;</span>
+    <span class="nt">&lt;v-col&gt;</span>
+      <span class="nt">&lt;v-card</span> <span class="nt">&gt;</span>
+        내용...
+      <span class="nt">&lt;/v-card&gt;</span>
+    <span class="nt">&lt;/v-col&gt;</span>
+  <span class="nt">&lt;/v-row&gt;</span>
+<span class="nt">&lt;/</span><span class="k">template</span><span class="nt">&gt;</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="12-포인트-grid-시스템">12 포인트 Grid 시스템</h2>
+
+<ul>
+  <li>Vuetify는 부트스트랩과 동일하게 12 포인트의 그리드 시스템을 제공한다.</li>
+  <li>즉 1개의 row(행)은 12개의 col(열)로 구성되어 있다고 보면된다.</li>
+  <li>col는 특정 화면 코드와 크기<code class="language-plaintext highlighter-rouge">(xs, sm, md, lg, xl)</code>에 따라 적용된다.</li>
+</ul>
+
+<div class="language-vue highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;</span><span class="k">template</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;v-container&gt;</span>
+  <span class="nt">&lt;v-row</span> <span class="na">dense</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;v-col</span> <span class="na">cols=</span><span class="s">"12"</span> <span class="na">md=</span><span class="s">"12"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;v-card</span> <span class="na">color=</span><span class="s">"red"</span> <span class="na">style=</span><span class="s">"text-align:center;"</span> <span class="nt">&gt;</span>
+        12
+      <span class="nt">&lt;/v-card&gt;</span>
+    <span class="nt">&lt;/v-col&gt;</span>
+    <span class="nt">&lt;v-col</span> <span class="na">cols=</span><span class="s">"6"</span> <span class="na">md=</span><span class="s">"6"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;v-card</span> <span class="na">color=</span><span class="s">"blue"</span> <span class="na">style=</span><span class="s">"text-align:center;"</span> <span class="nt">&gt;</span>
+        6
+      <span class="nt">&lt;/v-card&gt;</span>
+    <span class="nt">&lt;/v-col&gt;</span>
+    <span class="nt">&lt;v-col</span> <span class="na">cols=</span><span class="s">"6"</span> <span class="na">md=</span><span class="s">"6"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;v-card</span> <span class="na">color=</span><span class="s">"blue"</span> <span class="na">style=</span><span class="s">"text-align:center;"</span> <span class="nt">&gt;</span>
+        6
+      <span class="nt">&lt;/v-card&gt;</span>
+    <span class="nt">&lt;/v-col&gt;</span>
+    <span class="c">&lt;!-- 생략... --&gt;</span>
+  <span class="nt">&lt;/v-row&gt;</span>
+<span class="nt">&lt;/v-container&gt;</span>
+<span class="nt">&lt;/</span><span class="k">template</span><span class="nt">&gt;</span>
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/160543213-18324632-1816-4366-bdc3-bb1d2cfc0db9.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h3 id="반응형으로-적용">반응형으로 적용</h3>
+
+<ul>
+  <li>1.x버전에는 <code class="language-plaintext highlighter-rouge">xs</code> prop을 제공했지만 2.x 부터는 <code class="language-plaintext highlighter-rouge">xs</code> prop를 제공하지 않는다.</li>
+  <li><code class="language-plaintext highlighter-rouge">col</code>은 미리 차지해야하는 너비를 지정하지 않으면 부모 컨테이너 내에서 사용 가능한 전체 공간을 자동으로 차지한다.</li>
+  <li>따라서 <code class="language-plaintext highlighter-rouge">cols</code>라는 속성을 줘서 모든 뷰포트에 적용시킨다. 그렇게 되면 sm, md, lg, xl이 적용되고 나머지는 cols 속성이 적용되므로 xs효과를 대신한다.</li>
+  <li>단 <code class="language-plaintext highlighter-rouge">cols</code>는 모든 뷰포트에 적용되므로 명시되지 않은 속성은 전부 적용된다.</li>
+</ul>
+
+<div class="language-vue highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;</span><span class="k">template</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;v-container</span> <span class="nt">&gt;</span>
+  <span class="nt">&lt;v-row</span> <span class="na">dense</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;v-col</span> <span class="na">cols=</span><span class="s">"12"</span> <span class="na">sm=</span><span class="s">"3"</span> <span class="na">md=</span><span class="s">"4"</span> <span class="na">lg=</span><span class="s">"6"</span> <span class="na">xl=</span><span class="s">"12"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;v-card</span> <span class="na">color=</span><span class="s">"red"</span> <span class="na">style=</span><span class="s">"text-align:center;"</span> <span class="nt">&gt;</span>
+        BOX
+      <span class="nt">&lt;/v-card&gt;</span>
+    <span class="nt">&lt;/v-col&gt;</span>
+    <span class="nt">&lt;v-col</span> <span class="na">cols=</span><span class="s">"12"</span> <span class="na">sm=</span><span class="s">"3"</span> <span class="na">md=</span><span class="s">"4"</span> <span class="na">lg=</span><span class="s">"6"</span> <span class="na">xl=</span><span class="s">"12"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;v-card</span> <span class="na">color=</span><span class="s">"blue"</span> <span class="na">style=</span><span class="s">"text-align:center;"</span> <span class="nt">&gt;</span>
+        BOX
+      <span class="nt">&lt;/v-card&gt;</span>
+    <span class="nt">&lt;/v-col&gt;</span>
+    <span class="nt">&lt;v-col</span> <span class="na">cols=</span><span class="s">"12"</span> <span class="na">sm=</span><span class="s">"3"</span> <span class="na">md=</span><span class="s">"4"</span> <span class="na">lg=</span><span class="s">"6"</span> <span class="na">xl=</span><span class="s">"12"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;v-card</span> <span class="na">color=</span><span class="s">"red"</span> <span class="na">style=</span><span class="s">"text-align:center;"</span> <span class="nt">&gt;</span>
+        BOX
+      <span class="nt">&lt;/v-card&gt;</span>
+    <span class="nt">&lt;/v-col&gt;</span>
+    <span class="nt">&lt;v-col</span> <span class="na">cols=</span><span class="s">"12"</span> <span class="na">sm=</span><span class="s">"3"</span> <span class="na">md=</span><span class="s">"4"</span> <span class="na">lg=</span><span class="s">"6"</span> <span class="na">xl=</span><span class="s">"12"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;v-card</span> <span class="na">color=</span><span class="s">"blue"</span> <span class="na">style=</span><span class="s">"text-align:center;"</span> <span class="nt">&gt;</span>
+        BOX
+      <span class="nt">&lt;/v-card&gt;</span>
+    <span class="nt">&lt;/v-col&gt;</span>
+    <span class="nt">&lt;v-col</span> <span class="na">cols=</span><span class="s">"12"</span> <span class="na">sm=</span><span class="s">"3"</span> <span class="na">md=</span><span class="s">"4"</span> <span class="na">lg=</span><span class="s">"6"</span> <span class="na">xl=</span><span class="s">"12"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;v-card</span> <span class="na">color=</span><span class="s">"red"</span> <span class="na">style=</span><span class="s">"text-align:center;"</span> <span class="nt">&gt;</span>
+        BOX
+      <span class="nt">&lt;/v-card&gt;</span>
+    <span class="nt">&lt;/v-col&gt;</span>
+    <span class="nt">&lt;v-col</span> <span class="na">cols=</span><span class="s">"12"</span> <span class="na">sm=</span><span class="s">"3"</span> <span class="na">md=</span><span class="s">"4"</span> <span class="na">lg=</span><span class="s">"6"</span> <span class="na">xl=</span><span class="s">"12"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;v-card</span> <span class="na">color=</span><span class="s">"blue"</span> <span class="na">style=</span><span class="s">"text-align:center;"</span> <span class="nt">&gt;</span>
+        BOX
+      <span class="nt">&lt;/v-card&gt;</span>
+    <span class="nt">&lt;/v-col&gt;</span>
+    <span class="nt">&lt;v-col</span> <span class="na">cols=</span><span class="s">"12"</span> <span class="na">sm=</span><span class="s">"3"</span> <span class="na">md=</span><span class="s">"4"</span> <span class="na">lg=</span><span class="s">"6"</span> <span class="na">xl=</span><span class="s">"12"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;v-card</span> <span class="na">color=</span><span class="s">"red"</span> <span class="na">style=</span><span class="s">"text-align:center;"</span> <span class="nt">&gt;</span>
+        BOX
+      <span class="nt">&lt;/v-card&gt;</span>
+    <span class="nt">&lt;/v-col&gt;</span>
+    <span class="nt">&lt;v-col</span> <span class="na">cols=</span><span class="s">"12"</span> <span class="na">sm=</span><span class="s">"3"</span> <span class="na">md=</span><span class="s">"4"</span> <span class="na">lg=</span><span class="s">"6"</span> <span class="na">xl=</span><span class="s">"12"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;v-card</span> <span class="na">color=</span><span class="s">"blue"</span> <span class="na">style=</span><span class="s">"text-align:center;"</span> <span class="nt">&gt;</span>
+        BOX
+      <span class="nt">&lt;/v-card&gt;</span>
+    <span class="nt">&lt;/v-col&gt;</span>
+    <span class="nt">&lt;v-col</span> <span class="na">cols=</span><span class="s">"12"</span> <span class="na">sm=</span><span class="s">"3"</span> <span class="na">md=</span><span class="s">"4"</span> <span class="na">lg=</span><span class="s">"6"</span> <span class="na">xl=</span><span class="s">"12"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;v-card</span> <span class="na">color=</span><span class="s">"red"</span> <span class="na">style=</span><span class="s">"text-align:center;"</span> <span class="nt">&gt;</span>
+        BOX
+      <span class="nt">&lt;/v-card&gt;</span>
+    <span class="nt">&lt;/v-col&gt;</span>
+  <span class="nt">&lt;/v-row&gt;</span>
+<span class="nt">&lt;/v-container&gt;</span>
+<span class="nt">&lt;/</span><span class="k">template</span><span class="nt">&gt;</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<ul>
+  <li>모바일 (&lt; 600px) 화면</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/160551304-de61af4c-5f2b-4488-bcf4-5ad1f9cee30e.png" alt="image" /></p>
+
+<p><br /></p>
+
+<ul>
+  <li>테블릿 (600px &gt; &lt; 960px) 화면</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/160551506-18ea584d-6403-4a14-8b0a-f2e6053ff405.png" alt="image" /></p>
+
+<p><br /></p>
+
+<ul>
+  <li>랩탑 (960px &gt; &lt; 1264px*) 화면</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/160551781-a16ee2d3-b595-4d23-979c-fb26488cd588.png" alt="image" /></p>
+
+<p><br /></p>
+
+<ul>
+  <li>데스크탑 (1264px &gt; &lt; 1904px*) 화면</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/160551867-1cfb0fe6-5915-4d54-be4a-384ad71121be.png" alt="image" /></p>
+
+<p><br /></p>
+
+<ul>
+  <li>4k and ultra-wide (&gt; 1904px*) 화면</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/160551999-35994a7a-4d65-4564-b052-c8eadde0fee0.png" alt="image" /></p>
+:ET

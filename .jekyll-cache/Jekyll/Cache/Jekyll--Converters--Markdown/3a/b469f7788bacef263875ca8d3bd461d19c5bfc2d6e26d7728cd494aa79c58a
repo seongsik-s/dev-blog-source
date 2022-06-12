@@ -1,0 +1,405 @@
+I"�<h2 id="시작으로">시작으로</h2>
+
+<hr />
+
+<p><code class="language-plaintext highlighter-rouge">Vanilla JS</code>로 컴포넌트 구현을 공부하다가 <code class="language-plaintext highlighter-rouge">이벤트 버블링</code>이라는 것을 접하게 되었다. 한 번도 해본 적 없었기 때문에 공부한 내용을 정리하게 되었다.</p>
+
+<h2 id="이벤트-등록이란">이벤트 등록이란</h2>
+
+<hr />
+
+<p><code class="language-plaintext highlighter-rouge">이벤트 등록</code>은 웹 애플리케이션에서 기본적으로 이해하고 있어야하는 내용이다.
+<code class="language-plaintext highlighter-rouge">이벤트 등록</code>이란 웹 애플리케이션에서 사용자의 입력을 받기 위해 필요한 기능이다. 대표적으로 <code class="language-plaintext highlighter-rouge">click</code> 이벤트가 있다.</p>
+
+<p>아래의 간단한 예제를 보자.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"X-UA-Compatible"</span> <span class="na">content=</span><span class="s">"IE=edge"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Document<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"btn"</span> <span class="na">style=</span><span class="s">"height: 20px; width: 100px;"</span><span class="nt">&gt;</span>버튼클릭<span class="nt">&lt;/button&gt;</span>
+    <span class="nt">&lt;script&gt;</span>
+        <span class="kd">const</span> <span class="nx">btn</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="dl">'</span><span class="s1">#btn</span><span class="dl">'</span><span class="p">)</span>
+        <span class="nx">btn</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">click</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+            <span class="nx">alert</span><span class="p">(</span><span class="dl">'</span><span class="s1">click</span><span class="dl">'</span><span class="p">);</span>
+        <span class="p">})</span>
+    <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>버튼을 클릭하게 되면 콜백함수로 <code class="language-plaintext highlighter-rouge">alert()</code>를 호출하여 실행하게 되는 간단한 예제이다.
+이처럼 <code class="language-plaintext highlighter-rouge">addEventListener()</code>는 웹 API로 웹 개발자들이 동적인 기능들을 추가할 수 있도록 도와준다.
+그럼 브라우저는 어떻게 이벤트의 발생을 감지했을까? 브라우저가 이벤트를 감지하는 방식 2가지를 알아보자.</p>
+
+<p><br /></p>
+
+<h2 id="이벤트-버블링---event-bubbling">이벤트 버블링 - Event Bubbling</h2>
+
+<hr />
+
+<p><code class="language-plaintext highlighter-rouge">이벤트 버블링</code>이란 특정 화면 요소에서 이벤트가 발생했을 때 해당 이벤트가 더 <code class="language-plaintext highlighter-rouge">상위의 화면 요소</code>들로 전달되어 가는 특성을 말한다.</p>
+
+<p><img src="/assets/images/banners/bubble.png" alt="image" /></p>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">상위의 화면 요소</code>란 HTML 요소는 기본적으로 트리 구조를 갖습니다. 여기서는 트리 구조상으로 한 단계 위에 있는 요소를 상위 요소라고 하며 body 태그를 최상위 요소라고 부른다.</p>
+</blockquote>
+
+<p>밑의 예제로 이해해보자.</p>
+
+<p>새 개의 <code class="language-plaintext highlighter-rouge">div</code> 태그가 있다. 가장 하위의 <code class="language-plaintext highlighter-rouge">div</code>태그에서 <code class="language-plaintext highlighter-rouge">click</code>이벤트가 발생했을 때 최상위 요소인 body 태그까지 전달된다.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"X-UA-Compatible"</span> <span class="na">content=</span><span class="s">"IE=edge"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Document<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;style&gt;</span>
+        <span class="nt">div</span> <span class="p">{</span>
+            <span class="nl">width</span><span class="p">:</span> <span class="m">100px</span><span class="p">;</span>
+            <span class="nl">height</span><span class="p">:</span> <span class="m">20px</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nc">.three</span> <span class="p">{</span>
+          <span class="nl">background-color</span><span class="p">:</span> <span class="no">gray</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="nt">&lt;/style&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"one"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"two"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"three"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+            <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+    <span class="nt">&lt;script&gt;</span>
+        <span class="kd">var</span> <span class="nx">divs</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="dl">'</span><span class="s1">div</span><span class="dl">'</span><span class="p">);</span>
+        <span class="nx">divs</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">div</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">div</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">click</span><span class="dl">'</span><span class="p">,</span> <span class="nx">logEvent</span><span class="p">);</span>
+        <span class="p">});</span>
+
+        <span class="kd">function</span> <span class="nx">logEvent</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">.</span><span class="nx">className</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>위 코드를 실행하면 <code class="language-plaintext highlighter-rouge">querySelectorAll</code>로 <code class="language-plaintext highlighter-rouge">div</code> 태그 모두 클릭 이벤트를 등록한다. 그리고, 클릭했을 때 <code class="language-plaintext highlighter-rouge">logEvent()</code>가 실행된다.
+밑의 결과를 보면 <code class="language-plaintext highlighter-rouge">three</code>-&gt;<code class="language-plaintext highlighter-rouge">two</code>-&gt;<code class="language-plaintext highlighter-rouge">one</code> 순서로 콘솔 로그가 출력된 것을 확인할 수 있다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/157051957-0cfbbd39-c938-4bc1-b94b-0b9958655653.png" alt="image" /></p>
+
+<p>이와 같이 <code class="language-plaintext highlighter-rouge">div</code> 태그 한 개만 클릭했는데 3개 이벤트가 발생한 이유는 브라우저는 특정 화면 요소에서 이벤트가 발생했을 때 그 이벤트 최상위에 있는 화면 요소까지 이벤트를 <code class="language-plaintext highlighter-rouge">전파</code>시킨다.
+따라서, <code class="language-plaintext highlighter-rouge">three</code>-&gt;<code class="language-plaintext highlighter-rouge">two</code>-&gt;<code class="language-plaintext highlighter-rouge">one</code> 순서로 이벤트가 실행된 것이다.</p>
+
+<p>만약, 특정 <code class="language-plaintext highlighter-rouge">div</code> 태그에만 이벤트를 준다면 위와 같은 동작은 일어나지 않는다.</p>
+
+<p>이와 같이 하위에서 상위 요소로의 이벤트 전파 방식을 이벤트 버블링(Event Bubbling)이라고 한다.</p>
+
+<p><br /></p>
+
+<h2 id="이벤트-캡쳐---event-capture">이벤트 캡쳐 - Event Capture</h2>
+
+<hr />
+
+<p>이벤트 캡처는 이벤트 버블링과 반대 방향으로 진행되는 이벤트 전파 방식이다.</p>
+
+<p>밑의 그림처럼 특정 이벤트가 발생하게 되면 최상위 요소인 body 태그에서 해당 태그를 찾아 내려간다.</p>
+
+<p><img src="/assets/images/banners/capture.png" alt="image" /></p>
+
+<p>밑의 예제로 이해해보자.</p>
+
+<p>이벤트 캡쳐로 전파하려면 <code class="language-plaintext highlighter-rouge">addEventListener()</code> API에서 옵션 객체에 <code class="language-plaintext highlighter-rouge">capture:true</code>를 설정해주면 된다.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"X-UA-Compatible"</span> <span class="na">content=</span><span class="s">"IE=edge"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Document<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;style&gt;</span>
+        <span class="nt">div</span> <span class="p">{</span>
+            <span class="nl">width</span><span class="p">:</span> <span class="m">100px</span><span class="p">;</span>
+            <span class="nl">height</span><span class="p">:</span> <span class="m">20px</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nc">.three</span> <span class="p">{</span>
+            <span class="nl">background-color</span><span class="p">:</span> <span class="no">gray</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="nt">&lt;/style&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"one"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"two"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"three"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+            <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+    <span class="nt">&lt;script&gt;</span>
+        <span class="kd">var</span> <span class="nx">divs</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="dl">'</span><span class="s1">div</span><span class="dl">'</span><span class="p">);</span>
+        <span class="nx">divs</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">div</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">div</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">click</span><span class="dl">'</span><span class="p">,</span> <span class="nx">logEvent</span><span class="p">,</span> <span class="p">{</span>
+                <span class="na">capture</span><span class="p">:</span> <span class="kc">true</span> <span class="c1">// default 값은 false입니다.</span>
+            <span class="p">});</span>
+        <span class="p">});</span>
+
+        <span class="kd">function</span> <span class="nx">logEvent</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">.</span><span class="nx">className</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>밑에 결과를 보면 아까와 다르게 <code class="language-plaintext highlighter-rouge">&lt;div class="three"&gt;&lt;/div&gt; </code> 클릭하면 최상위 요소 -&gt; 최하위 요소 순서로 전파된다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/157054279-0c90c878-7438-4fbd-9a34-92f8232a0e19.png" alt="image" /></p>
+
+<p><br /></p>
+
+<h2 id="eventstoppropagation">event.stopPropagation()</h2>
+
+<hr />
+
+<p>이벤트 버블링과, 이벤트 캡쳐 방식은 포함된 모든 요소들에게 전파시킨다(순서만 다를 뿐).
+하지만, 시작지점에서 한 번만 이벤트를 발생시키고 상위 혹은 하위로 이벤트를 전달하고 싶지 않을 때 <code class="language-plaintext highlighter-rouge">event.stopPropagation()</code>를 사용한다.</p>
+
+<ul>
+  <li>이벤트 버블링 전파를 막는다.</li>
+</ul>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"one"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"two"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"three"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+    <span class="kd">var</span> <span class="nx">divs</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="dl">'</span><span class="s1">div</span><span class="dl">'</span><span class="p">);</span>
+    <span class="nx">divs</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">div</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">div</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">click</span><span class="dl">'</span><span class="p">,</span> <span class="nx">logEvent</span><span class="p">);</span>
+    <span class="p">});</span>
+
+    <span class="kd">function</span> <span class="nx">logEvent</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">event</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">();</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">.</span><span class="nx">className</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>이벤트 캡쳐 전파를 막는다.</li>
+</ul>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"one"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"two"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"three"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+    <span class="kd">var</span> <span class="nx">divs</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="dl">'</span><span class="s1">div</span><span class="dl">'</span><span class="p">);</span>
+    <span class="nx">divs</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">div</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">div</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">click</span><span class="dl">'</span><span class="p">,</span> <span class="nx">logEvent</span><span class="p">,</span> <span class="p">{</span>
+		      <span class="na">capture</span><span class="p">:</span> <span class="kc">true</span> <span class="c1">// default 값은 false입니다.</span>
+	      <span class="p">});</span>
+    <span class="p">});</span>
+
+    <span class="kd">function</span> <span class="nx">logEvent</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">event</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">();</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">.</span><span class="nx">className</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="이벤트-위임---event-delegation">이벤트 위임 - Event Delegation</h2>
+
+<hr />
+
+<p>이벤트 버블, 이벤트 캡쳐로 이벤트를 전파하는 것을 배웠다. 이것은 이벤트 위임을 위한 기초 지식이라고 해도 과언이 아니다.
+이벤트 위임은 실제 <code class="language-plaintext highlighter-rouge">Vanilla Javascript</code>로 웹 앱을 구현할 때 자주 사용하게 되는 코딩 패턴이다.</p>
+
+<p>이벤트 위임을 간단하게 설명하자면, <code class="language-plaintext highlighter-rouge">하위 요소에 이벤트를 각각 붙이지 않고 상위 요소에서 하위 요소의 이벤트들을 제어하는 방식</code>이다.</p>
+
+<p>밑의 간단한 예제로 이해해보자.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"X-UA-Compatible"</span> <span class="na">content=</span><span class="s">"IE=edge"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Document<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;style&gt;</span>
+        <span class="nt">button</span> <span class="p">{</span>
+            <span class="nl">width</span><span class="p">:</span> <span class="m">100px</span><span class="p">;</span>
+            <span class="nl">height</span><span class="p">:</span> <span class="m">20px</span><span class="p">;</span>
+            <span class="nl">background-color</span><span class="p">:</span> <span class="no">gray</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="nt">&lt;/style&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"list"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">"one"</span><span class="nt">&gt;</span>one<span class="nt">&lt;/button&gt;</span>
+            <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">"two"</span><span class="nt">&gt;</span>two<span class="nt">&lt;/button&gt;</span>
+            <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">"three"</span><span class="nt">&gt;</span>three<span class="nt">&lt;/button&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+    <span class="nt">&lt;script&gt;</span>
+        <span class="kd">var</span> <span class="nx">buttons</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="dl">'</span><span class="s1">button</span><span class="dl">'</span><span class="p">);</span>
+        <span class="nx">buttons</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">button</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">button</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">click</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>
+                <span class="nx">alert</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">.</span><span class="nx">className</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">});</span>
+    <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>위의 코드는 <code class="language-plaintext highlighter-rouge">querySelectorAll()</code>로 모든 <code class="language-plaintext highlighter-rouge">button</code> 요소들을 가져와 각각 <code class="language-plaintext highlighter-rouge">click</code> 이벤트 리스너를 추가해줬다. 
+실행시킨 다음 각 버튼을 누르면 해당 버튼의 <code class="language-plaintext highlighter-rouge">class name</code>이 알람창으로 표시된다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/157164917-92359fb2-1c20-43b5-8bd1-0485829b9131.png" alt="image" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/157165259-394a84ab-1839-42e2-83c7-d6b9d8390868.png" alt="image" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/157165277-6b03d1dd-d2ce-440d-8fe6-5e8a5b78eb0d.png" alt="image" /></p>
+
+<p><br /></p>
+
+<p>여기까지는 어렵지 않게 진행했지만, 만약 새로운 버튼을 추가해보면 어떻게 될까?</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// (생략...)</span>
+
+<span class="cm">/* 새로운 four 버튼 생성 */</span>
+<span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="dl">'</span><span class="s1">.list</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">button</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="dl">'</span><span class="s1">button</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">button_text</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="dl">'</span><span class="s1">four</span><span class="dl">'</span><span class="p">);</span>
+
+<span class="nx">button</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">button_text</span><span class="p">);</span>
+<span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">button</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/157165496-a0667cd7-8986-423c-8916-9f54ec611a21.png" alt="image" /></p>
+
+<p>실행시키고 <code class="language-plaintext highlighter-rouge">four</code> 버튼을 클릭해도 click 이벤트 리스너가 작동되지 않는다. 그 이유는 간단하다.<br />
+최초 <code class="language-plaintext highlighter-rouge">button</code> 요소들의 클릭 이벤트를 추가하는 시점에서는 <code class="language-plaintext highlighter-rouge">one</code>, <code class="language-plaintext highlighter-rouge">two</code>, <code class="language-plaintext highlighter-rouge">three</code> 3개의 버튼만 존재했기 때문에 해당 버튼들만 이벤트가 등록되었고
+나중에 추가한 <code class="language-plaintext highlighter-rouge">four</code> 버튼은 클릭 이벤트가 등록되지 않았다. 따라서, <code class="language-plaintext highlighter-rouge">four</code> 버튼에도 새롭게 이벤트를 등록해줘야 한다.</p>
+
+<p>하지만, 개발을 하다보면 새로운 기능, 새로운 요소들을 추가할 상황이 많아진다. 그럴 때 마다 이벤트 리스너를 등록해야 한다면 매우 번거롭게된다.<br />
+이 번거로운 작업을 해결하는 방법이 <code class="language-plaintext highlighter-rouge">이벤트 위임</code>이다.</p>
+
+<p>위의 코드를 아래와 같이 변경해보자.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">buttons</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="dl">'</span><span class="s1">.list</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">buttons</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">button</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">button</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">click</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>
+        <span class="nx">alert</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">.</span><span class="nx">className</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+
+<span class="cm">/* 새로운 four 버튼 생성 */</span>
+<span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="dl">'</span><span class="s1">.list</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">button</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="dl">'</span><span class="s1">button</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">button_text</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="dl">'</span><span class="s1">four</span><span class="dl">'</span><span class="p">);</span>
+
+<span class="nx">button</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">button_text</span><span class="p">);</span>
+<span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">button</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>모든 <code class="language-plaintext highlighter-rouge">button</code>요소를 일일이 이벤트 리스너를 추가할 필요없이 <code class="language-plaintext highlighter-rouge">button</code>요소의 상위 요소인 <code class="language-plaintext highlighter-rouge">&lt;div class="list"&gt;</code>에 이벤트 리스너를 등록하면 하위에 발생한 클릭 이벤트를 감지한다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/157173418-7c0088c0-b543-4d55-b2da-be2c532c5d1a.png" alt="image" /></p>
+
+<h3 id="특정-하위-요소만-제어">특정 하위 요소만 제어</h3>
+
+<p>하지만 여기서 각 버튼을 클릭해도 <code class="language-plaintext highlighter-rouge">list</code>라는 내용의 알람창이 발생한다. 그 이유는 현재의 타겟은 최상위 요소인 <code class="language-plaintext highlighter-rouge">&lt;div class="list"&gt;</code>이기 때문이다.
+따라서 <code class="language-plaintext highlighter-rouge">alert(event.currentTarget.className);</code>이 <code class="language-plaintext highlighter-rouge">list</code>만 발생하는 것이다.</p>
+
+<p>그리고 현재 <code class="language-plaintext highlighter-rouge">&lt;div class="list"&gt;</code> 태그의 하위 모든 요소들은 이벤트를 감지하기 때문에 특정 태그. 특정 클래스, 특정 ID에만 이벤트를 주고싶다면 예외처리로 구현해야 한다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">button</code> 태그인 경우에만 이벤트가 발생하도록 수정해보자.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"X-UA-Compatible"</span> <span class="na">content=</span><span class="s">"IE=edge"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Document<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;style&gt;</span>
+        <span class="nt">button</span><span class="o">,</span> <span class="nt">div</span><span class="p">{</span>
+            <span class="nl">width</span><span class="p">:</span> <span class="m">100px</span><span class="p">;</span>
+            <span class="nl">height</span><span class="p">:</span> <span class="m">20px</span><span class="p">;</span>
+            <span class="nl">background-color</span><span class="p">:</span> <span class="no">gray</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="nt">&lt;/style&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"list"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">"one"</span><span class="nt">&gt;</span>one<span class="nt">&lt;/button&gt;</span>
+            <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">"two"</span><span class="nt">&gt;</span>two<span class="nt">&lt;/button&gt;</span>
+            <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">"three"</span><span class="nt">&gt;</span>three<span class="nt">&lt;/button&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"four"</span><span class="nt">&gt;</span>four<span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+    <span class="nt">&lt;script&gt;</span>
+        <span class="kd">var</span> <span class="nx">buttons</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="dl">'</span><span class="s1">.list</span><span class="dl">'</span><span class="p">);</span>
+        <span class="nx">buttons</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">button</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">button</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">click</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">tagName</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">BUTTON</span><span class="dl">'</span><span class="p">){</span> <span class="c1">// button 태그인 경우에만 콜백함수를 리턴한다. </span>
+                    <span class="nx">alert</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">className</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">});</span>
+        <span class="p">});</span>
+        
+        <span class="cm">/* 새로운 five 버튼 생성 */</span>
+        <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="dl">'</span><span class="s1">.list</span><span class="dl">'</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">button</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="dl">'</span><span class="s1">button</span><span class="dl">'</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">button_text</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="dl">'</span><span class="s1">five</span><span class="dl">'</span><span class="p">);</span>
+
+        <span class="nx">button</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="dl">'</span><span class="s1">class</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">five</span><span class="dl">'</span><span class="p">);</span>
+        <span class="nx">button</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">button_text</span><span class="p">);</span>
+        <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">button</span><span class="p">);</span>
+    <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">one</code>, <code class="language-plaintext highlighter-rouge">two</code>, <code class="language-plaintext highlighter-rouge">three</code>, <code class="language-plaintext highlighter-rouge">five</code>인 button 태그들은 이벤트 리스너가 등록된 것을 확인할 수 있다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/157174650-61d4f95c-d475-4bb1-8980-eddec36814a8.png" alt="image" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/157174686-019a70c3-98f5-4186-8e94-ea01f4dbee57.png" alt="image" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/157174721-109358f8-0a56-47f1-8f13-68ba18ceb5ad.png" alt="image" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/157174743-b9452226-3853-4b7c-a5c9-d72628576296.png" alt="image" /></p>
+
+<p>하지만, <code class="language-plaintext highlighter-rouge">div</code> 태그는 이벤트 리스너가 등록되지 않았다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/157174788-2e6c68e0-b35a-4b7b-bcf4-93ff519d9809.png" alt="image" /></p>
+:ET

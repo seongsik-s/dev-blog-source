@@ -1,0 +1,318 @@
+---
+layout: post
+title: "[Javascript] 함수형 프로그래밍 - go, pipe, curry"
+tags: [Javascript, ES6]
+categories: [Javascript]
+banner:
+  image: /assets/images/banners/es6.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## 시작으로
+
+> 해당 글은 유인동님의 함수형 프로그래밍 강의내용을 정리하였습니다.
+
+아래와 같이 함수가 중첩되어 표현되면 가독성이 떨어지기 때문에 함수형 프로그래밍에서는 코드를 값으로 다뤄 표현력을 높일 수 있다.
+
+```js
+log(
+    reduce(
+        add,
+        map(p=>p.price, 
+        filter(p=>p.price>2000, prod))
+    )
+)
+```
+
+
+## go
+
+go함수에는 첫 번째는 값의 시작값을 넣고 그 외는 나머지 연산자로 함수들을 받아 값을 다음 함수로 계속해서 넘기면서 함수를 실행시켜주는 함수이다.
+
+밑의 예제를 통해 쉽게 이해해보자.
+
+### reduce 활용
+
+go 함수는 함수들을 차례대로 실행하면서 첫 번째 인자값을 축약하는 함수이기 때문에 reduce 함수를 활용한다.
+
+```js
+const reduce = (func, acc, iter) => {
+    if(!iter){
+        iter = acc[Symbol.iterator]();
+        acc = iter.next().value;
+    }
+
+    for(const a of iter){
+        acc = func(acc,a);
+    }
+
+    return acc
+}
+```
+
+### 구현
+아래의 go함수는 0값을 차례대로 5개의 함수에 넘겨 처리하는 함수이다. 실행순서는 다음과 같다.
+
+> 0, a => a+1 
+  * 0을 인자로 받아 0+1을 처리하여 `1`을 리턴한다.
+
+> 1, a => a+10
+  * 1을 인자로 받아 1+10을 처리하여 `11`을 리턴한다.
+
+> 11, a => a+100
+  * 11을 인자로 받아 11+100을 처리하여 `111`을 리턴한다.
+
+```js
+const log = console.log;
+const go = (...arg) => reduce((a,f) => f(a), arg)
+
+go(
+    0,
+    a => a+1,
+    a => a+10,
+    a => a+100,
+    log // 출력 : 111
+)
+```
+
+<br>
+
+## pipe
+pipe함수는 go함수와 다르게 함수를 리턴하는 함수이다. pipe함수는 여러 함수들을 인자로 받아 하나의 함수로 리턴한다.
+그리고 go함수를 사용한다.
+
+### 구현
+
+```js
+const pipe = (...fs) => (a) => go(a, ...fs);
+
+const f = pipe(
+    a=>a+1,
+    a=>a+10,
+    a=>a+100,
+    log
+)
+
+f(0) /// 111 출력
+f(10) /// 121 출력
+```
+
+### 여러개의 인자를 받도록 수정
+그런데 여기서 go함수는 첫 번째 인자에 `add(0,10)`와 같이 인자를 두개 전달하여 처리된 값을 함수로 전달할 수 있다.
+
+```js
+go(
+    add(0,10),
+    a=>a+1,
+    a=>a+10,
+    a=>a+100,
+    log
+)
+```
+
+pipe도 그렇게 할수 있도록 코드를 수정해보자.
+
+> 첫 번째로 받은 `f` 함수와 `...fs`를 따로 받는다. 그리고 리턴된 합성함수의 인자를 rest 파라미터로 처리하여 f함수에 넣고 그 결과를 나머지 함수들이 받으면서 처리하는 구조이다.
+
+```js
+const pipe = (f, ...fs) => (...arg) => go(f(...arg), ...fs);
+
+const f = pipe(
+    (a,b) => a+b,
+    a=>a+1,
+    a=>a+10,
+    a=>a+100,
+    log
+)
+
+f(1,2) // 114
+```
+
+<br>
+
+## go함수를 활용하여 더 좋은 코드로 개선
+
+* 개선전 코드
+
+```js
+const log = console.log;
+const prod = [
+    {name:'과자', price:2500},
+    {name:'소시지', price:2000},
+    {name:'맥주', price:5000},
+    {name:'음료수', price:1500},
+    {name:'껌', price:1000},
+]
+
+const add = (a,b) => a+b;
+
+const map = (func, iter) => {
+    const result = [];
+    
+    for(const a of iter) {
+        result.push(func(a));
+    }
+
+    return result;
+}
+
+const filter = (func, iter) => {
+    const result = [];
+
+    for(const a of iter){
+        if(func(a)){
+            result.push(a);
+        }
+    }
+    
+    return result;
+}
+
+const reduce = (func, acc, iter) => {
+    if(!iter){
+        iter = acc[Symbol.iterator]();
+        acc = iter.next().value;
+    }
+
+    for(const a of iter){
+        acc = func(acc,a);
+    }
+
+    return acc
+}
+
+log(
+  reduce(
+      add,
+      map(p=>p.price, 
+      filter(p=>p.price>2000, prod))
+  )
+) // 출력 : 7500
+  
+```
+
+* 개선후 코드
+
+```js
+go(
+    prod,
+    prod => filter(p => p.price>2000, prod),
+    prod => map(p => p.price, prod),
+    prices => reduce(add, prices),
+    log
+)
+```
+
+<br>
+
+## curry
+curry를 사용하면 함수를 부분적으로 사용할 수 있게 된다.
+기존의 map, filter, reduce 함수들은 인자값을 2개를 받아야 실행되었다.
+curry를 감싸게 되면 부족한 인자가 들어올 때까지 대기하다가 들어오면 함수를 실행하게 된다.
+
+* curry는 함수를 인자로 받아 함수를 리턴해준다.
+* 리턴받은 합성함수는 1개 이상의 인자를 받는데 인자의 갯수가 2개 이상이면 처음 받았던 함수를 즉시 실행하고, 2보다 적으면 기다렸다가 인자를 받으면 함수를 실행한다.
+
+```js
+const curry = f => (a, ..._) => _.length ? f(a, ..._) : (..._) => f(a, ..._);
+
+// 1. a와 b의 곱셈을 리턴하는 함수를 인자로 받는다. 
+// 2. 그리고 함수를 리턴한다.
+const mult = curry((a,b)=>a*b); 
+log(mult) // (a, ..._) => _.length ? f(a, ..._) : (..._) => f(a, ..._)
+
+log(mult(3)) // 인자가 1개이므로 (..._) => f(a, ..._)를 리턴한다.
+log(mult(3)(6)) // 리턴받은 함수에 6을 인자로 넘겨줬기 때문에 (6) => f(3, 6)이 실행된다.
+```
+
+### go + curry를 사용하여 더 좋은 코드로 만들기
+
+* map, filter, reduce를 cuury로 감싼다.
+
+```js
+const log = console.log;
+const prod = [
+    {name:'과자', price:2500},
+    {name:'소시지', price:2000},
+    {name:'맥주', price:5000},
+    {name:'음료수', price:1500},
+    {name:'껌', price:1000},
+]
+
+const add = (a,b) => a+b;
+
+const curry = f => (a, ..._) => _.length ? f(a, ..._) : (..._) => f(a, ..._);
+
+const map = curry((func, iter) => {
+    const result = [];
+    
+    for(const a of iter) {
+        result.push(func(a));
+    }
+
+    return result;
+});
+
+const filter = curry((func, iter) => {
+    const result = [];
+
+    for(const a of iter){
+        if(func(a)){
+            result.push(a);
+        }
+    }
+    
+    return result;
+})
+
+const reduce = curry((func, acc, iter) => {
+    if(!iter){
+        iter = acc[Symbol.iterator]();
+        acc = iter.next().value;
+    }
+
+    for(const a of iter){
+        acc = func(acc,a);
+    }
+
+    return acc
+})
+```
+
+* 기존의 go 함수를 아래와 같이 사용할 수 있다.
+
+```js
+const go = (...arg) => reduce((a,f) => f(a), arg)
+
+// curry 적용 전
+go(
+    prod,
+    prod => filter(p => p.price>2000, prod),
+    prod => map(p => p.price, prod),
+    prices => reduce(add, prices),
+    log
+)
+
+// cuury 적용 후
+go(
+    prod,
+    prod => filter(p => p.price>2000)(prod),
+    prod => map(p => p.price)(prod),
+    prices => reduce(add)(prices),
+    log
+)
+
+// cuury를 사용하고 있으므로 중복되는 prod를 제거해도 똑같이 실행된다.
+go(
+    prod,
+    filter(p => p.price>2000),
+    map(p => p.price),
+    reduce(add),
+    log
+)
+```

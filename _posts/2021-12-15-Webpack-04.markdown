@@ -1,0 +1,593 @@
+---
+layout: post
+title: "[Webpack] loader (2)"
+tags: [Webpack, Babel, Node.js, Javascript]
+categories: [Webpack]
+banner:
+  image: /assets/images/banners/webpack.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## **자주 사용하는 로더**
+{: id="a" } 
+
+***
+
+### **css-loader**
+{: id="b" } 
+
+* `css-loader`를 사용하면 스타일시트도 import 구문으로 불러와 모듈로 변환할 수 있습니다.  
+* `./src/app.css` 를 생성하여 밑의 코드를 저장합니다.
+* `./src/app.js`에서 `app.css`를 import 구문을 추가합니다.
+* `html`에 `css` 태그를 넣지 않아도 적용되는지 확인해보겠습니다.
+
+**install :**  
+```console
+    npm install --save-dev css-loader
+```
+
+<br>
+
+* ./package.json -> devDependencies에 `css-loader`가 추가된 것을 확인할 수 있습니다.
+
+```json
+    {
+        "name": "webpack-demo",
+        "version": "1.0.0",
+        "description": "",
+        "main": "index.js",
+        "scripts": {
+            "test": "echo \"Error: no test specified\" && exit 1",
+            "build": "webpack"
+        },
+        "author": "",
+        "license": "ISC",
+        "devDependencies": {
+            "css-loader": "^6.5.1",
+            "webpack": "^5.65.0",
+            "webpack-cli": "^4.9.1"
+        }
+    }
+```
+{: file="./package.json" } 
+
+```css
+    body {
+        background-color: red;
+    }
+```
+{: file="./src/app.css" } 
+
+```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <script src="./dist/main.js"></script>
+    </body>
+    </html>
+```
+{: file="./index.html" } 
+  
+```javascript
+    import * as math from './math.js'
+    import './app.css'; // 추가
+
+    console.log(math.sum(1, 2));
+```
+{: file="./src/app.js" } 
+
+```javascript
+    export function sum(a, b){
+        return a + b;
+    }
+```
+{: file="./src/math.js" } 
+
+```javascript
+    const path = require('path');
+
+    module.exports = {
+        mode : 'development',
+        entry : {
+            main : './src/app.js'
+        },
+        output : {
+            path : path.resolve('./dist'),
+            filename : '[name].js'
+        },
+        module : {
+            rules : [{
+                test: /\.css$/, // .css 확장자를 갖는 모든 파일을 대상으로 한다.
+                use: ['css-loader')] // .css 파일을 모듈료 변환해주는 로더
+            }]
+        }
+    }
+```
+{: file="./webpack.config.js" } 
+
+<br>
+
+**결과 :**
+```console
+    npm run build
+
+    > webpack-demo@1.0.0 build
+    > webpack
+
+    asset main.js 9.67 KiB [emitted] (name: main)
+    runtime modules 937 bytes 4 modules
+    cacheable modules 2.92 KiB
+    modules by path ./src/ 605 bytes
+        ./src/app.js 90 bytes [built] [code generated]
+        ./src/math.js 48 bytes [built] [code generated]
+        ./src/app.css 467 bytes [built] [code generated]
+    modules by path ./node_modules/css-loader/dist/runtime/*.js 2.33 KiB
+        ./node_modules/css-loader/dist/runtime/noSourceMaps.js 64 bytes [built] [code generated]
+        ./node_modules/css-loader/dist/runtime/api.js 2.26 KiB [built] [code generated]
+    webpack 5.65.0 compiled successfully in 2024 ms
+```
+
+* `"./dist/main.js"`에서 javascript로 변환된 것을 확인할 수 있습니다.  
+
+![image](https://user-images.githubusercontent.com/52439201/146322779-c5fda59b-622a-4c6a-b582-3196439004b6.png)
+
+<br>
+
+### **style-loader**
+{: id="c" } 
+
+* `css-loader`는 자바스크립트 코드로 변환만 해주고, 실제 `DOM`에 적용되지 않습니다. 
+* `style-loader`는 변환된 `CSS`코드를 동적으로 `DOM`에 추가해줍니다.
+* `webpack`으로 `css`를 번들링 하기 위해서는 `css-loader`와 `style-loader`를 함께 사용합니다.
+
+**install :**
+```console
+    npm install --save-dev style-loader
+```
+
+<br>
+
+* `./package.json` -> devDependencies에 `style-loader`가 추가된 것을 확인할 수 있습니다.
+```json
+    {
+        "name": "webpack-demo",
+        "version": "1.0.0",
+        "description": "",
+        "main": "index.js",
+        "scripts": {
+            "test": "echo \"Error: no test specified\" && exit 1",
+            "build": "webpack"
+        },
+        "author": "",
+        "license": "ISC",
+        "devDependencies": {
+            "css-loader": "^6.5.1",
+            "style-loader": "^3.3.1",
+            "webpack": "^5.65.0",
+            "webpack-cli": "^4.9.1"
+        }
+    }
+```
+{: file="./package.json" }
+  
+<br>
+
+* css-loader로 변환된 자바스크립트 코드를 DOM에 삽입하기 때문에, `css-loader` -> `style-loader` 순서로 처리되어야합니다.
+여기서 중요한 포인트! loader은 역순으로 처리한다고 저번 포스터에 말씀드렸습니다. 그러므로 `use: ['style-loader','css-loader']` 로 작성하셔야 합니다.
+```javascript
+    const path = require('path');
+
+    module.exports = {
+        mode : 'development',
+        entry : {
+            main : './src/app.js'
+        },
+        output : {
+            path : path.resolve('./dist'),
+            filename : '[name].js'
+        },
+        module : {
+            rules : [{
+                test: /\.css$/,
+                use: ['style-loader','css-loader']
+            }]
+        }
+    }
+```
+{: file="./webpack.config.js" } 
+
+<br>
+
+**결과 :**
+```console
+    npm run build
+
+    > webpack-demo@1.0.0 build
+    > webpack
+
+    asset main.js 23.7 KiB [emitted] (name: main)
+    runtime modules 937 bytes 4 modules
+    cacheable modules 9.77 KiB
+    modules by path ./node_modules/ 8.07 KiB
+        modules by path ./node_modules/style-loader/dist/runtime/*.js 5.75 KiB 6 modules
+        modules by path ./node_modules/css-loader/dist/runtime/*.js 2.33 KiB
+        ./node_modules/css-loader/dist/runtime/noSourceMaps.js 64 bytes [built] [code generated]
+        ./node_modules/css-loader/dist/runtime/api.js 2.26 KiB [built] [code generated]
+    modules by path ./src/ 1.7 KiB
+        modules by path ./src/*.js 138 bytes
+        ./src/app.js 90 bytes [built] [code generated]
+        ./src/math.js 48 bytes [built] [code generated]
+        modules by path ./src/*.css 1.57 KiB
+        ./src/app.css 1.11 KiB [built] [code generated]
+        ./node_modules/css-loader/dist/cjs.js!./src/app.css 467 bytes [built] [code generated]
+    webpack 5.65.0 compiled successfully in 903 ms
+```
+
+* index.html을 열어보면 css가 적용된 것을 확인할 수 있습니다.  
+
+![image](https://user-images.githubusercontent.com/52439201/146324627-1e30b729-52d2-4209-b540-0c150bfed174.png)
+
+<br>
+<br>
+
+### **Asset Modules**
+{: id="d" } 
+
+***
+
+[webpack 공식문서 참고](https://webpack.js.org/guides/asset-modules/#root)
+
+webpack 4 버전에서는 아래의 기능을 사용하는게 일반적이었습니다.
+* `raw-loader`, 파일을 문자열로 가져오는 기능
+* `url-loader`, 파일을 데이터 URI로 인라인하는 기능
+* `file-loader`, 파일을 출력 디렉토리로 보내는 기능
+
+webpack 5 버전에서는 Asset Modules의 4가지의 새로운 type을 추가하여 위의 로더를 대체합니다.
+* `asset/resource`, file-loader의 기능을 대체합니다.
+* `asset/inline`, url-loader의 기능을 대체합니다.
+* `asset/source`, raw-loader의 기능을 대체합니다.
+* `asset`, 파일 크기의 제한에 따라 file 내보내기와 URI 내보내기 중에서 자동으로 선택합니다,  url-loader의 기능 대체(limit에 따라 file or URI을 자동선택하여 내보냈었음)
+
+
+**준비물 :**
+* 2개의 이미지 파일을 준비해주세요.
+* 1개는 파일크기가 큰 이미지, 1개는 파일크기가 작은 이미지
+* .png, .jpg 아무거나 준비하셔도 됩니다.
+
+
+파일이 큰 이미지 파일을 body의 background-image로 써보겠습니다.  
+```css
+    body {
+        background-image: url(bg.png);
+    }
+```
+{: file="./src/app.css"}
+
+
+파일이 작은 이미지를 body안에 넣어서 써보겠습니다.
+```javascript
+    import * as math from './math.js'
+    import './app.css';
+    import webpackImage from './webpack.png';
+
+    document.addEventListener('DOMContentLoaded', ()=>{
+        document.body.innerHTML = `
+            <img src="${webpackImage}" />
+        `
+    })
+
+    console.log(math.sum(1, 2));
+```
+{: file="./src/app.js"}
+
+
+<br>
+
+### **asset/resource**
+{: id="e" } 
+
+```javascript
+    const path = require('path');
+
+    module.exports = {
+        mode : 'development',
+        entry : {
+            main : './src/app.js'
+        },
+        output : {
+            path : path.resolve('./dist'),
+            filename : '[name].js'
+        },
+        module : {
+            rules : [
+                {
+                    test: /\.css$/,
+                    use: ['style-loader','css-loader']
+                },{
+                    test: /\.(png|jpg)/,
+                    type: 'asset/resource'
+                }
+            ]
+
+        }
+    }
+```
+{: file="./webpack.config.js"}
+
+**결과 :**
+```console
+    npm run build
+
+    > webpack-demo@1.0.0 build
+    > webpack
+
+    asset 07cd38e60ab3ac16ae90.jpg 612 KiB [emitted] [immutable] [from: src/bg.jpg] (auxiliary name: main)
+    asset main.js 28.8 KiB [emitted] (name: main)
+    asset 870be3fe12bc3abc096d.png 3.8 KiB [emitted] [immutable] [from: src/webpack.png] (auxiliary name: main)
+    runtime modules 2.39 KiB 7 modules
+    javascript modules 10.8 KiB
+    modules by path ./node_modules/ 8.66 KiB
+        modules by path ./node_modules/style-loader/dist/runtime/*.js 5.75 KiB 6 modules
+        modules by path ./node_modules/css-loader/dist/runtime/*.js 2.91 KiB 3 modules
+    modules by path ./src/ 2.19 KiB
+        modules by path ./src/*.js 323 bytes 2 modules
+        modules by path ./src/*.css 1.88 KiB
+        ./src/app.css 1.11 KiB [built] [code generated]
+        ./node_modules/css-loader/dist/cjs.js!./src/app.css 785 bytes [built] [code generated]
+    asset modules 84 bytes (javascript) 616 KiB (asset)
+    ./src/webpack.png 42 bytes (javascript) 3.8 KiB (asset) [built] [code generated]
+    ./src/bg.jpg 42 bytes (javascript) 612 KiB (asset) [built] [code generated]
+    webpack 5.65.0 compiled successfully in 970 ms
+```
+
+* 아래 그림을 보면, 출력(output) 디렉토리에 이미지가 저장된것을 확인할 수 있습니다.
+* 이미지 이름이 해쉬코드로 변경되어 저장된 것을 확인할 수 있습니다.
+
+![image](https://user-images.githubusercontent.com/52439201/146333564-9de769a0-93cc-4098-81ff-fac4147ea6f1.png)
+
+<br>
+
+* `./index.html`으로 결과를 확인해보면 이미지가 적용되었습니다.  
+
+![image](https://user-images.githubusercontent.com/52439201/146334349-cf6d3830-47f0-49e0-bb23-9d6d3dbbf5b4.png)
+
+<br>
+<br>
+
+### **asset/inline**
+{: id="f" } 
+
+```javascript
+    const path = require('path');
+
+    module.exports = {
+        mode : 'development',
+        entry : {
+            main : './src/app.js'
+        },
+        output : {
+            path : path.resolve('./dist'),
+            filename : '[name].js'
+        },
+        module : {
+            rules : [
+                {
+                    test: /\.css$/,
+                    use: ['style-loader','css-loader']
+                },{
+                    test: /\.(png|jpg)/,
+                    type: 'asset/resource'
+                }
+            ]
+
+        }
+    }
+```
+{: file="./webpack.config.js"}
+
+**결과 :**
+```console
+    npm run build
+
+    > webpack-demo@1.0.0 build
+    > webpack
+
+    asset main.js 848 KiB [emitted] (name: main)
+    runtime modules 1.33 KiB 5 modules
+    javascript modules 10.8 KiB
+    modules by path ./node_modules/ 8.66 KiB
+        modules by path ./node_modules/style-loader/dist/runtime/*.js 5.75 KiB 6 modules
+        modules by path ./node_modules/css-loader/dist/runtime/*.js 2.91 KiB 3 modules
+    modules by path ./src/ 2.19 KiB
+        modules by path ./src/*.js 323 bytes 2 modules
+        modules by path ./src/*.css 1.88 KiB
+        ./src/app.css 1.11 KiB [built] [code generated]
+        ./node_modules/css-loader/dist/cjs.js!./src/app.css 785 bytes [built] [code generated]
+    asset modules 825 KiB
+    ./src/webpack.png 5.13 KiB [built] [code generated]
+    ./src/bg.jpg 820 KiB [built] [code generated]
+    webpack 5.65.0 compiled successfully in 1122 ms
+```
+
+<br>
+
+* `asset/resource`는 출력(output) 디렉토리에 해쉬코드로 이미지를 저장했지만, `asset/inline`은 저장되어있지않고 데이터를 `URI`로 내보냅니다. 
+* 추가로, 이미지를 `Base64`로 인코딩하여 문자열 형태로 소스코드에 넣는 형식입니다.
+* 개발자도구를 통해 이미지들을 학인해보면 `base64`로 인코딩된 문자열이 들어가 있는것을 확인할 수 있습니다.
+
+![image](https://user-images.githubusercontent.com/52439201/146336148-15b0d9de-2d47-495c-8544-3b1cea24da83.png)
+
+![image](https://user-images.githubusercontent.com/52439201/146336064-0aabe87d-c903-4f81-bff6-f27177a2745f.png) 
+
+![image](https://user-images.githubusercontent.com/52439201/146336321-ca6ef389-7c19-4a7a-9600-f38a5ceed84d.png)
+
+<br>
+
+
+### **asset**
+{: id="g" } 
+
+* `asset` tpye은 디폴드로 파일 크기가 `8kb` 작으면 `inline`으로 크면 `resource`로 처리합니다.
+* `Rule.parser.dataUrlCondition.maxSize` 옵션을 추가하여 조건을 변경할 수 있습니다.
+* 기준을 10kb로 잡아보겠습니다.
+
+
+**이미지 크기 확인** 
+* bg.jpg : 626kb
+* webpack.png : 3.9kb
+
+```console
+    디렉터리: E:\study\frontend\webpack-demo\src
+
+    Mode                 LastWriteTime         Length Name
+    ----                 -------------         ------ ----
+    -a----      2021-12-16   오후 5:08             45 app.css
+    -a----      2021-12-16   오후 5:06            275 app.js
+    -a----      2019-12-07   오후 6:09         626435 bg.jpg
+    -a----      2021-12-15   오후 3:43             48 math.js
+    -a----      2021-12-16   오후 4:56           3890 webpack.png
+```
+
+```javascript
+    const path = require('path');
+
+    module.exports = {
+        mode : 'development',
+        entry : {
+            main : './src/app.js'
+        },
+        output : {
+            path : path.resolve('./dist'),
+            filename : '[name].js'
+        },
+        module : {
+            rules : [
+                {
+                    test: /\.css$/,
+                    use: ['style-loader','css-loader']
+                },{
+                    test: /\.(png|jpg)/,
+                    type: 'asset',
+                    parser: {
+                        dataUrlCondition: {
+                        maxSize: 10 * 1024 // 10kb
+                    }
+                }
+                }
+            ]
+
+        }
+    }
+```
+{: file="./webpack.config.js"}
+
+**결과 :**
+```console
+    npm run build
+
+    > webpack-demo@1.0.0 build
+    > webpack
+
+    asset 07cd38e60ab3ac16ae90.jpg 612 KiB [emitted] [immutable] [from: src/bg.jpg] (auxiliary name: main)
+    asset main.js 33.8 KiB [emitted] (name: main)
+    runtime modules 2.39 KiB 7 modules
+    javascript modules 10.8 KiB
+    modules by path ./node_modules/ 8.66 KiB
+        modules by path ./node_modules/style-loader/dist/runtime/*.js 5.75 KiB 6 modules
+        modules by path ./node_modules/css-loader/dist/runtime/*.js 2.91 KiB 3 modules
+    modules by path ./src/ 2.19 KiB
+        modules by path ./src/*.js 323 bytes 2 modules
+        modules by path ./src/*.css 1.88 KiB
+        ./src/app.css 1.11 KiB [built] [code generated]
+        ./node_modules/css-loader/dist/cjs.js!./src/app.css 785 bytes [built] [code generated]
+    asset modules 5.17 KiB (javascript) 612 KiB (asset)
+    ./src/webpack.png 5.13 KiB [built] [code generated]
+    ./src/bg.jpg 42 bytes (javascript) 612 KiB (asset) [built] [code generated]
+    webpack 5.65.0 compiled successfully in 1502 ms
+```
+
+<br>
+
+* 8kb이상인 bg.jpg는 `resource` 타입으로 처리되었고, 미만인 webpack.png는 `inline` 타입으로 처리되었습니다.  
+
+![image](https://user-images.githubusercontent.com/52439201/146338350-5a0f13ab-9842-45cf-a9f2-40968ece14d7.png)
+
+![image](https://user-images.githubusercontent.com/52439201/146338637-54d62f9a-0080-4cbf-95b0-e732a415393a.png) 
+
+![image](https://user-images.githubusercontent.com/52439201/146338696-acb80bac-e449-411e-92d0-920d18bb70cd.png)
+
+<br>
+
+## **Output File 커스텀**
+{: id="h" } 
+
+***
+
+* 기본적으로 `asset/resource` 모듈은 `[hash][ext][query]` 파일 이름으로 출력 디렉토리에 내보냅니다.
+* `webpack.config.js` -> `output.assetModuleFilename` 구성에서 설정하여 파일명을 커스텀할 수 있습니다.
+* 지정된 디렉토리에 내보낼 수도 있습니다.
+* `images/[name][ext]` 형태로 저장되는지 확인해보겠습니다.
+
+**file 수준에서 대체 가능한 항목**  
+* [webpack 공식문서 참고](https://webpack.js.org/configuration/output/#outputassetmodulefilename)  
+
+![image](https://user-images.githubusercontent.com/52439201/146469483-3782eb1e-991a-458e-bd86-a3fd8fd7c943.png)
+
+<br>
+
+```javascript
+    const path = require('path');
+
+    module.exports = {
+        mode : 'development',
+        entry : {
+            main : './src/app.js'
+        },
+        output : {
+            path : path.resolve('./dist'),
+            filename : '[name].js',
+            assetModuleFilename: 'images/[name][ext]' // + 추가
+        },
+        module : {
+            rules : [
+                {
+                    test: /\.css$/,
+                    use: ['style-loader','css-loader']
+                },{
+                    test: /\.(png|jpg)/,
+                    type: 'asset',
+                    parser: {
+                        dataUrlCondition: {
+                            maxSize: 10 * 1024 // 10kb
+                        }
+                    }
+                }
+            ]
+
+        }
+    }
+```
+{: file="./webpack.config.js"}
+
+<br>
+
+* `./dist/images/` 디렉토리에 생성된 것을 확인할 수 있습니다.  
+
+![image](https://user-images.githubusercontent.com/52439201/146469759-68cb2306-c176-4de7-88c2-670d2cafa6c7.png)
+
+<br>
+
+* `./index.html`을 열어서 개발자도구로 bg.jpg를 확인해보면 `/iamges/[name][ext]`로 되어있는 것을 확인할 수 있습니다.
+  
+![image](https://user-images.githubusercontent.com/52439201/146469810-73e0798d-6b2d-4084-b51a-93a8118fc441.png)

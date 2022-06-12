@@ -1,0 +1,192 @@
+I"oZ<h2 id="jsx란">JSX란?</h2>
+
+<hr />
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">element</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nx">h1</span><span class="o">&gt;</span><span class="nx">Hello</span><span class="p">,</span> <span class="nx">world</span><span class="o">!&lt;</span><span class="sr">/h1&gt;;</span><span class="err"> 
+</span></code></pre></div></div>
+
+<p>위의 코드는 문자열도, HTML도 아니다.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">JSX</code>라고 하며 javascirpt를 확장한 문법이다. JSX라고 하면 템플릿 언어가 떠오를 수 있지만, Javascirpt의 모든 기능이 포함되어 있다.</li>
+  <li><code class="language-plaintext highlighter-rouge">JSK</code>는 리액트에서 UI가 어떻게 생겼는지를 정의하고, 사용하는 문법이다.</li>
+  <li>브라우저에서 실행하기 전에 babel 이 JSX문법을 JavaScript로 변환한다.</li>
+</ul>
+
+<p>밑의 JSX 문법을 바벨로 변환해보자.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">App</span><span class="p">()</span> <span class="p">{</span> 
+  <span class="k">return</span> <span class="p">(</span> <span class="o">&lt;</span><span class="nx">h1</span><span class="o">&gt;</span><span class="nx">Hello</span><span class="p">,</span> <span class="nx">siksik</span> <span class="nx">blog</span><span class="o">!&lt;</span><span class="sr">/h1&gt; </span><span class="se">)</span><span class="sr">;</span><span class="err"> 
+</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>이렇듯 바벨을 JSX 문법을 자바스크립트 문법으로 변환-&gt;출력 해준다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/164239872-4d475ec1-2e81-4132-bf04-7163724cb55a.png" alt="image" /></p>
+
+<p>리액트에서 JSX는 HTML을 작성하듯 사용하기 때문에 가독성과 유연성이 높고 자바스크립트와 동시에 사용할 수 있어 편리하다.</p>
+
+<p><br /></p>
+
+<h2 id="jsx-문법">JSX 문법</h2>
+
+<hr />
+
+<h3 id="최상위-부모-요소-하나로-존재해야-한다">최상위 부모 요소 하나로 존재해야 한다.</h3>
+<p>Virtual DOM에서 컴포넌트 변화를 감지할 때 효율적으로 비교할 수 있도록 컴포넌트 내부는 하나의 DOM 트리 구조로 이루어져야 한다는 규칙이 있기 때문이다.</p>
+
+<ul>
+  <li>밑에는 같은 레벨의 <code class="language-plaintext highlighter-rouge">div</code> 요소가 2개 존재하므로 에러를 발생시킨다.
+    <pre><code class="language-JS">// Parsing error: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment &lt;&gt;...&lt;/&gt;? (7:6)
+const App = () =&gt; {
+return (
+    &lt;div&gt;안녕하세요?&lt;/div&gt;
+    &lt;div&gt;반갑습니다.&lt;/div&gt;
+)
+}
+</code></pre>
+  </li>
+  <li>따라서 아래와 같이 작성해야 한다.
+    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="k">return</span> <span class="p">(</span>
+    <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">안녕하세요</span><span class="p">?</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">반갑습니다</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>    <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="jsx-표현식-포함">JSX 표현식 포함</h3>
+<p>JSX의 중괄호안에는 유효한 모든 <code class="language-plaintext highlighter-rouge">JavaScript</code> 표현식을 넣을 수 있다.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">name</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">서성식</span><span class="dl">'</span><span class="p">;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">안녕하세요</span><span class="p">?</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>            <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">저는</span> <span class="p">{</span><span class="nx">name</span><span class="p">}</span><span class="nx">입니다</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>        <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>    <span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="jsx도-표현식이다">JSX도 표현식이다.</h3>
+<p>JSX를 <code class="language-plaintext highlighter-rouge">if</code>구문이나 <code class="language-plaintext highlighter-rouge">for</code> loop 안에 넣어 사용하고, 변수에 할당하고, 인자로서 받고, 함수로부터 반환할 수 있다.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// if구문안에 사용</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+                <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">안녕하세요</span><span class="p">?</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>                <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">저는</span> <span class="p">{</span><span class="nx">formatName</span><span class="p">(</span><span class="nx">user</span><span class="p">)}</span><span class="nx">입니다</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>            <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>        <span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="p">(</span> <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">안녕하세요</span><span class="p">?.</span> <span class="nx">서성식입니다</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/div&gt;</span><span class="err">)
+</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>반대로, <code class="language-plaintext highlighter-rouge">if</code>구문이나 <code class="language-plaintext highlighter-rouge">for</code> loop는 JavaScript 표현식이 아니기 때문에 JSX 내부 자바스크립트 표현식에서는 사용할 수 없다.
+따라서, 조건에 따라 JSX 주변 코드에서 <code class="language-plaintext highlighter-rouge">if</code>구문을 사용하거나, 중괄호안에 삼항 연산자(조건부 연산자)를 넣어 사용한다.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">man</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">Y</span><span class="dl">'</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+                <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">안녕하세요</span><span class="p">?</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>                <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">저는</span> <span class="p">{</span><span class="nx">formatName</span><span class="p">(</span><span class="nx">user</span><span class="p">)}</span><span class="nx">입니다</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>                <span class="p">{</span><span class="nx">man</span><span class="o">===</span><span class="dl">'</span><span class="s1">Y</span><span class="dl">'</span> <span class="p">?</span> <span class="p">(</span>
+                    <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">저는</span> <span class="nx">남자입니다</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>                <span class="p">)</span> <span class="p">:</span> <span class="p">(</span>
+                    <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">저는</span> <span class="nx">여자입니다</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>                <span class="p">)}</span>
+            <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>    <span class="p">)}</span>
+    <span class="k">return</span> <span class="p">(</span> <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">안녕하세요</span><span class="p">?.</span> <span class="nx">서성식입니다</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/div&gt;</span><span class="err">)
+</span><span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="react-dom은-html-어트리뷰트-이름-대신-camelcase-명명-규칙을-사용-한다">React DOM은 HTML 어트리뷰트 이름 대신 camelCase 명명 규칙을 사용 한다.</h3>
+<ul>
+  <li>JSX에서 자바스크립트를 사용하려면 중괄호를 사용하는 것처럼, CSS을 적용하려면 객체 형태로 넣어야 한다.</li>
+  <li>camelCase 표기법으로 작성해야한다.(background-color =&gt; backgroundColor)</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">man</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">Y</span><span class="dl">'</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">css</span> <span class="o">=</span> <span class="p">{</span> <span class="na">backgroundColor</span><span class="p">:</span> <span class="dl">'</span><span class="s1">red</span><span class="dl">'</span><span class="p">,</span> <span class="na">fontSize</span><span class="p">:</span> <span class="dl">'</span><span class="s1">20px</span><span class="dl">'</span> <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+                <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">css</span><span class="p">}</span><span class="o">&gt;</span><span class="nx">안녕하세요</span><span class="p">?</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>                <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">css</span><span class="p">}</span><span class="o">&gt;</span><span class="nx">저는</span> <span class="p">{</span><span class="nx">formatName</span><span class="p">(</span><span class="nx">user</span><span class="p">)}</span><span class="nx">입니다</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>                <span class="p">{</span><span class="nx">man</span><span class="o">===</span><span class="dl">'</span><span class="s1">Y</span><span class="dl">'</span> <span class="p">?</span> <span class="p">(</span>
+                    <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">저는</span> <span class="nx">남자입니다</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>                <span class="p">)</span> <span class="p">:</span> <span class="p">(</span>
+                    <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">저는</span> <span class="nx">여자입니다</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>                <span class="p">)}</span>
+            <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>    <span class="p">)}</span>
+    <span class="k">return</span> <span class="p">(</span> <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">안녕하세요</span><span class="p">?.</span> <span class="nx">서성식입니다</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/div&gt;</span><span class="err">)
+</span><span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="class-대신-classname">class 대신 className</h3>
+<ul>
+  <li>JSX에서는 class대신 className으로 사용해야 한다.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">man</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">Y</span><span class="dl">'</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">css</span> <span class="o">=</span> <span class="p">{</span> <span class="na">backgroundColor</span><span class="p">:</span> <span class="dl">'</span><span class="s1">red</span><span class="dl">'</span><span class="p">,</span> <span class="na">fontSize</span><span class="p">:</span> <span class="dl">'</span><span class="s1">20px</span><span class="dl">'</span> <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+                <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">css</span><span class="p">}</span><span class="o">&gt;</span><span class="nx">안녕하세요</span><span class="p">?</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>                <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="dl">'</span><span class="s1">testClass</span><span class="dl">'</span> <span class="o">&gt;</span><span class="nx">저는</span> <span class="p">{</span><span class="nx">formatName</span><span class="p">(</span><span class="nx">user</span><span class="p">)}</span><span class="nx">입니다</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>                <span class="p">{</span><span class="nx">man</span><span class="o">===</span><span class="dl">'</span><span class="s1">Y</span><span class="dl">'</span> <span class="p">?</span> <span class="p">(</span>
+                    <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">저는</span> <span class="nx">남자입니다</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>                <span class="p">)</span> <span class="p">:</span> <span class="p">(</span>
+                    <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">저는</span> <span class="nx">여자입니다</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>                <span class="p">)}</span>
+            <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>    <span class="p">)}</span>
+    <span class="k">return</span> <span class="p">(</span> <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">안녕하세요</span><span class="p">?.</span> <span class="nx">서성식입니다</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/div&gt;</span><span class="err">)
+</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/164252264-1332b9b7-0f3a-4ff1-8c0e-cc58489928cb.png" alt="image" /></p>
+
+<h3 id="jsx에서-주석-사용">JSX에서 주석 사용</h3>
+<ul>
+  <li>JSX 내에서 주석을 사용하려면 {/<em>…</em>/}와 같이 사용해야 한다.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">man</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">Y</span><span class="dl">'</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">css</span> <span class="o">=</span> <span class="p">{</span> <span class="na">backgroundColor</span><span class="p">:</span> <span class="dl">'</span><span class="s1">red</span><span class="dl">'</span><span class="p">,</span> <span class="na">fontSize</span><span class="p">:</span> <span class="dl">'</span><span class="s1">20px</span><span class="dl">'</span> <span class="p">}</span>
+    <span class="kd">const</span> <span class="nx">title</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">potentiallyMaliciousInput</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+                <span class="p">{</span><span class="cm">/* 주석입니다. */</span><span class="p">}</span>
+                <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="nx">css</span><span class="p">}</span><span class="o">&gt;</span><span class="nx">안녕하세요</span><span class="p">?</span> <span class="p">{</span><span class="nx">title</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>                <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="dl">'</span><span class="s1">testClass</span><span class="dl">'</span> <span class="o">&gt;</span><span class="nx">저는</span> <span class="p">{</span><span class="nx">formatName</span><span class="p">(</span><span class="nx">user</span><span class="p">)}</span><span class="nx">입니다</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>                <span class="p">{</span><span class="nx">man</span><span class="o">===</span><span class="dl">'</span><span class="s1">Y</span><span class="dl">'</span> <span class="p">?</span> <span class="p">(</span>
+                    <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">저는</span> <span class="nx">남자입니다</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>                <span class="p">)</span> <span class="p">:</span> <span class="p">(</span>
+                    <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">저는</span> <span class="nx">여자입니다</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>                <span class="p">)}</span>
+            <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>    <span class="p">)}</span>
+    <span class="k">return</span> <span class="p">(</span> <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="nx">안녕하세요</span><span class="p">?.</span> <span class="nx">서성식입니다</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/div&gt;</span><span class="err">)
+</span><span class="p">}</span>
+</code></pre></div></div>
+:ET

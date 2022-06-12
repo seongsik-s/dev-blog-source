@@ -1,0 +1,217 @@
+---
+layout: post
+title: "[Node.js] Express API 서버 구축 - 앱 구조화 및 기본 라우팅" 
+tags: [Node.js, Javascript]
+categories: [Node.js]
+banner:
+  image: /assets/images/banners/node_js.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## **Express 애플리케이션 생성기**
+
+***
+
+Express 구조화된 애플리케이션을 생성하고 싶다면 `express-generator`를 사용하여 시작하면 된다.
+
+일단 npm 패키지로 설치한다.
+```console
+$ npm install express-generator -g
+```
+
+<br>
+
+`groupware-back-app`이라는 Express 앱을 생성해보자.  
+```console
+$ express --view=pug groupware-back-app
+
+   create : groupware-back-app\
+   create : groupware-back-app\public\
+   create : groupware-back-app\public\javascripts\
+   create : groupware-back-app\public\images\
+   create : groupware-back-app\public\stylesheets\
+   create : groupware-back-app\public\stylesheets\style.css
+   create : groupware-back-app\routes\
+   create : groupware-back-app\routes\index.js
+   create : groupware-back-app\routes\users.js
+   create : groupware-back-app\views\
+   create : groupware-back-app\views\error.pug
+   create : groupware-back-app\views\index.pug
+   create : groupware-back-app\views\layout.pug
+   create : groupware-back-app\app.js
+   create : groupware-back-app\package.json
+   create : groupware-back-app\bin\
+   create : groupware-back-app\bin\www
+
+   change directory:
+     > cd groupware-back-app
+
+   install dependencies:
+     > npm install
+
+   run the app:
+     > SET DEBUG=groupware-back-app:* & npm start
+```
+
+<br>
+
+**생성된 디렉토리로 이동 후 종속성을 설치한다.**
+```console
+$ cd groupware-back-app
+$ npm install
+```
+
+**MacOS 또는 Linux에서 다음 명령으로 앱을 실행**  
+```console
+$ DEBUG=groupware-back-app:* npm start
+```
+
+**Windows 명령 프롬프트에서 다음 명령으로 앱을 실행**
+```console
+> set DEBUG=groupware-back-app:* & npm start
+```
+
+**Windows PowerShell에서 다음 명령으로 앱을 실행**
+```console
+PS> $env:DEBUG='groupware-back-app:*'; npm start
+```
+
+[http://localhost:3000/](http://localhost:3000/)으로 접속해서 아래와 같이 출력한다면 정상적으로 실행한 것이다.  
+
+![image](https://user-images.githubusercontent.com/52439201/153125368-09364fcc-66c8-4b90-bcb3-2b93f32c8036.png)
+
+
+<br>
+
+`package.json`에서 scripts.start 명령어가 `express`를 실행해주는 명령어인가보다.
+(전 포스팅에서 `node app.js`와 같다고 보면된다.)
+
+```json
+{
+  "name": "groupware-back-app",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "pug": "2.0.0-beta11"
+  }
+}
+```
+{: file="package.json"}
+
+<br>
+ 
+ bin디렉토리안에 `www` 파일을 보면 node 서버 구성 환경에 대한 코드들이 들어가 있다. 
+
+```javascript
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('groupware-back-app:server');
+var http = require('http');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+...
+...
+...
+```
+{: file="./bin/www"}
+
+<br>
+
+### **Express 애플리케이션 구조**
+
+***
+
+![image](https://user-images.githubusercontent.com/52439201/153127492-0ae84775-2549-4942-808d-3712683bb354.png)
+
+<br>
+
+## **기본 라우팅**
+
+***
+라우팅은 URI(또는 경로) 및 특정 HTTP 요청 방법(GET, POST, PUT, DELETE)에 대한 클라이언트 요청에따라 애플리케이션이 응답하는 방식을 결정하는 방법을 말한다.
+
+각 경로에는 경로가 일치할 때 실행되는 하나 이상의 처리기 기능이 있을 수 있다. 
+
+경로 정의는 다음과 같다.
+
+`참고`: express 생성기로 만든 구조화된 애플리케이션이 아닌 초기 애플리케이션이라고 가정하고 진행한다.  
+[[Node.js] Express API 서버 구축 - 설치 및 실행](/posts/Node.js-03/)을 참고
+
+```javascript
+app.METHOD(PATH, HANDLER)
+```
+
+* `app`은 express의 인스턴스이다.
+* `METHOD`는 소문자로된 HTTP 요청 메서드이다.(`get`, `post`, `put`, `delete`)
+* `PATH`는 서버의 경로이다.
+* `HANDLER`는 경로가 일치할 때 실행하는 함수이다.
+
+### **GET**
+
+```javascript
+app.get('/get', function (req, res) {
+  res.send('get 방식입니다.')
+})
+```
+
+### **POST**
+
+```javascript
+app.get('/post', function (req, res) {
+  res.send('post 방식입니다.')
+})
+```
+
+### **PUT**
+
+```javascript
+app.get('/put', function (req, res) {
+  res.send('put 방식입니다.')
+})
+```
+
+### **DELETE**
+
+```javascript
+app.get('/delete', function (req, res) {
+  res.send('delete 방식입니다.')
+})
+```

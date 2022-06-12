@@ -1,0 +1,258 @@
+I"�K<p><code class="language-plaintext highlighter-rouge">webpack</code>을 다루기전에</p>
+
+<ol>
+  <li>모듈 시스템에 대한 이해가 수반되어야 합니다.</li>
+  <li>Node.js과 npm을 알아야 합니다.</li>
+</ol>
+
+<p>모듈 시스템을 모르신다면, 아래의 포스트를 먼저 보고 오시는 것을 추천드립니다.</p>
+
+<p><a href="/javascript/2021/12/08/javascript-02/">[Javascript] ES2015(ES6) 표준 모듈 시스템 (export, import)</a></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="a"><strong>webpack이란</strong></h2>
+
+<hr />
+
+<p><code class="language-plaintext highlighter-rouge">Webpack</code>은 오픈 소스 자바스크립트 모듈 번들러이다. 웹 어플리케이션 개발에 필요한 다양한 요소(HTML, CSS, Javascript, Images, Font 등 …)들을 하나의 파일로(혹은 여러개의 파일로) 병합 및 압축을 해주는 역할을 한다. 주요한 요소로는 Entry, Output, Loaders, Plugins, Mode, Browser Compatibility가 있다.</p>
+
+<p><br /></p>
+
+<h2 id="b"><strong>웹팩의 필요성</strong></h2>
+
+<hr />
+
+<h3 id="b-1"><strong>모듈 시스템은 모든 브라우저가 지원하지 않는다</strong></h3>
+
+<p><a href="/javascript/2021/12/08/javascript-02/">[Javascript] ES2015(ES6) 표준 모듈 시스템 (export, import)</a> 내용에서 알 수 있듯이, 모듈 시스템은 모든 브라우저에서 지원하지 않습니다.
+<code class="language-plaintext highlighter-rouge">Webpack</code>은 브라우저와 무관하게 모듈을 사용할 수 있습니다.</p>
+
+<p><br /></p>
+
+<h3 id="b-2"><strong>웹 애플리케이션의 로딩 속도와 성능 개선</strong></h3>
+
+<p>사용자들은 웹브라우저를 통해 애플리케이션을 접속할 수 있는데, 많은 리소스(<code class="language-plaintext highlighter-rouge">js</code>, <code class="language-plaintext highlighter-rouge">images</code>, <code class="language-plaintext highlighter-rouge">css</code> 등)들을 서버에 <code class="language-plaintext highlighter-rouge">http</code> 방식으로 요청하게 됩니다. 리소스들이 많을 수록 요청 수도 늘어나기 때문에
+속도와 성능이 저하될 수 밖에 없습니다. <code class="language-plaintext highlighter-rouge">Webpack</code>은 이런 문제들을 해결합니다.</p>
+
+<p><br /></p>
+
+<h3 id="b-3"><strong>번들러 도구</strong></h3>
+
+<p>자바스크립트 개발에서는 <code class="language-plaintext highlighter-rouge">JS</code>, <code class="language-plaintext highlighter-rouge">CSS</code>, <code class="language-plaintext highlighter-rouge">IMAGES</code>, <code class="language-plaintext highlighter-rouge">ES6</code>와 이전 버전과의 호환을 해주는 트랜스 파일, 모듈 라이브러리 등 많은 로드 작업이 필요합니다. 이런 작업을 한 번에 해주는 번들러 도구가 <code class="language-plaintext highlighter-rouge">Webpack</code>입니다.</p>
+
+<p><br /></p>
+
+<h2 id="c"><strong>npm 프로젝트 생성</strong></h2>
+
+<hr />
+
+<h3 id="c-1"><strong>npm init</strong></h3>
+
+<p><code class="language-plaintext highlighter-rouge">npm init</code>은 <code class="language-plaintext highlighter-rouge">node.js</code>에서 사용하는 모듈들을 패키지로 관리하기 위해 <code class="language-plaintext highlighter-rouge">package.json</code>을 생성하여 Node 패키지에 관리 정보와 의존중인 버전에 관한 정보로 <code class="language-plaintext highlighter-rouge">node.js</code>에서 사용하는 모듈들을 패키지로 만들어서 관리하기 위해 사용하는 것입니다.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Working 디렉토리</code>를 먼저 생성합니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">"npm init"</code> 로 프로젝트를 시작하게 되면, package name 부터 license 까지 입력할 수 있습니다. enter시 default값이 들어갑니다.</li>
+  <li>처음부터 default로 시작하고 싶으시면, <code class="language-plaintext highlighter-rouge">"npm init -y"</code> 로 생성합니다. -y는 yes의 약자로 default 패키지를 생성할 때 사용하는 옵션입니다.</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    mkdir webpack-demo
+    cd webpack-demo
+    npm init
+</span></code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/145957186-a1808cbb-6a60-4064-8d70-6b72fe947259.png" alt="image" /></p>
+
+<p><br /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">npm</code>을 통해 <code class="language-plaintext highlighter-rouge">webpack</code>과 <code class="language-plaintext highlighter-rouge">webpack-cli</code>을 설치합니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">webpack</code> 패키지는 <code class="language-plaintext highlighter-rouge">webpack</code>의 핵심 패키지이며, <code class="language-plaintext highlighter-rouge">webpack-cli</code> 패키지는 터미널에서 <code class="language-plaintext highlighter-rouge">webpack</code> 명령어를 실행할 수 있게 해주는 커맨드라인 도구입니다.</li>
+  <li>개발환경에서 필요한 의존성이므로 -D 옵션을 붙여 설치합니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">package.json</code>는 <code class="language-plaintext highlighter-rouge">npm init</code>으로 생기는 패키지입니다.</li>
+  <li>기본적으로 node package를 설치하게 되면 <code class="language-plaintext highlighter-rouge">"path/node_modules/"</code> 하단에 설치됩니다. 따라서, 최초 npm install시에 생성되며 그 이후로는 node_modules 하위에 패키지들이 설치됩니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">package-lock.json</code>은 node_modules 트리나 package.json 파일을 수정하게 되면 자동으로 생성됩니다. 이 파일은 파일이 생성되는 시점의 의존성 트리에 대한 정확한 정보를 가지고 있습니다.</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    seong@DESKTOP-O5CIEJV MINGW64 /e/study/frontend/webpack-demo (test)
+</span><span class="gp">    $</span><span class="w"> </span>ll
+<span class="go">    total 105
+    drwxr-xr-x 1 seong 197610     0 12월 14 17:05 node_modules/
+    -rw-r--r-- 1 seong 197610   290 12월 14 17:05 package.json
+    -rw-r--r-- 1 seong 197610 89604 12월 14 17:05 package-lock.json
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="d"><strong>package.json 구조 파악하기</strong></h2>
+
+<hr />
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w">    </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"webpack-demo"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0.0"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"main"</span><span class="p">:</span><span class="w"> </span><span class="s2">"index.js"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"test"</span><span class="p">:</span><span class="w"> </span><span class="s2">"echo </span><span class="se">\"</span><span class="s2">Error: no test specified</span><span class="se">\"</span><span class="s2"> &amp;&amp; exit 1"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"author"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"license"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ISC"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"devDependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"webpack"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^5.65.0"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"webpack-cli"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^4.9.1"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p><strong>devDependencies :</strong></p>
+<ul>
+  <li>설치된 npm 패키지들은 devDependencies 항목에서 관리됩니다.</li>
+</ul>
+
+<p><strong>scripts :</strong></p>
+<ul>
+  <li>scripts 항목에 다양한 명령어들을 설정하여 콘솔에서 사용할 수 있습니다.</li>
+  <li>보통 <code class="language-plaintext highlighter-rouge">npm run [명령어</code>]로 스크립트 명령어를 실행합니다.</li>
+  <li>test, start는 <code class="language-plaintext highlighter-rouge">npm test</code>, <code class="language-plaintext highlighter-rouge">npm start</code>로 실행합니다.</li>
+</ul>
+
+<p><br />
+<br /></p>
+
+<h2 id="e"><strong>디렉토리 구조 생성</strong></h2>
+
+<ul>
+  <li>현재는 모듈 시스템 기반으로 script를 로드합니다.</li>
+</ul>
+
+<hr />
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">    webpack-demo
+        |- /moda_modules
+        |- package.json
+        |- package-lock.json
+     +  |- index.html
+     +  |- /src
+     +      |- app.js
+     +      |- math.js
+</span></code></pre></div></div>
+
+<div file="index.html" class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cp">&lt;!DOCTYPE html&gt;</span>
+    <span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"X-UA-Compatible"</span> <span class="na">content=</span><span class="s">"IE=edge"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;title&gt;</span>Document<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"module"</span> <span class="na">src=</span><span class="s">"./src/app.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+    <span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<div file="app.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">math</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./math.js</span><span class="dl">'</span>
+
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">math</span><span class="p">.</span><span class="nx">sum</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">));</span>
+</code></pre></div></div>
+
+<div file="math.js" class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">export</span> <span class="kd">function</span> <span class="nx">sum</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">){</span>
+        <span class="k">return</span> <span class="nx">a</span><span class="o">+</span><span class="nx">b</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="f"><strong>webpack의 주요 요소</strong></h2>
+
+<hr />
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">--help</code> 옵션을 통해 webpack 사용 방법을 확인해봅시다.</li>
+  <li><code class="language-plaintext highlighter-rouge">"node_modules\.bin\webpack --help"</code> 입력</li>
+  <li>–mode, –entry, –output-path(-o) 옵션을 사용해서 웹팩으로 번들링 작업을 수행할 수 있습니다.</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    E:\study\frontend\webpack-demo&gt;</span>.<span class="se">\n</span>ode_modules<span class="se">\.</span>bin<span class="se">\w</span>ebpack <span class="nt">--help</span>
+<span class="go">    
+    Usage: webpack [entries...] [options]
+    Alternative usage to run commands: webpack [command] [options]
+
+    The build tool for modern web applications.
+
+    Options:
+</span><span class="gp">    -c, --config &lt;value...&gt;</span><span class="w">                </span>Provide path to a webpack configuration file e.g. ./webpack.config.js.
+<span class="gp">    --config-name &lt;value...&gt;</span><span class="w">               </span>Name of the configuration to use.
+<span class="go">    -m, --merge                            Merge two or more configurations using 'webpack-merge'.
+</span><span class="gp">    --env &lt;value...&gt;</span><span class="w">                       </span>Environment passed to the configuration when it is a <span class="k">function</span><span class="nb">.</span>        
+<span class="gp">    --node-env &lt;value&gt;</span><span class="w">                     </span>Sets process.env.NODE_ENV to the specified value.
+<span class="go">    --progress [value]                     Print compilation progress during build.
+    -j, --json [value]                     Prints result as JSON or store it in a file.
+</span><span class="gp">    -d, --devtool &lt;value&gt;</span><span class="w">                  </span>Determine <span class="nb">source </span>maps to use.
+<span class="go">    --no-devtool                           Do not generate source maps.
+</span><span class="gp">    --entry &lt;value...&gt;</span><span class="w">                     </span>The entry point<span class="o">(</span>s<span class="o">)</span> of your application e.g. ./src/main.js.
+<span class="gp">    --mode &lt;value&gt;</span><span class="w">                         </span>Defines the mode to pass to webpack.
+<span class="gp">    --name &lt;value&gt;</span><span class="w">                         </span>Name of the configuration. Used when loading multiple configurations. 
+<span class="gp">    -o, --output-path &lt;value&gt;</span><span class="w">              </span>Output location of the file generated by webpack e.g. ./dist/.        
+<span class="go">    --stats [value]                        It instructs webpack on how to treat the stats e.g. verbose.
+    --no-stats                             Disable stats output.
+</span><span class="gp">    -t, --target &lt;value...&gt;</span><span class="w">                </span>Sets the build target e.g. node.
+<span class="go">    --no-target                            Negative 'target' option.
+    -w, --watch                            Watch for files changes.
+    --no-watch                             Do not watch for file changes.
+    --watch-options-stdin                  Stop watching when stdin stream has ended.
+    --no-watch-options-stdin               Do not stop watching when stdin stream has ended.
+
+    ... (생략)
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="f-1"><strong>webpack.config.js</strong></h3>
+
+<ul>
+  <li>webpack의 기본 설정파일입니다. <code class="language-plaintext highlighter-rouge">--help</code> 옵션에서 알 수 있듯이 <code class="language-plaintext highlighter-rouge">./webpack.config.js</code> 로 만들어서 사용합니다.</li>
+</ul>
+
+<h3 id="f-2"><strong>mode</strong></h3>
+
+<ul>
+  <li>webpack의 실행 모드를 설정합니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">production</code> : 운영모드</li>
+  <li><code class="language-plaintext highlighter-rouge">development</code> : 개발모드</li>
+  <li><code class="language-plaintext highlighter-rouge">none</code> : 기본 최적화 모드</li>
+</ul>
+
+<h3 id="f-3"><strong>entry</strong></h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">webpack</code> 번들링의 시작점입니다. 쉽게 말해 <code class="language-plaintext highlighter-rouge">webpack</code> 번들링 하고 싶은 자바스크립트 파일 경로들을 선언합니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">webpack</code>은 <code class="language-plaintext highlighter-rouge">entry</code> 속성을 기준으로 번들링하기 때문에 웹 어플리케이션의 전반적인 구조와 내용이 있어야 합니다.</li>
+  <li>그 이유는, <code class="language-plaintext highlighter-rouge">entry</code>에 선언된 자바스크립트 파일을 기준으로 웹 어플리케이션에서 사용되는 모듈들의 연관 관계를 이해하고 분석하기 때문입니다.</li>
+</ul>
+
+<h3 id="f-4"><strong>output</strong></h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">webpack</code> 번들링의 결과물이 저장되는 경로를 선언합니다.</li>
+</ul>
+
+<h3 id="f-5"><strong>loader</strong></h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">webpack</code>은 자바스크립트 파일뿐만 아니라 모든 파일을 모듈로 바라볼 수 있습니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">CSS</code>, <code class="language-plaintext highlighter-rouge">HTML</code>, <code class="language-plaintext highlighter-rouge">FONT</code>, <code class="language-plaintext highlighter-rouge">IMAGES</code> 등 전부 모듈로 보기 때문에 <code class="language-plaintext highlighter-rouge">import</code> 구문을 사용하여 자바스크립트 코드안으로 가져올 수 있습니다. 이게 가능한 이유가 <code class="language-plaintext highlighter-rouge">loader</code> 때문입니다.</li>
+</ul>
+
+<h3 id="f-6"><strong>plugin</strong></h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">loader</code>는 파일 단위로 처리하지만 <code class="language-plaintext highlighter-rouge">plugin</code>은 번들된 결과물을 처리합니다.</li>
+  <li>보통 번들된 자바스크립트를 난독화(읽기 어렵게) 한다거나 텍스트를 추출하는 용도로 사용됩니다.</li>
+</ul>
+
+:ET

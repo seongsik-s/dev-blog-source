@@ -1,0 +1,239 @@
+---
+layout: post
+title: "[Javascript]] this는 어떻게 동작할까?" 
+tags: [Javascript, ES6]
+categories: [Javascript]
+banner:
+  image: /assets/images/banners/es6.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## **시작으로**
+
+***
+
+Javascript에서 함수의 `this` 키워드는 다른 언어들과 다르게 동작한다. 이는 Java와 같은 익숙한 언어의 개념과 달라 개발자들에게 혼동을 준다.
+대부분의 경우 `this`의 값은 함수를 호출한 방법에 의해 결정된다. 실행중에는 할당으로 설정할 수 없고 함수를 호출할 때 마다 다를 수 있다.
+
+Java에서의 this는 인스턴스 자신을 가르키는 참조변수이다. this가 객체 자신에 대한 참조 값을 가지고 있다는 뜻이다. 주로 매개변수와 객체 자신이 가지고 있는 멤버변수명이 같은 경우 이를 구분하기 위해 사용된다.
+하지만, `Javascript`의 경우 `Java`와 같이 `this`에 바인딩되는 객체는 한가지가 아니라 해당 `함수 호출 방식`에 따라 `this`에 바인딩되는 객체가 달라진다.
+
+<br>
+
+## **함수의 4가지 호출 방식**
+
+***
+
+* 함수 호출
+* 메서드 호출
+* 생성자 함수 호출
+* Call, Apply, Bind 호출
+
+<br>
+
+### **함수 호출**
+
+기본적으로 `this`는 `전역객체(Global object)`에 바인딩된다. 전역함수는 물론이고 내부함수의 경우에도 `this`는 외부함수가 아닌 전역객체에 바인딩된다.
+
+여기서 `전역객체(Global object)`란 모든 객체의 유일한 최상위 객체를 말한다. 일반적으로 B`rowser-side`에서는 `window`, `Server-side(Node.js)`에서는 `global` 객체를 의미한다.
+전역객체는 전역 스코프(Global Scope)를 갖는 전역변수(Global variable)를 프로퍼티로 소유한다. 글로벌 영역에 선언한 함수는 전역객체의 프로퍼티로 접근할 수 있는 전역 변수의 메소드이다.
+
+```javascript
+var x = 'global';
+console.log(x); // global
+console.log(window.x); // global
+console.log(this.x); // global
+
+function global_fn() {
+  console.log('global function');
+}
+
+window.global_fn(); // global function
+this.global_fn(); // global function
+```
+
+```console
+// browser console
+this===window // true
+
+// node terminal
+this===global // true
+```
+
+브라우저 콘솔과 Node.js 터미널에 `this`를 입력해보면 아래와 같은 객체가 출력된다.
+
+![image](https://user-images.githubusercontent.com/52439201/152727272-7991a6bf-6156-436b-9854-f8ac21fcd510.png)
+
+
+![image](https://user-images.githubusercontent.com/52439201/152727333-89429376-8080-43d9-8eba-9b6ba79a4795.png)
+
+<br>
+
+### **메서드 호출**
+
+함수가 객체의 프로퍼티 값이면 `메소드`로서 호출된다. 이때 메소드 내부의 `this`는 해당 메소드를 소유한 객체, 즉 해당 메소드를 호출한 객체에 바인딩된다.
+이를, `암시적 바인딩`이라 한다.
+
+```javascript
+var object = {
+    value : 100,
+    obj_fn : function(){
+        console.log(this.value);
+    }
+}
+
+var object2 = {
+    value : 200
+};
+
+object.obj_fn(); // 100
+object2.obj_fn(); // 200
+```
+
+<br>
+
+### **생성자 함수 호출**
+ 
+생성자 함수란 객체를 생성하는 역할을 한다. 함수를 `new` 키워드와 함께 생성자로 호출하면 생성자 함수로 동작한다.   
+생성자 함수가 아닌 일반 함수에 `new` 키워드를 붙여 호출하면 생성자 함수처럼 동작할 수 있다. 일반적으로 생성자 함수명은 첫문자를 대문자로 기술하여 혼란을 방지하려 노력한다.
+
+주의해야할 사항으로는  `new` 키워드와 함께 생성자 함수를 호출하지 않으면 생성자 함수로 동작하지 않는다.
+
+```javascript
+function Create_fn(name){
+    this.name = name;
+}
+
+var men = new Create_fn('Men');
+console.log(men); // Create_fn {name: 'Men'}
+
+
+// new 키워드와 함께 생성자 함수를 호출하지 않으면 생성자 함수로 동작하지 않는다.
+var female = Create_fn('Female');
+console.log(female ); // undefined
+```
+
+<br>
+
+그럼 `new` 키워드는 클래스의 인스턴스화인가? 결론부터 말해면 `No!`
+
+`new` 키워드 바인딩 동작순서를 쪼개서 실험해보면 아래와 같다.
+
+1. 새 객체를 생성한다.
+2. 생성된 객체의 Prototype 체인이 호출 함수의 프로토타입과 연결된다.
+3. 생성된 객체를 context 객체로 사용(명시적)하여 함수가 실행된다.
+4. 이 함수가 객체를 반환하지 않는 한 생성된 객체가 반환된다.
+
+```javascript
+function Person(name) {
+  this.name = name;
+  this.age = 20;
+}
+
+var per = new Person('seongsik');
+console.log(per.name); // seongsik
+console.log(per.age); // 20
+
+// 위와 똑같은 과정을 쪼개보자.
+// 1. 새 객체를 생성한다.
+var obj = {};
+
+// 2. 생성된 객체의 Prototype 체인이 호출 함수의 프로토타입과 연결된다.
+Object.setPrototypeOf(obj, Person.prototype);
+this.obj // Person {} 
+
+// 3. 생성된 객체를 context 객체로 사용(명시적)하여 함수가 실행된다.
+Person.call(obj,'seongsik222');
+
+// 4. 이 함수가 객체를 반환하지 않는 한 생성된 객체가 반환된다.
+var per2 = obj;
+console.log(per2 .name); // 2
+console.log(per2 .age); // 20
+console.log(obj) // Person {name: 'seongsik222', age: 20}
+```
+
+이렇듯 위의 과정이 발생한다는 것!   
+그리고, `new` 키워드는 그저 함수를 실행 시켜주는 것이다. 아래의 결과를 보면 순차적으로 함수내부를 실행시켜주는 것을 확인할 수 있다.
+그리고 우리가 알고 있던 클래스와 다르게 `return`에 객체를 반환된다.  
+즉, `Javascript`의 `new` 키워드는 클래스의 인스턴스화가 아닌 단순히 함수를 실행시켜주는 것이다.
+
+```javascript
+function Person(name) {
+  this.name = name;
+  this.age = 20;
+
+  console.log('function 실행!!');
+
+  return {address : '주소'};
+}
+
+var per = new Person('seongsik'); // function 실행!!
+console.log(per); // {address : '주소'}
+```
+
+
+
+
+<br>
+
+### **Call, Apply, Bind 호출**
+
+함수 객체는 Call, Apply, Bind 메소드를 가지고 있는데, 첫 번째 인자로 넘겨주는 것이 this context 객체가 된다. 이를 `명시적 바인딩`이라 한다.
+`this`의 값을 한 문맥에서 다른 문맥으로 넘기려면  `call()`이나 `apply()`를 사용해야 한다.
+
+```javascript
+// call 또는 apply의 첫 번째 인자로 객체가 전달될 수 있으며 this가 그 객체에 묶임
+var obj = {a: 'Custom'};
+
+// 변수를 선언하고 변수에 프로퍼티로 전역 window를 할당
+var a = 'Global';
+
+function whatsThis() {
+  return this.a;  // 함수 호출 방식에 따라 값이 달라짐
+}
+
+whatsThis();          // this는 'Global'. 함수 내에서 설정되지 않았으므로 global/window 객체로 초기값을 설정한다.
+whatsThis.call(obj);  // this는 'Custom'. 함수 내에서 obj로 설정한다.
+whatsThis.apply(obj); // this는 'Custom'. 함수 내에서 obj로 설정한다.
+```
+
+```javascript
+function add(c, d) {
+  return this.a + this.b + c + d;
+}
+
+var o = {a: 1, b: 3};
+
+// 첫 번째 인자는 'this'로 사용할 객체이고,
+// 이어지는 인자들은 함수 호출에서 인수로 전달된다.
+add.call(o, 5, 7); // 16
+
+// 첫 번째 인자는 'this'로 사용할 객체이고,
+// 두 번째 인자는 함수 호출에서 인수로 사용될 멤버들이 위치한 배열이다.
+add.apply(o, [10, 20]); // 34
+```
+
+
+ES5에 추가된 `Function.prototype.bind`를 사용하는 방법도 가능하다. `Function.prototype.bind`는 함수에 인자로 전달한 this가 바인딩된 새로운 함수를 리턴한다.  
+즉, `Function.prototype.bind`는 Function.prototype.apply, Function.prototype.call 메소드와 같이 함수를 실행하지 않기 때문에 명시적으로 함수를 호출할 필요가 있다.
+
+
+```javascript
+function f() {
+  return this.a;
+}
+
+var g = f.bind({a: 'azerty'});
+console.log(g()); // azerty
+
+var h = g.bind({a: 'yoo'}); // bind는 한 번만 동작함!
+console.log(h()); // azerty
+
+var o = {a: 37, f: f, g: g, h: h};
+console.log(o.a, o.f(), o.g(), o.h()); // 37, 37, azerty, azerty
+```

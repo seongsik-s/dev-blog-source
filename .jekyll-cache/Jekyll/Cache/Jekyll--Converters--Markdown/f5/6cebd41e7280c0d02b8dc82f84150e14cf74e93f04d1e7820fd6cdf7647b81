@@ -1,0 +1,208 @@
+I"*&<h2 id="npm이란"><strong>npm이란?</strong></h2>
+
+<hr />
+
+<p><code class="language-plaintext highlighter-rouge">npm</code>은 Node Package Manager의 약자로 자바스크립트 프로그래밍 언어를 위한 패키지 관리자입니다. 
+즉, <code class="language-plaintext highlighter-rouge">npm</code>은 node.js에서 사용하는 모듈들을 패키지로 관리 및 배포하는 역할을 합니다.</p>
+
+<p><br /></p>
+
+<h2 id="nodejs-설치"><strong>Node.js 설치</strong></h2>
+
+<hr />
+
+<ul>
+  <li>사용자의 운영체제에 맞게 <code class="language-plaintext highlighter-rouge">다운로드</code> 합니다.</li>
+  <li>[Node.js 홈페이지]](https://nodejs.org/ko/)</li>
+  <li>짝수버전(왼쪽), 홀수버전(오른쪽)이 있는데 짝수버전은 안정성과 신뢰성을 지원하는 버전으로 실제 서버에 배포용으로 사용할 때 사용하고 홀수버전은 최신 기능을 지원하므로 개발용으로 사용한다.</li>
+  <li>개발용으로 사용할 것이므로 오른쪽 버전을 다운로드 합니다.</li>
+  <li>2021-12-08 기준, 17.2.0 최신버전</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/145165822-2835ad88-0246-4910-8f38-a04e172d7431.png" alt="image" /></p>
+
+<p><br /></p>
+
+<ul>
+  <li>터미널을 실행하여 <code class="language-plaintext highlighter-rouge">node.js</code>가 잘 설치되었는지 확인합니다.</li>
+  <li>저는 윈도우에서 실행했습니다.</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    C:\Users\seong&gt;</span>node
+<span class="go">    Welcome to Node.js v17.2.0.
+    Type ".help" for more information.
+</span><span class="gp">    &gt;</span><span class="w">
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<ul>
+  <li>웹 브라우저 없이 <code class="language-plaintext highlighter-rouge">JavaScript</code>를 실행할 수 있습니다!</li>
+  <li><code class="language-plaintext highlighter-rouge">javaScript</code>가 작동하는지 테스트 해보겠습니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">ES6</code> 문법인 <code class="language-plaintext highlighter-rouge">const</code>가 잘 작동됩니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">const</code>의 재사용이 안되는 것까지 잘되네요!</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">    C:\Users\seong&gt;</span>node
+<span class="go">    Welcome to Node.js v17.2.0.
+    Type ".help" for more information.
+</span><span class="gp">    &gt;</span><span class="w"> </span>const x <span class="o">=</span> 30<span class="p">;</span>
+<span class="go">    undefined
+</span><span class="gp">    &gt;</span><span class="w"> </span>x
+<span class="go">    30
+</span><span class="gp">    &gt;</span><span class="w"> </span>x <span class="o">=</span> 10<span class="p">;</span>
+<span class="go">    Uncaught TypeError: Assignment to constant variable.
+</span><span class="gp">    &gt;</span><span class="w">
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">node.js</code>의 버전을 확인합니다.
+    <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">  C:\Users\seong&gt;</span>node <span class="nt">--version</span>
+<span class="go">  v17.2.0
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">npm</code>의 버전을 확인합니다.
+    <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">  C:\Users\seong&gt;</span>npm <span class="nt">--version</span>
+<span class="go">  v17.2.0
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">npm</code> 을 입력합니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">npm --version</code> 처럼 명령어 사용방법에 대해 알려줍니다.
+    <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">  C:\Users\seong&gt;</span>npm
+<span class="gp">  npm &lt;command&gt;</span><span class="w">
+</span><span class="go">
+  Usage:
+
+  npm install        install all the dependencies in your project
+</span><span class="gp">  npm install &lt;foo&gt;</span><span class="w">  </span>add the &lt;foo&gt; dependency to your project
+<span class="go">  npm test           run this project's tests
+</span><span class="gp">  npm run &lt;foo&gt;</span><span class="w">      </span>run the script named &lt;foo&gt;
+<span class="gp">  npm &lt;command&gt;</span><span class="w"> </span><span class="nt">-h</span>   quick <span class="nb">help </span>on &lt;<span class="nb">command</span><span class="o">&gt;</span>
+<span class="go">  npm -l             display usage info for all commands
+</span><span class="gp">  npm help &lt;term&gt;</span><span class="w">    </span>search <span class="k">for </span><span class="nb">help </span>on &lt;term&gt; <span class="o">(</span><span class="k">in </span>a browser<span class="o">)</span>
+<span class="go">  npm help npm       more involved overview (in a browser)
+
+  All commands:
+
+      access, adduser, audit, bin, bugs, cache, ci, completion,
+      config, dedupe, deprecate, diff, dist-tag, docs, doctor,
+      edit, exec, explain, explore, find-dupes, fund, get, help,
+      hook, init, install, install-ci-test, install-test, link,
+      ll, login, logout, ls, org, outdated, owner, pack, ping,
+      pkg, prefix, profile, prune, publish, rebuild, repo,
+      restart, root, run-script, search, set, set-script,
+      shrinkwrap, star, stars, start, stop, team, test, token,
+      uninstall, unpublish, unstar, update, version, view, whoami
+
+  Specify configs in the ini-formatted file:
+      C:\Users\seong\.npmrc
+</span><span class="gp">  or on the command line via: npm &lt;command&gt;</span><span class="w"> </span><span class="nt">--key</span><span class="o">=</span>value
+<span class="go">
+  More configuration info: npm help config
+  Configuration fields: npm help 7 config
+
+  npm@8.1.4 C:\Program Files\nodejs\node_modules\npm
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="프로젝트-생성-해보기"><strong>프로젝트 생성 해보기</strong></h2>
+
+<hr />
+
+<ul>
+  <li>프로젝트를 생성할 폴더(폴더명 : sample_01)를 만들어 줍니다.</li>
+  <li>저는 <code class="language-plaintext highlighter-rouge">E:\study\frontend</code> 위에 만들었습니다.</li>
+  <li>생성된 폴더에 이동합니다.
+    <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">  E:\study\frontend&gt;</span><span class="nb">mkdir </span>sample_01
+<span class="go">
+</span><span class="gp">  E:\study\frontend&gt;</span><span class="nb">dir</span>
+<span class="go">      E 드라이브의 볼륨: seongsik
+      볼륨 일련 번호: 1819-824F
+
+      E:\study\frontend 디렉터리
+
+</span><span class="gp">      2021-12-08  오후 05:04    &lt;DIR&gt;</span><span class="w">          </span><span class="nb">.</span>
+<span class="gp">      2021-12-08  오후 05:04    &lt;DIR&gt;</span><span class="w">          </span>..
+<span class="gp">      2021-12-08  오후 05:04    &lt;DIR&gt;</span><span class="w">          </span>sample_01
+<span class="go">                  0개 파일                   0 바이트
+                  3개 디렉터리  14,627,414,016 바이트 남음
+    
+</span><span class="gp">  E:\study\frontend&gt;</span><span class="nb">cd </span>sample_01
+<span class="go">
+</span><span class="gp">  E:\study\frontend\sample_01&gt;</span><span class="w">
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li>프로젝트 생성하기 : <code class="language-plaintext highlighter-rouge">npm init</code></li>
+  <li>package name, version, description … 입력란이 나오지만 전부 엔터</li>
+  <li>package name defalut는 폴더명입니다.
+    <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">  E:\study\frontend\sample_01&gt;</span>npm init
+<span class="go">
+  This utility will walk you through creating a package.json file.
+  It only covers the most common items, and tries to guess sensible defaults.
+
+  See `npm help init` for definitive documentation on these fields
+  and exactly what they do.
+
+</span><span class="gp">  Use `npm install &lt;pkg&gt;</span><span class="sb">`</span> afterwards to <span class="nb">install </span>a package and
+<span class="go">  save it as a dependency in the package.json file.
+
+  Press ^C at any time to quit.
+  package name: (sample_01)
+  version: (1.0.0)
+  description:
+  entry point: (index.js)
+  test command:
+  git repository:
+  keywords:
+  author:
+  license: (ISC)
+  About to write to E:\study\frontend\sample_01\package.json:
+
+  {
+  "name": "sample_01",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+      "test": "echo \"Error: no test specified\" &amp;&amp; exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+  }
+
+
+  Is this OK? (yes)
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li>sample_01 폴더 밑에 package.json 파일이 생성되었습니다.</li>
+  <li>해당 파일을 실행해보면 프로젝트 정보들이 들어있습니다.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/52439201/145175726-b0d7945d-d8dd-45d4-ae30-682d85ed2b8a.png" alt="image" /></p>
+
+:ET

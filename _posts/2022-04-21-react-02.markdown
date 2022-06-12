@@ -1,0 +1,271 @@
+---
+layout: post
+title: "[React] 라이프 사이클 메서드란?"
+tags: [React, Gatsby, Next.js, Node.js, Typescirpt, Javascript, ES6]
+categories: [React]
+banner:
+  image: /assets/images/banners/react.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## 라이프 사이클 메서드란?
+
+`LifeCycle Method`란 한국말로 "생명주기"라고 한다. React, Vue, angular와 같은 프레임워크들은 MVC패턴에서 View에 해당하는 영역이다. 그렇기 때문에 각 컴포넌트들은 라이프 사이클이 존재한다.
+
+라이프 사이클은 컴포넌트가 브라우저에 생성되고, 업데이트되고, 제거될 때 호출되는 메서드이다. 또한 클래스형 컴포넌트에서만 사용 할 수 있다. 
+
+만약, 함수형으로 컴포넌트를 구현한다면 `useEffect`를 사용하여 라이프사이클을 구현해야한다.
+일단, 라이프 사이클의 유형과 어떻게 사용하는지를 익히는 것에 집중해보자.
+
+그리고, 아래의 이미지는 리액트 라이프 사이클을 나타낸 [이미지](https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)이다.
+
+![image](https://user-images.githubusercontent.com/52439201/164472072-39bf1eab-65b0-4bc0-ae09-d2c2e8881477.png)
+
+<br>
+
+## 라이프 사이클 메서드 유형
+
+라이프 사이클은 크게 3가지 유형으로 나눌 수 있다.
+
+1. 컴포넌트가 브라우저에 생성될 때 => `Mount`
+  - 마운트는 DOM이 생성되고 웹 브라우저 상에 나타는 것을 말한다.
+
+2. 컴포넌트가 업데이트 될 때 => `Update`
+  - Props가 바뀔 때
+  - State가 바뀔 때
+  - 부모 컴포넌트가 리렌더링 될 때
+  - this.forceUpdate로 강제로 렌더링을 할 때이다.
+
+3. 컴포넌트가 제거 될 때 => `Unmount`
+  - Unmount는 DOM에서 제거되는 것을 말한다.
+
+### 마운트
+
+마운트될 때 발생하는 생명주기를 알아보자.
+
+* constructor
+* getDerivedStateFromProps
+* render
+* componentDidMount
+
+#### constructor
+
+`constructor(생성자)`는 컴포넌트가 처음 생성될 때 실행되는 메서드이다. 이 메서드는 초기 state를 정의할 수 있다.
+
+클래스형 컴포넌트에서는 초기 state를 사용할 때 `constructor`를 사용해야 한다. 
+훅에서는 useState hook을 사용하여 초기 state를 설정할 수 있다.
+
+```js
+//Class
+class LifeCycle extends React.Component  {
+  constructor(props) {
+    super(props);
+    this.state = { count: 0 };
+  }
+}
+
+//Hooks
+Const LifeCycle =() => {
+	const [count, setCount] = useState(0);
+}
+```
+
+#### getDerivedStateFromProps
+getDerivedStateFromProps는 props로 받아온 것을 state에 동기화 시키고 싶을 때 사용한다.
+컴포넌트가 마운트 될 때와 업데이트 될 때 호출된다. 자주 사용하진 않지만 가끔 사용하기 때문에 알아두면 좋을 것 같다.
+
+아래는 class에서의 사용법과 hooks에서의 사용법을 간단하게 작성한 예제이다.
+
+```js
+// Class
+class Example extends React.Component {
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.value !== prevState.value) {
+      return { value: nextProps.value }
+    }
+    return null
+  }
+}
+
+//Hooks
+function ScrollView({row}) {
+  const [isScrollingDown, setIsScrollingDown] = useState(false);
+  const [prevRow, setPrevRow] = useState(null);
+
+  if (row !== prevRow) {
+    // 마지막 렌더링 이후 행이 변경되었습니다. isScrollingDown을 업데이트합니다.
+    setIsScrollingDown(prevRow !== null && row > prevRow);
+    setPrevRow(row);
+  }
+
+  return `Scrolling down: ${isScrollingDown}`;
+}
+```
+
+#### render
+컴포넌트를 렌더링하는 메서드이다. 가장 기초적인 메서드이면서 가장 중요한 메서드이다. 
+함수형 컴포넌트에서는 render 메서드를 사용하지 않고 컴포넌트를 렌더링할 수 있다.
+
+```js
+//Class
+class LifeCycle extends React.Component  {
+  render() {
+    return <div>컴포넌트입니다.</div>
+  }
+}
+
+//Hooks
+Const LifeCycle =() => {
+	return <div>컴포넌트입니다.</div>
+}
+```
+
+#### componentDidMount
+
+componentDidMount는 컴포넌트의 첫 번째 렌더링이 끝나고 호출되는 메서드이다. 이 메서드가 호출되는 시점에는 우리가 만든 컴포넌트가 화면에 나타난 상태이다.
+여기선 보통 DOM을 사용해야하는 외부 라이브러리를 연동하거나, 해당 컴포넌트에서 필요한 데이터를 요청하기 위해 Axios, fetch 등 비동기 처리를 요청하거나 DOM의 속성을 읽거나 직접 변경하는 작업을 할 때 사용한다. 함수형 hooks에서는 `useEffect`를 활용하여 구현할 수 있다.
+
+
+```js
+// Class
+class LifeCycle extends React.Component {
+    componentDidMount() {
+        ...
+    }
+}
+
+// Hooks
+const LifeCycle = () => {
+     useEffect(() => {
+      ...
+    });
+}
+```
+useEffect의 사용방법은 [Using the Effect Hook](https://ko.reactjs.org/docs/hooks-effect.html)를 참고하자.
+
+<br>
+
+### 업데이트
+
+이번엔 컴포넌트가 업데이트 될 때 발생하는 생명주기를 알아보자.
+
+* getDerivedStateFromProps
+* shouldComponentUpdate
+* getSnapshotBeforeUpdate
+* componentDidUpdate
+
+#### getDerivedStateFromProps
+마운트에서 다룬 내용과 동일하다. 컴포넌트의 `props` 나 `state` 가 바뀌었을때도 이 메서드가 호출되므로 잘 알아두자!
+
+#### shouldComponentUpdate
+shouldComponentUpdate는 props나 state를 변경했을 때 리렌더링을 할지 말지 결정하는 메서드이다. 이 메서드는 반드시 `false`나 `true`를 반환해야 한다.
+이 메서드는 오직 성능 최적화만을 위한 것이며 렌더링 목적을 방지하는 목적으로 사용하게되면 버그로 이어질 수 있다.
+
+```js
+// Class
+class LifeCycle extends React.Component {
+  shouldComponentUpdate(nextProps) {
+    return nextProps.value !== this.props.value
+  }
+}
+
+// Hooks
+const LifeCycle = React.memo(() => {
+      ...
+  },
+  (prevProps, nextProps) => {
+    return nextProps.value === prevProps.value
+  }
+)
+```
+Hooks에서도 props는 React.memo, state는 useMemo를 활용하면 렌더링 성능을 개선할 수 있다고 한다.
+
+#### getSnapshotBeforeUpdate
+getSnapshotBeforeUpdate는 가장 마지막으로 렌더링된 결과가 DOM 등에 반영되기 전에 호출된다. [공식문서](https://ko.reactjs.org/docs/react-component.html#getsnapshotbeforeupdate)에서도 사용하는 예는 흔치 않다고 말한다. 보통 채팅 화면처럼 스크롤 위치를 따로 처리하는 작업이 필요한 UI 등을 생각해볼 수 있다고 한다.
+
+스냅샷 값을 반환하거나 null을 반환한다.
+
+```js
+class LifeCycle extends React.Component {
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    if (prevProps.list.length < this.props.list.length) {
+      const list = this.listRef.current
+      return list.scrollHeight - list.scrollTop
+    }
+    return null
+  }
+}
+```
+함수형에서는 아직 이 기능을 대체할만한 `hook`이 없다고 한다.
+
+
+
+#### componentDidUpdate
+componentDidUpdate는 `리렌더링`을 완료한 후 호출되는 메서드이다. 업데이트가 끝난 직후이므로, DOM관련 처리를 해도 무방하다.
+
+```js
+// Class
+class LifeCycle extends React.Component {
+    componentDidUpdate(prevProps, prevState) {
+        ...
+    }
+}
+
+// Hooks
+const LifeCycle = () => {
+    useEffect(() => {
+        ...
+    });
+}
+```
+
+
+<br>
+
+### 언마운트
+
+이번엔 컴포넌트가 제거 될 때 발생하는 생명주기를 알아보자.
+
+* componentWillUnmount
+
+#### componentWillUnmount
+componentWillUnmount는 컴포넌트를 DOM에서 제거할 때 호출되는 메서드이다. 여기서는 주로 DOM에 직접 등록했던 이벤트를 제거한다. 
+함수형 컴포넌트에서는 `useEffect CleanUp` 함수를 통해 해당 메서드를 구현할 수 있다.
+
+```JS
+// Class
+class LifeCycle extends React.Component {
+    coomponentWillUnmount() {
+        ...
+    }
+}
+
+// Hooks
+const LifeCycle = () => {
+    useEffect(() => {
+      function handleStatusChange(status) {
+        setIsOnline(status.isOnline);
+      }
+      ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange);
+      // effect 이후에 어떻게 정리(clean-up)할 것인지 표시합니다.
+      return function cleanup() {
+        ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange);
+      };
+    });
+}
+```
+
+<br>
+
+## 마치며
+
+리액트에서 클래스형 컴포넌트로 구현하게 되는 일은 앞으로 많지 않을 것이므로, 대략적인 내용만 숙지하면 될 것 같다.
+
+중요한건, View에서 어떤식으로 라이프 사이클이 돌아가는지 이해하는 것이 중요하다. 가령, 마운트가 무엇이고 그의 생명주기와 관련된 hooks들과 사용방법을 이해하는 것이 중요한 것 같다.
+
+앞으로 더 많은 내용들을 공부해야 해야겠지만 리액트는 정말 매력있는 라이브러리같다.
