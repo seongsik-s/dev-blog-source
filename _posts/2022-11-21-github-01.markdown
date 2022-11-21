@@ -1,0 +1,16 @@
+---
+layout: post
+title: "[Github] GitHub Actions 빠르게 시작하기"
+tags: [Github, Git, GitBook]
+categories: [Github]
+banner:
+  image: /assets/images/banners/github_actions.png
+  opacity: 0.618
+  background: "#000"
+  height: "100vh"
+  min_height: "38vh"
+  heading_style: "font-size: 3.25em; font-weight: bold; text-decoration: underline"
+  subheading_style: "color: gold"
+---
+
+## Github Actions란 무엇인가?
